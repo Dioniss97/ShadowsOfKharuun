@@ -1,0 +1,13 @@
+.godot/
+tools/godot/
+tools/downloads/
+tools/logs/
+screenshots/*.png
+screenshots/*.png.import
+tests/last_report.json
+tests/logic_report.json
+tests/capture_report.json
+tests/playthrough_report.json
+*.tmp
+*.log
+*.bak

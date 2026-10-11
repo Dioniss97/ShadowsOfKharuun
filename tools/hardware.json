@@ -1,0 +1,8 @@
+{
+  "gpu": "AMD Radeon RX 6600",
+  "signer": "CN=Prehensile Tales B.V., O=Prehensile Tales B.V., L=Uitgeest, S=Noord Holland, C=NL",
+  "executable_signature": "Valid",
+  "gpu_driver": "32.0.21045.5002",
+  "cpu": "AMD Ryzen 5 3600 6-Core Processor              ",
+  "memory_bytes": 34274308096
+}

@@ -9,5 +9,6 @@ if not exist "%GODOT%" (
   pause
   exit /b 1
 )
-start "Shadows of Kharuun" "%GODOT%" --path "%~dp0." %*
+if not exist "%~dp0tools\logs" mkdir "%~dp0tools\logs"
+start "Shadows of Kharuun" "%GODOT%" --path "%~dp0." --log-file "%~dp0tools\logs\game.log" %*
 endlocal

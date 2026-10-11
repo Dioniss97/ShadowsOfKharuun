@@ -27,6 +27,9 @@ Entrega local del 12 de octubre de 2026. **Demo jugable completa**, con Godot 4.
 | Rendimiento orientativo | Muestra de menú a 1920 × 1080: 165 FPS, 6,06 ms por fotograma, con VSync. Prueba breve, no benchmark sostenido del combate; `tools/logs/performance.log` |
 | Hardware efectivo | Ryzen 5 3600, RX 6600 y aproximadamente 32 GB RAM; `tools/hardware.json` |
 | TTS | Se encontró la voz española **Pablo** y se invocó el TTS con su identificador real. Siempre hay subtítulos. No se ha validado la audición humana |
+| Lanzador local | `PLAY.bat` ejecutado desde `tools/`, fuera de su carpeta: ventana gráfica activa con título Shadows of Kharuun; `tools/logs/game.log` sin errores |
+
+El juego se dejó abierto en el menú principal. El código y la documentación están guardados en un repositorio Git local; herramientas, descargas, cachés, capturas y logs se conservan en el ordenador y se excluyen del historial.
 
 El test de estados usa daño directo para comprobar señales de muerte y transiciones. **La partida del bot es una prueba separada**: se mueve, esquiva, ataca y usa habilidades normales, sin cambiar salud, daño o cooldowns. La victoria de esa partida confirma que el jefe puede derrotarse bajo las reglas de juego.
 

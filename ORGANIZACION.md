@@ -1,6 +1,6 @@
 # Organización mínima del trabajo
 
-Actualizado: 12 de octubre de 2026. Proyecto Godot para un jugador. La segunda vuelta está en diseño; esta organización no autoriza a iniciar su implementación.
+Actualizado: 12 de octubre de 2026. Proyecto Godot para un jugador. El usuario ha autorizado producir y la segunda vuelta está implementada como build de desarrollo; Q01 y la aceptación humana siguen pendientes.
 
 ## Qué registra cada lugar
 
@@ -25,11 +25,11 @@ Las nuevas instrucciones del usuario prevalecen. El diseño distingue intención
 |---|---|---|
 | 0.1.0 | `138d459` | Misión original verificada. Etiqueta retrospectiva `v0.1.0`. |
 | 0.2.0 | `f516f41` | Misión original y duelo táctico verificados. Etiqueta retrospectiva `v0.2.0`; versión jugable actual. |
-| 0.3.0 | Aún no existe | Misión unificada y segunda vuelta; planificada, sin etiqueta. |
+| 0.3.0 | Rama `feature/temple-tactical-demo` | Build de desarrollo implementada y probada; no existe una etiqueta final. |
 
 Convención para este prototipo: `0.MINOR.PATCH`. Incrementar MINOR cuando una entrega añade un conjunto importante de funciones; PATCH para correcciones o ajustes pequeños de una entrega. Los cambios solo de documentación conservan la versión jugable. No crear etiquetas definitivas para funciones meramente acordadas ni reutilizar/mover una etiqueta existente.
 
-La rama local actual es `feature/tactical-duel`; hay commits de diseño y entorno posteriores a `v0.2.0`, sin cambios de código del juego. El remoto tiene `main` como rama predeterminada con el estado vigente y conserva `feature/tactical-duel` y `master`; esta última identifica el estado de la primera entrega. Al iniciar la implementación nueva, usar una rama descriptiva desde `origin/main`; no cambiar ahora de rama ni alterar el árbol mientras se estudia o prueba la demo. No imponer GitFlow ni ramas de release adicionales en esta fase.
+La rama local actual es `feature/temple-tactical-demo`, creada desde `origin/main` después de la revisión `c0aab67`. Contiene la misión unificada y las pruebas de desarrollo; la revisión se publica como PR borrador contra `main`. El remoto conserva `feature/tactical-duel` y `master`; esta última identifica la primera entrega. No hay merge ni etiqueta final de 0.3.0 mientras falten la regla Q01 y la aceptación humana. No imponer GitFlow ni ramas de release adicionales.
 
 Remoto privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun), `origin = https://github.com/Dioniss97/ShadowsOfKharuun.git`. El usuario confirmó la cuenta autenticada con dos «s». Historial y etiquetas `v0.1.0`/`v0.2.0` están subidos. La prueba SSH devolvió `Permission denied (publickey)`; HTTPS con GitHub CLI autenticado funciona, sin modificar claves SSH ni el protocolo global de Git.
 
@@ -48,7 +48,7 @@ Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local
 3. Consultar las preguntas de esa tarea. Una duda sobre energía no bloquea cámara, interfaz o redacción independientes. Marcar exactamente qué parte espera respuesta.
 4. Si Engram está disponible, confirmar el proyecto y recuperar contexto con `project = shadowsofkharuun`, `scope = project` y sin `all_projects`; verificarlo contra los documentos actuales. Ignorar memorias ajenas incluso si falta contexto del juego.
 
-Durante la fase de diseño actual, seguir con documentación y pruebas de la versión existente solicitadas por el usuario. Comenzar funciones de la segunda vuelta cuando el usuario pida implementarlas.
+El usuario autorizó implementar esta segunda vuelta. Mantener el alcance D01–D24 y cerrar con evidencia; la protección temporal Q01 no sustituye una decisión del usuario.
 
 ## Durante el trabajo y al terminar
 
@@ -117,9 +117,10 @@ Referencias: [Changesets](https://github.com/changesets/changesets), [guía Engr
 
 ## Punto de reanudación actual
 
-- Versión que se puede probar: **0.2.0**; el código no incorpora aún la segunda vuelta.
+- Versión que se puede probar con PLAY.bat: **demo 0.3 en desarrollo**, misión unificada en `feature/temple-tactical-demo`. La última etiqueta estable permanece `v0.2.0`.
 - Acuerdos confirmados: D01–D24. Además del combate y cierre común, curar con salud llena gasta recurso/ronda; persecución por toda la zona accesible; reinicio completo; tiempo/recursos congelados durante el diálogo.
 - Regla principal pendiente: **Q01**, el usuario comprobará en KOTOR qué pasa con una orden sin energía al final o en medio de la cola. No volver a preguntarla mientras espera esa prueba.
 - Q02/Q03/Q07 están cerradas por las respuestas del usuario de esta revisión. No reabrirlas; solo Q01 sigue pendiente de comprobación.
-- Próximo paso de diseño: incorporar la observación de Q01 cuando llegue. Si el usuario solicita implementar antes, avanzar con las partes independientes y aislar la regla pendiente.
-- Entorno: repositorio privado y versiones remotas, 13 issues y milestone revisados, Engram con lectura MCP y filtrado de proyecto verificados. Falta recargar el cliente y confirmar su registro para escribir los acuerdos nuevos en Engram; están conservados en Git y las issues. No se ha iniciado la producción de 0.3.0.
+- Implementación actual: integración, destinatarios/HUD, cámara/retirada, ráfaga/poderes/botiquines, diálogos/objetivo/reinicio; verificación y bot normal en RESULTADO. Las issues de componentes identifican la rama y su evidencia.
+- Próximo paso: prueba humana de ritmo/claridad y observación Q01. Sustituir la protección temporal por la regla definitiva, verificarla y solo después aceptar la entrega final.
+- Entorno: repositorio privado, 13 issues y milestone; lectura MCP de Engram filtrada a este proyecto. La escritura sigue rechazada por el hook de sesión, incluso después de instalar jq: acuerdos y cierre quedan en Git/MD, sin eludir el rechazo ni tocar memorias ajenas.

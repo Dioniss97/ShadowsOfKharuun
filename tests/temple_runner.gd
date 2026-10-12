@@ -1,0 +1,702 @@
+extends Node
+
+# Isolated fixtures below may move/freeze actors to test one rule. The separate
+# normal-playthrough report uses production stats, real movement and orders only.
+var main: Node
+var capture = false
+var results: Array = []
+var failures = 0
+var bot_report: Dictionary = {}
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("run")
+
+func check(condition: bool, label: String, details: String = "") -> void:
+	results.append({"name":label,"passed":condition,"details":details})
+	if condition: print("PASS | ",label," | ",details)
+	else:
+		failures += 1
+		push_error("FAIL | %s | %s" % [label,details])
+
+func frames(count: int) -> void:
+	for _i in range(count): await get_tree().physics_frame
+
+func tap_key(code: Key) -> void:
+	await key_state(code,true)
+	await key_state(code,false)
+
+func key_state(code: Key, pressed: bool) -> void:
+	var event = InputEventKey.new()
+	event.physical_keycode = code
+	event.pressed = pressed
+	Input.parse_input_event(event)
+	await frames(2)
+
+func click_control(control: Control) -> void:
+	var pos = get_viewport().get_final_transform()*control.get_global_rect().get_center()
+	var motion = InputEventMouseMotion.new()
+	motion.position = pos
+	motion.global_position = pos
+	Input.parse_input_event(motion)
+	await frames(2)
+	for pressed in [true,false]:
+		var event = InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		event.position = pos
+		event.global_position = pos
+		Input.parse_input_event(event)
+		await frames(2)
+
+func wheel_control(control: Control, direction: MouseButton) -> void:
+	var pos = get_viewport().get_final_transform()*control.get_global_rect().get_center()
+	var event = InputEventMouseButton.new()
+	event.button_index = direction
+	event.pressed = true
+	event.position = pos
+	event.global_position = pos
+	Input.parse_input_event(event)
+	await frames(3)
+	var released = InputEventMouseButton.new()
+	released.button_index = direction
+	released.pressed = false
+	released.position = pos
+	released.global_position = pos
+	Input.parse_input_event(released)
+	await frames(2)
+
+func screenshot(name: String) -> void:
+	if not capture: return
+	await RenderingServer.frame_post_draw
+	var rendered = get_viewport().get_texture().get_image()
+	var error = rendered.save_png(ProjectSettings.globalize_path("res://screenshots/%s.png" % name))
+	check(error == OK and rendered.get_width() >= 1280,"Captura real: "+name,"%dx%d" % [rendered.get_width(),rendered.get_height()])
+
+func wait_started(combat: Node, count: int, budget: int = 240) -> bool:
+	for _i in range(budget):
+		if combat.clock.started_count >= count: return true
+		if not combat.enabled or main.tactical_paused: return false
+		await get_tree().physics_frame
+	return combat.clock.started_count >= count
+
+func wait_impacts(combat: Node, count: int, budget: int = 100) -> bool:
+	for _i in range(budget):
+		if combat.clock.impact_count >= count: return true
+		if not combat.enabled or main.tactical_paused: return false
+		await get_tree().physics_frame
+	return combat.clock.impact_count >= count
+
+func player_events(combat: Node) -> Array:
+	var found = []
+	for event in combat.event_log:
+		if event.get("source","") == "player": found.append(event)
+	return found
+
+func fresh_encounter(fixture: bool = true) -> void:
+	main.show_menu()
+	main.new_game()
+	await frames(4)
+	# This fixture skips exploration; test_normal_playthrough walks the full route.
+	main.level.player.global_position = Vector3(0,0.1,-8)
+	main.level.player.velocity = Vector3.ZERO
+	main.mission.transition(KhMission.State.DIALOGUE)
+	main.dialogue.choose(0)
+	main.dialogue.continue_dialogue()
+	await frames(4)
+	main.tactical_ui.hide_help()
+	if fixture:
+		main.level.player.global_position = Vector3(0,0.1,1.6)
+		main.level.player.velocity = Vector3.ZERO
+		for i in range(3):
+			var enemy = main.level.enemies[i]
+			enemy.global_position = Vector3(-0.5 if i == 0 else (0.5 if i == 1 else 7.0),0.1,0)
+			enemy.velocity = Vector3.ZERO
+			enemy.set_physics_process(false)
+		main.level.player.snap_camera()
+		await frames(3)
+
+func unpause() -> void:
+	if main.tactical_paused: await tap_key(KEY_SPACE)
+
+func test_clock_and_rig() -> void:
+	var clock = KhRoundQueue.new()
+	var contacts: Array = []
+	clock.action_impact.connect(func(order): contacts.append(order.duplicate()))
+	for id in ["attack","flurry","heal","medkit"]: clock.enqueue({"id":id})
+	check(clock.pending.size() == 4 and not clock.enqueue({"id":"attack"}),"Cola: cuatro pendientes, quinta rechazada")
+	check(clock.cancel(1) and not clock.cancel(-1) and clock.pending[1].id == "heal","Cola: retirar una orden preserva las demás")
+	clock.start({"id":"flurry","target_name":"A","impact_times":[0.42,0.90]})
+	clock.advance(0.4)
+	check(contacts.is_empty(),"Ráfaga: ningún impacto antes de preparar el arma")
+	clock.advance(0.03)
+	check(contacts.size() == 1 and contacts[0].impact_index == 0,"Ráfaga: primer contacto a 0,42 segundos")
+	clock.advance(0.47)
+	check(contacts.size() == 2 and contacts[1].impact_index == 1 and clock.started_count == 1,"Ráfaga: segundo contacto a 0,90 dentro de la misma acción")
+	clock.advance(10.0)
+	clock.advance(10.0)
+	check(clock.finished_count == 1 and clock.impact_count == 2 and clock.current.is_empty(),"Ráfaga: dos impactos y una ronda, sin duplicados")
+	var interrupted = KhRoundQueue.new()
+	interrupted.start({"id":"flurry","impact_times":[0.42,0.90]})
+	interrupted.advance(0.43)
+	interrupted.interrupt()
+	interrupted.advance(0.7)
+	check(interrupted.impact_count == 1 and interrupted.current.is_empty() and interrupted.round_left > 0,"Ráfaga: interrupción cancela segundo contacto y conserva recuperación")
+	var outcomes: Array = []
+	for fps in [30,60,144]:
+		var timed = KhRoundQueue.new()
+		timed.start({"id":"flurry","impact_times":[0.42,0.90]})
+		for _i in range(fps*3): timed.advance(1.0/fps)
+		outcomes.append([timed.impact_count,timed.finished_count,timed.round_left])
+	check(outcomes[0] == outcomes[1] and outcomes[1] == outcomes[2],"Rondas: resultados iguales a 30, 60 y 144 Hz",str(outcomes))
+	check(not KhCombatRules.hit_result(1,999,1).hit and KhCombatRules.hit_result(20,-99,999).critical,"Tiradas: fallo natural y crítico conservados")
+	var rig = KhRig.new()
+	add_child(rig)
+	rig.build(Color(0.1,0.2,0.3),Color.CYAN)
+	rig.combat_stance = true
+	rig.animate(0,0)
+	var rest_palm: Vector3 = rig.palm_world_position()
+	check(rig.left_palm.get_parent() == rig.left_arm and rig.sword.get_parent() == rig.right_arm,"Rig: mano izquierda libre, sable en mano derecha")
+	for kind in ["push","lightning","heal","medkit"]:
+		rig.cast(kind)
+		rig.animate(0.42,0)
+		check(rig.left_arm.rotation.x > 1.4 and (rig.palm_world_position()-rest_palm).dot(Vector3.FORWARD)>0.4,"Gesto izquierdo y palma real: "+kind)
+		rig.cancel_action()
+		rig.animate(0,0)
+	rig.swing_flurry()
+	rig.animate(0.42,0)
+	var first: bool = rig.right_arm.rotation.distance_to(Vector3(0.18,0.22,0.14))<0.001
+	rig.animate(0.26,0)
+	var prepared_again: bool = rig.right_arm.rotation.x > 1.3
+	rig.animate(0.22,0)
+	check(first and prepared_again and rig.right_arm.rotation.distance_to(Vector3(0.23,-0.18,0.10))<0.001,"Rig: ráfaga prepara y conecta dos golpes visibles")
+	check((rig.sword.global_basis*Vector3.UP).dot(Vector3.FORWARD)>0.7,"Rig: espada apunta delante en el contacto")
+	rig.cancel_action()
+	check(rig.attack_time == 0,"Rig: cancelar corta la animación actual")
+	rig.queue_free()
+
+func test_encounter_and_pause() -> void:
+	await fresh_encounter()
+	var level = main.level
+	var combat = level.combat
+	var player = level.player
+	check(main.mission.state == KhMission.State.COMBAT and not level.duel_mode and combat is KhTacticalCombat,"Misión principal utiliza combate táctico")
+	check(level.enemies.size() == 4 and level.enemies[0].tactical_mode and not level.guardian.active,"Tres acólitos tácticos y guardián neutral")
+	check(main.tactical_paused and get_tree().paused and combat.selected != null,"Encuentro: selecciona agresor y pausa inicial una vez")
+	check(combat.medkits == 3 and not KhTacticalCombat.ACTIONS.has("defend"),"Tres botiquines y Defensa retirada del catálogo")
+	var state = [player.global_position,player.health,player.energy,main.mission.elapsed,combat.round_left,level.enemies[0].global_position]
+	await frames(30)
+	check(state == [player.global_position,player.health,player.energy,main.mission.elapsed,combat.round_left,level.enemies[0].global_position],"Pausa congela física, salud, energía, cronómetro y rondas",str(state)+" -> "+str([player.global_position,player.health,player.energy,main.mission.elapsed,combat.round_left,level.enemies[0].global_position]))
+	await unpause()
+	await frames(8)
+	combat.select_target(level.enemies[1])
+	await frames(5)
+	check(not main.tactical_paused and not get_tree().paused,"Cambiar de objetivo no repite la pausa del encuentro")
+	await tap_key(KEY_SPACE)
+	check(main.tactical_paused,"Espacio pausa manualmente")
+	await tap_key(KEY_ESCAPE)
+	var held = main.paused and main.tactical_paused and get_tree().paused
+	await tap_key(KEY_ESCAPE)
+	check(held and not main.paused and main.tactical_paused and get_tree().paused,"Escape conserva la pausa táctica previa")
+
+func test_targets_and_fallback() -> void:
+	await fresh_encounter()
+	var combat = main.level.combat
+	var a = main.level.enemies[0]
+	var b = main.level.enemies[1]
+	combat.clear_queue()
+	combat.select_target(a)
+	combat.enqueue_action("attack")
+	combat.select_target(b)
+	combat.enqueue_action("flurry")
+	combat.select_target(a)
+	combat.enqueue_action("attack")
+	combat.enqueue_action("heal")
+	combat.select_target(b)
+	check(combat.queue[0].target == a and combat.queue[1].target == b and combat.queue[2].target == a and combat.queue[3].target == main.level.player,"Cada orden conserva destinatario y curación es propia")
+	await unpause()
+	var started = await wait_started(combat,1)
+	combat.select_target(b)
+	check(started and combat.current_action.target == a,"Cambiar selección no redirige la acción en ejecución")
+	var fallback = await wait_started(combat,5,1000)
+	check(fallback and combat.current_action.id == "attack" and combat.current_action.automatic and combat.current_action.target == a and combat.last_offensive_target == a,"1A, 2B, 2A y curación continúan con básico A")
+	var events = player_events(combat)
+	check(events.size() >= 5 and events[0].target_instance_id == a.get_instance_id() and events[1].target_instance_id == b.get_instance_id() and events[2].target_instance_id == b.get_instance_id() and events[3].target_instance_id == a.get_instance_id() and events[4].id == "heal","Registro prueba dos tiradas de ráfaga y destinatarios A/B",str(events))
+	main.toggle_tactical_pause()
+	combat.clear_queue()
+	combat.clock.reset()
+	main.level.player.rig.cancel_action()
+	a.take_damage(a.health)
+	await unpause()
+	await wait_started(combat,6,220)
+	check(combat.last_offensive_target == b and combat.current_action.target == b and combat.current_action.get("automatic",false) and not main.tactical_paused,"Caída de último destinatario continúa automáticamente con otro agresor sin nueva pausa")
+	check(not combat.target_valid(main.level.guardian) and not combat.select_target(main.level.guardian),"Guardián neutral excluido de selección y órdenes")
+
+func test_flurry_invalid_second_contact() -> void:
+	for cause in ["dead","range","wall"]:
+		await fresh_encounter()
+		var combat = main.level.combat
+		var a = main.level.enemies[0]
+		var b = main.level.enemies[1]
+		combat.select_target(a)
+		combat.enqueue_action("flurry")
+		await unpause()
+		await wait_impacts(combat,1)
+		var b_health = b.health
+		var a_health = a.health
+		if cause == "dead": a.take_damage(a.health)
+		elif cause == "range": a.global_position += Vector3(0,0,-8)
+		else:
+			var obstacle = Node3D.new()
+			main.level.add_child(obstacle)
+			KhGeometry.box(obstacle,Vector3(-0.25,1.0,0.8),Vector3(1.2,2.0,0.12),KhGeometry.material(Color.GRAY),true)
+		await wait_impacts(combat,2)
+		var events = player_events(combat)
+		var correct: bool = events.size() == 2 and events[1].impact_index == 1 and events[1].damage == 0 and events[1].target_instance_id == a.get_instance_id()
+		if correct: correct = events[1].get("reason","") == ("invalid_target" if cause == "dead" else "range")
+		check(correct and b.health == b_health and (cause == "dead" or a.health == a_health),"Ráfaga segundo contacto sin transferencia: "+cause,str(events))
+		check(combat.resolved_actions == 1 and combat.clock.started_count == 1,"Ráfaga conserva una acción: "+cause)
+
+func test_resources() -> void:
+	await fresh_encounter()
+	var combat = main.level.combat
+	var player = main.level.player
+	combat.disengage()
+	combat.enqueue_action("medkit")
+	combat.enqueue_action("heal")
+	check(combat.medkits == 3 and player.energy == player.max_energy and combat.queue[0].target == player and combat.queue[1].target == player,"Encolar botiquín y curación no consume recursos")
+	combat.clear_queue()
+	check(combat.medkits == 3 and player.energy == player.max_energy,"Cancelar órdenes pendientes conserva recursos")
+	combat.enqueue_action("medkit")
+	await unpause()
+	await wait_started(combat,1)
+	check(combat.medkits == 2 and player.health == player.max_health and combat.round_left > 2.4,"Botiquín con salud llena consume unidad y ronda al ejecutar")
+	await wait_impacts(combat,1)
+	var events = player_events(combat)
+	check(events.size() == 1 and events[0].healing == 0 and combat.medkits == 2,"Botiquín con salud llena no duplica consumo")
+	combat.enqueue_action("heal")
+	await wait_started(combat,2,200)
+	check(player.energy < 73.0 and combat.current_action.target == player and combat.round_left > 2.4,"Poder curativo con salud llena consume energía y ronda")
+	await wait_impacts(combat,2)
+	check(player_events(combat)[1].healing == 0,"Poder curativo muestra cero curación con salud llena")
+	main.toggle_tactical_pause()
+	combat.disengage()
+	combat.clock.reset()
+	player.health = player.max_health-50
+	combat.enqueue_action("medkit")
+	await unpause()
+	await wait_impacts(combat,3)
+	check(player.health == player.max_health and combat.medkits == 1,"Botiquín cura parcialmente hasta el máximo")
+	main.toggle_tactical_pause()
+	combat.disengage()
+	combat.clock.reset()
+	combat.medkits = 1
+	for _i in range(3): combat.enqueue_action("medkit")
+	var baseline = combat.clock.started_count
+	await unpause()
+	await frames(210)
+	check(combat.medkits == 0 and combat.queue.is_empty() and combat.clock.started_count == baseline+1 and not combat.enqueue_action("medkit"),"Agotamiento descarta excedentes y nunca deja contador negativo")
+	await fresh_encounter()
+	combat = main.level.combat
+	player = main.level.player
+	combat.select_target(main.level.enemies[0])
+	combat.enqueue_action("lightning")
+	combat.enqueue_action("lightning")
+	await unpause()
+	await wait_started(combat,2,220)
+	check(combat.clock.started_count == 2 and combat.current_action.id == "lightning" and player.energy > 35 and player.energy < 48,"Dos descargas consecutivas separadas solo por ronda, sin recarga extra")
+	await fresh_encounter()
+	combat = main.level.combat
+	player = main.level.player
+	player.energy = 0
+	combat.enqueue_action("heal")
+	await unpause()
+	await frames(5)
+	check(combat.energy_pending and main.tactical_paused and get_tree().paused and combat.queue.size() == 1 and combat.clock.started_count == 0 and player.energy < 1,"Q01: guardia de desarrollo pausa y conserva orden sin inventar penalización")
+	combat.cancel_queued(0)
+	check(not combat.energy_pending and combat.queue.is_empty(),"Q01: cancelar orden pendiente libera guardia de energía")
+
+func test_input_camera_and_retreat() -> void:
+	await fresh_encounter()
+	var combat = main.level.combat
+	var player = main.level.player
+	var a = main.level.enemies[0]
+	combat.select_target(a)
+	combat.enqueue_action("attack")
+	combat.enqueue_action("flurry")
+	await unpause()
+	await wait_started(combat,1)
+	var before: Vector3 = player.global_position
+	await key_state(KEY_W,true)
+	await frames(8)
+	await key_state(KEY_W,false)
+	check(combat.engaged and combat.current_action.id == "attack" and combat.queue.size() == 1 and Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.02,"WASD mantiene combate, acción y cola hasta cancelar",str([combat.engaged,combat.current_action,combat.queue.size(),before,player.global_position]))
+	var point = get_viewport().get_final_transform()*Vector2(900,280)
+	var right = InputEventMouseButton.new()
+	right.button_index = MOUSE_BUTTON_RIGHT
+	right.pressed = true
+	right.position = point
+	right.global_position = point
+	Input.parse_input_event(right)
+	var motion = InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	motion.button_mask = MOUSE_BUTTON_MASK_RIGHT
+	motion.relative = Vector2(120,0)
+	Input.parse_input_event(motion)
+	await frames(3)
+	var displaced: float = absf(angle_difference(player.yaw,player.rig.rotation.y))
+	right = InputEventMouseButton.new()
+	right.button_index = MOUSE_BUTTON_RIGHT
+	right.pressed = false
+	right.position = point
+	right.global_position = point
+	Input.parse_input_event(right)
+	await frames(45)
+	check(displaced>0.08 and absf(angle_difference(player.yaw,player.rig.rotation.y))<0.06,"Botón derecho gira y al soltar vuelve suavemente detrás",str([displaced,angle_difference(player.yaw,player.rig.rotation.y)]))
+	check(player.forward().dot((a.global_position-player.global_position).normalized())>0.9,"Girar cámara no aparta al combatiente de su destinatario")
+	await tap_key(KEY_F)
+	check(not combat.engaged and combat.queue.is_empty() and combat.current_action.is_empty() and not combat.actor_locked,"F libera movimiento y elimina órdenes y autoataque")
+	before = player.global_position
+	await key_state(KEY_S,true)
+	await frames(25)
+	await key_state(KEY_S,false)
+	check(player.global_position.distance_to(before)>0.7 and not combat.engaged,"Tras F, WASD mueve libremente sin reenganche")
+	player.global_position = Vector3(0,0.1,20)
+	player.velocity = Vector3.ZERO
+	a.set_physics_process(true)
+	var enemy_before: Vector3 = a.global_position
+	await frames(35)
+	check(a.active and a.global_position.z > enemy_before.z+0.7 and not combat.engaged,"Agresor sigue persiguiendo lejos por la zona accesible tras cancelar")
+	await fresh_encounter()
+	combat = main.level.combat
+	player = main.level.player
+	a = main.level.enemies[0]
+	main.level.enemies[1].global_position = Vector3(8,0.1,0)
+	combat.disengage()
+	player.automation_mode = true
+	player.automation_direction = Vector3(0,0,-1)
+	await unpause()
+	var touched = false
+	for _i in range(100):
+		await get_tree().physics_frame
+		for c in range(player.get_slide_collision_count()):
+			if player.get_slide_collision(c).get_collider() == a: touched = true
+	check(touched and player.global_position.distance_to(a.global_position)>0.55,"Colisiones sólidas impiden atravesar a un acólito")
+	player.automation_direction = Vector3.ZERO
+	player.automation_mode = false
+
+func test_hud_events() -> void:
+	await fresh_encounter()
+	var hud = main.tactical_ui
+	var combat = main.level.combat
+	var player = main.level.player
+	var a = main.level.enemies[0]
+	var b = main.level.enemies[1]
+	combat.clear_queue()
+	combat.select_target(a)
+	await frames(4)
+	check(hud.root.visible and hud.action_buttons.size() == 3 and hud.queue_buttons.size() == 4 and hud.action_buttons[2].disabled,"HUD: tres categorías separadas de cuatro órdenes, arrojadizo desactivado")
+	var energy_before = player.energy
+	var yaw_before = player.yaw
+	await wheel_control(hud.action_buttons[0],MOUSE_BUTTON_WHEEL_DOWN)
+	check(hud.category_indices[0] == 1 and combat.queue.is_empty() and is_equal_approx(yaw_before,player.yaw),"Rueda sobre físico recorre a Ráfaga sin encolar ni girar cámara")
+	await click_control(hud.action_buttons[0])
+	check(combat.queue.size() == 1 and combat.queue[0].id == "flurry" and combat.queue[0].target == a,"Clic en físico encola acción mostrada contra A")
+	combat.select_target(b)
+	await frames(3)
+	await click_control(hud.selector_arrows[1][1])
+	check(hud.category_indices[1] == 1 and combat.queue.size() == 1,"Flecha de poder recorre a Descarga sin encolar",str([hud.category_indices,combat.queue,hud.selector_arrows[1][1].get_global_rect()]))
+	await click_control(hud.action_buttons[1])
+	check(combat.queue.size() == 2 and combat.queue[1].id == "lightning" and combat.queue[1].target == b and combat.queue[0].target == a,"Clic en poder encola descarga B y conserva ráfaga A")
+	await click_control(hud.medkit_button)
+	check(combat.queue.size() == 3 and combat.queue[2].id == "medkit" and combat.queue[2].target == player and combat.medkits == 3 and player.energy == energy_before,"Botiquín personal añade orden propia y no gasta al encolar")
+	await screenshot("demo_hud_mixed_targets")
+	await click_control(hud.queue_buttons[1])
+	check(combat.queue.size() == 2 and combat.queue[0].id == "flurry" and combat.queue[1].id == "medkit","Clic en pendiente cancela solo esa orden")
+	await click_control(hud.clear_button)
+	check(combat.queue.is_empty(),"Limpiar cola funciona con evento real en pausa")
+	await click_control(hud.selector_arrows[1][1])
+	await click_control(hud.action_buttons[1])
+	check(hud.category_indices[1] == 2 and combat.queue.size() == 1 and combat.queue[0].id == "heal" and combat.queue[0].target == player,"Selector curativo indica acción propia con enemigo B seleccionado")
+	await click_control(hud.retreat_button)
+	check(not combat.engaged and combat.queue.is_empty(),"Cancelar combate responde a clic real")
+
+func test_enemy_independent_rounds_and_stagger() -> void:
+	await fresh_encounter()
+	var combat = main.level.combat
+	var hero = main.level.player
+	var enemy = main.level.enemies[0]
+	combat.disengage()
+	hero.set_physics_process(false)
+	enemy.set_physics_process(true)
+	var health_before: float = hero.health
+	await unpause()
+	await frames(int(ceil((enemy.round_clock.round_seconds+0.7)*60)))
+	var enemy_damage = 0.0
+	var enemy_events = 0
+	for event in combat.event_log:
+		if event.get("source","") == "enemy":
+			enemy_events += 1
+			enemy_damage += event.get("damage",0)
+	check(enemy_events >= 2 and enemy.attacks >= 2 and combat.resolved_actions == 0 and not combat.engaged,"Tras cancelar, agresor sigue atacando por sus propias rondas")
+	check(enemy_damage>0 and is_equal_approx(health_before-hero.health,enemy_damage),"Daño enemigo coincide con tiradas registradas mientras jugador no da órdenes")
+	await fresh_encounter()
+	combat = main.level.combat
+	hero = main.level.player
+	enemy = main.level.enemies[0]
+	combat.disengage()
+	hero.set_physics_process(false)
+	enemy.set_physics_process(true)
+	await unpause()
+	for _i in range(20):
+		if enemy.round_clock.started_count>0: break
+		await get_tree().physics_frame
+	health_before = hero.health
+	enemy.take_damage(1,Vector3.RIGHT*2)
+	await frames(80)
+	check(enemy.round_clock.impact_count == 0 and hero.health == health_before and enemy.rig.attack_time == 0 and enemy.round_clock.round_left>0,"Interrumpir preparación enemiga cancela daño y animación sin golpe invisible")
+
+func guardian_fixture() -> void:
+	await fresh_encounter()
+	var p = main.level.player
+	p.health = 180
+	p.energy = 41
+	main.level.combat.medkits = 2
+	for i in range(3): main.level.enemies[i].take_damage(main.level.enemies[i].health)
+	await frames(4)
+
+func side_capture(name: String) -> void:
+	if not capture: return
+	var hero = main.level.player
+	var midpoint: Vector3 = hero.global_position+hero.forward()*0.5
+	# View the bare left hand and place contacts below the selector cards.
+	main.level.menu_camera.global_position = midpoint+Vector3(-4.2,2.8,0.8)
+	main.level.menu_camera.look_at(midpoint+Vector3.UP*1.8)
+	main.level.menu_camera.fov = 48
+	main.level.menu_camera.make_current()
+	await screenshot(name)
+	hero.camera.make_current()
+
+func test_visual_actions() -> void:
+	await fresh_encounter()
+	var combat = main.level.combat
+	var hero = main.level.player
+	combat.select_target(main.level.enemies[0])
+	combat.enqueue_action("flurry")
+	await unpause()
+	await wait_impacts(combat,1)
+	main.toggle_tactical_pause()
+	await side_capture("demo_flurry_contact_1")
+	await unpause()
+	await wait_impacts(combat,2)
+	main.toggle_tactical_pause()
+	await side_capture("demo_flurry_contact_2")
+	var events = player_events(combat)
+	check(events.size() == 2 and events[0].roll != events[1].roll and combat.resolved_actions == 1,"Ráfaga real: dos tiradas independientes y dos contactos visuales")
+	for kind in ["push","lightning","heal"]:
+		await fresh_encounter()
+		combat = main.level.combat
+		hero = main.level.player
+		hero.health = 240
+		combat.select_target(main.level.enemies[0])
+		combat.enqueue_action(kind)
+		await unpause()
+		await wait_impacts(combat,1)
+		main.toggle_tactical_pause()
+		check(hero.rig.left_arm.rotation.x>1.3 and hero.rig.sword.get_parent() == hero.rig.right_arm,"Poder real extiende brazo izquierdo sin intercambiar sable: "+kind)
+		var effect = main.level.fx.get_node_or_null("Lightning" if kind == "lightning" else ("PushWave" if kind == "push" else "Healing"))
+		var present: bool = is_instance_valid(effect)
+		if present and kind == "lightning":
+			present = effect.get_child(0).global_position.distance_to(hero.rig.palm_world_position())<0.05
+		elif present and kind == "heal":
+			present = effect.get_child(0).material_override.albedo_color.g>0.9 and effect.global_position.distance_to(hero.global_position)<0.05
+		check(present,"Efecto visible: onda, descarga desde palma real o curación verde: "+kind)
+		if present:
+			var effect_position: Vector3 = effect.global_position
+			await frames(12)
+			check(is_instance_valid(effect) and effect.global_position == effect_position,"Pausa también congela el efecto del poder: "+kind)
+		await side_capture("demo_cast_"+kind)
+
+func test_story_and_final() -> void:
+	await fresh_encounter()
+	var level = main.level
+	var player = level.player
+	player.global_position = level.relic_position
+	check(not level.claim_relic() and main.mission.state == KhMission.State.COMBAT,"No se puede reclamar objetivo antes de resolver guardián")
+	for route in ["reject","lesson_attack","peaceful"]:
+		await guardian_fixture()
+		level = main.level
+		player = level.player
+		var combat = level.combat
+		check(main.mission.state == KhMission.State.GUARDIAN_DIALOGUE and get_tree().paused and not combat.enabled and not level.guardian.active,"Acólitos llevan a conversación segura: "+route)
+		var values = [player.health,player.energy,combat.medkits,main.mission.elapsed,player.global_position,level.guardian.global_position]
+		await frames(60)
+		check(values == [player.health,player.energy,combat.medkits,main.mission.elapsed,player.global_position,level.guardian.global_position],"Diálogo congela tiempo y recursos sin regalos: "+route)
+		if route == "reject":
+			await tap_key(KEY_ESCAPE)
+			check(main.paused and main.dialogue_paused and get_tree().paused,"Escape abre menú durante diálogo sin reanudar mundo")
+			await tap_key(KEY_ESCAPE)
+			check(not main.paused and main.dialogue_paused and get_tree().paused and main.ui.dialog_panel.visible and player.energy == 41,"Cerrar menú restaura diálogo y conserva congelación de recursos")
+		if route == "reject":
+			main.dialogue.choose(0)
+		else:
+			main.dialogue.choose(1)
+			check(main.mission.heard_doctrine and main.dialogue.stage == "lesson","Escuchar permite decidir después: "+route)
+			main.dialogue.choose(0 if route == "peaceful" else 1)
+		await screenshot("demo_dialogue_"+route)
+		main.dialogue.continue_dialogue()
+		await frames(4)
+		check(player.health == 180 and player.energy >= 41 and player.energy < 42 and combat.medkits == 2,"Transición conserva salud, energía y botiquines: "+route)
+		if route != "peaceful":
+			check(main.mission.state == KhMission.State.BOSS and level.guardian.active and main.tactical_paused,"Decisión inicia guardián con pausa propia: "+route)
+			level.guardian.take_damage(level.guardian.health)
+			await frames(3)
+			check(main.mission.guardian_resolution == "combat" and main.mission.kills == 4,"Combate registra resolución y cuatro muertes: "+route)
+		else:
+			check(level.guardian.health > 0 and not level.guardian.active and not combat.target_valid(level.guardian) and main.mission.kills == 3 and main.mission.guardian_resolution == "peaceful","Acuerdo mantiene guardián vivo, neutral y tres muertes")
+		check(main.mission.state == KhMission.State.TEMPLE,"Resolver guardián habilita entrada sin terminar demo: "+route)
+		player.global_position = Vector3(0,0.1,12)
+		check(not level.claim_relic() and main.mission.state == KhMission.State.TEMPLE,"Objetivo requiere entrar y aproximarse: "+route)
+		player.global_position = level.relic_position+Vector3(0,0,1)
+		player.velocity = Vector3.ZERO
+		player.snap_camera()
+		await screenshot("demo_temple_"+route)
+		await tap_key(KEY_E)
+		check(main.mission.state == KhMission.State.VICTORY,"Reclamar con E produce final común: "+route)
+		await screenshot("demo_final_"+route)
+		main.ui.menu_requested.emit()
+		await frames(3)
+		check(main.mission.state == KhMission.State.MENU and not get_tree().paused and not main.tactical_ui.root.visible,"Final permite volver al menú sin pausa: "+route)
+
+func test_defeat_restart() -> void:
+	await fresh_encounter()
+	main.level.combat.medkits = 1
+	main.level.player.energy = 13
+	main.mission.heard_doctrine = true
+	main.level.combat.enqueue_action("flurry",main.level.enemies[0])
+	main.level.player.take_damage(main.level.player.max_health*2)
+	await frames(3)
+	check(main.mission.state == KhMission.State.DEFEAT and not main.level.combat.enabled and main.level.combat.queue.is_empty(),"Muerte detiene misión y órdenes")
+	main.ui.restart_requested.emit()
+	await frames(4)
+	var player = main.level.player
+	var initial_enemies = true
+	for enemy in main.level.enemies: initial_enemies = initial_enemies and enemy.health == enemy.max_health and not enemy.active
+	check(main.mission.state == KhMission.State.EXPLORATION and player.health == player.max_health and player.energy == player.max_energy and main.level.combat.medkits == 3 and initial_enemies and main.mission.kills == 0 and not main.mission.heard_doctrine and main.mission.guardian_resolution.is_empty() and main.level.combat.queue.is_empty(),"Reiniciar vuelve al inicio con enemigos, recursos, cola y elecciones restablecidos")
+
+func test_normal_playthrough() -> void:
+	main.show_menu()
+	main.new_game()
+	await frames(5)
+	var player = main.level.player
+	var combat = main.level.combat
+	player.automation_mode = true
+	player.automation_direction = Vector3.FORWARD
+	var exploration_frames = 0
+	for i in range(900):
+		await get_tree().physics_frame
+		exploration_frames = i+1
+		if main.mission.state == KhMission.State.DIALOGUE: break
+	player.automation_direction = Vector3.ZERO
+	player.automation_mode = false
+	var walked_to_gate: bool = main.mission.state == KhMission.State.DIALOGUE and player.distance_walked > 25
+	check(walked_to_gate,"Bot normal recorre exploración hasta diálogo mediante movimiento real")
+	if not walked_to_gate:
+		bot_report = {"passed":false,"reason":"gate_not_reached","position":str(player.global_position)}
+		return
+	main.dialogue.choose(0)
+	main.dialogue.continue_dialogue()
+	await frames(4)
+	await screenshot("demo_normal_first_pause")
+	await unpause()
+	var previous_health: float = player.health
+	var damage_taken = 0.0
+	var healing_received = 0.0
+	var played_frames = 0
+	var interrupted_by_energy = false
+	for i in range(13000):
+		await get_tree().physics_frame
+		played_frames = i+1
+		if player.health < previous_health: damage_taken += previous_health-player.health
+		elif player.health > previous_health: healing_received += player.health-previous_health
+		previous_health = player.health
+		if main.mission.state in [KhMission.State.DEFEAT,KhMission.State.VICTORY]: break
+		if combat.energy_pending:
+			interrupted_by_energy = true
+			break
+		if main.mission.state == KhMission.State.GUARDIAN_DIALOGUE:
+			await screenshot("demo_normal_guardian_offer")
+			main.dialogue.choose(0)
+			main.dialogue.continue_dialogue()
+			await frames(4)
+			await unpause()
+			continue
+		if main.mission.state == KhMission.State.TEMPLE:
+			player.automation_mode = true
+			var destination: Vector3 = main.level.relic_position
+			if player.global_position.z > -9 and absf(player.global_position.x)>0.5:
+				destination = Vector3(0,player.global_position.y,-8)
+			var direction: Vector3 = destination-player.global_position
+			direction.y = 0
+			player.automation_direction = direction.normalized()
+			if player.global_position.distance_to(main.level.relic_position)<=2.0:
+				player.automation_direction = Vector3.ZERO
+				await screenshot("demo_normal_temple")
+				await tap_key(KEY_E)
+			continue
+		if main.mission.state not in [KhMission.State.COMBAT,KhMission.State.BOSS]: continue
+		if main.tactical_paused: await unpause()
+		if not combat.queue.is_empty(): continue
+		if player.health < 215 and combat.medkits>0:
+			combat.enqueue_action("medkit")
+		elif player.health<215 and player.energy>=KhTacticalCombat.ACTIONS.heal.cost+6:
+			combat.enqueue_action("heal")
+		else:
+			var enemy = combat.nearest_target()
+			if enemy == null: continue
+			combat.select_target(enemy)
+			if player.energy>=KhTacticalCombat.ACTIONS.lightning.cost+30:
+				combat.enqueue_action("lightning",enemy)
+			else: combat.enqueue_action("flurry",enemy)
+	var won: bool = main.mission.state == KhMission.State.VICTORY
+	var enemy_initial: Array = []
+	for enemy in main.level.enemies: enemy_initial.append({"name":enemy.display_name,"max_health":enemy.max_health,"health":enemy.health,"attacks":enemy.attacks})
+	bot_report = {"passed":won,"isolated_fixture":false,"production_stats":true,"teleports":0,"direct_damage_calls":0,"exploration_frames":exploration_frames,"combat_frames":played_frames,"seconds":main.mission.elapsed,"state":main.mission.state,"hero_max_health":player.max_health,"hero_health":player.health,"hero_energy":player.energy,"medkits_remaining":combat.medkits,"damage_taken":damage_taken,"healing_received":healing_received,"kills":main.mission.kills,"route":main.mission.guardian_resolution,"resolved_actions":combat.resolved_actions,"energy_guard_triggered":interrupted_by_energy,"distance_walked":player.distance_walked,"position":str(player.global_position),"enemies":enemy_initial,"events":combat.event_log.duplicate(true)}
+	check(won and player.health>0 and main.mission.kills == 4 and not interrupted_by_energy,"Bot normal completa acólitos, guardián, entrada y E final sin alterar estadísticas",JSON.stringify({"seconds":bot_report.seconds,"hero_health":player.health,"energy":player.energy,"medkits":combat.medkits,"kills":main.mission.kills,"damage_taken":damage_taken,"healing_received":healing_received,"actions":combat.resolved_actions,"position":str(player.global_position)}))
+	var report_file = FileAccess.open("res://tests/demo_playthrough_report.json",FileAccess.WRITE)
+	if report_file:
+		report_file.store_string(JSON.stringify(bot_report,"\t"))
+		report_file.close()
+	if won: await screenshot("demo_normal_victory")
+
+func finish() -> void:
+	var report = {"engine":Engine.get_version_info(),"renderer":RenderingServer.get_current_rendering_method(),"capture":capture,"failures":failures,"checks":results,"normal_playthrough":bot_report,"q01":"Development guard only; final insufficient-energy rule pending human KOTOR test."}
+	for path in ["res://tests/demo_report.json","res://tests/demo_capture_report.json" if capture else "res://tests/demo_logic_report.json"]:
+		var file = FileAccess.open(path,FileAccess.WRITE)
+		if file:
+			file.store_string(JSON.stringify(report,"\t"))
+			file.close()
+		else: check(false,"Guardar informe de demo",path)
+	print("KHARUUN_DEMO_RESULT | checks=%d failures=%d" % [results.size(),failures])
+	get_tree().quit(0 if failures == 0 else 1)
+
+func run() -> void:
+	await frames(8)
+	check(is_instance_valid(main) and main.has_method("new_game") and main.level.has_method("claim_relic"),"API de demo unificada disponible")
+	if not main.level.has_method("claim_relic"):
+		finish()
+		return
+	test_clock_and_rig()
+	await test_encounter_and_pause()
+	await test_hud_events()
+	await test_visual_actions()
+	await test_targets_and_fallback()
+	await test_flurry_invalid_second_contact()
+	await test_resources()
+	await test_input_camera_and_retreat()
+	await test_enemy_independent_rounds_and_stagger()
+	await test_story_and_final()
+	await test_defeat_restart()
+	await test_normal_playthrough()
+	finish()

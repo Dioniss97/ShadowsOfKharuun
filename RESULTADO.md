@@ -1,48 +1,51 @@
-# Resultado: primera iteración táctica
+# Resultado: demo táctica unificada en desarrollo
 
-Entrega local del 12 de octubre de 2026. Se han completado los pasos 1–3 del plan: reglas documentadas, corrección de arma y colisiones, y un duelo jugable para validar el núcleo del combate antes de adaptarlo a toda la misión.
+Build local del 12 de octubre de 2026, rama `feature/temple-tactical-demo`, prevista como **0.3.0**. El usuario autorizó producir tras revisar D01–D24 y las 13 issues. La última etiqueta estable sigue siendo `v0.2.0`; no se etiqueta una 0.3.0 final mientras Q01 y la aceptación humana estén pendientes. El informe histórico del duelo separado está conservado en `v0.2.0:RESULTADO.md`.
 
-Abre `PLAY.bat` y elige **Duelo táctico · nueva iteración**. Empieza pausado: selecciona al centinela con clic o Tab, prepara órdenes y pulsa Espacio. La misión del templo continúa disponible en **Nueva partida · misión original**.
+Abre `PLAY.bat` y elige **Nueva partida · asalto al templo**. La misión completa usa el combate táctico. El duelo permanece accesible con `PLAY.bat --duel` como herramienta interna.
 
-## Cambios comprobados
+## Qué se puede probar
 
-- Espada orientada hacia delante, postura de combate y animación con preparación, contacto y recuperación. La locomoción conserva la orientación durante el golpe.
-- Jugador y enemigos sólidos: el movimiento físico ya no permite atravesar al adversario. Se mantienen accesibles el patio, el umbral y la rampa del templo.
-- Impacto diferido durante la animación, comprobado una sola vez y sujeto a alcance y visibilidad. La misión original también utiliza impacto diferido para el arma.
-- Duelo en tiempo real con pausa y relojes propios por combatiente. Una acción activa y hasta cuatro órdenes pendientes, cancelables; cada orden conserva su objetivo.
-- Selección con clic o Tab, aproximación física al objetivo, ataque básico automático con cola vacía, retirada y movimiento manual que interrumpe el enfrentamiento.
-- Empuje, descarga y defensa; energía cobrada al ejecutar, recargas, tiradas de acierto y crítico. Empuje interrumpe el golpe enemigo preparado y evita impactos posteriores invisibles.
-- Interfaz para objetivo, acción, recuperación, cola y resultados. Espacio congela movimiento, daño, energía y relojes, pero permite preparar órdenes. Escape conserva la pausa táctica al cerrar su menú.
-- Victoria, derrota, repetición del duelo y regreso al menú. Controles y reglas en [README.md](README.md) y [COMBATE.md](COMBATE.md).
+- Exploración, diálogo inicial, tres acólitos, diálogo ramificado del guardián, combate o acuerdo pacífico, entrada al templo y reclamación del núcleo con E. Resolver al guardián habilita el paso; la misión termina al reclamar el núcleo.
+- Una acción actual y cuatro órdenes pendientes. Cada orden conserva su destinatario; `1A, 2B, 2A` continúa con básico automático A aunque la selección de interfaz sea B. Curación y botiquín actúan sobre el protagonista.
+- Selectores de básico/ráfaga y empuje/descarga/curación mediante flechas o rueda; clic encola. Arrojadizos, escudo y formas quedan visibles y desactivados. Tres botiquines iniciales con contador.
+- Recursos consumidos al ejecutar, sin recargas adicionales por poder. Curar con salud llena también consume ronda y recurso. Cancelar una orden pendiente conserva el recurso; F durante una acción iniciada corta el efecto pendiente sin devolver el gasto ya realizado.
+- Ráfaga con dos contactos y tiradas dentro de una ronda; mano izquierda para poderes, descarga desde la palma y curación verde. Espada en mano derecha orientada hacia delante, cuerpos sólidos e impactos sujetos a alcance y visibilidad.
+- Pausa inicial una vez por encuentro, preparación de órdenes durante pausa, WASD bloqueado hasta F, persecución por toda la zona accesible y cámara que retorna al soltar botón derecho. Movimiento lateral sin caminar involuntariamente en círculos.
+- Recursos conservados entre acólitos y guardián; diálogos con tiempo/recursos congelados. Ruta pacífica con guardián vivo y no agresivo. Derrota reinicia toda la misión y sus recursos/decisiones.
 
-## Evidencia de verificación
+## Evidencia de esta build
 
-| Comprobación | Resultado / evidencia local |
+| Comprobación | Resultado y evidencia local |
 |---|---|
-| Duelo, sin ventana | 56 comprobaciones, 0 fallos; `tests/tactical_logic_report.json`, `tools/logs/tactical-test.log` |
-| Duelo, con GPU | 60 comprobaciones, 0 fallos; `tests/tactical_capture_report.json`, `tools/logs/tactical-capture.log` |
-| Capturas del duelo | Cuatro PNG reales de 1280 × 720; pausa, ataque frontal, vista lateral y victoria en `screenshots/tactical_*.png`; inspeccionados visualmente |
-| Partida normal del duelo | Victoria en 36,62 s simulados, 13 acciones del jugador, 11 ataques enemigos y 276 de salud restante; incluido en ambos informes tácticos |
-| Regresión de la misión original | 34 comprobaciones sin ventana y 43 con GPU, 0 fallos; `tests/logic_report.json`, `tests/capture_report.json` |
-| Partida normal de la misión original | Victoria con 4 bajas, 111 ataques básicos, 34 habilidades y 166,27 s totales; `tests/playthrough_report.json` |
-| Controles reales dentro de Godot | Eventos de clic sobre enemigo y botones de habilidades, teclado, autorepetición, pausa y arrastre de cámara con botón derecho |
-| Reloj de rondas | Mismo orden e impactos con pasos simulados a 30, 60 y 144 Hz; no constituye una medición de rendimiento |
-| Motor y GPU | Godot 4.7.2 estándar portátil; Vulkan / Forward+ en Radeon RX 6600; procesos de prueba terminados con código 0 y sin errores de scripts o recursos |
+| Suite de misión, sin ventana | **114 comprobaciones, 0 fallos**; `tests/demo_logic_report.json` |
+| Suite con GPU | **133 comprobaciones, 0 fallos**; `tests/demo_capture_report.json`, `tools/logs/demo-capture.log` |
+| Renderizado | Godot 4.7.2 estándar; Vulkan / Forward+ en Radeon RX 6600; sin errores de scripts o recursos |
+| Entradas reales | Clic en iconos/órdenes/retirada, flechas, rueda, teclado, WASD, F, Espacio/Escape y botón derecho; comprobados en Godot sin ventana y con GPU |
+| Rondas | Dos impactos por ráfaga, una ronda, interrupción entre contactos y resultados iguales con pasos de 30/60/144 Hz; no es una medición de rendimiento |
+| Narrativa | Rechazo, lección seguida de ataque y lección seguida de acuerdo. Tres finales completados mediante acceso y reclamación real, sin victoria anticipada |
+| Bot de partida normal | Victoria en **106,67 s simulados**, salud final **312/340**, **36 acciones resueltas**, 4 bajas, 0 botiquines restantes; `tests/demo_playthrough_report.json` |
+| Integridad del bot | 0 teletransportes y 0 llamadas de daño directo; estadísticas de producción, movimiento real y órdenes. Daño recibido 317,5 y curación observada 289,5 |
+| Capturas reales | 19 PNG de 1280 × 720 en `screenshots/demo_*.png`; HUD con destinatarios, gestos/contactos, diálogo, interior, rutas y final. Además `ui_v03_*.png` para menú/ayuda/cola; inspeccionados visualmente |
 
-Los tests de estados usan daño directo para comprobar señales y transiciones. Las partidas completas del bot son pruebas separadas: utilizan movimiento, órdenes, ataques y habilidades con salud, daño y recargas normales. No equivalen a una evaluación humana de dificultad.
+Los fixtures aislados pueden congelar o colocar actores y aplicar daño directo para comprobar una transición. La partida normal se ejecuta aparte y deja constancia de estadísticas, movimiento, acciones, recursos y eventos. La victoria del bot no sustituye la evaluación humana de dificultad ni significa que un jugador tardará 106,67 s.
 
-## Correcciones encontradas durante la verificación
+Lanzadores: `tools/DEMO_TEST.bat` y `tools/DEMO_CAPTURE.bat`; los lanzadores anteriores son alias de esa suite, incluido su bot normal. `tools/QA.ps1` usa el mismo marcador `KHARUUN_DEMO_RESULT`. Los runners y el motor de acción sustituidos se retiraron de esta rama y siguen disponibles en las etiquetas históricas.
 
-Se corrigieron la colocación inicial de cuerpos antes de registrarse en física, la selección al comenzar pausado, los golpes enemigos a través de obstáculos y el impacto pendiente tras un empuje. Los controles de la interfaz ignoran la repetición de teclas y no capturan Espacio como una segunda pulsación de botón. Los tests comprueban estos casos.
+## Fallos resueltos al verificar
 
-La entrada automatizada se transforma entre coordenadas de ventana y viewport para que el clic sea válido tanto con GPU a 1280 × 720 como en el modo sin ventana. Las capturas proceden del renderizado real de Godot.
+- Cronómetro que heredaba el procesamiento durante pausa: la misión ahora se congela junto con física y recursos.
+- Realimentación entre dirección de WASD y retorno de cámara, que producía círculos al mantener A/D.
+- HUD que aún consultaba recargas retiradas, solape de flechas con el panel de pausa y textos de selección confundidos con el destinatario de la próxima orden.
+- Reentrancia cuando el último impacto abre el diálogo y resetea la cola; los impactos siguientes no continúan después de detener el encuentro.
+- Altar oculto por el protagonista al acercarse: marcador de núcleo y E visible en el interior.
 
-## Alcance y siguiente iteración
+El helper de prueba de rueda debía emitir también la liberación del botón: dejarlo pulsado retenía el foco GUI e invalidaba clics posteriores. Se corrigió el helper; no se simuló el resultado llamando directamente a las señales del HUD.
 
-El combate táctico se aplica por ahora a **un duelo contra el centinela**. Sus valores son ajustes propios de Kharuun inspirados en la estructura de KOTOR; no una reproducción completa de sus reglas. La misión original conserva su combate de acción, con las correcciones compartidas de arma y física.
+## Pendientes antes de la entrega final
 
-Tu primera partida de la misión original duró **4 min 18 s**, según tu prueba. El duelo nuevo aún necesita esa evaluación humana para ajustar ritmo, claridad y dificultad; sus 36,62 s corresponden al bot y a un solo enemigo.
+**Q01 no está resuelta.** Si una orden llega sin energía, esta build conserva la orden y pausa el mundo sin consumir recurso ni decidir una penalización o salto de cola. Cancela esa orden o pulsa F y reanuda para continuar probando. Es una protección temporal de desarrollo; se sustituirá por la regla definitiva cuando llegue la prueba del usuario en KOTOR.
 
-Los personajes siguen siendo modelos procedurales simples. Esta iteración mejora la orientación y la postura, pero no añade modelos Blender, compañero, nuevas zonas ni universo ampliado. El siguiente paso es afinar este duelo con la prueba humana y trasladar el sistema validado a los encuentros de la misión; después se avanzará con modelos, animaciones y contenido.
+Falta la prueba humana de comprensión y equilibrio, especialmente con tres enemigos, curación y retirada. Los daños, costes y duraciones son provisionales propios de Kharuun. Personajes procedurales simples; no hay nuevos modelos Blender, formas, escudos, arrojadizos, compañero, karma o progresión.
 
-No se necesita instalar Blender para ejecutar esta entrega. Se utiliza el Godot portátil de `tools/godot/`, sin conexión. Código y documentación se guardan en Git local; informes, capturas, logs y ejecutables permanecen disponibles en el ordenador y se excluyen del historial.
+Engram lee el proyecto correctamente, pero el hook todavía rechaza escrituras por vínculo de sesión no confirmado. Se conservan acuerdos y trabajo en los MD y GitHub; no se elude ese bloqueo ni se modifican memorias ajenas. Logs, capturas, informes y motor portátil permanecen locales y están excluidos de Git.

@@ -2,9 +2,22 @@
 
 Las versiones identifican entregas jugables verificadas, mediante etiquetas Git locales. La numeración de las dos entregas existentes se asigna el 12 de octubre de 2026; las etiquetas apuntan a los commits originales y no reescriben su historial.
 
-Versión jugable actual: **0.2.0**. Próxima versión prevista: **0.3.0**, todavía en diseño y sin etiqueta de entrega. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
+Última entrega estable: **v0.2.0**. Versión del árbol actual: **demo 0.3 en desarrollo**, sin etiqueta final de entrega. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
+
+El árbol de `feature/temple-tactical-demo` contiene ahora una build jugable de desarrollo de 0.3.0. La última entrega estable permanece en `v0.2.0`; Q01 y la aceptación humana impiden presentar esta build como entrega final.
 
 ## Sin publicar
+
+### Demo 0.3 en desarrollo
+
+- Misión del templo unificada con combate táctico, cola con destinatarios independientes y autoataque al último destinatario ofensivo ejecutado.
+- HUD con tres selectores de categorías, cuatro órdenes pendientes, botiquines con contador, huecos futuros desactivados y retrato/recursos. Ayuda breve omitible y avisos contextuales.
+- Básico y ráfaga con dos impactos; empuje, descarga, curación propia y tres botiquines. Consumo al ejecutar incluso con salud llena, sin recargas adicionales ni orden Defensa.
+- Gesto con la mano izquierda, descarga desde la palma y curación verde; orientación y contacto del arma, cuerpos sólidos y comprobación de obstáculos.
+- Pausa inicial una vez por encuentro, WASD tras F, persecución por la zona accesible y retorno suave de cámara sin movimiento circular involuntario.
+- Diálogo ramificado del guardián después de los acólitos, recursos conservados y tiempo congelado mientras se lee. Combate y paso pacífico habilitan el mismo núcleo final del templo; reinicio completo tras derrota.
+- Suite nueva de misión y bot con reglas normales; lanzadores DEMO y anteriores actualizados. Runners y motor de acción sustituidos conservados en el historial Git, retirados del árbol actual.
+- Q01 aislada con protección temporal: orden sin energía conservada y mundo pausado, cancelable para continuar las pruebas. La regla definitiva de KOTOR sigue pendiente y no se crea `v0.3.0` final. Evidencia y limitaciones en RESULTADO.
 
 ### Documentación y organización
 
@@ -17,7 +30,7 @@ Versión jugable actual: **0.2.0**. Próxima versión prevista: **0.3.0**, todav
 - Revisión previa a producción: lectura de Engram desde el MCP de esta sesión verificada y política explícita de consultas exclusivas a `shadowsofkharuun`, conservando memorias ajenas. Instalado jq 1.8.2 oficial, dependencia ausente de los hooks; escritura de agente pendiente de recarga/registro confirmado del cliente.
 - Respuestas D21–D24 incorporadas al diseño y backlog: curación con salud llena consume ronda/recurso, persecución por toda la zona accesible, reinicio completo de misión y congelación de tiempo/recursos durante el diálogo. Q02/Q03/Q07 cerradas; Q01 sigue pendiente. Las 13 issues se revisan contra estos criterios sin iniciar implementación.
 
-Estos cambios son de documentación. La misión unificada, ráfaga, botiquines, curación y rutas nuevas están **planificadas**, no implementadas; su alcance está en el diseño y no se cuenta como funcionalidad entregada.
+La documentación y organización anteriores se mantienen. Las funciones de la build de desarrollo están implementadas y comprobadas según RESULTADO, pero permanecen **sin entrega final** mientras Q01 y la aceptación humana estén pendientes.
 
 ## 0.2.0 — 2026-10-12
 

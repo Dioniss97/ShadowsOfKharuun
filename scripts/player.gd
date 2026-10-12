@@ -20,7 +20,8 @@ var automation_mode = false
 var distance_walked = 0.0
 var attack_bonus = 8
 var defence = 14
-var defending_left = 0.0
+var movement_heading = 0.0
+var was_moving = false
 
 func _ready() -> void:
 	floor_snap_length = 0.7
@@ -56,46 +57,33 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.echo: return
 	if not control_enabled:
 		return
-	var tactical = is_instance_valid(combat) and combat.tactical
-	if event is InputEventMouseMotion and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or (tactical and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT))):
+	if event is InputEventMouseMotion: camera_input(event)
+
+func camera_input(event: InputEventMouseMotion) -> void:
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		yaw -= event.relative.x*0.0026
 		pitch = clampf(pitch-event.relative.y*0.0023,-0.7,0.30)
-	if tactical:
-		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			combat.select_screen(event.position)
-		if event.is_action_pressed("queue_attack"): combat.enqueue_action("attack")
-		if event.is_action_pressed("push"): combat.enqueue_action("push")
-		if event.is_action_pressed("lightning"): combat.enqueue_action("lightning")
-		if event.is_action_pressed("defend"): combat.enqueue_action("defend")
-		if event.is_action_pressed("cycle_target"): combat.cycle_target()
-		if event.is_action_pressed("disengage"): combat.disengage()
-		return
-	if event.is_action_pressed("attack"):
-		combat.basic_attack()
-	if event.is_action_pressed("push"):
-		combat.use_ability(1)
-	if event.is_action_pressed("lightning"):
-		combat.use_ability(2)
 
 func _physics_process(delta: float) -> void:
 	invulnerable = maxf(0,invulnerable-delta)
-	defending_left = maxf(0,defending_left-delta)
-	rig.guarding = defending_left > 0
+	rig.guarding = false
 	var tactical = is_instance_valid(combat) and combat.tactical
 	energy = minf(max_energy,energy+delta*(3.0 if tactical else 10.0))
 	var direction = Vector3.ZERO
 	var running = false
 	if control_enabled:
 		var axis = Input.get_vector("move_left","move_right","move_forward","move_back")
-		direction = Vector3(cos(yaw),0,-sin(yaw))*axis.x+Vector3(sin(yaw),0,cos(yaw))*axis.y
+		var moving = axis.length() > 0.1
+		if moving and (not was_moving or Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)): movement_heading = yaw
+		direction = Vector3(cos(movement_heading),0,-sin(movement_heading))*axis.x+Vector3(sin(movement_heading),0,cos(movement_heading))*axis.y
+		was_moving = moving
 		running = Input.is_action_pressed("sprint")
 	if automation_mode:
 		direction = automation_direction
-	elif tactical:
-		if direction.length() > 0.1:
-			combat.manual_override()
-		else:
-			direction = combat.movement_direction
+	elif tactical and (combat.engaged or combat.actor_locked or not combat.queue.is_empty()):
+		direction = combat.movement_direction
+		running = false
+		was_moving = false
 	var speed = 6.6 if running else 3.6
 	velocity.x = move_toward(velocity.x,direction.x*speed,delta*22)
 	velocity.z = move_toward(velocity.z,direction.z*speed,delta*22)
@@ -116,6 +104,11 @@ func _physics_process(delta: float) -> void:
 	if direction.length() > 0.1 and (not tactical or not combat.actor_locked) and rig.attack_time <= 0:
 		rig.rotation.y = lerp_angle(rig.rotation.y,atan2(-direction.x,-direction.z),delta*12)
 	rig.animate(delta,flat_speed)
+	update_camera(delta)
+
+func update_camera(delta: float) -> void:
+	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		yaw = lerp_angle(yaw, rig.rotation.y, 1.0-exp(-delta*3.5))
 	camera_pivot.global_position = camera_pivot.global_position.lerp(global_position+Vector3(0,1.65,0),1.0-exp(-delta*14))
 	camera_pivot.rotation.x = lerp_angle(camera_pivot.rotation.x,pitch,1.0-exp(-delta*18))
 	camera_pivot.rotation.y = lerp_angle(camera_pivot.rotation.y,yaw,1.0-exp(-delta*18))
@@ -123,7 +116,7 @@ func _physics_process(delta: float) -> void:
 func take_damage(amount: float) -> void:
 	if health <= 0 or invulnerable > 0:
 		return
-	health = maxf(0,health-amount*(0.45 if defending_left > 0 else 1.0))
+	health = maxf(0,health-amount)
 	invulnerable = 0.0 if is_instance_valid(combat) and combat.tactical else 0.32
 	rig.hit()
 	health_changed.emit()

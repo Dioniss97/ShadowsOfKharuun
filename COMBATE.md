@@ -1,25 +1,69 @@
-# Primera iteración: duelo táctico
+# Combate de la misión unificada
 
-**Documento de la primera entrega implementada.** El diseño vigente para la segunda vuelta está en [DISENO_DEMO.md](DISENO_DEMO.md), con tareas en [PENDIENTES.md](PENDIENTES.md). Allí se sustituyen, entre otras, las reglas de WASD, recargas y destino del autoataque. Esta página conserva la referencia de la versión ya verificada.
+Referencia técnica de la **build de desarrollo de la segunda vuelta, prevista como 0.3.0**, en `feature/temple-tactical-demo`. No hay etiqueta final `v0.3.0`: Q01 sigue pendiente y falta la evaluación humana de equilibrio. El diseño humano vigente está en [DISENO_DEMO.md](DISENO_DEMO.md); implementación y evidencia se registran en [PENDIENTES.md](PENDIENTES.md) y [RESULTADO.md](RESULTADO.md).
 
-Alcance: pasos 1–3 del plan. Corregir arma, colisiones y sincronización; probar selección, rondas, cola y pausa en un duelo dentro del patio actual. La misión original continúa disponible como referencia. Blender, compañero, ampliación de mapa y equilibrio final de toda la misión corresponden a iteraciones posteriores.
+La primera iteración permanece en Git, etiqueta [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0). Sus reglas de WASD, recargas, Defensa y continuación contra la selección anterior fueron sustituidas. Este documento describe el código de la misión unificada.
 
-## Reglas propuestas para Kharuun
+## Rondas, órdenes y destinatarios
 
-- Combate en tiempo real con pausa. Cada combatiente tiene su propio reloj; no hay alternancia global entre jugador y enemigo.
-- Una acción activa y hasta cuatro órdenes pendientes. Las órdenes conservan su objetivo al encolarse; cambiar de selección afecta a las nuevas órdenes.
-- La ronda del jugador dura 2,6 s como ajuste inicial propio. El golpe se resuelve a los 0,42 s de comenzar la animación y solo una vez. La ronda restante representa recuperación.
-- Ataque básico automático al vaciarse la cola si el jugador sigue enfrentado a un objetivo vivo. Sin objetivo, el personaje espera.
-- Espacio pausa y permite seleccionar, encolar o cancelar. Escape abre el menú de pausa. Reanudar un menú no elimina una pausa táctica anterior.
-- Clic izquierdo selecciona un enemigo y comienza el enfrentamiento; Tab cambia selección. Botón derecho mantenido gira la cámara. 3 encola ataque, 1 empuje, 2 descarga, 4 defensa. F se retira y cancela órdenes; WASD interrumpe el enfrentamiento para moverse manualmente.
-- Fuera de alcance, una orden acerca al personaje físicamente. Si hay un obstáculo persistente, se cancela con explicación en pantalla. Objetivos muertos se descartan; no se sustituye silenciosamente su objetivo por otro.
-- El coste y cooldown de un poder se consumen al comenzar su acción. La energía no se consume al pulsar para encolarlo. Defensa aumenta temporalmente la defensa y reduce el daño; el enemigo conserva su ritmo.
-- Acierto: 1d20 + ataque frente a defensa. 1 siempre falla; 20 es crítico. Esta estructura toma como referencia KOTOR; valores, duración y efectos son decisiones de este prototipo.
-- Movimiento y daño se ejecutan en física, independientes del renderizado. Pausa congela movimiento, rondas, cooldowns y estados.
-- Personajes sólidos, frente local -Z y hoja orientada hacia ese frente. La locomoción no cambia la orientación durante el golpe.
+- Tiempo real con pausa y relojes independientes por combatiente. No hay alternancia global ni ronda extra artificial para el enemigo.
+- Una acción en curso y hasta cuatro órdenes pendientes. Cada orden guarda acción y destinatario al encolarse; seleccionar otro enemigo o recorrer un selector no reescribe órdenes.
+- El personaje se aproxima físicamente al destinatario cuando le falta alcance o visibilidad. La precisión, defensa, distancia y obstáculos pueden impedir un impacto. Si una ruta permanece bloqueada, se descarta la orden con explicación.
+- El básico automático, cuando se agota la cola, usa el último destinatario de una acción ofensiva ejecutada. Cambiar la selección después no lo cambia. Una cura actúa sobre el protagonista y tampoco cambia ese destinatario.
+- `1→A, 2→B, 2→A` sigue con `básico→A`. Aquí los números representan acciones del ejemplo, no teclas ni tipos de ataque adicionales.
+- Una orden ofensiva contra un enemigo caído se descarta; no se transfiere a otro enemigo. Si el destinatario automático muere y ya no quedan órdenes válidas, se busca otro agresor vivo, visible y alcanzable.
+
+La selección para preparar órdenes aparece arriba. La acción actual y la próxima orden se muestran en el panel inferior central con su destinatario, que puede ser diferente. Los cuatro botones de la cola permiten cancelación individual; el nombre completo también aparece en su descripción al pasar el ratón.
+
+## Acciones y valores iniciales
+
+Estos números son **ajustes provisionales de equilibrio de Kharuun**, no una reproducción exacta de KOTOR. La ronda inicial del jugador dura 2,6 s; los impactos se resuelven durante la animación y el tiempo restante representa recuperación.
+
+| Acción | Recurso | Resultado inicial | Alcance |
+|---|---|---|---|
+| Básico | Una acción | Un intento, daño base 26 | 2,15 m |
+| Ráfaga | Una acción | Dos intentos independientes, daño base 17 cada uno | 2,15 m |
+| Empuje | Una acción y 24 de energía | Daño base 30, desplazamiento y aturdimiento si acierta | 5,5 m |
+| Descarga | Una acción y 32 de energía | Daño base 58 | 11 m |
+| Curación propia | Una acción y 28 de energía | Hasta 68 de salud sobre el protagonista | Sobre ti |
+| Botiquín | Una acción y una unidad | Hasta 95 de salud sobre el protagonista | Sobre ti |
+
+El básico tiene un contacto a los 0,42 s. La ráfaga tiene dos contactos a los 0,42 y 0,90 s, con tiradas separadas dentro de la misma ronda. Ambos pertenecen al mismo enemigo: su muerte, alejamiento, interrupción u obstáculo entre contactos no permiten transferir el segundo a otra persona.
+
+El acierto usa `1d20 + ataque` frente a defensa pasiva; 1 falla y 20 es crítico. Un crítico surgido de esta tirada no añade un ataque crítico seleccionable. Defensa ya no es una acción y no se han añadido formas, equipo defensivo ni bloqueos entre armas.
+
+Empuje, descarga y curación gastan energía sin recarga adicional. El protagonista empieza con 100 de energía y regenera inicialmente 3 por segundo cuando el mundo avanza. Los poderes usan un gesto común con el brazo izquierdo: empuje desde la palma, descarga desde la palma y curación verde alrededor del protagonista. El sable permanece en la mano derecha.
+
+## Consumo, cancelación y energía pendiente
+
+La energía o el botiquín se comprueban y consumen al iniciar la ejecución. Encolar o cancelar una orden pendiente no los gasta. F interrumpe una acción ya iniciada, pero no devuelve lo que consumió al comenzar. Botiquín y curación con salud completa consumen igualmente el recurso y una acción.
+
+Empiezas con tres botiquines. El contador no puede quedar negativo y el botón agotado se desactiva. Como ajuste técnico provisional, una orden pendiente de botiquín que llega a ejecutarse sin unidades se descarta con aviso y deja avanzar la cola; no se inventa una penalización equivalente a Q01.
+
+**Q01 aún no tiene una regla de juego acordada.** La build pausa el mundo cuando una orden llega a ejecutarse sin energía suficiente, conserva esa orden y muestra «Orden sin energía». El jugador debe cancelarla, limpiar la cola o pulsar F, y reanudar con Espacio. Así se prueba el resto mientras se espera la comprobación humana de KOTOR, sin elegir a escondidas entre saltar la orden, consumir una ronda o sustituirla por un básico. Esta pausa provisional no certifica Q01.
+
+## Pausa, retirada y cámara
+
+Al iniciar un encuentro agresivo se selecciona un agresor visible y alcanzable y se pausa una vez. Cambiar o perder enemigo dentro del mismo encuentro no provoca otra pausa inicial. La primera pausa de los acólitos ofrece ayuda breve omitible, seguida de avisos contextuales que aparecen una sola vez por misión.
+
+Espacio congela movimiento, daño, rondas, estados y recursos, permitiendo seleccionar y preparar órdenes. Escape añade el menú de pausa; cerrarlo conserva cualquier pausa táctica anterior. El diálogo congela también la regeneración y se reanuda según combate o paso pacífico.
+
+WASD no borra ni interrumpe órdenes del combate automático. F o Cancelar combate interrumpen la acción, vacían la cola y paran el básico automático, devolviendo movimiento libre sin reenganche involuntario. Los agresores conservan su actividad y persiguen por toda la zona accesible.
+
+Mantener el botón derecho permite girar la cámara. Al soltarlo vuelve suavemente detrás del protagonista. Durante acciones ofensivas, el personaje encara su destinatario; el giro de cámara no cambia esa orden. Las flechas y la rueda de los selectores consumen sus eventos de interfaz, recorren acciones y no mueven la cámara ni encolan una acción por sí solas.
+
+## Continuidad de la misión
+
+Menú → exploración → diálogo inicial → acólitos → conversación del guardián. Rechazarlo o atacarlo tras escuchar inicia su encuentro; aceptar después de escuchar habilita paso pacífico con guardián vivo y no agresivo. Resolverlo abre la entrada al templo. Solo reclamar el núcleo permite completar la misión.
+
+No hay reposición de salud, energía ni botiquines al pasar al guardián. El diálogo conserva los valores de entrada y congela tiempo y recursos. Reiniciar después de morir restablece la misión completa: recursos iniciales, tres botiquines, enemigos, encuentros, cola y elecciones.
+
+Escudo, formas y arrojadizos son huecos futuros vacíos desactivados. El duelo queda accesible internamente con `PLAY.bat --duel`; la experiencia principal es una sola misión.
 
 ## Verificación
 
-Comprobar orden, límite y cancelación de cola; autoataque; objetivos independientes; daño diferido y único; alcance al impactar; defensa; pausa y órdenes durante ella; muerte de objetivo; retirada; colisiones y rampa; victoria y reinicio del duelo. Inspeccionar capturas frontal y lateral del arma. Repetir el recorrido original para detectar regresiones y jugar el duelo con un bot que use la misma cola y reglas.
+La suite de `tests/temple_runner.gd` cubre órdenes mezcladas A/B, selección independiente, ambos contactos de ráfaga, recursos, cura con salud llena, cancelación, pausa, persecución, colisiones, las ramas del guardián, objetivo final y reinicio. Incluye eventos reales sobre controles y un bot que usa reglas normales. Las capturas con GPU permiten revisar la legibilidad a 1280 × 720 y la relación entre arma, palma e impactos.
 
-Fuentes: [manual oficial de KOTOR, páginas 28–31](https://cdn.steamstatic.com/steam/apps/32370/manuals/KOTORI_Manual.pdf#page=15) y [manual oficial de KOTOR II, páginas 20–21](https://cdn.akamai.steamstatic.com/steam/apps/208580/manuals/KOTORII_Manual.pdf#page=11).
+Las comprobaciones efectivamente ejecutadas y sus límites se publican en [RESULTADO.md](RESULTADO.md), sin equiparar pruebas de transición o un bot con la valoración humana de dificultad. El caso final de energía y esa valoración siguen pendientes.
+
+Referencias visuales y de diseño: capturas de KOTOR II aportadas por el usuario y [manual de KOTOR II](https://cdn.akamai.steamstatic.com/steam/apps/208580/manuals/KOTORII_Manual.pdf). Las reglas y los números de Kharuun corresponden a los acuerdos de este prototipo.

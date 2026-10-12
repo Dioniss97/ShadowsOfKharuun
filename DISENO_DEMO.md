@@ -1,12 +1,12 @@
 # Diseño vigente: segunda vuelta de la demo
 
-Actualizado: 12 de octubre de 2026. Estado: **diseño y documentación; implementación todavía no iniciada**.
+Actualizado: 12 de octubre de 2026. Estado: **segunda vuelta implementada en una build de desarrollo; regla Q01 y aceptación humana pendientes**.
 
 Este documento conserva los acuerdos humanos de esta conversación y permite retomar el proyecto sin reconstruirla. Las tareas están en [PENDIENTES.md](PENDIENTES.md). Las instrucciones para trabajar con estos documentos están en [AGENTS.md](AGENTS.md); la rutina, versiones y punto de reanudación están en [ORGANIZACION.md](ORGANIZACION.md).
 
 ## Estado real y objetivo
 
-La entrega jugable **0.2.0**, etiqueta `v0.2.0`, tiene dos entradas: misión original de acción y duelo táctico. La evidencia está en [RESULTADO.md](RESULTADO.md), commit local `f516f41`: 56 comprobaciones tácticas sin ventana y 60 con GPU; regresión original de 34/43 comprobaciones. Esas pruebas no certifican aún la segunda vuelta, prevista como **0.3.0** y sin etiqueta de entrega.
+La última entrega estable **0.2.0**, etiqueta `v0.2.0` y commit `f516f41`, tenía misión original de acción y duelo táctico separados. Su informe histórico permanece en esa etiqueta. El árbol actual de `feature/temple-tactical-demo` implementa la misión unificada y los acuerdos D01–D24 como **build de desarrollo de 0.3.0**. Las pruebas nuevas y sus límites están en [RESULTADO.md](RESULTADO.md); no existe aún una etiqueta final `v0.3.0`.
 
 El objetivo siguiente es **una única demo del asalto al templo con combate táctico integrado**, conservando exploración, diálogo, tres acólitos, guardián y finales. Tras los acólitos habrá una conversación ramificada que permita combatir al guardián o obtener paso pacífico. El duelo podrá conservarse internamente para pruebas. El proyecto es para un jugador y prioriza la historia.
 
@@ -45,7 +45,7 @@ La corrección D07 es explícita del usuario: `1→A, 2→B, 2→A` termina en `
 
 El usuario eligió inicialmente «toda la base» con ataques, escudo, granada y dos formas, pero después redujo expresamente esta vuelta. El alcance vigente contiene básico y ráfaga, empuje/descarga/curación y botiquines. Ataque crítico, ataque fuerte, escudo, formas, granadas de concusión o congelación, minas, inventario completo, combate a distancia nuevo, compañero y modelos Blender quedan para después.
 
-También quedan sustituidas las propuestas de que WASD cancele el combate, de mantener recargas adicionales de poderes y de continuar el autoataque contra el último enemigo seleccionado. Esas tres reglas todavía existen en el código de la primera entrega y tendrán que cambiar al implementar.
+También quedan sustituidas las propuestas de que WASD cancele el combate, de mantener recargas adicionales de poderes y de continuar el autoataque contra el último enemigo seleccionado. Esas reglas pertenecen a `v0.2.0`; ya están retiradas de la build actual.
 
 La oferta del guardián y su lección serán narrativas en esta vuelta. Registrar la ruta elegida para diálogo/final no requiere karma numérico, afiliación persistente, poderes aprendidos ni progresión; esos sistemas siguen aplazados. Escuchar la lección no obliga a aceptarla.
 
@@ -72,6 +72,8 @@ Guardián: «Mis acólitos habían aprendido a obedecer; creyeron que eso bastab
 - Ataque tras escuchar: «Ya me has enseñado lo que necesitaba. Ahora eres el último obstáculo.»
 
 Estas líneas son propuestas de redacción. Las ramas y el cierre común están acordados; las frases concretas siguen siendo borrador. La ruta pacífica debe contar como resolución válida, sin exigir la muerte del guardián.
+
+La build usa estas líneas originales como primer texto jugable; se pueden pulir con la prueba humana sin modificar las ramas acordadas.
 
 ### Objetivo final común confirmado
 
@@ -106,6 +108,18 @@ Dudas cerradas: Q02 → D21 (curación con salud llena consume recurso y ronda),
 Para Q01 comparar `ataque → curación sin energía` con `ataque → curación sin energía → ataque`. Observar si consume tiempo de ronda o pasa a otra orden; distinguir no poder encolarla de que falle al ejecutarse. Una penalización solo al final de la cola podría evitarse añadiendo un básico detrás. En Kharuun los relojes son independientes: perder la ronda propia no concede una ronda adicional artificial al enemigo. El usuario comprobará el comportamiento del original; no preguntárselo de nuevo mientras está pendiente esa comprobación.
 
 Las propuestas no equivalen a respuestas del usuario. Si una duda pendiente es necesaria para el comportamiento que se está implementando y no se puede resolver por los acuerdos, consultarla con opciones. El usuario prefiere resolverlas antes de programar y recibir ese mismo formato si surge una duda importante durante el trabajo.
+
+## Implementación de desarrollo y límites
+
+El usuario autorizó empezar a producir esta segunda vuelta el 12 de octubre. La misión, cola por destinatario, HUD, ataques, recursos, cámara, retirada y ramas del guardián están implementados en `feature/temple-tactical-demo`. El menú presenta una única misión principal; el duelo queda como herramienta interna mediante `--duel`.
+
+Q01 permanece aislada: si una orden llega sin energía, **esta build de desarrollo conserva la orden y pausa el mundo**, sin cobrar energía ni inventar una ronda perdida o un salto de cola. Para seguir probando se cancela esa orden o se pulsa F y luego se reanuda. Esta protección temporal no es la respuesta definitiva del combate ni fidelidad verificada a KOTOR. Debe sustituirse y probarse tras la observación del usuario antes de etiquetar la entrega final.
+
+Ajustes técnicos provisionales: una orden de botiquín que encuentre el inventario agotado se descarta con aviso, sin contador negativo; cancelar una orden pendiente no gasta recursos, y F después de iniciarse una acción no devuelve el recurso que ya se consumió. Una ráfaga cuyo enemigo muera o salga de alcance conserva la ronda y no redirige el segundo golpe. La aproximación usa física y evita obstáculos cercanos; no hay un sistema nuevo de navegación de mapas.
+
+Valores iniciales para la prueba humana: salud 340, energía 100, regeneración 3/s, tres botiquines de 95; básico 26, ráfaga 17 × 2; empuje 30 por 24 de energía, descarga 58 por 32 y curación 68 por 28; ronda del jugador 2,6 s. Acólitos con 160 de salud y ronda de 3,8 s; guardián con 520 y ronda de 3 s. Son valores de equilibrio propios, modificables con evidencia. La defensa sigue siendo una estadística pasiva de acierto.
+
+El núcleo reclamable del templo es el mismo en ambas rutas. Se añadió una cámara pequeña detrás del portal existente y un marcador visible del altar para concretar D20; no es una ampliación del universo ni otra misión. La aceptación humana de ritmo y claridad y Q01 siguen pendientes, aunque pasen los tests automáticos.
 
 ## Casos que deberá cubrir la verificación
 

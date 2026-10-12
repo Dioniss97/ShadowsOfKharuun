@@ -26,12 +26,12 @@ var round_clock = KhRoundQueue.new()
 
 func _ready() -> void:
 	if guardian:
-		max_health = 1800
+		max_health = 520 if tactical_mode else 1800
 		health = max_health
 		display_name = "Guardián de Kharuun"
 	floor_snap_length = 0.7
 	if tactical_mode:
-		round_clock.round_seconds = 3.0
+		round_clock.round_seconds = 3.0 if guardian else 3.8
 		round_clock.action_started.connect(_tactical_started)
 		round_clock.action_impact.connect(_tactical_impact)
 	var c = CollisionShape3D.new()
@@ -165,13 +165,23 @@ func _tactical_physics(delta: float) -> void:
 				mode = Mode.RECOVER if round_clock.impact_done else Mode.WINDUP
 			else:
 				mode = Mode.CHASE
-				if direction.length() > 1.8 or not _tactical_visible():
+				if direction.length() > (2.0 if guardian else 1.8) or not _tactical_visible():
 					desired = direction.normalized()*2.4
+					for other in level.enemies:
+						if other != self and other.health > 0:
+							var separation = global_position-other.global_position
+							separation.y = 0
+							if separation.length() > 0.01 and separation.length() < 1.1: desired += separation.normalized()*1.3
 				else:
 					round_clock.start({"id":"attack","target":target,"target_name":"Intruso"})
 	knockback = knockback.move_toward(Vector3.ZERO,delta*12)
 	velocity.x = desired.x+knockback.x
 	velocity.z = desired.z+knockback.z
+	if desired.length() > 0.1 and test_move(global_transform,desired*delta):
+		var tangent = Vector3(-desired.z,0,desired.x)
+		if test_move(global_transform,tangent*delta): tangent = -tangent
+		velocity.x = tangent.x+knockback.x
+		velocity.z = tangent.z+knockback.z
 	move_and_slide()
 	rig.animate(delta,desired.length())
 
@@ -193,9 +203,9 @@ func _tactical_impact(_order: Dictionary) -> void:
 	if distance > 2.35 or not _tactical_visible():
 		combat.record({"source":"enemy","id":"attack","hit":false,"damage":0,"reason":"range"})
 		return
-	var effective_defence = target.defence+(6 if target.defending_left > 0 else 0)
+	var effective_defence = target.defence
 	var result = KhCombatRules.hit_result(combat.rng.randi_range(1,20),attack_bonus,effective_defence)
-	var damage = KhCombatRules.scaled_damage(16,result)
+	var damage = KhCombatRules.scaled_damage(18 if guardian else 11,result)
 	var before = target.health
 	if result.hit:
 		target.take_damage(damage)
@@ -203,7 +213,7 @@ func _tactical_impact(_order: Dictionary) -> void:
 		level.audio.play_effect("enemy")
 	else:
 		level.fx.status_text(target.global_position+Vector3(0,2,0),"FALLO",Color(0.75,0.72,0.67))
-	combat.record({"source":"enemy","id":"attack","hit":result.hit,"damage":before-target.health,"roll":result.roll,"defended":target.defending_left > 0})
+	combat.record({"source":"enemy","id":"attack","hit":result.hit,"damage":before-target.health,"roll":result.roll})
 
 func stop_tactical() -> void:
 	round_clock.reset()

@@ -33,6 +33,7 @@ El objetivo siguiente es **una única demo del asalto al templo con combate tác
 | D17 | Conservar salud, energía y botiquines restantes al pasar al guardián. Retirar el regalo actual de hasta 75 de salud y energía completa. |
 | D18 | Enseñar con ayuda breve y omitible durante la primera pausa y avisos contextuales de una sola aparición. |
 | D19 | Retirar Defensa como orden o movimiento del jugador. Conservar la estadística pasiva de defensa ya implementada para calcular aciertos; no añadir ahora formas, bloqueos ni un sistema nuevo de equipo defensivo. |
+| D20 | Las rutas de combate y acuerdo desembocan en entrar al templo y reclamar el mismo objetivo final. La muerte del guardián o su permiso habilitan el paso, pero por sí solos no terminan la demo. |
 
 La corrección D07 es explícita del usuario: `1→A, 2→B, 2→A` termina en `0→A`, donde 0 significa básico automático. Los números son una notación de acciones, no una petición de añadir más ataques a esta vuelta. Una curación posterior no convierte al protagonista en destinatario del autoataque.
 
@@ -66,7 +67,13 @@ Guardián: «Mis acólitos habían aprendido a obedecer; creyeron que eso bastab
 - Aceptación: «Acepto tu enseñanza. Reclamaré el poder que guarda el templo.»
 - Ataque tras escuchar: «Ya me has enseñado lo que necesitaba. Ahora eres el último obstáculo.»
 
-Estas líneas son propuestas de redacción. Las ramas están acordadas; las frases y el punto exacto donde termina la misión requieren su revisión correspondiente. La ruta pacífica debe contar como resolución válida, sin exigir la muerte del guardián.
+Estas líneas son propuestas de redacción. Las ramas y el cierre común están acordados; las frases concretas siguen siendo borrador. La ruta pacífica debe contar como resolución válida, sin exigir la muerte del guardián.
+
+### Objetivo final común confirmado
+
+Derrotar al guardián o aceptar el acuerdo permite entrar al templo. En ambos casos, el objetivo cambia a reclamar lo que guarda el templo; solo completar ese objetivo desencadena el final. El acceso y la interacción deben estar condicionados a haber resuelto al guardián, para que no se gane simplemente corriendo hacia el objetivo durante un enfrentamiento todavía pendiente.
+
+La ruta pacífica conserva al guardián vivo y no agresivo; la ruta de combate permite avanzar después de derrotarlo. Las pantallas finales y los contadores reconocen ambas resoluciones: tres acólitos muertos son compatibles con una misión completada pacíficamente. Registrar la elección narrativa permite describir la ruta, sin implementar karma ni recompensas de progresión.
 
 ## Organización de la interfaz
 
@@ -92,9 +99,8 @@ Durante la ráfaga cada intento tiene su propio resultado y momento visible de c
 | Q02 | Curación que llega a su turno con salud completa | Descartar sin recurso ni ronda y seguir. Aplicar la misma regla a botiquín y poder. |
 | Q03 | Persecución y salida del encuentro tras F | Conservar la amenaza mientras los agresores estén activos; delimitar la persecución para impedir saltarse presentaciones narrativas. |
 | Q07 | Derrota y reinicio | Conservar el reinicio de misión completa de la demo actual; un punto de control sería una ampliación a decidir. |
-| Q09 | Punto de cierre de la ruta pacífica y de combate | Propuesta: ambas permiten entrar al templo y reclamar el mismo objetivo final. Alternativa: finalizar tras derrotar al guardián o conseguir su permiso de paso. |
 
-Dudas cerradas: Q04 → D16, Q05 → D17, Q06 → D18 y Q08 → D19. Se conservan los identificadores para rastrear las respuestas anteriores.
+Dudas cerradas: Q04 → D16, Q05 → D17, Q06 → D18, Q08 → D19 y Q09 → D20. Se conservan los identificadores para rastrear las respuestas anteriores.
 
 Para Q01 comparar `ataque → curación sin energía` con `ataque → curación sin energía → ataque`. Observar si consume tiempo de ronda o pasa a otra orden; distinguir no poder encolarla de que falle al ejecutarse. Una penalización solo al final de la cola podría evitarse añadiendo un básico detrás. En Kharuun los relojes son independientes: perder la ronda propia no concede una ronda adicional artificial al enemigo. El usuario comprobará el comportamiento del original; no preguntárselo de nuevo mientras está pendiente esa comprobación.
 
@@ -112,7 +118,7 @@ Las propuestas no equivalen a respuestas del usuario. Si una duda pendiente es n
 8. F devuelve movimiento; WASD conserva órdenes antes de F; cámara retorna al soltar botón derecho sin girar al combatiente fuera de su destinatario.
 9. Huecos futuros desactivados, acción y objetivo visibles y ayuda comprensible a 1280 × 720. Verificación gráfica de palma, espada y ambos contactos de ráfaga.
 10. Partida normal del bot con reglas de producción y prueba humana de claridad y equilibrio; no confundir un test de transiciones con una partida normal.
-11. Diálogo posterior: rechazo y ataque tras escuchar inician combate pausado; aceptar permite paso con guardián vivo y no agresivo. Las tres rutas llegan al resultado previsto sin exigir cuatro muertes.
+11. Diálogo posterior: rechazo y ataque tras escuchar inician combate pausado; aceptar permite paso con guardián vivo y no agresivo. Las tres rutas habilitan el objetivo final del templo y solo reclamarlo termina la misión; ninguna exige cuatro muertes. El objetivo no puede completarse antes de resolver al guardián.
 12. Comprobar D17 y la regla definitiva de recursos durante el diálogo: sin regalos de salud, energía o botiquines entre encuentros. Para la propuesta de congelación, leer todo el diálogo o saltarlo conserva los mismos recursos. No queda Defensa como acción seleccionable; las estadísticas pasivas siguen resolviendo aciertos.
 
 ## Referencias de diseño

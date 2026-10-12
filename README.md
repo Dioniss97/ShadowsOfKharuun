@@ -10,8 +10,10 @@ Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/S
 
 | Control | Acción |
 |---|---|
-| WASD / Shift | Mover / correr durante exploración o tras cancelar combate |
-| Botón derecho mantenido + ratón | Girar la cámara; al soltarlo vuelve suavemente detrás del personaje |
+| W / S | Avanzar / retroceder manteniendo el frente, durante exploración o tras cancelar combate |
+| A / D | Girar continuamente a izquierda / derecha; combinar con W describe un arco o círculo |
+| Shift | Correr durante movimiento libre |
+| Botón derecho mantenido + ratón | Orbitar la cámara; al soltar conserva la vista estando quieto o pausado. Se recentra suave y rápido solo al desplazarte |
 | Clic izquierdo sobre enemigo / Tab | Seleccionar un agresor para nuevas órdenes e iniciar el enfrentamiento |
 | Flechas o rueda sobre un selector | Recorrer ataques o poderes sin encolar nada |
 | Clic sobre el icono del selector | Añadir su acción contra la selección actual; curación siempre actúa sobre ti |
@@ -27,6 +29,8 @@ Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/S
 | Escape | Menú de pausa / continuar |
 
 Durante el combate automático, **WASD conserva las órdenes**. Pulsa F primero para moverte libremente. Los enemigos siguen atacando y persiguen por toda la zona accesible: cancelar combate no los detiene ni los devuelve a su posición inicial.
+
+Los tres selectores son una tarjeta compacta sobre el enemigo seleccionado y siguen su posición y la cámara. Se muestran durante el enfrentamiento, incluso en pausa táctica, y se ocultan al cancelar con F o fuera del combate. Si el enemigo no está visible, la tarjeta se oculta en lugar de quedarse en el centro.
 
 ## Selección, cola y recursos
 

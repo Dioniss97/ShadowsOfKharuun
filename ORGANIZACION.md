@@ -50,7 +50,7 @@ Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local
 3. Consultar las preguntas de esa tarea. Una duda sobre energía no bloquea cámara, interfaz o redacción independientes. Marcar exactamente qué parte espera respuesta.
 4. Si Engram está disponible, confirmar el proyecto y recuperar contexto con `project = shadowsofkharuun`, `scope = project` y sin `all_projects`; verificarlo contra los documentos actuales. Ignorar memorias ajenas incluso si falta contexto del juego.
 
-El usuario autorizó implementar esta segunda vuelta. Mantener el alcance D01–D24 y cerrar con evidencia; la protección temporal Q01 no sustituye una decisión del usuario.
+El usuario autorizó implementar esta segunda vuelta. Mantener el alcance D01–D26 y cerrar con evidencia; la protección temporal Q01 no sustituye una decisión del usuario. B1/B2 corrigen cámara, movimiento y menú flotante dentro del mismo PR y milestone.
 
 ## Durante el trabajo y al terminar
 
@@ -120,9 +120,9 @@ Referencias: [Changesets](https://github.com/changesets/changesets), [guía Engr
 ## Punto de reanudación actual
 
 - Versión que se puede probar con PLAY.bat: **demo 0.3 en desarrollo**, misión unificada en `feature/temple-tactical-demo`. La última etiqueta estable permanece `v0.2.0`.
-- Acuerdos confirmados: D01–D24. Además del combate y cierre común, curar con salud llena gasta recurso/ronda; persecución por toda la zona accesible; reinicio completo; tiempo/recursos congelados durante el diálogo.
+- Acuerdos confirmados: D01–D26. B1 sustituye el retorno de cámara al soltar en reposo y el desplazamiento lateral: órbita persistente quieto/pausado, retorno al moverse, W/S y giro continuo A/D. B2 fija selectores compactos sobre el enemigo solo en combate; no volver al panel central.
 - Regla principal pendiente: **Q01**, el usuario comprobará en KOTOR qué pasa con una orden sin energía al final o en medio de la cola. No volver a preguntarla mientras espera esa prueba.
 - Q02/Q03/Q07 están cerradas por las respuestas del usuario de esta revisión. No reabrirlas; solo Q01 sigue pendiente de comprobación.
-- Implementación actual: integración, destinatarios/HUD, cámara/retirada, ráfaga/poderes/botiquines, diálogos/objetivo/reinicio; verificación y bot normal en RESULTADO. Las issues de componentes identifican la rama y su evidencia.
+- Implementación actual: integración, destinatarios/HUD, cámara/retirada, ráfaga/poderes/botiquines, diálogos/objetivo/reinicio. B1/B2 están verificados en rama: 157 comprobaciones sin ventana, 179 con GPU y 22 capturas, sin fallos; detalle y bot normal en RESULTADO. Las issues de componentes identifican la rama y su evidencia.
 - Próximo paso: prueba humana de ritmo/claridad y observación Q01. Sustituir la protección temporal por la regla definitiva, verificarla y solo después aceptar la entrega final.
-- Entorno: repositorio privado, 13 issues y milestone; lectura MCP de Engram filtrada a este proyecto. La escritura sigue rechazada por el hook de sesión, incluso después de instalar jq: acuerdos y cierre quedan en Git/MD, sin eludir el rechazo ni tocar memorias ajenas.
+- Entorno: repositorio privado, issues DEMO y B1/B2 (#15/#16) en milestone 0.3 y PR borrador #14 sin merge; lectura MCP de Engram filtrada al proyecto. La escritura sigue rechazada por el hook de sesión: acuerdos y cierre quedan en Git/MD, sin eludir el rechazo ni tocar memorias ajenas.

@@ -50,7 +50,9 @@ Espacio congela movimiento, daño, rondas, estados y recursos, permitiendo selec
 
 WASD no borra ni interrumpe órdenes del combate automático. F o Cancelar combate interrumpen la acción, vacían la cola y paran el básico automático, devolviendo movimiento libre sin reenganche involuntario. Los agresores conservan su actividad y persiguen por toda la zona accesible.
 
-Mantener el botón derecho permite girar la cámara. Al soltarlo vuelve suavemente detrás del protagonista. Durante acciones ofensivas, el personaje encara su destinatario; el giro de cámara no cambia esa orden. Las flechas y la rueda de los selectores consumen sus eventos de interfaz, recorren acciones y no mueven la cámara ni encolan una acción por sí solas.
+Arrastrar con el botón derecho permite orbitar la cámara. Al soltar conserva su orientación si el protagonista está quieto o el mundo pausado; se recentra suave y rápido al desplazarse. W avanza, S retrocede manteniendo el frente y A/D gira continuamente. Combinar W con A/D describe un arco o círculo, sin una diagonal fija. Durante acciones ofensivas el personaje encara su destinatario y orbitar no cambia esa orden.
+
+Los tres selectores se proyectan sobre el enemigo seleccionado en una tarjeta compacta con nombre y vida, dejando la cara libre. Siguen al actor y a la cámara, se muestran también en pausa táctica y se ocultan fuera de combate, tras F o ante una selección no visible/válida. Flechas y rueda consumen sus eventos de interfaz y recorren sin encolar; clic en el icono conserva el destinatario seleccionado para esa nueva orden.
 
 ## Continuidad de la misión
 

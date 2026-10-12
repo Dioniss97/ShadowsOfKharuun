@@ -201,7 +201,7 @@ func build_hud() -> void:
 		p.custom_minimum_size.x = 110
 		v.add_child(p)
 		ability_bars.append(p)
-	var controls = label("WASD  Mover   ·   SHIFT  Correr\nE  Interactuar   ·   ESC  Pausa",12,DIM)
+	var controls = label("W/S  Avanzar/retroceder  ·  A/D  Girar\nE  Interactuar   ·   ESC  Pausa",12,DIM)
 	controls_label = controls
 	hud.add_child(controls)
 	place(controls,Vector2(-320,74),Vector2(295,65),Control.PRESET_TOP_RIGHT)
@@ -257,7 +257,7 @@ func show_game() -> void:
 	legacy_actions.hide()
 	message.hide()
 	hint.show()
-	controls_label.text = "WASD · mover  /  SHIFT · correr\nBOTÓN DERECHO · cámara  /  E · interactuar\nESPACIO · táctica  /  ESC · menú"
+	controls_label.text = "W/S · avanzar/retroceder · A/D · girar\nBOTÓN DERECHO · cámara  /  E · interactuar\nESPACIO · táctica  /  ESC · menú"
 	controls_label.add_theme_font_size_override("font_size",11)
 	announce("EL UMBRAL DE CENIZA")
 
@@ -350,8 +350,8 @@ func show_pause() -> void:
 	v.add_child(label("Clic / Tab: objetivo · Flechas / rueda: recorrer acciones",16))
 	v.add_child(label("1: empuje · 2: descarga · 3: básico · 4: ráfaga",16))
 	v.add_child(label("5: curación propia · 6: botiquín · E: interactuar",16))
-	v.add_child(label("F: cancelar combate y mover con WASD · Espacio: pausa táctica",15,GOLD))
-	v.add_child(label("Botón derecho: girar cámara · Al soltarlo vuelve detrás",14,DIM))
+	v.add_child(label("F: liberar movimiento · W/S: avanzar/retroceder · A/D: girar",15,GOLD))
+	v.add_child(label("Botón derecho: girar cámara · Se centra al avanzar o retroceder",14,DIM))
 	var resume = button("Continuar  [ESC]",true)
 	v.add_child(resume)
 	resume.pressed.connect(func(): resume_requested.emit())
@@ -370,7 +370,7 @@ func _process(delta: float) -> void:
 	var p = main.level.player
 	var combat = main.level.combat
 	var mission = main.mission
-	var movement_text = "F · liberar WASD" if combat.engaged or not combat.current_action.is_empty() else "WASD · mover  /  SHIFT · correr"
+	var movement_text = "F · liberar movimiento" if combat.engaged or not combat.current_action.is_empty() else "W/S · avanzar/retroceder · A/D · girar"
 	controls_label.text = movement_text + "\nBOTÓN DERECHO · cámara  /  E · interactuar\nESPACIO · táctica  /  ESC · menú"
 	if p.health < last_health: flash.color.a = 0.17
 	last_health = p.health
@@ -380,11 +380,8 @@ func _process(delta: float) -> void:
 	energy_label.text = "ENERGÍA   %d / 100" % int(p.energy)
 	objective_label.text = mission.objective()
 	timer_label.text = "%02d:%02d" % [int(mission.elapsed)/60,int(mission.elapsed)%60]
-	if combat.target_valid(combat.selected) and combat.enabled:
-		target_panel.show()
-		target_label.text = "SELECCIÓN: " + combat.selected.display_name
-		target_bar.value = combat.selected.health/combat.selected.max_health*100
-	else: target_panel.hide()
+	# Name and health now share the projected card above the selected enemy.
+	target_panel.hide()
 	hint.text = "E  Hablar con el guardián" if mission.state == KhMission.State.EXPLORATION and p.position.z < -6.5 else ("E  Reclamar el secreto del templo al acercarte al altar" if mission.state == KhMission.State.TEMPLE else "")
 	if not main.get_tree().paused:
 		toast_time = maxf(0,toast_time-delta)

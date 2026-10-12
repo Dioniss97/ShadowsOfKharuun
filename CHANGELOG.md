@@ -10,6 +10,8 @@ El árbol de `feature/temple-tactical-demo` contiene ahora una build jugable de 
 
 ### Demo 0.3 en desarrollo
 
+- Correcciones B1/B2 de la prueba humana: órbita persistente en reposo/pausa y retorno solo al desplazarse; W/S conserva frente, A/D giro continuo y W+A/D arco/círculo. Selectores compactos sobre el enemigo seleccionado, ocultos fuera de combate y tras F, con seguimiento de actor/cámara y sin cubrir su cara. Issues #15/#16 en el mismo PR borrador #14.
+
 - Misión del templo unificada con combate táctico, cola con destinatarios independientes y autoataque al último destinatario ofensivo ejecutado.
 - HUD con tres selectores de categorías, cuatro órdenes pendientes, botiquines con contador, huecos futuros desactivados y retrato/recursos. Ayuda breve omitible y avisos contextuales.
 - Básico y ráfaga con dos impactos; empuje, descarga, curación propia y tres botiquines. Consumo al ejecutar incluso con salud llena, sin recargas adicionales ni orden Defensa.

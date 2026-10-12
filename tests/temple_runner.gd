@@ -33,6 +33,44 @@ func key_state(code: Key, pressed: bool) -> void:
 	Input.parse_input_event(event)
 	await frames(2)
 
+func right_mouse_state(pressed: bool) -> void:
+	var point = get_viewport().get_final_transform()*Vector2(1080,180)
+	var event = InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_RIGHT
+	event.pressed = pressed
+	event.position = point
+	event.global_position = point
+	Input.parse_input_event(event)
+	await frames(2)
+
+func drag_camera(relative: Vector2) -> void:
+	await right_mouse_state(true)
+	var point = get_viewport().get_final_transform()*Vector2(1080,180)
+	var motion = InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	motion.button_mask = MOUSE_BUTTON_MASK_RIGHT
+	motion.relative = get_viewport().get_final_transform().basis_xform(relative)
+	Input.parse_input_event(motion)
+	await frames(3)
+
+func click_actor(actor: Node3D) -> void:
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	var point = get_viewport().get_final_transform()*camera.unproject_position(actor.global_position+Vector3.UP)
+	var motion = InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	Input.parse_input_event(motion)
+	await frames(2)
+	for pressed in [true,false]:
+		var event = InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		event.position = point
+		event.global_position = point
+		Input.parse_input_event(event)
+		await frames(2)
+
 func click_control(control: Control) -> void:
 	var pos = get_viewport().get_final_transform()*control.get_global_rect().get_center()
 	var motion = InputEventMouseMotion.new()
@@ -331,29 +369,17 @@ func test_input_camera_and_retreat() -> void:
 	await frames(8)
 	await key_state(KEY_W,false)
 	check(combat.engaged and combat.current_action.id == "attack" and combat.queue.size() == 1 and Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.02,"WASD mantiene combate, acción y cola hasta cancelar",str([combat.engaged,combat.current_action,combat.queue.size(),before,player.global_position]))
-	var point = get_viewport().get_final_transform()*Vector2(900,280)
-	var right = InputEventMouseButton.new()
-	right.button_index = MOUSE_BUTTON_RIGHT
-	right.pressed = true
-	right.position = point
-	right.global_position = point
-	Input.parse_input_event(right)
-	var motion = InputEventMouseMotion.new()
-	motion.position = point
-	motion.global_position = point
-	motion.button_mask = MOUSE_BUTTON_MASK_RIGHT
-	motion.relative = Vector2(120,0)
-	Input.parse_input_event(motion)
-	await frames(3)
+	var combat_facing: Vector3 = player.forward()
+	await key_state(KEY_A,true)
+	await frames(8)
+	await key_state(KEY_A,false)
+	check(combat.engaged and combat.queue.size() == 1 and player.forward().dot(combat_facing)>0.999,"B1: A tampoco gira al actor ni interrumpe órdenes mientras combate automáticamente")
+	await drag_camera(Vector2(120,0))
 	var displaced: float = absf(angle_difference(player.yaw,player.rig.rotation.y))
-	right = InputEventMouseButton.new()
-	right.button_index = MOUSE_BUTTON_RIGHT
-	right.pressed = false
-	right.position = point
-	right.global_position = point
-	Input.parse_input_event(right)
+	var released_yaw: float = player.yaw
+	await right_mouse_state(false)
 	await frames(45)
-	check(displaced>0.08 and absf(angle_difference(player.yaw,player.rig.rotation.y))<0.06,"Botón derecho gira y al soltar vuelve suavemente detrás",str([displaced,angle_difference(player.yaw,player.rig.rotation.y)]))
+	check(displaced>0.08 and absf(angle_difference(released_yaw,player.yaw))<0.002,"B1: soltar botón derecho conserva la órbita durante combate sin desplazamiento",str([displaced,released_yaw,player.yaw]))
 	check(player.forward().dot((a.global_position-player.global_position).normalized())>0.9,"Girar cámara no aparta al combatiente de su destinatario")
 	await tap_key(KEY_F)
 	check(not combat.engaged and combat.queue.is_empty() and combat.current_action.is_empty() and not combat.actor_locked,"F libera movimiento y elimina órdenes y autoataque")
@@ -386,8 +412,115 @@ func test_input_camera_and_retreat() -> void:
 	player.automation_direction = Vector3.ZERO
 	player.automation_mode = false
 
+func free_movement_fixture() -> void:
+	main.show_menu()
+	main.new_game()
+	await frames(5)
+	var player = main.level.player
+	player.global_position = Vector3(0,0.1,14)
+	player.velocity = Vector3.ZERO
+	player.rig.rotation.y = 0
+	player.yaw = 0
+	player.snap_camera()
+	await frames(4)
+
+func test_free_movement_camera() -> void:
+	await free_movement_fixture()
+	var player = main.level.player
+	var before: Vector3 = player.global_position
+	var original_forward: Vector3 = player.forward()
+	await drag_camera(Vector2(220,0))
+	var orbit_yaw: float = player.yaw
+	await right_mouse_state(false)
+	await frames(40)
+	check(absf(orbit_yaw)>0.4 and absf(angle_difference(orbit_yaw,player.yaw))<0.002 and player.forward().dot(original_forward)>0.999,"B1: parado conserva cámara libre sin girar al personaje")
+	check(Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.01,"B1: arrastrar cámara parado no desplaza al personaje")
+	await tap_key(KEY_SPACE)
+	await drag_camera(Vector2(-170,45))
+	orbit_yaw = player.yaw
+	var orbit_pitch: float = player.pitch
+	await right_mouse_state(false)
+	await frames(40)
+	check(main.tactical_paused and absf(angle_difference(orbit_yaw,player.yaw))<0.002 and is_equal_approx(player.pitch,orbit_pitch) and absf(angle_difference(player.camera_pivot.rotation.y,orbit_yaw))<0.015,"B1: pausa permite arrastrar y mantiene orientación al soltar")
+	await key_state(KEY_W,true)
+	await key_state(KEY_A,true)
+	await frames(15)
+	await key_state(KEY_A,false)
+	await key_state(KEY_W,false)
+	check(Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.01 and player.forward().dot(original_forward)>0.999 and absf(angle_difference(orbit_yaw,player.yaw))<0.002,"B1: W+A durante pausa no mueve, gira ni recentra el personaje o la cámara")
+	await screenshot("demo_b1_paused_orbit")
+	await unpause()
+	await drag_camera(Vector2(180,-45))
+	await right_mouse_state(false)
+	var return_start: float = absf(angle_difference(player.yaw,player.rig.rotation.y))
+	await key_state(KEY_W,true)
+	await frames(4)
+	var return_partial: float = absf(angle_difference(player.yaw,player.rig.rotation.y))
+	check(return_start>0.4 and return_partial>0.025 and return_partial<return_start*0.65,"B1: desplazarse inicia retorno rápido y gradual hacia el frente",str([return_start,return_partial]))
+	await frames(35)
+	check(absf(angle_difference(player.yaw,player.rig.rotation.y))<0.025 and absf(angle_difference(player.camera_pivot.rotation.y,player.rig.rotation.y))<0.04,"B1: avanzar centra cámara detrás sin depender de la órbita anterior")
+	await drag_camera(Vector2(160,0))
+	orbit_yaw = player.yaw
+	await frames(15)
+	check(absf(angle_difference(orbit_yaw,player.yaw))<0.002 and absf(angle_difference(player.yaw,player.rig.rotation.y))>0.3,"B1: mantener botón derecho permite órbita libre también avanzando")
+	await right_mouse_state(false)
+	await frames(32)
+	check(absf(angle_difference(player.yaw,player.rig.rotation.y))<0.025,"B1: soltar el arrastre durante desplazamiento vuelve al frente")
+	await key_state(KEY_W,false)
+	await frames(12)
+	orbit_yaw = player.yaw
+	await frames(25)
+	check(absf(angle_difference(orbit_yaw,player.yaw))<0.002,"B1: detenerse vuelve a conservar la orientación de cámara")
+	await free_movement_fixture()
+	player = main.level.player
+	before = player.global_position
+	original_forward = player.forward()
+	await drag_camera(Vector2(-190,0))
+	await right_mouse_state(false)
+	await key_state(KEY_S,true)
+	await frames(35)
+	await key_state(KEY_S,false)
+	var backward: Vector3 = player.global_position-before
+	backward.y = 0
+	check(backward.dot(original_forward)<-1.0 and player.forward().dot(original_forward)>0.999,"B1: S retrocede conservando el frente del personaje",str([backward,player.forward()]))
+	check(absf(angle_difference(player.yaw,player.rig.rotation.y))<0.025,"B1: retroceder centra cámara al frente y evita giro de 180 grados")
+	for key in [KEY_A,KEY_D]:
+		await free_movement_fixture()
+		player = main.level.player
+		before = player.global_position
+		await key_state(key,true)
+		await frames(20)
+		var first_turn: float = angle_difference(0,player.rig.rotation.y)
+		await frames(20)
+		var second_turn: float = angle_difference(0,player.rig.rotation.y)
+		await key_state(key,false)
+		var turn_sign = 1 if key == KEY_A else -1
+		check(first_turn*turn_sign>0.5 and second_turn*turn_sign>first_turn*turn_sign+0.5 and Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.01,"B1: mantener %s gira continuamente en sitio, sin desplazamiento diagonal" % ("A" if key == KEY_A else "D"),str([first_turn,second_turn]))
+	for key in [KEY_A,KEY_D]:
+		await free_movement_fixture()
+		player = main.level.player
+		before = player.global_position
+		var distance_before: float = player.distance_walked
+		await key_state(KEY_W,true)
+		await key_state(key,true)
+		await frames(20)
+		var first_position: Vector3 = player.global_position
+		var first_heading: float = player.rig.rotation.y
+		await frames(20)
+		var first_segment: Vector3 = first_position-before
+		var second_segment: Vector3 = player.global_position-first_position
+		first_segment.y = 0
+		second_segment.y = 0
+		check(absf(angle_difference(first_heading,player.rig.rotation.y))>0.6 and first_segment.normalized().dot(second_segment.normalized())<0.9,"B1: W+%s curva trayectoria mientras continúa girando" % ("A" if key == KEY_A else "D"),str([first_segment,second_segment,first_heading,player.rig.rotation.y]))
+		await frames(130)
+		await key_state(key,false)
+		await key_state(KEY_W,false)
+		await frames(10)
+		var circle_distance = Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()
+		check(player.distance_walked-distance_before>9.0 and circle_distance<1.0 and absf(angle_difference(0,player.rig.rotation.y))<0.4,"B1: mantener W+%s completa una vuelta, sin repetir pulsaciones" % ("A" if key == KEY_A else "D"),str([circle_distance,player.distance_walked-distance_before,player.rig.rotation.y]))
+
 func test_hud_events() -> void:
-	await fresh_encounter()
+	await hud_fixture()
 	var hud = main.tactical_ui
 	var combat = main.level.combat
 	var player = main.level.player
@@ -421,6 +554,123 @@ func test_hud_events() -> void:
 	check(hud.category_indices[1] == 2 and combat.queue.size() == 1 and combat.queue[0].id == "heal" and combat.queue[0].target == player,"Selector curativo indica acción propia con enemigo B seleccionado")
 	await click_control(hud.retreat_button)
 	check(not combat.engaged and combat.queue.is_empty(),"Cancelar combate responde a clic real")
+	check(not hud.target_selectors.visible,"B2: Cancelar combate oculta selectores aunque el encuentro hostil siga activo")
+
+func hud_fixture() -> void:
+	await fresh_encounter()
+	# Keep enough projected space above the actors for the floating selector card.
+	main.level.player.global_position = Vector3(0,0.1,3)
+	main.level.player.velocity = Vector3.ZERO
+	main.level.player.yaw = 0
+	main.level.player.rig.rotation.y = 0
+	main.level.enemies[0].global_position = Vector3(-1.2,0.1,-3)
+	main.level.enemies[1].global_position = Vector3(1.2,0.1,-3)
+	main.level.player.snap_camera()
+	# Paused CharacterBody colliders retain the pre-fixture server pose. Briefly
+	# resume with actor/combat updates disabled to sync placement before real clicks.
+	var actors: Array = [main.level.player] + main.level.enemies
+	var actor_processing: Array = []
+	for actor in actors:
+		actor_processing.append(actor.is_physics_processing())
+		actor.set_physics_process(false)
+	main.level.combat.set_physics_process(false)
+	get_tree().paused = false
+	await frames(3)
+	get_tree().paused = true
+	main.level.combat.set_physics_process(true)
+	for i in range(actors.size()): actors[i].set_physics_process(actor_processing[i])
+	await frames(5)
+
+func test_hud_target_attachment() -> void:
+	await hud_fixture()
+	var hud = main.tactical_ui
+	var combat = main.level.combat
+	var a = main.level.enemies[0]
+	var b = main.level.enemies[1]
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	await click_actor(a)
+	var head: Vector2 = camera.unproject_position(a.rig.to_global(Vector3(0,2.15,0)))
+	var card: Rect2 = hud.target_selectors.get_global_rect()
+	check(combat.selected == a and hud.target_selectors.visible and main.tactical_paused,"B2: clic real sobre A muestra el menú flotante durante pausa del encuentro")
+	check(card.size.x<=260 and card.size.y<=160 and absf(card.get_center().x-head.x)<4 and card.end.y<=head.y-4,"B2: menú compacto centrado sobre la cabeza sin tapar la cara",str([card,head]))
+	check(not main.ui.target_panel.visible and hud.target_name_label.text.contains(a.display_name) and is_equal_approx(hud.target_health_bar.value,100.0),"B2: nombre y salud acompañan al enemigo seleccionado en la tarjeta flotante")
+	var previous_card: Rect2 = card
+	a.global_position.x -= 0.8
+	await frames(4)
+	head = camera.unproject_position(a.rig.to_global(Vector3(0,2.15,0)))
+	card = hud.target_selectors.get_global_rect()
+	check(hud.target_selectors.visible and card.position.distance_to(previous_card.position)>15 and absf(card.get_center().x-head.x)<4 and card.end.y<=head.y-4,"B2: mover el destinatario actualiza el anclaje de la tarjeta",str([previous_card,card,head]))
+	previous_card = card
+	await drag_camera(Vector2(80,0))
+	await right_mouse_state(false)
+	await frames(15)
+	head = camera.unproject_position(a.rig.to_global(Vector3(0,2.15,0)))
+	card = hud.target_selectors.get_global_rect()
+	check(hud.target_selectors.visible and card.position.distance_to(previous_card.position)>15 and absf(card.get_center().x-head.x)<4 and card.end.y<=head.y-4,"B2: arrastrar cámara reproyecta el menú sobre el mismo enemigo",str([previous_card,card,head]))
+	await screenshot("demo_b2_target_camera_attachment")
+	await click_actor(b)
+	head = camera.unproject_position(b.rig.to_global(Vector3(0,2.15,0)))
+	card = hud.target_selectors.get_global_rect()
+	check(combat.selected == b and hud.target_selectors.visible and absf(card.get_center().x-head.x)<4 and hud.target_name_label.text.contains(b.display_name),"B2: cambiar objetivo con clic mueve el menú a B")
+	await screenshot("demo_b2_selected_b")
+	var obstacle = StaticBody3D.new()
+	main.level.add_child(obstacle)
+	obstacle.global_position = camera.global_position.lerp(b.rig.to_global(Vector3(0,2.15,0)),0.5)
+	var collision = CollisionShape3D.new()
+	var shape = BoxShape3D.new()
+	shape.size = Vector3(1.0,0.8,0.3)
+	collision.shape = shape
+	obstacle.add_child(collision)
+	await frames(4)
+	check(not hud.target_selectors.visible,"B2: un obstáculo entre cámara y enemigo oculta la tarjeta")
+	obstacle.queue_free()
+	await frames(4)
+	check(hud.target_selectors.visible,"B2: quitar el obstáculo restaura la tarjeta del objetivo visible")
+	await tap_key(KEY_F)
+	check(not combat.engaged and not hud.target_selectors.visible and hud.root.visible,"B2: F oculta menú del enemigo y conserva equipo personal y órdenes")
+	await click_actor(b)
+	check(combat.engaged and combat.selected == b and hud.target_selectors.visible and main.encounters_started.size() == 1,"B2: clic en agresor reengancha y recupera tarjeta sin nueva pausa inicial")
+	b.active = false
+	await frames(3)
+	check(not hud.target_selectors.visible,"B2: un destinatario neutral no muestra selectores")
+	b.active = true
+	var old_position: Vector3 = b.global_position
+	b.global_position = main.level.player.global_position+Vector3(0,0,20)
+	await frames(3)
+	check(camera.is_position_behind(b.rig.to_global(Vector3(0,2.15,0))) and not hud.target_selectors.visible,"B2: objetivo detrás de cámara oculta su menú")
+	b.global_position = Vector3(80,0.1,-3)
+	await frames(3)
+	check(not camera.is_position_behind(b.rig.to_global(Vector3(0,2.15,0))) and not hud.target_selectors.visible,"B2: objetivo fuera del encuadre no deja tarjeta flotando en pantalla")
+	b.global_position = old_position
+	combat.selected = null
+	await frames(3)
+	check(not hud.target_selectors.visible,"B2: selección inválida oculta los tres selectores")
+	await free_movement_fixture()
+	hud = main.tactical_ui
+	check(hud.root.visible and not hud.target_selectors.visible and main.mission.state == KhMission.State.EXPLORATION,"B2: exploración muestra equipo personal sin menú ofensivo")
+	main.mission.transition(KhMission.State.DIALOGUE)
+	await frames(3)
+	check(not hud.target_selectors.visible,"B2: diálogo inicial mantiene oculto el menú ofensivo")
+	await guardian_fixture()
+	main.dialogue.choose(0)
+	main.dialogue.continue_dialogue()
+	await frames(3)
+	main.level.player.global_position = Vector3(0,0.1,3)
+	main.level.player.yaw = 0
+	main.level.player.snap_camera()
+	main.level.guardian.global_position = Vector3(0,0.1,-3)
+	main.level.combat.select_target(main.level.guardian)
+	await frames(4)
+	check(main.mission.state == KhMission.State.BOSS and main.tactical_ui.target_selectors.visible and main.tactical_ui.target_name_label.text.contains(main.level.guardian.display_name),"B2: combate del guardián también usa tarjeta de objetivo durante pausa")
+	main.show_menu()
+	main.new_duel()
+	await frames(6)
+	main.level.player.global_position = Vector3(0,0.1,3)
+	main.level.player.yaw = 0
+	main.level.player.snap_camera()
+	main.level.enemies[0].global_position = Vector3(0,0.1,-3)
+	await frames(4)
+	check(main.mission.state == KhMission.State.DUEL and main.tactical_ui.target_selectors.visible and main.level.combat.engaged,"B2: duelo interno conserva el menú sobre su enemigo seleccionado")
 
 func test_enemy_independent_rounds_and_stagger() -> void:
 	await fresh_encounter()
@@ -530,6 +780,7 @@ func test_story_and_final() -> void:
 		player = level.player
 		var combat = level.combat
 		check(main.mission.state == KhMission.State.GUARDIAN_DIALOGUE and get_tree().paused and not combat.enabled and not level.guardian.active,"Acólitos llevan a conversación segura: "+route)
+		check(not main.tactical_ui.target_selectors.is_visible_in_tree(),"B2: conversación con guardián oculta los selectores ofensivos: "+route)
 		var values = [player.health,player.energy,combat.medkits,main.mission.elapsed,player.global_position,level.guardian.global_position]
 		await frames(60)
 		check(values == [player.health,player.energy,combat.medkits,main.mission.elapsed,player.global_position,level.guardian.global_position],"Diálogo congela tiempo y recursos sin regalos: "+route)
@@ -556,6 +807,7 @@ func test_story_and_final() -> void:
 		else:
 			check(level.guardian.health > 0 and not level.guardian.active and not combat.target_valid(level.guardian) and main.mission.kills == 3 and main.mission.guardian_resolution == "peaceful","Acuerdo mantiene guardián vivo, neutral y tres muertes")
 		check(main.mission.state == KhMission.State.TEMPLE,"Resolver guardián habilita entrada sin terminar demo: "+route)
+		check(not main.tactical_ui.target_selectors.is_visible_in_tree(),"B2: entrada al templo oculta selectores tras resolver el encuentro: "+route)
 		player.global_position = Vector3(0,0.1,12)
 		check(not level.claim_relic() and main.mission.state == KhMission.State.TEMPLE,"Objetivo requiere entrar y aproximarse: "+route)
 		player.global_position = level.relic_position+Vector3(0,0,1)
@@ -690,11 +942,13 @@ func run() -> void:
 	test_clock_and_rig()
 	await test_encounter_and_pause()
 	await test_hud_events()
+	await test_hud_target_attachment()
 	await test_visual_actions()
 	await test_targets_and_fallback()
 	await test_flurry_invalid_second_contact()
 	await test_resources()
 	await test_input_camera_and_retreat()
+	await test_free_movement_camera()
 	await test_enemy_independent_rounds_and_stagger()
 	await test_story_and_final()
 	await test_defeat_restart()

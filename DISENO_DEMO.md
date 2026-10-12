@@ -2,11 +2,11 @@
 
 Actualizado: 12 de octubre de 2026. Estado: **diseño y documentación; implementación todavía no iniciada**.
 
-Este documento conserva los acuerdos humanos de esta conversación y permite retomar el proyecto sin reconstruirla. Las tareas están en [PENDIENTES.md](PENDIENTES.md). Las instrucciones para trabajar con estos documentos están en [AGENTS.md](AGENTS.md).
+Este documento conserva los acuerdos humanos de esta conversación y permite retomar el proyecto sin reconstruirla. Las tareas están en [PENDIENTES.md](PENDIENTES.md). Las instrucciones para trabajar con estos documentos están en [AGENTS.md](AGENTS.md); la rutina, versiones y punto de reanudación están en [ORGANIZACION.md](ORGANIZACION.md).
 
 ## Estado real y objetivo
 
-La primera entrega verificada tiene dos entradas jugables: misión original de acción y duelo táctico. La evidencia está en [RESULTADO.md](RESULTADO.md), commit local `f516f41`: 56 comprobaciones tácticas sin ventana y 60 con GPU; regresión original de 34/43 comprobaciones. Esas pruebas no certifican aún la segunda vuelta.
+La entrega jugable **0.2.0**, etiqueta `v0.2.0`, tiene dos entradas: misión original de acción y duelo táctico. La evidencia está en [RESULTADO.md](RESULTADO.md), commit local `f516f41`: 56 comprobaciones tácticas sin ventana y 60 con GPU; regresión original de 34/43 comprobaciones. Esas pruebas no certifican aún la segunda vuelta, prevista como **0.3.0** y sin etiqueta de entrega.
 
 El objetivo siguiente es **una única demo del asalto al templo con combate táctico integrado**, conservando exploración, diálogo, tres acólitos, guardián y finales. Tras los acólitos habrá una conversación ramificada que permita combatir al guardián o obtener paso pacífico. El duelo podrá conservarse internamente para pruebas. El proyecto es para un jugador y prioriza la historia.
 

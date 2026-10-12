@@ -2,7 +2,9 @@
 
 Haz doble clic en **PLAY.bat**. Abre el juego directamente; no necesitas abrir el editor. **Duelo táctico · nueva iteración** prueba el combate con rondas y órdenes. **Nueva partida · misión original** conserva el asalto completo al templo.
 
-La segunda vuelta está en fase de diseño. Sus decisiones están guardadas en [DISENO_DEMO.md](DISENO_DEMO.md) y las tareas en [PENDIENTES.md](PENDIENTES.md); los controles de abajo corresponden a la entrega que puedes jugar ahora.
+Versión jugable actual: **0.2.0**, identificada por la etiqueta Git `v0.2.0`. Historial de entregas en [CHANGELOG.md](CHANGELOG.md) y rutina de trabajo en [ORGANIZACION.md](ORGANIZACION.md).
+
+La segunda vuelta, prevista como **0.3.0**, está en fase de diseño. Sus decisiones están guardadas en [DISENO_DEMO.md](DISENO_DEMO.md) y las tareas en [PENDIENTES.md](PENDIENTES.md); los controles de abajo corresponden a la entrega que puedes jugar ahora.
 
 ## Duelo táctico
 

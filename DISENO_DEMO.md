@@ -8,7 +8,7 @@ Este documento conserva los acuerdos humanos de esta conversación y permite ret
 
 La primera entrega verificada tiene dos entradas jugables: misión original de acción y duelo táctico. La evidencia está en [RESULTADO.md](RESULTADO.md), commit local `f516f41`: 56 comprobaciones tácticas sin ventana y 60 con GPU; regresión original de 34/43 comprobaciones. Esas pruebas no certifican aún la segunda vuelta.
 
-El objetivo siguiente es **una única demo del asalto al templo con combate táctico integrado**, conservando exploración, diálogo, tres acólitos, guardián, victoria y derrota. El duelo podrá conservarse internamente para pruebas. El proyecto es para un jugador y prioriza la historia.
+El objetivo siguiente es **una única demo del asalto al templo con combate táctico integrado**, conservando exploración, diálogo, tres acólitos, guardián y finales. Tras los acólitos habrá una conversación ramificada que permita combatir al guardián o obtener paso pacífico. El duelo podrá conservarse internamente para pruebas. El proyecto es para un jugador y prioriza la historia.
 
 ## Decisiones confirmadas
 
@@ -29,6 +29,10 @@ El objetivo siguiente es **una única demo del asalto al templo con combate tác
 | D13 | Tres selectores junto al objetivo: ataques físicos, poderes y arrojadizos. Flechas o rueda sobre el selector cambian lo mostrado; pulsar el icono encola la acción. No son tres ranuras de la cola. |
 | D14 | Menú personal inferior izquierdo para botiquines y huecos futuros visibles. Escudo, formas y arrojadizos permanecen vacíos y desactivados en esta vuelta. |
 | D15 | Gesto sencillo común con el brazo izquierdo para poderes; el sable permanece en la mano derecha. Empuje proyecta una onda, descarga sale de la palma y curación produce un efecto verde alrededor del protagonista. |
+| D16 | Tras los acólitos, el guardián reconoce el potencial del protagonista, desprecia el nivel de sus aprendices y ofrece su doctrina. Un rechazo inicial conduce al combate. Escuchar permite después aceptar el paso pacífico o atacar aun habiendo escuchado. |
+| D17 | Conservar salud, energía y botiquines restantes al pasar al guardián. Retirar el regalo actual de hasta 75 de salud y energía completa. |
+| D18 | Enseñar con ayuda breve y omitible durante la primera pausa y avisos contextuales de una sola aparición. |
+| D19 | Retirar Defensa como orden o movimiento del jugador. Conservar la estadística pasiva de defensa ya implementada para calcular aciertos; no añadir ahora formas, bloqueos ni un sistema nuevo de equipo defensivo. |
 
 La corrección D07 es explícita del usuario: `1→A, 2→B, 2→A` termina en `0→A`, donde 0 significa básico automático. Los números son una notación de acciones, no una petición de añadir más ataques a esta vuelta. Una curación posterior no convierte al protagonista en destinatario del autoataque.
 
@@ -37,6 +41,32 @@ La corrección D07 es explícita del usuario: `1→A, 2→B, 2→A` termina en `
 El usuario eligió inicialmente «toda la base» con ataques, escudo, granada y dos formas, pero después redujo expresamente esta vuelta. El alcance vigente contiene básico y ráfaga, empuje/descarga/curación y botiquines. Ataque crítico, ataque fuerte, escudo, formas, granadas de concusión o congelación, minas, inventario completo, combate a distancia nuevo, compañero y modelos Blender quedan para después.
 
 También quedan sustituidas las propuestas de que WASD cancele el combate, de mantener recargas adicionales de poderes y de continuar el autoataque contra el último enemigo seleccionado. Esas tres reglas todavía existen en el código de la primera entrega y tendrán que cambiar al implementar.
+
+La oferta del guardián y su lección serán narrativas en esta vuelta. Registrar la ruta elegida para diálogo/final no requiere karma numérico, afiliación persistente, poderes aprendidos ni progresión; esos sistemas siguen aplazados. Escuchar la lección no obliga a aceptarla.
+
+## Conversación del guardián tras los acólitos
+
+Flujo confirmado:
+
+1. Termina el encuentro con los acólitos y se presenta el guardián. Retirar órdenes contra enemigos caídos y detener el autoataque antes de la conversación.
+2. El guardián combina reconocimiento del protagonista con desprecio por sus acólitos y una oferta de enseñanza. Tono culto y solemne; diálogo original, no copia de los textos de KOTOR.
+3. **Rechazar:** el jugador no acepta ser corrompido; empieza el encuentro del guardián con la pausa inicial acordada.
+4. **Indagar:** el guardián expone una lección breve sobre su doctrina. Después el jugador decide **aceptar y pasar** o **atacarlo**.
+5. En la ruta pacífica, el guardián permanece vivo y no agresivo, permite el paso y queda excluido de la selección automática de agresores. No debe bloquear físicamente la ruta.
+
+La conversación no permite agresión ni gasto de recursos. Como propuesta para aplicar D17, congelar la regeneración de energía y la recuperación de salud durante esta transición narrativa: leer más despacio no debería equivaler a restaurar recursos gratuitamente. El usuario ha confirmado conservar los recursos y retirar el regalo entre encuentros; esta regla concreta de tiempo de lectura es una propuesta técnica. No reponer botiquines.
+
+### Borrador de tono, pendiente de revisión
+
+Guardián: «Mis acólitos habían aprendido a obedecer; creyeron que eso bastaba para merecer el poder. Tú has demostrado algo más. No confundas, sin embargo, una victoria con dominio. Este templo aún podría ser tu tumba… o el principio de tu verdadero aprendizaje.»
+
+- Rechazo: «No someteré mi voluntad a tu doctrina. Permíteme pasar.»
+- Indagar: «¿Qué es lo que crees poder enseñarme?»
+- Lección: «El miedo no desaparece cuando lo niegas. Se convierte en tu dueño. Reconócelo; aprende a dirigirlo. El poder que buscas no responde a quien pide permiso, sino a quien acepta el precio de ejercerlo.»
+- Aceptación: «Acepto tu enseñanza. Reclamaré el poder que guarda el templo.»
+- Ataque tras escuchar: «Ya me has enseñado lo que necesitaba. Ahora eres el último obstáculo.»
+
+Estas líneas son propuestas de redacción. Las ramas están acordadas; las frases y el punto exacto donde termina la misión requieren su revisión correspondiente. La ruta pacífica debe contar como resolución válida, sin exigir la muerte del guardián.
 
 ## Organización de la interfaz
 
@@ -58,20 +88,21 @@ Durante la ráfaga cada intento tiene su propio resultado y momento visible de c
 
 | ID | Tema abierto | Propuesta de partida, todavía no confirmada |
 |---|---|---|
-| Q01 | Orden que llega a ejecutarse sin energía suficiente | Descartarla con aviso y continuar; permitir planificar y comprobar disponibilidad al ejecutarse. |
+| Q01 | Orden que llega a ejecutarse sin energía suficiente | **Pendiente de la comprobación del usuario en KOTOR.** Su hipótesis: si es la última orden, consumir una ronda propia sin efecto antes del básico; si quedan órdenes, quizá pasar a la siguiente. No tratar ninguna variante como confirmada. |
 | Q02 | Curación que llega a su turno con salud completa | Descartar sin recurso ni ronda y seguir. Aplicar la misma regla a botiquín y poder. |
 | Q03 | Persecución y salida del encuentro tras F | Conservar la amenaza mientras los agresores estén activos; delimitar la persecución para impedir saltarse presentaciones narrativas. |
-| Q04 | Paso del último acólito al guardián | Dos encuentros con breve presentación y nueva pausa inicial. La versión actual activa al jefe inmediatamente. |
-| Q05 | Recursos al comenzar el guardián | Conservar salud, energía y botiquines restantes. La versión actual regala hasta 75 de salud y restaura toda la energía. |
-| Q06 | Cómo enseñar selector, cola y retirada | Ayuda breve y omitible durante la primera pausa, con avisos contextuales de una sola aparición. |
 | Q07 | Derrota y reinicio | Conservar el reinicio de misión completa de la demo actual; un punto de control sería una ampliación a decidir. |
-| Q08 | Acción Defensa de la primera entrega | Reservarla para otra vuelta; alternativamente conservarla como orden personal. No confundirla con una forma de combate persistente. |
+| Q09 | Punto de cierre de la ruta pacífica y de combate | Propuesta: ambas permiten entrar al templo y reclamar el mismo objetivo final. Alternativa: finalizar tras derrotar al guardián o conseguir su permiso de paso. |
+
+Dudas cerradas: Q04 → D16, Q05 → D17, Q06 → D18 y Q08 → D19. Se conservan los identificadores para rastrear las respuestas anteriores.
+
+Para Q01 comparar `ataque → curación sin energía` con `ataque → curación sin energía → ataque`. Observar si consume tiempo de ronda o pasa a otra orden; distinguir no poder encolarla de que falle al ejecutarse. Una penalización solo al final de la cola podría evitarse añadiendo un básico detrás. En Kharuun los relojes son independientes: perder la ronda propia no concede una ronda adicional artificial al enemigo. El usuario comprobará el comportamiento del original; no preguntárselo de nuevo mientras está pendiente esa comprobación.
 
 Las propuestas no equivalen a respuestas del usuario. Si una duda pendiente es necesaria para el comportamiento que se está implementando y no se puede resolver por los acuerdos, consultarla con opciones. El usuario prefiere resolverlas antes de programar y recibir ese mismo formato si surge una duda importante durante el trabajo.
 
 ## Casos que deberá cubrir la verificación
 
-1. Misión completa: menú → exploración → diálogo → acólitos → guardián → victoria; derrota, repetición y vuelta al menú.
+1. Misión completa: menú → exploración → diálogo inicial → acólitos → conversación del guardián → resolución de combate o pacífica → final; derrota, repetición y vuelta al menú.
 2. Pausa inicial una vez por encuentro, órdenes durante ella y ausencia de agresión durante diálogo/presentación.
 3. Dos enemigos vivos A/B: órdenes mezcladas `1A, 2B, 2A`, selección independiente y básico posterior contra A. Repetir intercalando curación.
 4. Ráfaga: dos tiradas y contactos, una acción/ronda; muerte, interrupción, distancia u obstáculo entre intentos no provocan daño a otro objetivo.
@@ -81,6 +112,8 @@ Las propuestas no equivalen a respuestas del usuario. Si una duda pendiente es n
 8. F devuelve movimiento; WASD conserva órdenes antes de F; cámara retorna al soltar botón derecho sin girar al combatiente fuera de su destinatario.
 9. Huecos futuros desactivados, acción y objetivo visibles y ayuda comprensible a 1280 × 720. Verificación gráfica de palma, espada y ambos contactos de ráfaga.
 10. Partida normal del bot con reglas de producción y prueba humana de claridad y equilibrio; no confundir un test de transiciones con una partida normal.
+11. Diálogo posterior: rechazo y ataque tras escuchar inician combate pausado; aceptar permite paso con guardián vivo y no agresivo. Las tres rutas llegan al resultado previsto sin exigir cuatro muertes.
+12. Comprobar D17 y la regla definitiva de recursos durante el diálogo: sin regalos de salud, energía o botiquines entre encuentros. Para la propuesta de congelación, leer todo el diálogo o saltarlo conserva los mismos recursos. No queda Defensa como acción seleccionable; las estadísticas pasivas siguen resolviendo aciertos.
 
 ## Referencias de diseño
 

@@ -15,7 +15,7 @@ El objetivo siguiente es **una única demo del asalto al templo con combate tác
 | ID | Acuerdo vigente |
 |---|---|
 | D01 | Unificar el combate táctico con la misión del templo; dejar de presentar duelo y misión como dos experiencias principales distintas. |
-| D02 | Tiempo real con pausa y rondas independientes por combatiente. Pausa automática una vez al comenzar cada encuentro; Espacio permite pausar manualmente y preparar órdenes. |
+| D02 | Tiempo real con pausa y rondas independientes por combatiente. Al iniciar un encuentro agresivo, seleccionar automáticamente al agresor más cercano que esté vivo, visible y alcanzable, sin incluir personajes neutrales. Pausa automática una vez al comenzar cada encuentro; Espacio permite pausar manualmente y preparar órdenes. |
 | D03 | La cámara gira manteniendo el botón derecho. Al soltarlo vuelve suavemente detrás del personaje. En combate el personaje encara el destinatario de su acción; la cámara no cambia ese destinatario. |
 | D04 | WASD no interrumpe ni borra órdenes durante el enfrentamiento automático. Primero se pulsa F o Cancelar combate para recuperar el movimiento libre. |
 | D05 | Cancelar combate detiene órdenes y autoataque, y evita el reenganche inmediato del protagonista. Los enemigos siguen actuando. |
@@ -34,6 +34,10 @@ El objetivo siguiente es **una única demo del asalto al templo con combate tác
 | D18 | Enseñar con ayuda breve y omitible durante la primera pausa y avisos contextuales de una sola aparición. |
 | D19 | Retirar Defensa como orden o movimiento del jugador. Conservar la estadística pasiva de defensa ya implementada para calcular aciertos; no añadir ahora formas, bloqueos ni un sistema nuevo de equipo defensivo. |
 | D20 | Las rutas de combate y acuerdo desembocan en entrar al templo y reclamar el mismo objetivo final. La muerte del guardián o su permiso habilitan el paso, pero por sí solos no terminan la demo. |
+| D21 | Si se ejecuta una curación con salud completa, se consumen igualmente la ronda y el recurso. Aplicar tanto a botiquín como a poder curativo; no descartarla ni bloquear su uso solo porque la salud esté llena. |
+| D22 | Tras F o Cancelar combate, los enemigos persiguen por toda la zona accesible de la demo. Cancelar no apaga la amenaza ni devuelve enemigos a una zona de origen. Mantener las condiciones narrativas del templo y la ausencia de agresión durante el diálogo. |
+| D23 | Morir permite reiniciar desde el inicio de la misión con salud, energía y tres botiquines iniciales; reiniciar también enemigos, cola, encuentros y elecciones de esa partida. No añadir un punto de control por encuentro. |
+| D24 | Durante el diálogo con el guardián se congelan tiempo y recursos, incluida la regeneración. Leer despacio o saltar texto conserva los mismos recursos de entrada; al concluir se reanuda el tiempo según combate o paso pacífico. |
 
 La corrección D07 es explícita del usuario: `1→A, 2→B, 2→A` termina en `0→A`, donde 0 significa básico automático. Los números son una notación de acciones, no una petición de añadir más ataques a esta vuelta. Una curación posterior no convierte al protagonista en destinatario del autoataque.
 
@@ -55,7 +59,7 @@ Flujo confirmado:
 4. **Indagar:** el guardián expone una lección breve sobre su doctrina. Después el jugador decide **aceptar y pasar** o **atacarlo**.
 5. En la ruta pacífica, el guardián permanece vivo y no agresivo, permite el paso y queda excluido de la selección automática de agresores. No debe bloquear físicamente la ruta.
 
-La conversación no permite agresión ni gasto de recursos. Como propuesta para aplicar D17, congelar la regeneración de energía y la recuperación de salud durante esta transición narrativa: leer más despacio no debería equivaler a restaurar recursos gratuitamente. El usuario ha confirmado conservar los recursos y retirar el regalo entre encuentros; esta regla concreta de tiempo de lectura es una propuesta técnica. No reponer botiquines.
+La conversación no permite agresión ni gasto de recursos. D24 confirma congelar el tiempo y los recursos durante esta transición narrativa: leer más despacio no restaura recursos gratuitamente. Conservar los valores de entrada según D17, sin reponer botiquines. Rechazar o atacar inicia el encuentro con su pausa inicial; aceptar devuelve la exploración con el guardián no agresivo.
 
 ### Borrador de tono, pendiente de revisión
 
@@ -96,11 +100,8 @@ Durante la ráfaga cada intento tiene su propio resultado y momento visible de c
 | ID | Tema abierto | Propuesta de partida, todavía no confirmada |
 |---|---|---|
 | Q01 | Orden que llega a ejecutarse sin energía suficiente | **Pendiente de la comprobación del usuario en KOTOR.** Su hipótesis: si es la última orden, consumir una ronda propia sin efecto antes del básico; si quedan órdenes, quizá pasar a la siguiente. No tratar ninguna variante como confirmada. |
-| Q02 | Curación que llega a su turno con salud completa | Descartar sin recurso ni ronda y seguir. Aplicar la misma regla a botiquín y poder. |
-| Q03 | Persecución y salida del encuentro tras F | Conservar la amenaza mientras los agresores estén activos; delimitar la persecución para impedir saltarse presentaciones narrativas. |
-| Q07 | Derrota y reinicio | Conservar el reinicio de misión completa de la demo actual; un punto de control sería una ampliación a decidir. |
 
-Dudas cerradas: Q04 → D16, Q05 → D17, Q06 → D18, Q08 → D19 y Q09 → D20. Se conservan los identificadores para rastrear las respuestas anteriores.
+Dudas cerradas: Q02 → D21 (curación con salud llena consume recurso y ronda), Q03 → D22 (persecución por toda la zona accesible), Q04 → D16, Q05 → D17, Q06 → D18, Q07 → D23 (reinicio de misión), Q08 → D19 y Q09 → D20. D24 confirma la propuesta de congelación durante el diálogo. Se conservan los identificadores para rastrear las respuestas anteriores; las propuestas anteriores de Q02/Q03 quedan sustituidas.
 
 Para Q01 comparar `ataque → curación sin energía` con `ataque → curación sin energía → ataque`. Observar si consume tiempo de ronda o pasa a otra orden; distinguir no poder encolarla de que falle al ejecutarse. Una penalización solo al final de la cola podría evitarse añadiendo un básico detrás. En Kharuun los relojes son independientes: perder la ronda propia no concede una ronda adicional artificial al enemigo. El usuario comprobará el comportamiento del original; no preguntárselo de nuevo mientras está pendiente esa comprobación.
 
@@ -113,13 +114,13 @@ Las propuestas no equivalen a respuestas del usuario. Si una duda pendiente es n
 3. Dos enemigos vivos A/B: órdenes mezcladas `1A, 2B, 2A`, selección independiente y básico posterior contra A. Repetir intercalando curación.
 4. Ráfaga: dos tiradas y contactos, una acción/ronda; muerte, interrupción, distancia u obstáculo entre intentos no provocan daño a otro objetivo.
 5. Selección, flechas, rueda y botones con eventos reales de entrada; recorrer opciones no encola ni mueve la cámara.
-6. Tres botiquines, encolado, cancelación, consumo único, agotamiento, curación parcial, salud llena y reinicio según las reglas definitivas. Ningún contador negativo.
+6. Tres botiquines, encolado, cancelación, consumo único, agotamiento y curación parcial. Con salud llena, botiquín y poder curativo consumen recurso y una ronda igualmente (D21). Ningún contador negativo. Reiniciar la misión completa devuelve recursos iniciales y restablece enemigos, cola y ruta narrativa (D23).
 7. Energía comprobada al ejecutar, curación sobre el protagonista y ausencia de recarga adicional. Nunca bloquear una cola silenciosamente.
-8. F devuelve movimiento; WASD conserva órdenes antes de F; cámara retorna al soltar botón derecho sin girar al combatiente fuera de su destinatario.
+8. F devuelve movimiento; WASD conserva órdenes antes de F; cámara retorna al soltar botón derecho sin girar al combatiente fuera de su destinatario. Los agresores persiguen por toda la zona accesible (D22), sin reactivar automáticamente al protagonista ni permitir completar el objetivo final antes de resolver al guardián.
 9. Huecos futuros desactivados, acción y objetivo visibles y ayuda comprensible a 1280 × 720. Verificación gráfica de palma, espada y ambos contactos de ráfaga.
 10. Partida normal del bot con reglas de producción y prueba humana de claridad y equilibrio; no confundir un test de transiciones con una partida normal.
 11. Diálogo posterior: rechazo y ataque tras escuchar inician combate pausado; aceptar permite paso con guardián vivo y no agresivo. Las tres rutas habilitan el objetivo final del templo y solo reclamarlo termina la misión; ninguna exige cuatro muertes. El objetivo no puede completarse antes de resolver al guardián.
-12. Comprobar D17 y la regla definitiva de recursos durante el diálogo: sin regalos de salud, energía o botiquines entre encuentros. Para la propuesta de congelación, leer todo el diálogo o saltarlo conserva los mismos recursos. No queda Defensa como acción seleccionable; las estadísticas pasivas siguen resolviendo aciertos.
+12. Comprobar D17/D24: sin regalos de salud, energía o botiquines entre encuentros; leer todo el diálogo o saltarlo conserva los mismos recursos y no avanza física, daño ni regeneración. No queda Defensa como acción seleccionable; las estadísticas pasivas siguen resolviendo aciertos.
 
 ## Referencias de diseño
 

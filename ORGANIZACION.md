@@ -15,7 +15,7 @@ Actualizado: 12 de octubre de 2026. Proyecto Godot para un jugador. La segunda v
 | [README.md](README.md) | Cómo ejecutar y usar la versión jugable actual. |
 | [AGENTS.md](AGENTS.md) | Instrucciones breves para consultar y mantener estos registros al retomar trabajo. |
 | GitHub Issues | Seguimiento operativo de tareas y milestone; enlaces y resumen local en `PENDIENTES.md`, detalles y aceptación en los MD. |
-| Engram | Memoria local auxiliar: recuperar decisiones, hallazgos y cierres con referencias a archivos/commits. MCP/plugin configurados; recargar Codex para cargar herramientas y hooks. |
+| Engram | Memoria local auxiliar del proyecto `shadowsofkharuun`: lectura por MCP verificada en esta sesión. Escrituras pendientes del registro del cliente; acuerdos recientes conservados en Git. |
 
 Las nuevas instrucciones del usuario prevalecen. El diseño distingue intención futura de comportamiento existente: una regla documentada no es una función implementada. Los recuerdos externos deben remitirse al repositorio y comprobarse contra su estado vigente.
 
@@ -46,7 +46,7 @@ Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local
 1. Leer `AGENTS.md`, diseño y pendientes; comprobar rama, cambios locales y última entrega identificada por etiqueta.
 2. Separar el objetivo autorizado de lo que solo está propuesto. Elegir una tarea con ID y un resultado concreto para esta sesión.
 3. Consultar las preguntas de esa tarea. Una duda sobre energía no bloquea cámara, interfaz o redacción independientes. Marcar exactamente qué parte espera respuesta.
-4. Si Engram está disponible, recuperar contexto del proyecto `ShadowsOfKharuun` y verificarlo contra los documentos actuales.
+4. Si Engram está disponible, confirmar el proyecto y recuperar contexto con `project = shadowsofkharuun`, `scope = project` y sin `all_projects`; verificarlo contra los documentos actuales. Ignorar memorias ajenas incluso si falta contexto del juego.
 
 Durante la fase de diseño actual, seguir con documentación y pruebas de la versión existente solicitadas por el usuario. Comenzar funciones de la segunda vuelta cuando el usuario pida implementarlas.
 
@@ -95,13 +95,19 @@ command = 'C:\Users\dedeb\bin\engram.exe'
 args = ['mcp', '--tools=agent']
 ```
 
-El proyecto se fija mediante `.engram/config.json` (`project_name = ShadowsOfKharuun`); Engram normaliza su identificador como `shadowsofkharuun`. Solo ese archivo de identificación se versiona; no se exportan base global ni recuerdos de otros proyectos.
+El proyecto se fija mediante `.engram/config.json` (`project_name = ShadowsOfKharuun`); Engram normaliza su identificador como `shadowsofkharuun`. Solo ese archivo de identificación se versiona; no se exportan base global ni recuerdos de otros proyectos. Es una separación lógica dentro de la base existente, no una base nueva: las memorias ajenas permanecen intactas. La configuración fija el proyecto predeterminado, pero no es un bloqueo de seguridad contra consultas explícitas a otros proyectos.
+
+La instrucción de trabajo para este repositorio exige filtros explícitos `project = shadowsofkharuun`, `scope = project` en búsqueda y contexto. No usar búsqueda global ni recuperar contexto ajeno como alternativa. La respuesta de contexto puede incluir estadísticas globales; no son recuerdos del juego ni se incorporan al diseño. La recuperación por ID no filtra propiedad: usar solo IDs devueltos por una búsqueda ya filtrada. Guardar nuevos recuerdos con proyecto y ámbito explícitos, después de verificar el registro real de sesión. No borrar, fusionar, reasignar ni exportar memorias previas.
 
 Se guardaron **cinco resúmenes manuales administrativos**, IDs 130–134: base/versiones, combate D01–D15, narrativa D16–D20, Q01 pendiente y entorno. Estos registros no se presentan como escrituras atribuidas a una sesión de agente Codex. Una prueba directa de MCP inicializó el servidor 3.3.2, enumeró 19 herramientas y recuperó contexto mediante búsqueda.
 
-**Paso pendiente del cliente:** recargar/reiniciar Codex y volver al proyecto para cargar el MCP y los hooks nuevos. Engram es un MCP/plugin local de Codex, no una cuenta que deba aparecer en el catálogo de conectores de ChatGPT. La guía del proveedor requiere una sesión nueva tras cambiar ejecutable/configuración.
+**Repaso del 12 de octubre:** las herramientas se han cargado durante esta sesión. `mem_current_project` confirma el proyecto desde la configuración; `mem_search` devuelve únicamente los cinco recuerdos 130–134 de Kharuun con ámbito `project`; `mem_context` devuelve sus sesiones/observaciones. Acceso de lectura por el MCP del agente verificado, además de la prueba directa anterior.
 
-En la sesión nueva, comprobar que `mem_current_project` identifica Kharuun, que los resúmenes son recuperables y que el hook confirma el ID real de sesión antes de escrituras de agente. No inventar un ID Codex ni confundir guardados manuales con ese registro. La prueba del servidor y el plugin configurado están verificados; la atribución de memoria desde una sesión nueva queda pendiente de esa recarga.
+La escritura sigue pendiente: el hook `PreToolUse` rechazó `mem_session_start` con `Codex host session resolution could not be confirmed`, incluso usando el ID real del entorno. No se elude este rechazo mediante guardados CLI/HTTP/SQL ni se inventa otro ID. Los acuerdos D21–D24 y el cierre de revisión quedan en los MD y GitHub hasta que el cliente confirme el registro.
+
+Se comprobó una dependencia ausente en los scripts oficiales: `jq`. Se instaló **jq 1.8.2** oficial en `C:\Users\dedeb\bin\jq.exe`, SHA256 `a6fc67fedaf9128a3309a1e2ebb8b986aeccf70122ee46d2cb4849e423f0c627`, y Git Bash ya encuentra el ejecutable. No se modificaron los hooks del proveedor ni el PATH global. El servidor HTTP auxiliar no respondía en el puerto local 7437 durante el diagnóstico; no se da por resuelta la atribución solo por instalar la dependencia.
+
+**Paso pendiente del cliente:** recargar/reiniciar Codex y volver a este proyecto para ejecutar el hook de inicio/reanudación con la dependencia disponible. Confirmar el vínculo real de sesión antes de guardar por MCP el resumen de esta revisión. Engram es un MCP/plugin local de Codex, no una cuenta del catálogo de conectores de ChatGPT. La lectura ya está operativa; las escrituras requieren esta verificación separada.
 
 ## Por qué no Changesets ahora
 
@@ -112,8 +118,8 @@ Referencias: [Changesets](https://github.com/changesets/changesets), [guía Engr
 ## Punto de reanudación actual
 
 - Versión que se puede probar: **0.2.0**; el código no incorpora aún la segunda vuelta.
-- Acuerdos confirmados: D01–D20. La oferta del guardián permite combate o paso pacífico y ambos conducen al mismo objetivo del templo.
+- Acuerdos confirmados: D01–D24. Además del combate y cierre común, curar con salud llena gasta recurso/ronda; persecución por toda la zona accesible; reinicio completo; tiempo/recursos congelados durante el diálogo.
 - Regla principal pendiente: **Q01**, el usuario comprobará en KOTOR qué pasa con una orden sin energía al final o en medio de la cola. No volver a preguntarla mientras espera esa prueba.
-- Q02/Q03/Q07 tienen propuestas explícitas en el diseño; revisarlas solo cuando afecten a la tarea siguiente.
+- Q02/Q03/Q07 están cerradas por las respuestas del usuario de esta revisión. No reabrirlas; solo Q01 sigue pendiente de comprobación.
 - Próximo paso de diseño: incorporar la observación de Q01 cuando llegue. Si el usuario solicita implementar antes, avanzar con las partes independientes y aislar la regla pendiente.
-- Entorno listo: repositorio privado y versiones remotas, 13 issues y milestone, Engram actualizado/configurado y resúmenes recuperables. Falta recargar el cliente para que el agente reciba herramientas y registro de sesión; no se ha iniciado la producción de 0.3.0.
+- Entorno: repositorio privado y versiones remotas, 13 issues y milestone revisados, Engram con lectura MCP y filtrado de proyecto verificados. Falta recargar el cliente y confirmar su registro para escribir los acuerdos nuevos en Engram; están conservados en Git y las issues. No se ha iniciado la producción de 0.3.0.

@@ -14,6 +14,8 @@ Versión jugable actual: **0.2.0**. Próxima versión prevista: **0.3.0**, todav
 - Convención de versiones, changelog y protocolo de inicio/cierre de trabajo; revisión de dependencias para que una duda local no bloquee toda la iteración.
 - Repositorio privado `Dioniss97/ShadowsOfKharuun` preparado, con historial, ramas y etiquetas subidos mediante HTTPS; milestone `Demo 0.3.0` y 13 issues enlazados al backlog.
 - Engram actualizado de 1.7.1 a 3.3.2 estable, con SHA256 verificado, respaldo de memoria/configuración y conservación de los registros anteriores. MCP y plugin oficial de Codex configurados, proyecto fijado y cinco resúmenes manuales de contexto guardados. Protocolo MCP probado; carga de herramientas/hooks en el agente requiere recargar Codex.
+- Revisión previa a producción: lectura de Engram desde el MCP de esta sesión verificada y política explícita de consultas exclusivas a `shadowsofkharuun`, conservando memorias ajenas. Instalado jq 1.8.2 oficial, dependencia ausente de los hooks; escritura de agente pendiente de recarga/registro confirmado del cliente.
+- Respuestas D21–D24 incorporadas al diseño y backlog: curación con salud llena consume ronda/recurso, persecución por toda la zona accesible, reinicio completo de misión y congelación de tiempo/recursos durante el diálogo. Q02/Q03/Q07 cerradas; Q01 sigue pendiente. Las 13 issues se revisan contra estos criterios sin iniciar implementación.
 
 Estos cambios son de documentación. La misión unificada, ráfaga, botiquines, curación y rutas nuevas están **planificadas**, no implementadas; su alcance está en el diseño y no se cuenta como funcionalidad entregada.
 

@@ -14,7 +14,8 @@ Actualizado: 12 de octubre de 2026. Proyecto Godot para un jugador. La segunda v
 | [RESULTADO.md](RESULTADO.md) | Evidencia, límites y resultados de la última entrega verificada. |
 | [README.md](README.md) | Cómo ejecutar y usar la versión jugable actual. |
 | [AGENTS.md](AGENTS.md) | Instrucciones breves para consultar y mantener estos registros al retomar trabajo. |
-| Engram, cuando esté conectado | Recuperar contexto mediante recuerdos breves de decisiones, hallazgos y cierres, con referencias a archivos/commits. |
+| GitHub Issues | Seguimiento operativo de tareas y milestone; enlaces y resumen local en `PENDIENTES.md`, detalles y aceptación en los MD. |
+| Engram | Memoria local auxiliar: recuperar decisiones, hallazgos y cierres con referencias a archivos/commits. MCP/plugin configurados; recargar Codex para cargar herramientas y hooks. |
 
 Las nuevas instrucciones del usuario prevalecen. El diseño distingue intención futura de comportamiento existente: una regla documentada no es una función implementada. Los recuerdos externos deben remitirse al repositorio y comprobarse contra su estado vigente.
 
@@ -28,9 +29,17 @@ Las nuevas instrucciones del usuario prevalecen. El diseño distingue intención
 
 Convención para este prototipo: `0.MINOR.PATCH`. Incrementar MINOR cuando una entrega añade un conjunto importante de funciones; PATCH para correcciones o ajustes pequeños de una entrega. Los cambios solo de documentación conservan la versión jugable. No crear etiquetas definitivas para funciones meramente acordadas ni reutilizar/mover una etiqueta existente.
 
-La rama actual es `feature/tactical-duel`; hay commits de diseño posteriores a `v0.2.0`, sin cambios de código del juego. `master` conserva la primera entrega. Al iniciar la implementación nueva, usar una rama de trabajo descriptiva desde el estado vigente; no cambiar ahora de rama ni alterar el árbol mientras se estudia o prueba la demo. No imponer GitFlow ni ramas de release adicionales en esta fase.
+La rama local actual es `feature/tactical-duel`; hay commits de diseño y entorno posteriores a `v0.2.0`, sin cambios de código del juego. El remoto tiene `main` como rama predeterminada con el estado vigente y conserva `feature/tactical-duel` y `master`; esta última identifica el estado de la primera entrega. Al iniciar la implementación nueva, usar una rama descriptiva desde `origin/main`; no cambiar ahora de rama ni alterar el árbol mientras se estudia o prueba la demo. No imponer GitFlow ni ramas de release adicionales en esta fase.
 
-Las etiquetas y commits son locales. Actualmente no hay remoto configurado. Una copia externa/privada del repositorio queda como tarea organizativa opcional; no se ha publicado ni sincronizado el proyecto. La carpeta del Godot portátil está excluida de Git y debe conservarse o descargarse aparte al preparar otra máquina.
+Remoto privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun), `origin = https://github.com/Dioniss97/ShadowsOfKharuun.git`. El usuario confirmó la cuenta autenticada con dos «s». Historial y etiquetas `v0.1.0`/`v0.2.0` están subidos. La prueba SSH devolvió `Permission denied (publickey)`; HTTPS con GitHub CLI autenticado funciona, sin modificar claves SSH ni el protocolo global de Git.
+
+La carpeta del Godot portátil está excluida de Git y debe conservarse o descargarse aparte al preparar otra máquina. Memoria global, credenciales, ejecutables, descargas y copias de seguridad no se suben al repositorio.
+
+## Backlog en GitHub
+
+Milestone: [Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los 13 issues DEMO tienen dependencias, resultado esperado y verificación basada en el diseño. Al crearlos, DEMO-01 lleva `pendiente-decision` y los demás `planificado`; todos están abiertos y sin implementar.
+
+Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local y los enlaces. Al cambiar estado o cerrar una tarea, actualizar ambos, añadir evidencia/commit al issue y mantener el acuerdo detallado en `DISENO_DEMO.md`. Si GitHub no está disponible, registrar el avance local y señalar la sincronización pendiente. Las FUT pospuestas permanecen en los MD, sin crear tarjetas fuera del alcance actual.
 
 ## Inicio de una sesión
 
@@ -65,13 +74,20 @@ git show v0.2.0:RESULTADO.md
 
 No usar `reset --hard` o restaurar una versión encima de cambios locales para probar una entrega anterior. Preparar un checkout aparte si hace falta compararlas.
 
-## Engram: complemento opcional
+## Engram: integración local preparada
 
-Comprobación local de esta sesión: `C:\Users\dedeb\bin\engram.exe`, versión **1.7.1**, con comando MCP por stdio. Sus herramientas `mem_*` no están expuestas aquí; no se ha cambiado la configuración de Codex ni escrito recuerdos en su base de datos.
+Ejecutable: `C:\Users\dedeb\bin\engram.exe`, actualizado de **1.7.1 a 3.3.2 estable**. Archivo oficial `engram_3.3.2_windows_amd64.zip`, SHA256 verificado: `e00afe91d1baade484d217606d78c2fd91e26a4f9823b603d050c1e4be78233c`.
 
-Recomendación: aprovecharlo como memoria auxiliar al conectarlo, conservando decisiones y tareas en Git. No es una dependencia necesaria para avanzar. Un recuerdo de decisión debe incluir proyecto, ID D/Q, estado confirmado/pendiente, archivo de referencia y commit cuando exista. Guardar hallazgos significativos y un resumen al cerrar; no duplicar toda la especificación ni cada mensaje del chat. Una hipótesis no se guarda como hecho.
+Antes de actualizar se respaldaron base SQLite, ejecutable anterior y configuración de Codex. La prueba de migración sobre copia pasó `quick_check` y preservó 50 sesiones, 129 observaciones y 2 prompts; después se comprobó que todos sus IDs siguen presentes en la base real. Respaldos locales:
 
-Ejemplo preparado para una futura conexión en la configuración de Codex, no aplicado ahora:
+- `C:\Users\dedeb\.engram\backups\20261012-kharuun-3889f64f`.
+- `C:\Users\dedeb\.codex\backups\20261012-kharuun-3889f64f`.
+
+Se ejecutó el instalador oficial `engram setup codex`. El MCP `engram` está habilitado y el plugin **`engram@engram` 0.1.5** instalado y habilitado. Se comprobaron las otras entradas de configuración/MCP/marketplaces para asegurar que se conservan; no hay `model_instructions_file` ni `experimental_compact_prompt_file` que sustituyan el prompt base de Codex.
+
+Usarlo como memoria auxiliar, conservando decisiones y tareas en Git. Un recuerdo debe incluir proyecto, ID D/Q, estado confirmado/pendiente, archivo de referencia y commit cuando exista. Guardar hallazgos significativos y un resumen al cerrar; no duplicar toda la especificación ni cada mensaje. Una hipótesis no se guarda como hecho.
+
+Configuración instalada en `C:\Users\dedeb\.codex\config.toml`:
 
 ```toml
 [mcp_servers.engram]
@@ -79,13 +95,19 @@ command = 'C:\Users\dedeb\bin\engram.exe'
 args = ['mcp', '--tools=agent']
 ```
 
-El perfil `agent` está confirmado por el `help` de la versión instalada. Al conectarlo, verificar que las herramientas aparecen en una sesión de Codex y pueden recuperar/guardar un recuerdo del proyecto. No considerar una integración probada solo porque el ejecutable esté instalado. No exportar la base global completa ni recuerdos de otros proyectos al repositorio.
+El proyecto se fija mediante `.engram/config.json` (`project_name = ShadowsOfKharuun`); Engram normaliza su identificador como `shadowsofkharuun`. Solo ese archivo de identificación se versiona; no se exportan base global ni recuerdos de otros proyectos.
+
+Se guardaron **cinco resúmenes manuales administrativos**, IDs 130–134: base/versiones, combate D01–D15, narrativa D16–D20, Q01 pendiente y entorno. Estos registros no se presentan como escrituras atribuidas a una sesión de agente Codex. Una prueba directa de MCP inicializó el servidor 3.3.2, enumeró 19 herramientas y recuperó contexto mediante búsqueda.
+
+**Paso pendiente del cliente:** recargar/reiniciar Codex y volver al proyecto para cargar el MCP y los hooks nuevos. Engram es un MCP/plugin local de Codex, no una cuenta que deba aparecer en el catálogo de conectores de ChatGPT. La guía del proveedor requiere una sesión nueva tras cambiar ejecutable/configuración.
+
+En la sesión nueva, comprobar que `mem_current_project` identifica Kharuun, que los resúmenes son recuperables y que el hook confirma el ID real de sesión antes de escrituras de agente. No inventar un ID Codex ni confundir guardados manuales con ese registro. La prueba del servidor y el plugin configurado están verificados; la atribución de memoria desde una sesión nueva queda pendiente de esa recarga.
 
 ## Por qué no Changesets ahora
 
 Este proyecto no tiene paquetes npm ni componentes publicables con versiones coordinadas. Git, etiquetas y un changelog manual cubren la necesidad actual sin añadir un gestor de paquetes o una cadena de publicación. Si más adelante aparecen paquetes o publicaciones que coordinar, se reevaluará.
 
-Referencias: [Changesets](https://github.com/changesets/changesets), [memoria de Engram](https://github.com/Gentleman-Programming/engram/blob/main/docs/codebase/mental-model.md) y [MCP en Codex](https://learn.chatgpt.com/docs/extend/mcp).
+Referencias: [Changesets](https://github.com/changesets/changesets), [guía Engram para Codex](https://github.com/Gentleman-Programming/engram/blob/main/docs/AGENT-SETUP.md#codex), [versión estable 3.3.2](https://github.com/Gentleman-Programming/engram/releases/tag/v3.3.2) y [MCP en Codex](https://learn.chatgpt.com/docs/extend/mcp).
 
 ## Punto de reanudación actual
 
@@ -94,3 +116,4 @@ Referencias: [Changesets](https://github.com/changesets/changesets), [memoria de
 - Regla principal pendiente: **Q01**, el usuario comprobará en KOTOR qué pasa con una orden sin energía al final o en medio de la cola. No volver a preguntarla mientras espera esa prueba.
 - Q02/Q03/Q07 tienen propuestas explícitas en el diseño; revisarlas solo cuando afecten a la tarea siguiente.
 - Próximo paso de diseño: incorporar la observación de Q01 cuando llegue. Si el usuario solicita implementar antes, avanzar con las partes independientes y aislar la regla pendiente.
+- Entorno listo: repositorio privado y versiones remotas, 13 issues y milestone, Engram actualizado/configurado y resúmenes recuperables. Falta recargar el cliente para que el agente reciba herramientas y registro de sesión; no se ha iniciado la producción de 0.3.0.

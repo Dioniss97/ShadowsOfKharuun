@@ -4,6 +4,8 @@ Haz doble clic en **PLAY.bat**. Abre el juego directamente; no necesitas abrir e
 
 Versión jugable actual: **0.2.0**, identificada por la etiqueta Git `v0.2.0`. Historial de entregas en [CHANGELOG.md](CHANGELOG.md) y rutina de trabajo en [ORGANIZACION.md](ORGANIZACION.md).
 
+Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). La segunda vuelta tiene [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Engram está preparado como memoria local de Codex; configuración, pruebas y paso de recarga en `ORGANIZACION.md`.
+
 La segunda vuelta, prevista como **0.3.0**, está en fase de diseño. Sus decisiones están guardadas en [DISENO_DEMO.md](DISENO_DEMO.md) y las tareas en [PENDIENTES.md](PENDIENTES.md); los controles de abajo corresponden a la entrega que puedes jugar ahora.
 
 ## Duelo táctico

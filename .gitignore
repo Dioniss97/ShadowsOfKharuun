@@ -14,3 +14,5 @@ tests/tactical_capture_report.json
 *.tmp
 *.log
 *.bak
+.engram/*
+!.engram/config.json

@@ -2,6 +2,8 @@
 
 Build local del 12 de octubre de 2026, rama `feature/temple-tactical-demo`, prevista como **0.3.0**. El usuario autorizó producir tras revisar D01–D24 y las 13 issues. La última etiqueta estable sigue siendo `v0.2.0`; no se etiqueta una 0.3.0 final mientras Q01 y la aceptación humana estén pendientes. El informe histórico del duelo separado está conservado en `v0.2.0:RESULTADO.md`.
 
+Código y pruebas: commit `2a6cd6b`, [PR borrador #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). Esta build se ha subido a su rama; main y las etiquetas estables permanecen conservados.
+
 Abre `PLAY.bat` y elige **Nueva partida · asalto al templo**. La misión completa usa el combate táctico. El duelo permanece accesible con `PLAY.bat --duel` como herramienta interna.
 
 ## Qué se puede probar

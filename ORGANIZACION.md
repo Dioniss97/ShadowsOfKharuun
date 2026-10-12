@@ -31,6 +31,8 @@ Convención para este prototipo: `0.MINOR.PATCH`. Incrementar MINOR cuando una e
 
 La rama local actual es `feature/temple-tactical-demo`, creada desde `origin/main` después de la revisión `c0aab67`. Contiene la misión unificada y las pruebas de desarrollo; la revisión se publica como PR borrador contra `main`. El remoto conserva `feature/tactical-duel` y `master`; esta última identifica la primera entrega. No hay merge ni etiqueta final de 0.3.0 mientras falten la regla Q01 y la aceptación humana. No imponer GitFlow ni ramas de release adicionales.
 
+Implementación guardada en `2a6cd6b`; [PR borrador #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). La rama remota contiene código, suite y evidencia resumida. Las issues permanecen abiertas hasta aceptar e integrar la entrega; sus etiquetas diferencian componentes verificados en rama de Q01 y pruebas humanas pendientes.
+
 Remoto privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun), `origin = https://github.com/Dioniss97/ShadowsOfKharuun.git`. El usuario confirmó la cuenta autenticada con dos «s». Historial y etiquetas `v0.1.0`/`v0.2.0` están subidos. La prueba SSH devolvió `Permission denied (publickey)`; HTTPS con GitHub CLI autenticado funciona, sin modificar claves SSH ni el protocolo global de Git.
 
 La carpeta del Godot portátil está excluida de Git y debe conservarse o descargarse aparte al preparar otra máquina. Memoria global, credenciales, ejecutables, descargas y copias de seguridad no se suben al repositorio.

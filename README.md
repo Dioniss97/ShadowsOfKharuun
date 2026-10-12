@@ -2,6 +2,8 @@
 
 Haz doble clic en **PLAY.bat**. Abre el juego directamente; no necesitas abrir el editor. **Duelo táctico · nueva iteración** prueba el combate con rondas y órdenes. **Nueva partida · misión original** conserva el asalto completo al templo.
 
+La segunda vuelta está en fase de diseño. Sus decisiones están guardadas en [DISENO_DEMO.md](DISENO_DEMO.md) y las tareas en [PENDIENTES.md](PENDIENTES.md); los controles de abajo corresponden a la entrega que puedes jugar ahora.
+
 ## Duelo táctico
 
 El duelo comienza pausado. Haz clic en el centinela o pulsa Tab, prepara órdenes y pulsa Espacio para reanudar. Cada combatiente tiene su propio ritmo; el enemigo no espera a que des órdenes. Al vaciarse la cola, tu personaje continúa con ataques básicos automáticos contra su objetivo.

@@ -1,5 +1,7 @@
 # Primera iteración: duelo táctico
 
+**Documento de la primera entrega implementada.** El diseño vigente para la segunda vuelta está en [DISENO_DEMO.md](DISENO_DEMO.md), con tareas en [PENDIENTES.md](PENDIENTES.md). Allí se sustituyen, entre otras, las reglas de WASD, recargas y destino del autoataque. Esta página conserva la referencia de la versión ya verificada.
+
 Alcance: pasos 1–3 del plan. Corregir arma, colisiones y sincronización; probar selección, rondas, cola y pausa en un duelo dentro del patio actual. La misión original continúa disponible como referencia. Blender, compañero, ampliación de mapa y equilibrio final de toda la misión corresponden a iteraciones posteriores.
 
 ## Reglas propuestas para Kharuun

@@ -15,8 +15,8 @@ static func mesh(parent: Node3D, shape: Mesh, pos: Vector3, mat: Material) -> Me
 	var instance = MeshInstance3D.new()
 	instance.mesh = shape
 	instance.material_override = mat
-	parent.add_child(instance)
 	instance.position = pos
+	parent.add_child(instance)
 	return instance
 
 static func box(parent: Node3D, pos: Vector3, size: Vector3, mat: Material, solid: bool = false) -> MeshInstance3D:
@@ -25,8 +25,8 @@ static func box(parent: Node3D, pos: Vector3, size: Vector3, mat: Material, soli
 	var instance = mesh(parent, shape, pos, mat)
 	if solid:
 		var body = StaticBody3D.new()
-		parent.add_child(body)
 		body.position = pos
+		parent.add_child(body)
 		var collider = CollisionShape3D.new()
 		var box_shape = BoxShape3D.new()
 		box_shape.size = size

@@ -40,13 +40,16 @@ func lightning(a: Vector3, b: Vector3) -> void:
 	t.tween_callback(container.queue_free)
 
 func damage_number(pos: Vector3, damage: int) -> void:
+	status_text(pos,str(damage),Color(1,0.79,0.35))
+
+func status_text(pos: Vector3, text: String, color: Color) -> void:
 	var l = Label3D.new()
 	add_child(l)
 	l.position = pos
-	l.text = str(damage)
+	l.text = text
 	l.font_size = 36
 	l.pixel_size = 0.0075
-	l.modulate = Color(1,0.79,0.35)
+	l.modulate = color
 	l.outline_modulate = Color(0.08,0.02,0.01)
 	l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	l.no_depth_test = true

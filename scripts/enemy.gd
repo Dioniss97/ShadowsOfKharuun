@@ -19,6 +19,10 @@ var bar: MeshInstance3D
 var slam = false
 var attacks = 0
 var level: Node3D
+var tactical_mode = false
+var defence = 12
+var attack_bonus = 5
+var round_clock = KhRoundQueue.new()
 
 func _ready() -> void:
 	if guardian:
@@ -26,6 +30,10 @@ func _ready() -> void:
 		health = max_health
 		display_name = "Guardián de Kharuun"
 	floor_snap_length = 0.7
+	if tactical_mode:
+		round_clock.round_seconds = 3.0
+		round_clock.action_started.connect(_tactical_started)
+		round_clock.action_impact.connect(_tactical_impact)
 	var c = CollisionShape3D.new()
 	var shape = CapsuleShape3D.new()
 	shape.radius = 0.36 if not guardian else 0.46
@@ -65,8 +73,12 @@ func activate() -> void:
 	active = true
 	mode = Mode.CHASE
 	bar.get_meta("holder").visible = true
+	rig.combat_stance = true
 
 func _physics_process(delta: float) -> void:
+	if tactical_mode:
+		_tactical_physics(delta)
+		return
 	if not is_on_floor():
 		velocity.y -= 22*delta
 	else:
@@ -133,6 +145,71 @@ func _physics_process(delta: float) -> void:
 		velocity.z = 0
 	rig.animate(delta,desired.length())
 
+func _tactical_physics(delta: float) -> void:
+	if not is_on_floor(): velocity.y -= 22*delta
+	else: velocity.y = -0.5
+	var desired = Vector3.ZERO
+	stun = maxf(0,stun-delta)
+	if active and mode != Mode.DEAD and is_instance_valid(target) and target.health > 0:
+		var direction = target.global_position-global_position
+		direction.y = 0
+		rig.rotation.y = atan2(-direction.x,-direction.z)
+		if stun > 0 and not round_clock.current.is_empty() and not round_clock.impact_done:
+			round_clock.interrupt()
+			rig.attack_time = 0
+			telegraph.hide()
+		# Stagger cancels a pending hit; recovery keeps ticking with the animation.
+		round_clock.advance(delta)
+		if stun <= 0 and active and target.health > 0:
+			if round_clock.round_left > 0:
+				mode = Mode.RECOVER if round_clock.impact_done else Mode.WINDUP
+			else:
+				mode = Mode.CHASE
+				if direction.length() > 1.8 or not _tactical_visible():
+					desired = direction.normalized()*2.4
+				else:
+					round_clock.start({"id":"attack","target":target,"target_name":"Intruso"})
+	knockback = knockback.move_toward(Vector3.ZERO,delta*12)
+	velocity.x = desired.x+knockback.x
+	velocity.z = desired.z+knockback.z
+	move_and_slide()
+	rig.animate(delta,desired.length())
+
+func _tactical_visible() -> bool:
+	var query = PhysicsRayQueryParameters3D.create(global_position+Vector3.UP,target.global_position+Vector3.UP,1)
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+func _tactical_started(_order: Dictionary) -> void:
+	mode = Mode.WINDUP
+	rig.swing(0.9)
+	telegraph.visible = true
+
+func _tactical_impact(_order: Dictionary) -> void:
+	telegraph.visible = false
+	attacks += 1
+	if not active or target.health <= 0: return
+	var distance = global_position.distance_to(target.global_position)
+	var combat = level.combat
+	if distance > 2.35 or not _tactical_visible():
+		combat.record({"source":"enemy","id":"attack","hit":false,"damage":0,"reason":"range"})
+		return
+	var effective_defence = target.defence+(6 if target.defending_left > 0 else 0)
+	var result = KhCombatRules.hit_result(combat.rng.randi_range(1,20),attack_bonus,effective_defence)
+	var damage = KhCombatRules.scaled_damage(16,result)
+	var before = target.health
+	if result.hit:
+		target.take_damage(damage)
+		level.fx.burst(target.global_position+Vector3.UP,Color(1,0.25,0.12),7)
+		level.audio.play_effect("enemy")
+	else:
+		level.fx.status_text(target.global_position+Vector3(0,2,0),"FALLO",Color(0.75,0.72,0.67))
+	combat.record({"source":"enemy","id":"attack","hit":result.hit,"damage":before-target.health,"roll":result.roll,"defended":target.defending_left > 0})
+
+func stop_tactical() -> void:
+	round_clock.reset()
+	telegraph.hide()
+	active = false
+
 func take_damage(amount: float, force: Vector3 = Vector3.ZERO) -> void:
 	if mode == Mode.DEAD or not active:
 		return
@@ -140,8 +217,12 @@ func take_damage(amount: float, force: Vector3 = Vector3.ZERO) -> void:
 	bar.scale.x = maxf(0.001,health/max_health)
 	rig.hit()
 	knockback = force
-	stun = 0.22 if guardian else 0.44
-	if mode == Mode.WINDUP and not guardian:
+	stun = (1.3 if force.length() > 0.1 else 0.0) if tactical_mode else (0.22 if guardian else 0.44)
+	if tactical_mode and stun > 0:
+		round_clock.interrupt()
+		rig.attack_time = 0
+		telegraph.hide()
+	if mode == Mode.WINDUP and not guardian and not tactical_mode:
 		mode = Mode.RECOVER
 		timer = 0.6
 		telegraph.visible = false
@@ -154,4 +235,6 @@ func take_damage(amount: float, force: Vector3 = Vector3.ZERO) -> void:
 		bar.get_meta("holder").visible = false
 		rig.dying = true
 		collision_layer = 0
+		collision_mask = 1
+		round_clock.reset()
 		died.emit(self)

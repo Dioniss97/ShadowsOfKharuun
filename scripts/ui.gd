@@ -32,6 +32,8 @@ var toast: Label
 var toast_time = 0.0
 var main: Node
 var last_health = 340.0
+var legacy_actions: HBoxContainer
+var controls_label: Label
 
 static func style(bg: Color, border: Color = GOLD, width: int = 1) -> StyleBoxFlat:
 	var s = StyleBoxFlat.new()
@@ -148,6 +150,7 @@ func build_hud() -> void:
 	energy_bar = bar(Color(0.23,0.49,0.70),7)
 	status_box.add_child(energy_bar)
 	var actions = HBoxContainer.new()
+	legacy_actions = actions
 	hud.add_child(actions)
 	place(actions,Vector2(-242,-111),Vector2(484,78),Control.PRESET_CENTER_BOTTOM)
 	actions.add_theme_constant_override("separation",10)
@@ -172,6 +175,7 @@ func build_hud() -> void:
 		v.add_child(p)
 		ability_bars.append(p)
 	var controls = label("WASD  Mover   ·   SHIFT  Correr\nE  Interactuar   ·   ESC  Pausa",12,DIM)
+	controls_label = controls
 	hud.add_child(controls)
 	place(controls,Vector2(-315,-77),Vector2(295,56),Control.PRESET_BOTTOM_RIGHT)
 	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -216,6 +220,7 @@ func show_menu() -> void:
 	menu = KhMenu.new()
 	root.add_child(menu)
 	menu.start_requested.connect(func(): main.new_game())
+	menu.duel_requested.connect(func(): main.new_duel())
 	menu.quit_requested.connect(func(): main.get_tree().quit())
 
 func show_game() -> void:
@@ -223,6 +228,10 @@ func show_game() -> void:
 	hud.show()
 	dialog_panel.hide()
 	last_health = main.level.player.health
+	legacy_actions.visible = not main.level.duel_mode
+	message.visible = not main.level.duel_mode
+	hint.visible = not main.level.duel_mode
+	controls_label.text = "WASD  Mover · BOTÓN DERECHO  Cámara\nESPACIO  Táctica · ESC  Menú" if main.level.duel_mode else "WASD  Mover   ·   SHIFT  Correr\nE  Interactuar   ·   ESC  Pausa"
 	announce("EL UMBRAL DE CENIZA")
 
 func show_dialogue(dialogue: KhDialogue) -> void:
@@ -282,17 +291,18 @@ func show_end(victory: bool, elapsed: float) -> void:
 	var sub = label("EL UMBRAL HA SIDO QUEBRADO" if victory else "EL TEMPLO RECLAMA OTRA ALMA",12,GOLD)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(sub)
-	var title = label("DEMO COMPLETADA" if victory else "HAS CAÍDO",39)
+	var duel = main.level.duel_mode
+	var title = label(("DUELO COMPLETADO" if duel else "DEMO COMPLETADA") if victory else "HAS CAÍDO",39)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(title)
-	var text = label("«El templo ha caído. Pero algo antiguo\ncomienza a despertar»." if victory else "La sombra aún espera. Regresa al umbral.",21)
+	var text = label(("Has dominado las rondas del centinela.\nEl umbral aún guarda su secreto." if duel else "«El templo ha caído. Pero algo antiguo\ncomienza a despertar».") if victory else "La sombra aún espera. Regresa al umbral.",21)
 	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(text)
 	if victory:
-		var stats = label("4 enemigos derrotados  ·  Tiempo %02d:%02d" % [int(elapsed)/60,int(elapsed)%60],13,DIM)
+		var stats = label("%d enemigo%s derrotado%s  ·  Tiempo %02d:%02d" % [main.mission.kills,"" if duel else "s","" if duel else "s",int(elapsed)/60,int(elapsed)%60],13,DIM)
 		stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		v.add_child(stats)
-	var restart = button("Repetir misión" if victory else "Reiniciar misión",true)
+	var restart = button(("Repetir duelo" if duel else "Repetir misión") if victory else ("Reiniciar duelo" if duel else "Reiniciar misión"),true)
 	v.add_child(restart)
 	restart.pressed.connect(func(): restart_requested.emit())
 	var return_button = button("Volver al menú")
@@ -305,9 +315,14 @@ func show_pause() -> void:
 	var title = label("PAUSA",36)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(title)
-	v.add_child(label("WASD: movimiento · Ratón: cámara · Shift: correr",16))
-	v.add_child(label("Clic: arma · 1: empuje · 2: descarga · E: interactuar",16))
-	v.add_child(label("Los círculos rojos anuncian ataques. Aléjate para esquivarlos.",14,GOLD))
+	if main.level.duel_mode:
+		v.add_child(label("Clic: objetivo · Botón derecho: cámara · WASD: mover",16))
+		v.add_child(label("1: empuje · 2: descarga · 3: ataque · 4: defensa",16))
+		v.add_child(label("Espacio: pausa táctica · Tab: objetivo · F: retirarse",14,GOLD))
+	else:
+		v.add_child(label("WASD: movimiento · Ratón: cámara · Shift: correr",16))
+		v.add_child(label("Clic: arma · 1: empuje · 2: descarga · E: interactuar",16))
+		v.add_child(label("Los círculos rojos anuncian ataques. Aléjate para esquivarlos.",14,GOLD))
 	var resume = button("Continuar  [ESC]",true)
 	v.add_child(resume)
 	resume.pressed.connect(func(): resume_requested.emit())
@@ -348,4 +363,4 @@ func _process(delta: float) -> void:
 	hint.text = "E  Hablar con el guardián" if mission.state == KhMission.State.EXPLORATION and p.position.z < -6.5 else ("Acércate al enemigo · ataca · retrocede ante los círculos rojos" if mission.state == KhMission.State.COMBAT else "")
 	if not main.get_tree().paused:
 		toast_time = maxf(0,toast_time-delta)
-	toast.modulate.a = minf(1,toast_time)
+	toast.modulate.a = 0 if main.level.duel_mode and main.tactical_paused else minf(1,toast_time)

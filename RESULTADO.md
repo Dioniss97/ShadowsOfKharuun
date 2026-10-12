@@ -1,48 +1,48 @@
-# Resultado de la sesión
+# Resultado: primera iteración táctica
 
-Entrega local del 12 de octubre de 2026. **Demo jugable completa**, con Godot 4.7.2 estándar portátil y lanzador `PLAY.bat`. No necesita abrir el editor ni conectarse a Internet.
+Entrega local del 12 de octubre de 2026. Se han completado los pasos 1–3 del plan: reglas documentadas, corrección de arma y colisiones, y un duelo jugable para validar el núcleo del combate antes de adaptarlo a toda la misión.
 
-## Funcionalidad implementada y comprobada
+Abre `PLAY.bat` y elige **Duelo táctico · nueva iteración**. Empieza pausado: selecciona al centinela con clic o Tab, prepara órdenes y pulsa Espacio. La misión del templo continúa disponible en **Nueva partida · misión original**.
 
-- Menú → exploración → diálogo → tres acólitos → guardián → victoria.
-- Derrota, reinicio, repetición de misión, vuelta al menú y pausa que detiene la IA.
-- Movimiento con WASD, cámara con ratón, carrera, colisiones, bordes seguros y escalera con rampa física independiente de los escalones visuales.
-- Humanoides procedurales, arma luminosa, ataque básico, empuje y descarga. Alcance y visibilidad limitan los ataques; energía y cooldowns limitan habilidades.
-- Enemigos con persecución, separación, ataques anunciados, daño, barras de salud y muerte. El guardián tiene más salud y una onda de área.
-- Tres respuestas distintas del guardián y elección registrada; diálogo sin agresión. Textos en español.
-- HUD de salud, energía, habilidades, objetivo, enemigo cercano y tiempo; pantallas finales.
-- Patio principal de 40 × 55 m, templo elevado, dos estatuas, columnas, obeliscos, banderas, braseros, horizonte, cielo procedural, iluminación, niebla y efectos originales.
+## Cambios comprobados
+
+- Espada orientada hacia delante, postura de combate y animación con preparación, contacto y recuperación. La locomoción conserva la orientación durante el golpe.
+- Jugador y enemigos sólidos: el movimiento físico ya no permite atravesar al adversario. Se mantienen accesibles el patio, el umbral y la rampa del templo.
+- Impacto diferido durante la animación, comprobado una sola vez y sujeto a alcance y visibilidad. La misión original también utiliza impacto diferido para el arma.
+- Duelo en tiempo real con pausa y relojes propios por combatiente. Una acción activa y hasta cuatro órdenes pendientes, cancelables; cada orden conserva su objetivo.
+- Selección con clic o Tab, aproximación física al objetivo, ataque básico automático con cola vacía, retirada y movimiento manual que interrumpe el enfrentamiento.
+- Empuje, descarga y defensa; energía cobrada al ejecutar, recargas, tiradas de acierto y crítico. Empuje interrumpe el golpe enemigo preparado y evita impactos posteriores invisibles.
+- Interfaz para objetivo, acción, recuperación, cola y resultados. Espacio congela movimiento, daño, energía y relojes, pero permite preparar órdenes. Escape conserva la pausa táctica al cerrar su menú.
+- Victoria, derrota, repetición del duelo y regreso al menú. Controles y reglas en [README.md](README.md) y [COMBATE.md](COMBATE.md).
 
 ## Evidencia de verificación
 
 | Comprobación | Resultado / evidencia local |
 |---|---|
-| Motor oficial | `--version`: 4.7.2.stable.official.ed1daf0bf; SHA256 y SHA512 verificados; firma Authenticode **Valid**, Prehensile Tales B.V. |
-| Importación final | Código de salida 0, sin errores de scripts o recursos; `tools/logs/import-final.log` |
-| Pruebas headless | 33 comprobaciones; `tests/logic_report.json`, `tools/logs/logic.log` |
-| Pruebas con GPU | 42 comprobaciones, incluidas entrada de teclado, cámara con ratón y límites del panel de diálogo; `tests/capture_report.json` |
-| Capturas reales | Ocho PNG de 1280 × 720 en `screenshots/`, obtenidos tras `RenderingServer.frame_post_draw` e inspeccionados visualmente |
-| Partida con reglas normales | Victoria: 4 bajas, 86 ataques básicos, 28 usos de habilidad, 142,13 s totales; `tests/playthrough_report.json` |
-| Renderizador real | Vulkan 1.4.315 / Forward+ en AMD Radeon RX 6600; `tools/logs/capture.log` |
-| Rendimiento orientativo | Muestra de menú a 1920 × 1080: 165 FPS, 6,06 ms por fotograma, con VSync. Prueba breve, no benchmark sostenido del combate; `tools/logs/performance.log` |
-| Hardware efectivo | Ryzen 5 3600, RX 6600 y aproximadamente 32 GB RAM; `tools/hardware.json` |
-| TTS | Se encontró la voz española **Pablo** y se invocó el TTS con su identificador real. Siempre hay subtítulos. No se ha validado la audición humana |
-| Lanzador local | `PLAY.bat` ejecutado desde `tools/`, fuera de su carpeta: ventana gráfica activa con título Shadows of Kharuun; `tools/logs/game.log` sin errores |
+| Duelo, sin ventana | 56 comprobaciones, 0 fallos; `tests/tactical_logic_report.json`, `tools/logs/tactical-test.log` |
+| Duelo, con GPU | 60 comprobaciones, 0 fallos; `tests/tactical_capture_report.json`, `tools/logs/tactical-capture.log` |
+| Capturas del duelo | Cuatro PNG reales de 1280 × 720; pausa, ataque frontal, vista lateral y victoria en `screenshots/tactical_*.png`; inspeccionados visualmente |
+| Partida normal del duelo | Victoria en 36,62 s simulados, 13 acciones del jugador, 11 ataques enemigos y 276 de salud restante; incluido en ambos informes tácticos |
+| Regresión de la misión original | 34 comprobaciones sin ventana y 43 con GPU, 0 fallos; `tests/logic_report.json`, `tests/capture_report.json` |
+| Partida normal de la misión original | Victoria con 4 bajas, 111 ataques básicos, 34 habilidades y 166,27 s totales; `tests/playthrough_report.json` |
+| Controles reales dentro de Godot | Eventos de clic sobre enemigo y botones de habilidades, teclado, autorepetición, pausa y arrastre de cámara con botón derecho |
+| Reloj de rondas | Mismo orden e impactos con pasos simulados a 30, 60 y 144 Hz; no constituye una medición de rendimiento |
+| Motor y GPU | Godot 4.7.2 estándar portátil; Vulkan / Forward+ en Radeon RX 6600; procesos de prueba terminados con código 0 y sin errores de scripts o recursos |
 
-El juego se dejó abierto en el menú principal. El código y la documentación están guardados en un repositorio Git local; herramientas, descargas, cachés, capturas y logs se conservan en el ordenador y se excluyen del historial.
+Los tests de estados usan daño directo para comprobar señales y transiciones. Las partidas completas del bot son pruebas separadas: utilizan movimiento, órdenes, ataques y habilidades con salud, daño y recargas normales. No equivalen a una evaluación humana de dificultad.
 
-El test de estados usa daño directo para comprobar señales de muerte y transiciones. **La partida del bot es una prueba separada**: se mueve, esquiva, ataca y usa habilidades normales, sin cambiar salud, daño o cooldowns. La victoria de esa partida confirma que el jefe puede derrotarse bajo las reglas de juego.
+## Correcciones encontradas durante la verificación
 
-## Fallos encontrados y corregidos
+Se corrigieron la colocación inicial de cuerpos antes de registrarse en física, la selección al comenzar pausado, los golpes enemigos a través de obstáculos y el impacto pendiente tras un empuje. Los controles de la interfaz ignoran la repetición de teclas y no capturan Espacio como una segunda pulsación de botón. Los tests comprueban estos casos.
 
-La primera importación detectó una constante incorrecta del entorno; se retiró la asignación redundante. La revisión gráfica detectó niebla que ocultaba el cielo, barras de enemigo detrás de su fondo y escaso margen inferior en el diálogo; se corrigieron y se repitieron las pruebas. Un aviso de recursos de audio al cerrar headless se resolvió evitando reproducir audio en ese modo. Las comprobaciones finales no presentan errores críticos conocidos.
+La entrada automatizada se transforma entre coordenadas de ventana y viewport para que el clic sea válido tanto con GPU a 1280 × 720 como en el modo sin ventana. Las capturas proceden del renderizado real de Godot.
 
-## Límites y calidad alcanzada
+## Alcance y siguiente iteración
 
-La calidad alcanzada es la de un **prototipo 3D estilizado de geometría simple**, con composición monumental, cielo, sombras, partículas y brillo. Los personajes y el terreno siguen siendo visiblemente procedurales; no alcanza el acabado de un RPG comercial de 2010–2013.
+El combate táctico se aplica por ahora a **un duelo contra el centinela**. Sus valores son ajustes propios de Kharuun inspirados en la estructura de KOTOR; no una reproducción completa de sus reglas. La misión original conserva su combate de acción, con las correcciones compartidas de arma y física.
 
-La ruta optimizada del bot dura 2 min 22 s. El objetivo de 3–7 minutos para una primera partida humana es orientativo y **no se ha confirmado con jugadores humanos**. El bot conoce exactamente los anuncios de ataque y esquiva mejor que un jugador nuevo.
+Tu primera partida de la misión original duró **4 min 18 s**, según tu prueba. El duelo nuevo aún necesita esa evaluación humana para ajustar ritmo, claridad y dificultad; sus 36,62 s corresponden al bot y a un solo enemigo.
 
-No se ha realizado una partida humana manual completa. Se verificaron eventos de teclado y ratón dentro de Godot, movimiento físico, lógica y capturas reales. No hay exportación Windows independiente del motor; el lanzador utiliza el ejecutable portátil incluido. El fallback OpenGL está disponible por opción de lanzamiento, pero no se ha certificado en esta sesión.
+Los personajes siguen siendo modelos procedurales simples. Esta iteración mejora la orientación y la postura, pero no añade modelos Blender, compañero, nuevas zonas ni universo ampliado. El siguiente paso es afinar este duelo con la prueba humana y trasladar el sistema validado a los encuentros de la misión; después se avanzará con modelos, animaciones y contenido.
 
-Las mejoras posteriores serían modelos y animaciones más elaborados, terreno menos angular, sonido espacial y ajuste de dificultad y duración con jugadores. No se ha añadido una segunda misión ni sistemas ajenos al alcance solicitado.
+No se necesita instalar Blender para ejecutar esta entrega. Se utiliza el Godot portátil de `tools/godot/`, sin conexión. Código y documentación se guardan en Git local; informes, capturas, logs y ejecutables permanecen disponibles en el ordenador y se excluyen del historial.

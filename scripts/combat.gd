@@ -7,8 +7,10 @@ var push_cooldown = 0.0
 var lightning_cooldown = 0.0
 var selected: KhEnemy
 var enabled = false
+var tactical = false
 var ability_error = ""
 var error_time = 0.0
+var pending_strikes: Array = []
 
 func _process(delta: float) -> void:
 	attack_cooldown = maxf(0,attack_cooldown-delta)
@@ -16,6 +18,17 @@ func _process(delta: float) -> void:
 	lightning_cooldown = maxf(0,lightning_cooldown-delta)
 	error_time = maxf(0,error_time-delta)
 	selected = nearest_target(13)
+
+func _physics_process(delta: float) -> void:
+	for i in range(pending_strikes.size()-1,-1,-1):
+		var strike = pending_strikes[i]
+		strike.time -= delta
+		if strike.time > 0: continue
+		pending_strikes.remove_at(i)
+		var enemy = strike.target
+		if enabled and player.health > 0 and is_instance_valid(enemy) and enemy.active and enemy.health > 0 and player.global_position.distance_to(enemy.global_position) <= 2.8 and line_of_sight(enemy):
+			player.face_target(enemy.global_position)
+			enemy.take_damage(20)
 
 func valid_targets() -> Array:
 	var list = []
@@ -47,7 +60,7 @@ func basic_attack() -> bool:
 	var closest = nearest_target(2.8)
 	if closest != null:
 		player.face_target(closest.global_position)
-		closest.take_damage(20,(closest.global_position-player.global_position).normalized()*1.5)
+		pending_strikes.append({"target":closest,"time":0.42})
 	else:
 		level.fx.burst(player.global_position+player.forward()*1.25+Vector3.UP,Color(0.25,0.8,1),3)
 	return true

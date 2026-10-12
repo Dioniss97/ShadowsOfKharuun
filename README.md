@@ -1,6 +1,27 @@
 # Shadows of Kharuun
 
-Haz doble clic en **PLAY.bat**. Abre el juego directamente; no necesitas abrir el editor. Selecciona **Nueva partida**.
+Haz doble clic en **PLAY.bat**. Abre el juego directamente; no necesitas abrir el editor. **Duelo táctico · nueva iteración** prueba el combate con rondas y órdenes. **Nueva partida · misión original** conserva el asalto completo al templo.
+
+## Duelo táctico
+
+El duelo comienza pausado. Haz clic en el centinela o pulsa Tab, prepara órdenes y pulsa Espacio para reanudar. Cada combatiente tiene su propio ritmo; el enemigo no espera a que des órdenes. Al vaciarse la cola, tu personaje continúa con ataques básicos automáticos contra su objetivo.
+
+| Control | Acción en el duelo |
+|---|---|
+| Clic izquierdo sobre enemigo / Tab | Seleccionar objetivo |
+| Botón derecho mantenido + ratón | Girar cámara |
+| Espacio | Pausa táctica; puedes preparar y cancelar órdenes |
+| 1 / 2 / 3 / 4 | Encolar empuje / descarga / ataque / defensa |
+| Clic sobre orden pendiente | Cancelar esa orden |
+| F / botón Retirarse | Detener ataque automático y cancelar órdenes |
+| WASD | Mover manualmente e interrumpir el enfrentamiento |
+| Escape | Menú de pausa |
+
+Hay una acción en ejecución y hasta cuatro pendientes. El personaje se acerca para alcanzar al objetivo; el impacto se resuelve durante la animación y puede fallar por precisión, defensa, obstáculos o distancia. Los poderes cobran energía al ejecutarse y conservan sus recargas. Una habilidad que espera recarga mantiene su lugar en la cola. Defensa protege durante dos rondas. Cambiar de objetivo conserva el destinatario de las órdenes ya pendientes.
+
+El duelo es una prueba corta del núcleo táctico de los pasos 1–3. Las reglas concretas están en [COMBATE.md](COMBATE.md). El equilibrio de tres acólitos y jefe con este sistema, los modelos Blender y el compañero corresponden a las siguientes iteraciones.
+
+## Misión original
 
 Asalta el templo, responde al guardián, derrota a sus tres acólitos y acaba con él. El diálogo se activa al llegar a las escaleras. Al caer los acólitos recuperas hasta 75 puntos de vitalidad y toda la energía. La victoria permite repetir o volver al menú; la derrota permite reiniciar.
 
@@ -29,6 +50,8 @@ La voz usa el TTS de Windows si Godot encuentra una voz española; siempre hay s
 - `tools/TEST.bat`: pruebas funcionales en modo headless.
 - `tools/CAPTURE.bat`: las mismas pruebas con GPU y capturas reales en `screenshots/`.
 - `tools/PLAYTEST.bat`: bot que juega usando las reglas normales de combate.
+- `tools/TACTICAL_TEST.bat`: pruebas de rondas, órdenes, controles y bot del duelo.
+- `tools/TACTICAL_CAPTURE.bat`: esas pruebas con GPU y cuatro capturas del duelo.
 - Los informes están en `tests/*_report.json`; los logs locales, en `tools/logs/`.
 
 Los lanzadores `.bat` no necesitan cambiar la política de ejecución de PowerShell. `tools/QA.ps1` ofrece la misma verificación para terminales de desarrollo que admitan scripts locales.

@@ -5,7 +5,8 @@ signal reached_gate
 var player: KhPlayer
 var enemies: Array = []
 var guardian: KhEnemy
-var combat: KhCombat
+var combat: Node
+var duel_mode = false
 var fx: KhEffects
 var audio: KhAudio
 var menu_camera: Camera3D
@@ -88,9 +89,9 @@ func module(kind: String, pos: Vector3, turn: float = 0.0) -> Node3D:
 	var m = module_scene.instantiate()
 	m.kind = kind
 	m.stone = stone
-	add_child(m)
 	m.position = pos
 	m.rotation.y = turn
+	add_child(m)
 	return m
 
 func build_courtyard() -> void:
@@ -243,20 +244,25 @@ func mountain_mesh(radius: float, height: float) -> ArrayMesh:
 
 func spawn_actors() -> void:
 	player = preload("res://scenes/player.tscn").instantiate()
+	player.position = Vector3(0,0.1,6) if duel_mode else Vector3(0,0.1,22)
 	add_child(player)
-	player.position = Vector3(0,0.1,22)
-	var positions = [Vector3(-5,0.1,-6),Vector3(5,0.1,-7),Vector3(0,0.1,-3)]
-	for i in range(4):
+	var positions = [Vector3(-5,0.1,-6),Vector3(5,0.1,-7),Vector3(3,0.1,-3)]
+	for i in range(1 if duel_mode else 4):
 		var e = preload("res://scenes/enemy.tscn").instantiate()
 		e.guardian = i == 3
+		e.tactical_mode = duel_mode
+		if duel_mode:
+			e.display_name = "Centinela del umbral"
+			e.max_health = 360
+			e.health = e.max_health
 		e.level = self
 		e.target = player
+		e.position = Vector3(0,0.1,-2) if duel_mode else (positions[i] if i < 3 else Vector3(0,2.5,-21))
 		add_child(e)
-		e.position = positions[i] if i < 3 else Vector3(0,2.5,-21)
 		e.rig.rotation.y = PI
 		enemies.append(e)
-		if i == 3: guardian = e
-	combat = KhCombat.new()
+		if i == 3 or duel_mode: guardian = e
+	combat = KhTacticalCombat.new() if duel_mode else KhCombat.new()
 	combat.player = player
 	combat.level = self
 	add_child(combat)
@@ -266,6 +272,7 @@ func begin_mission() -> void:
 	player.visible = true
 	player.control_enabled = true
 	player.camera.make_current()
+	player.snap_camera()
 	gate_triggered = false
 
 func _process(_delta: float) -> void:
@@ -288,8 +295,10 @@ func start_boss() -> void:
 
 func stop_combat() -> void:
 	combat.enabled = false
+	if duel_mode: combat.stop()
 	player.control_enabled = false
 	player.automation_direction = Vector3.ZERO
 	for e in enemies:
 		e.active = false
 		e.telegraph.visible = false
+		if duel_mode: e.stop_tactical()

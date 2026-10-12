@@ -110,8 +110,10 @@ func run() -> void:
 	p.position = enemy.position+Vector3(0,0,2.15)
 	await frames(3)
 	var before = enemy.health
-	check(combat.basic_attack() and enemy.health < before,"Ataque básico aplica daño",str(enemy.health))
+	check(combat.basic_attack() and enemy.health == before,"Ataque básico prepara el golpe sin daño instantáneo")
 	check(not combat.basic_attack() and combat.attack_cooldown > 0,"Ataque básico respeta cooldown")
+	await frames(30)
+	check(enemy.health < before,"El impacto del arma aplica daño diferido",str(enemy.health))
 	var energy_before = p.energy
 	check(combat.use_ability(1) and combat.push_cooldown > 0 and p.energy < energy_before,"Empuje: daño, energía y cooldown")
 	check(not combat.use_ability(1),"Empuje no se puede repetir durante cooldown")

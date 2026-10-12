@@ -8,10 +8,13 @@ var right_leg: Node3D
 var body: Node3D
 var sword: Node3D
 var phase = 0.0
+var attack_duration: float = 0.9
 var attack_time = 0.0
 var hit_time = 0.0
 var dying = false
 var boss = false
+var guarding: bool = false
+var combat_stance: bool = false
 
 func build(tint: Color, blade_color: Color, guardian: bool = false) -> void:
 	boss = guardian
@@ -52,7 +55,8 @@ func build(tint: Color, blade_color: Color, guardian: bool = false) -> void:
 	sword = Node3D.new()
 	right_arm.add_child(sword)
 	sword.position = Vector3(0,-0.59,-0.10)
-	sword.rotation.x = PI/2.0
+	# The blade grows along local +Y; -PI/2 maps it to the character's front (-Z).
+	sword.rotation.x = -PI/2.0
 	KhGeometry.cylinder(sword,Vector3(0,0.04,0),0.05,0.28,trim,0.05,10)
 	KhGeometry.cylinder(sword,Vector3(0,0.81,0),0.035,1.35,KhGeometry.material(blade_color,0.2,4.5),0.025,10)
 	KhGeometry.cylinder(sword,Vector3(0,0.81,0),0.013,1.37,KhGeometry.material(Color(1,0.92,0.82),0.2,6),0.01,8)
@@ -82,21 +86,45 @@ func animate(delta: float, speed: float) -> void:
 	var stride = minf(speed/4.0,1.0)*0.57
 	left_leg.rotation.x = sin(phase)*stride
 	right_leg.rotation.x = -sin(phase)*stride
-	left_arm.rotation.x = -sin(phase)*stride*0.6
-	right_arm.rotation.x = sin(phase)*stride*0.4-0.2
+	var arm_stride = sin(phase)*stride
+	var ready_pose = Vector3(0.16+arm_stride*0.3,0.0,0.12)
+	left_arm.rotation = Vector3(-arm_stride*0.6,0.0,-0.08)
+	if combat_stance or guarding:
+		# Raising the forearm moves both the hand and blade ahead of the torso.
+		ready_pose = Vector3(0.62+arm_stride*0.15,0.12,0.12)
+		left_arm.rotation = Vector3(0.32-arm_stride*0.25,0.0,-0.12)
+	if guarding:
+		ready_pose = Vector3(1.02+arm_stride*0.10,0.08,0.12)
+		left_arm.rotation.x = 0.68-arm_stride*0.15
+	right_arm.rotation = ready_pose
 	body.position.y = sin(phase*2.0)*0.025*minf(speed,1.0)+sin(phase*0.55)*0.008
-	body.rotation.z = sin(hit_time*40.0)*hit_time*0.6
+	# Hit recoil is a small independent roll, never a replacement for the swing.
+	body.rotation.z = sin(hit_time*40.0)*hit_time*0.28
 	if attack_time > 0:
-		var p = 1.0-attack_time/0.52
-		right_arm.rotation.x = -0.5-sin(p*PI)*1.15
-		right_arm.rotation.z = sin(p*TAU)*0.9
-		body.rotation.y = sin(p*TAU)*0.36
+		var p = clampf(1.0-attack_time/attack_duration,0.0,1.0)
+		var raised_pose = Vector3(1.45,-0.12,0.20)
+		var contact_pose = Vector3(0.18,0.22,0.14)
+		# Contact at 0.42 seconds in a 0.9-second action, matching tactical damage.
+		# The stroke stays in front and to the right of the body, then recovers.
+		const CONTACT_PHASE = 0.42/0.9
+		if p < 0.30:
+			var prepare = smoothstep(0.0,0.30,p)
+			right_arm.rotation = ready_pose.lerp(raised_pose,prepare)
+			body.rotation.y = lerpf(0.0,-0.08,prepare)
+		elif p < CONTACT_PHASE:
+			var strike = smoothstep(0.30,CONTACT_PHASE,p)
+			right_arm.rotation = raised_pose.lerp(contact_pose,strike)
+			body.rotation.y = lerpf(-0.08,0.08,strike)
+		else:
+			var recover = smoothstep(CONTACT_PHASE,1.0,p)
+			right_arm.rotation = contact_pose.lerp(ready_pose,recover)
+			body.rotation.y = lerpf(0.08,0.0,recover)
 	else:
-		right_arm.rotation.z = -0.1
 		body.rotation.y = lerpf(body.rotation.y,0,delta*8.0)
 
-func swing() -> void:
-	attack_time = 0.52
+func swing(duration: float = 0.9) -> void:
+	attack_duration = maxf(duration,0.1)
+	attack_time = attack_duration
 
 func hit() -> void:
 	hit_time = 0.25

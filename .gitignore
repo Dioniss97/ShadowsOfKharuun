@@ -8,6 +8,9 @@ tests/last_report.json
 tests/logic_report.json
 tests/capture_report.json
 tests/playthrough_report.json
+tests/tactical_report.json
+tests/tactical_logic_report.json
+tests/tactical_capture_report.json
 *.tmp
 *.log
 *.bak

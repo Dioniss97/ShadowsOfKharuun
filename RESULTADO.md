@@ -1,58 +1,49 @@
-# Resultado: demo táctica unificada en desarrollo
+# Resultado: candidata 0.3.0 para QA humana
 
-Build local del 12 de octubre de 2026, rama `feature/temple-tactical-demo`, prevista como **0.3.0**. El usuario autorizó producir tras revisar D01–D24 y las 13 issues. La última etiqueta estable sigue siendo `v0.2.0`; no se etiqueta una 0.3.0 final mientras Q01 y la aceptación humana estén pendientes. El informe histórico del duelo separado está conservado en `v0.2.0:RESULTADO.md`.
+Comprobada el 13 de octubre de 2026, rama `feature/temple-tactical-demo`, versión interna **0.3.0-rc.1**. D01–D32 y B1–B6 están implementados y verificados en rama. Falta la aceptación humana de claridad, ritmo y equilibrio. La [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) sigue en borrador; no hay merge ni etiqueta final `v0.3.0`. La última entrega estable es `v0.2.0`.
 
-Base de la implementación: commit `2a6cd6b`; correcciones B1/B2 verificadas en [b54514e](https://github.com/Dioniss97/ShadowsOfKharuun/commit/b54514e), en el mismo [PR borrador #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). Esta build se ha subido a su rama; main y las etiquetas estables permanecen conservados.
+Abre `PLAY.bat` y elige **Nueva partida · asalto al templo**. El menú identifica la candidata. Recorrido de prueba humana en [QA_0_3_0.md](QA_0_3_0.md), controles en [README.md](README.md), reglas en [COMBATE.md](COMBATE.md).
 
-Abre `PLAY.bat` y elige **Nueva partida · asalto al templo**. La misión completa usa el combate táctico. El duelo permanece accesible con `PLAY.bat --duel` como herramienta interna.
+## Comportamientos comprobados
 
-## Qué se puede probar
+- B1: A/D orbita cámara en reposo, pausa y combate sin mover al actor; W sigue la vista, S conserva el frente. Arrastre RMB persistente al soltar y retorno durante desplazamiento. Las pruebas antiguas de A/D girando al personaje fueron sustituidas por D27.
+- B2: tarjeta compacta (~198 × 119 px) sobre el enemigo seleccionado, seguimiento de actor/cámara, nombre/vida coherentes y cara libre. Se oculta fuera de combate, tras F o con selección inválida/oculta.
+- B3: sin órdenes y fuera de alcance cuerpo a cuerpo, protagonista quieto. Básico automático al entrar el enemigo en alcance; órdenes explícitas sí permiten acercarse. Los agresores mantienen sus relojes y persecución.
+- B4: primer clic selecciona un neutral, segundo sobre actor/icono de voz inicia interacción. Acólitos con tres frases rotativas. Primera conversación del guardián automática al acercarse; después de los acólitos, espera hasta volver a hablar por clic. Puerta/orbe bloqueados hasta acuerdo o derrota. Sin voz disponible, los subtítulos permiten completar el flujo.
+- B5: retícula segmentada y cursor propio; hover normal en no seleccionado, espada en hostil seleccionado y clic que encola básico al destinatario. Órdenes anteriores y sus objetivos conservados.
+- B6: selectores inferiores independientes para consumibles y curación propia; el selector sobre el enemigo contiene solo poderes ofensivos/de control. Botiquín agotado pierde su icono y se distingue de huecos futuros. Rueda/flechas recorren sin encolar.
+- D31: disponibilidad por energía; gasto al ejecutar; retirada de poderes o botiquines impagables y órdenes de su categoría. Si queda otra válida, ocupa esa oportunidad sin perder ronda; si no, recuperación de una ronda y básico posterior, sujeto al alcance. No hay pausa provisional Q01.
+- Misión completa, destinos A/B, ráfaga con dos contactos y tiradas, curación con salud llena, cancelación y recursos, pausa/Escape, colisiones, gestos/efectos, las tres ramas del guardián, final común y reinicio.
 
-- Exploración, diálogo inicial, tres acólitos, diálogo ramificado del guardián, combate o acuerdo pacífico, entrada al templo y reclamación del núcleo con E. Resolver al guardián habilita el paso; la misión termina al reclamar el núcleo.
-- Una acción actual y cuatro órdenes pendientes. Cada orden conserva su destinatario; `1A, 2B, 2A` continúa con básico automático A aunque la selección de interfaz sea B. Curación y botiquín actúan sobre el protagonista.
-- Selectores de básico/ráfaga y empuje/descarga/curación mediante flechas o rueda; clic encola. Arrojadizos, escudo y formas quedan visibles y desactivados. Tres botiquines iniciales con contador.
-- Recursos consumidos al ejecutar, sin recargas adicionales por poder. Curar con salud llena también consume ronda y recurso. Cancelar una orden pendiente conserva el recurso; F durante una acción iniciada corta el efecto pendiente sin devolver el gasto ya realizado.
-- Ráfaga con dos contactos y tiradas dentro de una ronda; mano izquierda para poderes, descarga desde la palma y curación verde. Espada en mano derecha orientada hacia delante, cuerpos sólidos e impactos sujetos a alcance y visibilidad.
-- Pausa inicial una vez por encuentro, preparación de órdenes durante pausa y WASD bloqueado hasta F. B1 conserva órbita al soltar RMB quieto/pausado y recentra solo al desplazarse; W/S mantiene el frente y A/D gira continuamente, con arcos/círculos al combinar con W. Los enemigos siguen persiguiendo por la zona accesible.
-- B2 reemplaza los selectores fijos centrales por una tarjeta compacta (~198 × 119 px) sobre el enemigo seleccionado. Sigue actor/cámara, deja la cara libre y se oculta fuera de combate, tras F y con objetivos no visibles/válidos. Nombre y vida forman parte de esa tarjeta.
-- Recursos conservados entre acólitos y guardián; diálogos con tiempo/recursos congelados. Ruta pacífica con guardián vivo y no agresivo. Derrota reinicia toda la misión y sus recursos/decisiones.
+## Evidencia vigente
 
-## Evidencia de esta build
-
-| Comprobación | Resultado y evidencia local |
+| Comprobación | Resultado |
 |---|---|
-| Suite de misión, sin ventana | **157 comprobaciones, 0 fallos**; `tests/demo_logic_report.json` |
-| Suite con GPU | **179 comprobaciones, 0 fallos**; `tests/demo_capture_report.json`, `tools/logs/demo-capture.log` |
-| Renderizado | Godot 4.7.2 estándar; Vulkan / Forward+ en Radeon RX 6600; sin errores de scripts o recursos |
-| Entradas reales | Clic en iconos/órdenes/retirada, flechas, rueda, teclado, WASD, F, Espacio/Escape y botón derecho; comprobados en Godot sin ventana y con GPU |
-| Rondas | Dos impactos por ráfaga, una ronda, interrupción entre contactos y resultados iguales con pasos de 30/60/144 Hz; no es una medición de rendimiento |
-| Narrativa | Rechazo, lección seguida de ataque y lección seguida de acuerdo. Tres finales completados mediante acceso y reclamación real, sin victoria anticipada |
-| Bot de partida normal | Victoria en **106,67 s simulados**, salud final **312/340**, **36 acciones resueltas**, 4 bajas, 0 botiquines restantes; `tests/demo_playthrough_report.json` |
-| Integridad del bot | 0 teletransportes y 0 llamadas de daño directo; estadísticas de producción, movimiento real y órdenes. Daño recibido 317,5 y curación observada 289,5 |
-| Capturas reales | 22 PNG de 1280 × 720 en `screenshots/demo_*.png`; HUD con destinatarios, gestos/contactos, diálogo, interior, rutas y final. Además `ui_v03_*.png` para menú/ayuda/cola; inspeccionados visualmente |
+| Suite sin ventana | **187 comprobaciones, 0 fallos**; `tests/demo_logic_report.json`, `tools/logs/demo-test.log` |
+| Suite con GPU | **211 comprobaciones, 0 fallos**: los mismos 187 casos más 24 capturas reales; `tests/demo_capture_report.json`, `tools/logs/demo-capture.log` |
+| Motor y renderizado | Godot 4.7.2 estándar, Vulkan / Forward+ en RX 6600; sin errores de scripts o recursos en las suites finales |
+| Entradas de prueba | Eventos reales de teclado/ratón inyectados en Godot: clic de actor/voz/órdenes, flechas, rueda, RMB, A/D, W/S, F, Espacio, Escape y E final |
+| Gráficos | 24 PNG de 1280 × 720; revisión visual del HUD personal/ofensivo, retícula/voz, órbita, poderes, diálogos, interior y finales |
+| Bot de partida normal | Victoria en **98.10 s simulados**, **203/340 salud**, **33 acciones**, **4 bajas**, **1 botiquín restante** |
+| Integridad del bot | Estadísticas de producción, movimiento real y órdenes; 0 teletransportes y 0 llamadas de daño directo. Daño recibido 274.5, curación observada 137.5 |
 
-Los fixtures aislados pueden congelar o colocar actores y aplicar daño directo para comprobar una transición. La partida normal se ejecuta aparte y deja constancia de estadísticas, movimiento, acciones, recursos y eventos. La victoria del bot no sustituye la evaluación humana de dificultad ni significa que un jugador tardará 106,67 s.
+Las capturas e informes permanecen locales y están excluidos de Git. Ejemplos: `demo_hud_mixed_targets.png`, `demo_b4_neutral_voice.png`, `demo_b5_contextual_basic.png`, `demo_b1_paused_orbit.png`, gestos `demo_cast_*.png` y finales `demo_final_*.png`.
 
-Lanzadores: `tools/DEMO_TEST.bat` y `tools/DEMO_CAPTURE.bat`; los lanzadores anteriores son alias de esa suite, incluido su bot normal. `tools/QA.ps1` usa el mismo marcador `KHARUUN_DEMO_RESULT`. Los runners y el motor de acción sustituidos se retiraron de esta rama y siguen disponibles en las etiquetas históricas.
+La suite usa fixtures aislados que pueden colocar/congelar actores o aplicar daño directo para probar una transición; el bot normal se ejecuta aparte y deja constancia de sus condiciones. Los tiempos simulados no predicen la duración de una partida humana ni miden rendimiento. La victoria del bot no sustituye tu evaluación de dificultad.
 
-## Fallos resueltos al verificar
+Para reproducir: `tools/DEMO_TEST.bat`, `tools/DEMO_CAPTURE.bat` o `tools/QA.ps1`. En el sandbox del agente se dirigió APPDATA a `tools/sandbox-appdata` para permitir los datos locales de Godot; no se cambió la configuración global de Windows.
 
-- Cronómetro que heredaba el procesamiento durante pausa: la misión ahora se congela junto con física y recursos.
-- El primer control lateral de rumbo fijo se sustituye tras la prueba humana B1: A/D ahora gira de forma continua y W+A/D describe círculos intencionales; S mantiene el frente. La órbita deja de retornar por sí sola estando quieto/pausado.
-- HUD que aún consultaba recargas retiradas, solape de flechas con el panel de pausa y textos de selección confundidos con el destinatario de la próxima orden.
-- Reentrancia cuando el último impacto abre el diálogo y resetea la cola; los impactos siguientes no continúan después de detener el encuentro.
-- Altar oculto por el protagonista al acercarse: marcador de núcleo y E visible en el interior.
+## Fallos corregidos durante esta verificación
 
-El helper de prueba de rueda debía emitir también la liberación del botón: dejarlo pulsado retenía el foco GUI e invalidaba clics posteriores. Se corrigió el helper; no se simuló el resultado llamando directamente a las señales del HUD.
+- La acción impagable ya no bloquea la build en la pausa provisional; se aplica D31 en colas simples y mixtas.
+- El icono de voz no oculta/muestra su botón cada fotograma: hacerlo cancelaba la pulsación antes de soltar el ratón. Conserva su visibilidad mientras siga válido.
+- El cursor usa coordenadas de eventos del viewport, coherentes tanto con ratón físico como con entradas de prueba; antes podía permanecer normal sobre la selección.
+- El segundo diálogo espera al clic y mantiene acceso cerrado. La interacción de voz no se ofrece mientras el encuentro de los acólitos sigue activo; al entrar en diálogo se retira la frase neutral anterior.
 
-Durante B2 se corrigió un fallo real de interacción: ocultar y mostrar el panel en cada fotograma cancelaba el estado del botón antes de soltarlo. El panel conserva su visibilidad mientras el objetivo siga válido y solo se oculta cuando corresponde. Las pruebas realizan clics y rueda reales contra A/B. Los fixtures que recolocan actores pausados sincronizan también sus colliders antes de probar selección, y convierten el desplazamiento del ratón entre ventana y viewport; no llaman a las señales de selección para simular un éxito.
+Evidencia previa: `2a6cd6b` (integración) y `b54514e` (B1 anterior/B2) conservados en Git. Las cifras 157/179, 22 capturas y 106,67 s del bot pertenecen a aquella build, no a esta candidata.
 
-El aviso de pausa se redujo y trasladó a una esquina para dejar libre también el centro de la escena y las caras. Si coincide con la tarjeta de objetivo se oculta el aviso opcional; el botón Reanudar de la cola conserva la indicación de pausa. Las regresiones B1/B2 comprueban órbita en reposo/pausa, retorno durante movimiento, retroceso, giro continuo, arcos, anclaje y ocultación, además de la misión normal.
+## Cierre pendiente y límites
 
-## Pendientes antes de la entrega final
+Falta tu QA con [QA_0_3_0.md](QA_0_3_0.md). Con aceptación se integra la PR, cierran los issues cubiertos y milestone, y etiqueta v0.3.0. Después se detiene el trabajo hasta definir 0.4. Costes, daños y duraciones siguen siendo ajustes propios provisionales; personajes procedurales, sin escudos, formas, arrojadizos, compañeros, karma, progresión ni nuevos modelos Blender.
 
-**Q01 no está resuelta.** Si una orden llega sin energía, esta build conserva la orden y pausa el mundo sin consumir recurso ni decidir una penalización o salto de cola. Cancela esa orden o pulsa F y reanuda para continuar probando. Es una protección temporal de desarrollo; se sustituirá por la regla definitiva cuando llegue la prueba del usuario en KOTOR.
-
-Falta la prueba humana de comprensión y equilibrio, especialmente con tres enemigos, curación y retirada. Los daños, costes y duraciones son provisionales propios de Kharuun. Personajes procedurales simples; no hay nuevos modelos Blender, formas, escudos, arrojadizos, compañero, karma o progresión.
-
-Engram lee el proyecto correctamente, pero el hook todavía rechaza escrituras por vínculo de sesión no confirmado. Se conservan acuerdos y trabajo en los MD y GitHub; no se elude ese bloqueo ni se modifican memorias ajenas. Logs, capturas, informes y motor portátil permanecen locales y están excluidos de Git.
+Engram confirmó el proyecto por MCP con consulta limitada a `shadowsofkharuun`. El host no confirmó una identidad de sesión para escrituras, por lo que este turno conserva decisiones y resumen en los MD/Git; no intenta crear otra sesión ni guardar por CLI. El siguiente paso es exclusivamente recibir QA humana y atender los defectos que reporte.

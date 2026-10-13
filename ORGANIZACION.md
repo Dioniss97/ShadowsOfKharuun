@@ -1,6 +1,6 @@
 # Organización mínima del trabajo
 
-Actualizado: 12 de octubre de 2026. Proyecto Godot para un jugador. El usuario ha autorizado producir y la segunda vuelta está implementada como build de desarrollo; Q01 y la aceptación humana siguen pendientes.
+Actualizado: 13 de octubre de 2026. Candidata 0.3.0 implementada y comprobada; falta QA humana. Sin merge ni etiqueta final.
 
 ## Qué registra cada lugar
 
@@ -29,9 +29,9 @@ Las nuevas instrucciones del usuario prevalecen. El diseño distingue intención
 
 Convención para este prototipo: `0.MINOR.PATCH`. Incrementar MINOR cuando una entrega añade un conjunto importante de funciones; PATCH para correcciones o ajustes pequeños de una entrega. Los cambios solo de documentación conservan la versión jugable. No crear etiquetas definitivas para funciones meramente acordadas ni reutilizar/mover una etiqueta existente.
 
-La rama local actual es `feature/temple-tactical-demo`, creada desde `origin/main` después de la revisión `c0aab67`. Contiene la misión unificada y las pruebas de desarrollo; la revisión se publica como PR borrador contra `main`. El remoto conserva `feature/tactical-duel` y `master`; esta última identifica la primera entrega. No hay merge ni etiqueta final de 0.3.0 mientras falten la regla Q01 y la aceptación humana. No imponer GitFlow ni ramas de release adicionales.
+La rama local actual es `feature/temple-tactical-demo`, creada desde `origin/main` después de la revisión `c0aab67`. Contiene la misión unificada y las pruebas de desarrollo; la revisión se publica como PR borrador contra `main`. El remoto conserva `feature/tactical-duel` y `master`; esta última identifica la primera entrega. No hay merge ni etiqueta final de 0.3.0 hasta recibir la aceptación humana del usuario. No imponer GitFlow ni ramas de release adicionales.
 
-Implementación guardada en `2a6cd6b`; [PR borrador #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). La rama remota contiene código, suite y evidencia resumida. Las issues permanecen abiertas hasta aceptar e integrar la entrega; sus etiquetas diferencian componentes verificados en rama de Q01 y pruebas humanas pendientes.
+Implementación guardada en `2a6cd6b`; [PR borrador #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). La rama remota contiene código, suite y evidencia resumida. Las issues permanecen abiertas hasta aceptar e integrar la entrega; sus etiquetas diferencian componentes verificados en rama de cambios acordados pendientes y pruebas humanas.
 
 Remoto privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun), `origin = https://github.com/Dioniss97/ShadowsOfKharuun.git`. El usuario confirmó la cuenta autenticada con dos «s». Historial y etiquetas `v0.1.0`/`v0.2.0` están subidos. La prueba SSH devolvió `Permission denied (publickey)`; HTTPS con GitHub CLI autenticado funciona, sin modificar claves SSH ni el protocolo global de Git.
 
@@ -39,7 +39,7 @@ La carpeta del Godot portátil está excluida de Git y debe conservarse o descar
 
 ## Backlog en GitHub
 
-Milestone: [Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los 13 issues DEMO tienen dependencias, resultado esperado y verificación basada en el diseño. Al crearlos, DEMO-01 lleva `pendiente-decision` y los demás `planificado`; todos están abiertos y sin implementar.
+Milestone: [Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). DEMO-01–13 y B1–B6 (#15–20) implementadas y comprobadas en rama; DEMO-10/11 esperan aceptación humana. Las issues siguen abiertas y la PR en borrador hasta completar ese control.
 
 Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local y los enlaces. Al cambiar estado o cerrar una tarea, actualizar ambos, añadir evidencia/commit al issue y mantener el acuerdo detallado en `DISENO_DEMO.md`. Si GitHub no está disponible, registrar el avance local y señalar la sincronización pendiente. Las FUT pospuestas permanecen en los MD, sin crear tarjetas fuera del alcance actual.
 
@@ -50,12 +50,12 @@ Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local
 3. Consultar las preguntas de esa tarea. Una duda sobre energía no bloquea cámara, interfaz o redacción independientes. Marcar exactamente qué parte espera respuesta.
 4. Si Engram está disponible, confirmar el proyecto y recuperar contexto con `project = shadowsofkharuun`, `scope = project` y sin `all_projects`; verificarlo contra los documentos actuales. Ignorar memorias ajenas incluso si falta contexto del juego.
 
-El usuario autorizó implementar esta segunda vuelta. Mantener el alcance D01–D26 y cerrar con evidencia; la protección temporal Q01 no sustituye una decisión del usuario. B1/B2 corrigen cámara, movimiento y menú flotante dentro del mismo PR y milestone.
+El usuario autorizó completar 0.3.0 y probarla en local antes de validarla. D01–D32 y B1–B6 están implementados. El siguiente paso es su QA humana con QA_0_3_0.md; solo tras su validación se fusiona la PR, cierran los issues cubiertos, etiqueta v0.3.0 y cierra el milestone. Después se detiene hasta definir 0.4.
 
 ## Durante el trabajo y al terminar
 
 - Mantener D/Q/DEMO estables; registrar una decisión sustituida y su motivo, en lugar de reabrirla o conservar dos reglas incompatibles.
-- Una pregunta importante usa opciones clicables. Una observación pendiente, como Q01 en KOTOR, sigue siendo hipótesis y no pasa a confirmado por falta de respuesta.
+- Una pregunta importante usa opciones clicables. Una observación pendiente sigue siendo hipótesis hasta que el usuario la compruebe; Q01 y Q10 quedaron confirmadas por el usuario y se registraron en D31.
 - Distinguir componentes parcialmente terminados de los que todavía dependen de otra tarea. Evitar que un criterio de integración exija por adelantado las funciones que se integrarán después.
 - Actualizar estados y evidencia tras comprobar el trabajo. Para documentación, revisar coherencia, enlaces y diff; para juego, comprobar los flujos afectados y las reglas relevantes.
 - Crear un commit coherente con referencia al ID de tarea cuando corresponda; no mezclar cambios ajenos del usuario. No son obligatorios Conventional Commits ni un changeset por cada cambio.
@@ -119,10 +119,7 @@ Referencias: [Changesets](https://github.com/changesets/changesets), [guía Engr
 
 ## Punto de reanudación actual
 
-- Versión que se puede probar con PLAY.bat: **demo 0.3 en desarrollo**, misión unificada en `feature/temple-tactical-demo`. La última etiqueta estable permanece `v0.2.0`.
-- Acuerdos confirmados: D01–D26. B1 sustituye el retorno de cámara al soltar en reposo y el desplazamiento lateral: órbita persistente quieto/pausado, retorno al moverse, W/S y giro continuo A/D. B2 fija selectores compactos sobre el enemigo solo en combate; no volver al panel central.
-- Regla principal pendiente: **Q01**, el usuario comprobará en KOTOR qué pasa con una orden sin energía al final o en medio de la cola. No volver a preguntarla mientras espera esa prueba.
-- Q02/Q03/Q07 están cerradas por las respuestas del usuario de esta revisión. No reabrirlas; solo Q01 sigue pendiente de comprobación.
-- Implementación actual: integración, destinatarios/HUD, cámara/retirada, ráfaga/poderes/botiquines, diálogos/objetivo/reinicio. B1/B2 están verificados en el commit `b54514e`: 157 comprobaciones sin ventana, 179 con GPU y 22 capturas, sin fallos; detalle y bot normal en RESULTADO. Las issues de componentes identifican la rama y su evidencia.
-- Próximo paso: prueba humana de ritmo/claridad y observación Q01. Sustituir la protección temporal por la regla definitiva, verificarla y solo después aceptar la entrega final.
-- Entorno: repositorio privado, issues DEMO y B1/B2 (#15/#16) en milestone 0.3 y PR borrador #14 sin merge; lectura MCP de Engram filtrada al proyecto. La escritura sigue rechazada por el hook de sesión: acuerdos y cierre quedan en Git/MD, sin eludir el rechazo ni tocar memorias ajenas.
+- Build local: candidata **0.3.0-rc.1**, `PLAY.bat`, rama `feature/temple-tactical-demo`; estable v0.2.0.
+- D01–D32 y B1–B6 implementados. Evidencia vigente en RESULTADO, controles en README, guía humana en QA_0_3_0.md.
+- Próximo paso: recibir QA humana y corregir defectos del alcance 0.3. Después validar, integrar PR #14, cerrar issues/milestone y etiquetar v0.3.0. No iniciar 0.4 sin definición del usuario.
+- Engram: lectura de proyecto verificada; escritura MCP pendiente del registro de sesión por el host. Este turno conserva el resumen en MD/Git y no intenta registrar otra sesión ni usar CLI como alternativa.

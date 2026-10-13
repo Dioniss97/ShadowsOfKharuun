@@ -1,6 +1,6 @@
 # Combate de la misión unificada
 
-Referencia técnica de la **build de desarrollo de la segunda vuelta, prevista como 0.3.0**, en `feature/temple-tactical-demo`. No hay etiqueta final `v0.3.0`: Q01 sigue pendiente y falta la evaluación humana de equilibrio. El diseño humano vigente está en [DISENO_DEMO.md](DISENO_DEMO.md); implementación y evidencia se registran en [PENDIENTES.md](PENDIENTES.md) y [RESULTADO.md](RESULTADO.md).
+Referencia técnica de la **build de desarrollo de la segunda vuelta, prevista como 0.3.0**, en `feature/temple-tactical-demo`. No hay etiqueta final `v0.3.0`: la candidata implementa D01–D32/B1–B6 y espera QA humana. El diseño humano vigente está en [DISENO_DEMO.md](DISENO_DEMO.md); implementación y evidencia se registran en [PENDIENTES.md](PENDIENTES.md) y [RESULTADO.md](RESULTADO.md).
 
 La primera iteración permanece en Git, etiqueta [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0). Sus reglas de WASD, recargas, Defensa y continuación contra la selección anterior fueron sustituidas. Este documento describe el código de la misión unificada.
 
@@ -8,7 +8,7 @@ La primera iteración permanece en Git, etiqueta [v0.2.0](https://github.com/Dio
 
 - Tiempo real con pausa y relojes independientes por combatiente. No hay alternancia global ni ronda extra artificial para el enemigo.
 - Una acción en curso y hasta cuatro órdenes pendientes. Cada orden guarda acción y destinatario al encolarse; seleccionar otro enemigo o recorrer un selector no reescribe órdenes.
-- El personaje se aproxima físicamente al destinatario cuando le falta alcance o visibilidad. La precisión, defensa, distancia y obstáculos pueden impedir un impacto. Si una ruta permanece bloqueada, se descarta la orden con explicación.
+- Las órdenes explícitas permiten aproximarse físicamente al destinatario cuando le falta alcance o visibilidad. El básico automático espera quieto hasta que el destinatario entre en alcance cuerpo a cuerpo. La precisión, defensa, distancia y obstáculos pueden impedir un impacto. Si una ruta permanece bloqueada, se descarta la orden con explicación.
 - El básico automático, cuando se agota la cola, usa el último destinatario de una acción ofensiva ejecutada. Cambiar la selección después no lo cambia. Una cura actúa sobre el protagonista y tampoco cambia ese destinatario.
 - `1→A, 2→B, 2→A` sigue con `básico→A`. Aquí los números representan acciones del ejemplo, no teclas ni tipos de ataque adicionales.
 - Una orden ofensiva contra un enemigo caído se descarta; no se transfiere a otro enemigo. Si el destinatario automático muere y ya no quedan órdenes válidas, se busca otro agresor vivo, visible y alcanzable.
@@ -34,13 +34,15 @@ El acierto usa `1d20 + ataque` frente a defensa pasiva; 1 falla y 20 es crítico
 
 Empuje, descarga y curación gastan energía sin recarga adicional. El protagonista empieza con 100 de energía y regenera inicialmente 3 por segundo cuando el mundo avanza. Los poderes usan un gesto común con el brazo izquierdo: empuje desde la palma, descarga desde la palma y curación verde alrededor del protagonista. El sable permanece en la mano derecha.
 
-## Consumo, cancelación y energía pendiente
+## Consumo y fallo de recursos (D31)
 
-La energía o el botiquín se comprueban y consumen al iniciar la ejecución. Encolar o cancelar una orden pendiente no los gasta. F interrumpe una acción ya iniciada, pero no devuelve lo que consumió al comenzar. Botiquín y curación con salud completa consumen igualmente el recurso y una acción.
+La energía o el botiquín se consumen al iniciar la ejecución. Encolar o cancelar una orden pendiente no gasta recursos. F interrumpe la acción sin devolver el gasto realizado. Curar con salud completa consume recurso y ronda.
 
-Empiezas con tres botiquines. El contador no puede quedar negativo y el botón agotado se desactiva. Como ajuste técnico provisional, una orden pendiente de botiquín que llega a ejecutarse sin unidades se descarta con aviso y deja avanzar la cola; no se inventa una penalización equivalente a Q01.
+Un poder que supera la energía actual se muestra gris y no se puede encolar. Si al ejecutarse una orden ya no puede pagarse, se elimina junto con las pendientes del mismo recurso: poderes o botiquines. La siguiente orden válida ocupa esa oportunidad sin perder ronda. Si no queda ninguna válida, se pierde una ronda sin efecto; el básico automático vuelve en la siguiente oportunidad, condicionado a D28. Cada combatiente conserva su propio reloj.
 
-**Q01 aún no tiene una regla de juego acordada.** La build pausa el mundo cuando una orden llega a ejecutarse sin energía suficiente, conserva esa orden y muestra «Orden sin energía». El jugador debe cancelarla, limpiar la cola o pulsar F, y reanudar con Espacio. Así se prueba el resto mientras se espera la comprobación humana de KOTOR, sin elegir a escondidas entre saltar la orden, consumir una ronda o sustituirla por un básico. Esta pausa provisional no certifica Q01.
+Ejemplo: con energía para una descarga, `descarga → descarga → ráfaga` ejecuta la primera descarga y después la ráfaga; elimina la segunda descarga sin añadir una ronda vacía. Con solo `descarga → descarga`, la segunda causa una ronda perdida antes del básico posterior.
+
+Abajo a la izquierda hay dos selectores separados: consumibles (tres botiquines) y poderes personales (curación propia). La tarjeta flotante solo contiene básico/ráfaga, empuje/descarga y arrojadizos vacíos. Al agotar botiquines desaparece su icono y el hueco indica Agotado, distinto de las funciones futuras.
 
 ## Pausa, retirada y cámara
 
@@ -50,13 +52,13 @@ Espacio congela movimiento, daño, rondas, estados y recursos, permitiendo selec
 
 WASD no borra ni interrumpe órdenes del combate automático. F o Cancelar combate interrumpen la acción, vacían la cola y paran el básico automático, devolviendo movimiento libre sin reenganche involuntario. Los agresores conservan su actividad y persiguen por toda la zona accesible.
 
-Arrastrar con el botón derecho permite orbitar la cámara. Al soltar conserva su orientación si el protagonista está quieto o el mundo pausado; se recentra suave y rápido al desplazarse. W avanza, S retrocede manteniendo el frente y A/D gira continuamente. Combinar W con A/D describe un arco o círculo, sin una diagonal fija. Durante acciones ofensivas el personaje encara su destinatario y orbitar no cambia esa orden.
+Arrastrar con el botón derecho permite orbitar la cámara. Al soltar conserva su orientación si el protagonista está quieto o el mundo pausado; se recentra suave y rápido al desplazarse. A/D orbita la cámara sin mover ni girar al actor en reposo, pausa o combate. W orienta al actor y avanza según la cámara; S retrocede manteniendo el frente. Combinar W con A/D sigue continuamente el giro de la vista. Durante acciones ofensivas el personaje encara su destinatario y orbitar no cambia esa orden.
 
 Los tres selectores se proyectan sobre el enemigo seleccionado en una tarjeta compacta con nombre y vida, dejando la cara libre. Siguen al actor y a la cámara, se muestran también en pausa táctica y se ocultan fuera de combate, tras F o ante una selección no visible/válida. Flechas y rueda consumen sus eventos de interfaz y recorren sin encolar; clic en el icono conserva el destinatario seleccionado para esa nueva orden.
 
 ## Continuidad de la misión
 
-Menú → exploración → diálogo inicial → acólitos → conversación del guardián. Rechazarlo o atacarlo tras escuchar inicia su encuentro; aceptar después de escuchar habilita paso pacífico con guardián vivo y no agresivo. Resolverlo abre la entrada al templo. Solo reclamar el núcleo permite completar la misión.
+Menú → exploración → diálogo inicial automático al acercarse al guardián → acólitos → espera libre con puerta cerrada → segunda conversación al seleccionar y hablar con el guardián. Los neutrales usan primer clic para seleccionar, segundo sobre actor/icono de voz para hablar; los acólitos rotan tres frases en orden. Si están lejos, el personaje se acerca para hablar y W/S permite cancelar esa aproximación. Rechazarlo o atacarlo tras escuchar inicia su encuentro; aceptar después de escuchar habilita paso pacífico con guardián vivo y no agresivo. Resolverlo abre la entrada al templo. Solo reclamar el núcleo permite completar la misión.
 
 No hay reposición de salud, energía ni botiquines al pasar al guardián. El diálogo conserva los valores de entrada y congela tiempo y recursos. Reiniciar después de morir restablece la misión completa: recursos iniciales, tres botiquines, enemigos, encuentros, cola y elecciones.
 
@@ -66,6 +68,6 @@ Escudo, formas y arrojadizos son huecos futuros vacíos desactivados. El duelo q
 
 La suite de `tests/temple_runner.gd` cubre órdenes mezcladas A/B, selección independiente, ambos contactos de ráfaga, recursos, cura con salud llena, cancelación, pausa, persecución, colisiones, las ramas del guardián, objetivo final y reinicio. Incluye eventos reales sobre controles y un bot que usa reglas normales. Las capturas con GPU permiten revisar la legibilidad a 1280 × 720 y la relación entre arma, palma e impactos.
 
-Las comprobaciones efectivamente ejecutadas y sus límites se publican en [RESULTADO.md](RESULTADO.md), sin equiparar pruebas de transición o un bot con la valoración humana de dificultad. El caso final de energía y esa valoración siguen pendientes.
+Las comprobaciones efectivamente ejecutadas y sus límites se publican en [RESULTADO.md](RESULTADO.md), sin equiparar pruebas de transición o un bot con la valoración humana de dificultad. La regla de energía está comprobada; falta la valoración humana de claridad y equilibrio.
 
 Referencias visuales y de diseño: capturas de KOTOR II aportadas por el usuario y [manual de KOTOR II](https://cdn.akamai.steamstatic.com/steam/apps/208580/manuals/KOTORII_Manual.pdf). Las reglas y los números de Kharuun corresponden a los acuerdos de este prototipo.

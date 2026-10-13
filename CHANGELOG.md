@@ -4,13 +4,13 @@ Las versiones identifican entregas jugables verificadas, mediante etiquetas Git 
 
 Última entrega estable: **v0.2.0**. Versión del árbol actual: **demo 0.3 en desarrollo**, sin etiqueta final de entrega. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
 
-El árbol de `feature/temple-tactical-demo` contiene ahora una build jugable de desarrollo de 0.3.0. La última entrega estable permanece en `v0.2.0`; Q01 y la aceptación humana impiden presentar esta build como entrega final.
+El árbol de `feature/temple-tactical-demo` contiene una build jugable de desarrollo de 0.3.0. La última entrega estable permanece en `v0.2.0`; D01–D32/B1–B6 implementadas; la aceptación humana del usuario es el control final antes de presentar la entrega. Las decisiones de diseño de esta ronda están cerradas.
 
 ## Sin publicar
 
 ### Demo 0.3 en desarrollo
 
-- Correcciones B1/B2 de la prueba humana: órbita persistente en reposo/pausa y retorno solo al desplazarse; W/S conserva frente, A/D giro continuo y W+A/D arco/círculo. Selectores compactos sobre el enemigo seleccionado, ocultos fuera de combate y tras F, con seguimiento de actor/cámara y sin cubrir su cara. Issues #15/#16 en el mismo PR borrador #14.
+- Correcciones B1/B2 de la prueba humana: órbita persistente en reposo/pausa y retorno solo al desplazarse; A/D orbita cámara sin mover el actor; W sigue la vista y S mantiene el frente. Selectores compactos sobre el enemigo seleccionado, ocultos fuera de combate y tras F, con seguimiento de actor/cámara y sin cubrir su cara. Issues #15/#16 en el mismo PR borrador #14.
 
 - Misión del templo unificada con combate táctico, cola con destinatarios independientes y autoataque al último destinatario ofensivo ejecutado.
 - HUD con tres selectores de categorías, cuatro órdenes pendientes, botiquines con contador, huecos futuros desactivados y retrato/recursos. Ayuda breve omitible y avisos contextuales.
@@ -19,7 +19,10 @@ El árbol de `feature/temple-tactical-demo` contiene ahora una build jugable de 
 - Pausa inicial una vez por encuentro, WASD tras F, persecución por la zona accesible y retorno suave de cámara sin movimiento circular involuntario.
 - Diálogo ramificado del guardián después de los acólitos, recursos conservados y tiempo congelado mientras se lee. Combate y paso pacífico habilitan el mismo núcleo final del templo; reinicio completo tras derrota.
 - Suite nueva de misión y bot con reglas normales; lanzadores DEMO y anteriores actualizados. Runners y motor de acción sustituidos conservados en el historial Git, retirados del árbol actual.
-- Q01 aislada con protección temporal: orden sin energía conservada y mundo pausado, cancelable para continuar las pruebas. La regla definitiva de KOTOR sigue pendiente y no se crea `v0.3.0` final. Evidencia y limitaciones en RESULTADO.
+- D31/Q10 implementadas: si una orden de energía o botiquín ya no puede pagarse al ejecutarse, se elimina junto con las demás del mismo recurso. Si quedan órdenes válidas de otros tipos, la siguiente ocupa esa oportunidad sin perder turno; si no, se pierde la acción y el básico automático vuelve en la siguiente. El poder aparece gris si el coste supera la energía actual.
+- D32/B6 (#20) implementadas: separar en el HUD inferior izquierdo el selector de consumibles del selector de poderes personales y mover allí la curación propia. Velocidad de la Fuerza y otros poderes que alteren atributos quedan pospuestos (FUT-09). No se crea `v0.3.0` final hasta implementar, verificar y recibir la aceptación humana. Evidencia y limitaciones en RESULTADO.
+
+- B3: cola vacía espera al alcance cuerpo a cuerpo; las órdenes explícitas permiten aproximación. B4: selección/voz, frases neutrales y segundo diálogo manual con acceso condicionado. B5: cursor propio, retícula segmentada y clic contextual que encola básico al objetivo. Guía de QA humana y menú de candidata 0.3.0.
 
 ### Documentación y organización
 
@@ -27,12 +30,12 @@ El árbol de `feature/temple-tactical-demo` contiene ahora una build jugable de 
 - Tareas, dependencias y criterios de aceptación en `PENDIENTES.md`; instrucciones para retomar el proyecto en `AGENTS.md`.
 - Conversación ramificada del guardián y objetivo final común documentados. La falta de energía queda pendiente de la comprobación del usuario en KOTOR.
 - Convención de versiones, changelog y protocolo de inicio/cierre de trabajo; revisión de dependencias para que una duda local no bloquee toda la iteración.
-- Repositorio privado `Dioniss97/ShadowsOfKharuun` preparado, con historial, ramas y etiquetas subidos mediante HTTPS; milestone `Demo 0.3.0` y 13 issues enlazados al backlog.
+- Repositorio privado `Dioniss97/ShadowsOfKharuun` preparado, con historial, ramas y etiquetas subidos mediante HTTPS; milestone `Demo 0.3.0` con 13 tareas de demo y correcciones B1–B6 (#15–20).
 - Engram actualizado de 1.7.1 a 3.3.2 estable, con SHA256 verificado, respaldo de memoria/configuración y conservación de los registros anteriores. MCP y plugin oficial de Codex configurados, proyecto fijado y cinco resúmenes manuales de contexto guardados. Protocolo MCP probado; carga de herramientas/hooks en el agente requiere recargar Codex.
 - Revisión previa a producción: lectura de Engram desde el MCP de esta sesión verificada y política explícita de consultas exclusivas a `shadowsofkharuun`, conservando memorias ajenas. Instalado jq 1.8.2 oficial, dependencia ausente de los hooks; escritura de agente pendiente de recarga/registro confirmado del cliente.
-- Respuestas D21–D24 incorporadas al diseño y backlog: curación con salud llena consume ronda/recurso, persecución por toda la zona accesible, reinicio completo de misión y congelación de tiempo/recursos durante el diálogo. Q02/Q03/Q07 cerradas; Q01 sigue pendiente. Las 13 issues se revisan contra estos criterios sin iniciar implementación.
+- Respuestas D21–D24 incorporadas al diseño y backlog: curación con salud llena consume ronda/recurso, persecución por toda la zona accesible, reinicio completo de misión y congelación de tiempo/recursos durante el diálogo. Q02/Q03/Q07 cerradas. Las 13 issues originales se revisaron sin iniciar implementación.
 
-La documentación y organización anteriores se mantienen. Las funciones de la build de desarrollo están implementadas y comprobadas según RESULTADO, pero permanecen **sin entrega final** mientras Q01 y la aceptación humana estén pendientes.
+La documentación y organización anteriores se mantienen. La build de desarrollo conserva la evidencia previa descrita en RESULTADO; las reglas de cámara, combate pasivo, interacción, fallo por recursos y HUD personal están implementadas y comprobadas. La aceptación humana final corresponde al usuario.
 
 ## 0.2.0 — 2026-10-12
 

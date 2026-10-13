@@ -23,6 +23,13 @@ var tactical_mode = false
 var defence = 12
 var attack_bonus = 5
 var round_clock = KhRoundQueue.new()
+var phrase_index = 0
+const NEUTRAL_LINES = ["Escoge bien tus palabras. El umbral no admite imprudencias.", "Mi maestro no tendrá piedad de quien desafíe su voluntad.", "Ten cuidado con lo que buscas. El poder siempre exige un precio."]
+
+func next_phrase() -> String:
+	var phrase: String = NEUTRAL_LINES[phrase_index]
+	phrase_index = (phrase_index+1)%NEUTRAL_LINES.size()
+	return phrase
 
 func _ready() -> void:
 	if guardian:

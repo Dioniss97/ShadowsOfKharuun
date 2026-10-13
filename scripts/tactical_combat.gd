@@ -1,8 +1,6 @@
 class_name KhTacticalCombat
 extends Node
 
-signal energy_rule_pending(order: Dictionary)
-
 # Initial balance values; rounds and costs are independent of any power cooldown.
 const ACTIONS = {
 	"attack": {"name":"Básico", "reach":2.15, "cost":0, "damage":26},
@@ -25,8 +23,6 @@ var clock = KhRoundQueue.new()
 var rng = RandomNumberGenerator.new()
 var movement_direction = Vector3.ZERO
 var actor_locked = false
-var energy_pending = false
-var energy_pending_order: Dictionary = {}
 var attack_cooldown: float:
 	get: return clock.round_left
 var round_left: float:
@@ -72,6 +68,9 @@ func valid_targets() -> Array:
 func target_valid(enemy: Node) -> bool:
 	return is_instance_valid(enemy) and enemy is KhEnemy and enemy.active and enemy.health > 0
 
+func selection_valid(enemy: Node) -> bool:
+	return is_instance_valid(enemy) and enemy is KhEnemy and enemy.health > 0
+
 func nearest_target(reach: float = 100.0) -> KhEnemy:
 	var best: KhEnemy = null
 	var distance = reach
@@ -115,12 +114,23 @@ func select_target(enemy: Node, engage: bool = true) -> bool:
 	return true
 
 func select_screen(pos: Vector2) -> bool:
+	var enemy = screen_actor(pos)
+	if not enabled or not selection_valid(enemy): return false
+	if enemy == selected:
+		if target_valid(enemy): return enqueue_action("attack",enemy)
+		return level.request_talk(enemy)
+	if target_valid(enemy): return select_target(enemy)
+	selected = enemy
+	update_selection()
+	return true
+
+func screen_actor(pos: Vector2) -> KhEnemy:
 	var camera = player.camera
 	var origin = camera.project_ray_origin(pos)
 	var query = PhysicsRayQueryParameters3D.create(origin,origin+camera.project_ray_normal(pos)*100,5)
 	var hit = player.get_world_3d().direct_space_state.intersect_ray(query)
-	if not hit.is_empty() and hit.collider is KhEnemy: return select_target(hit.collider)
-	return false
+	if not hit.is_empty() and selection_valid(hit.collider): return hit.collider
+	return null
 
 func cycle_target() -> void:
 	var targets = valid_targets()
@@ -129,12 +139,15 @@ func cycle_target() -> void:
 	select_target(targets[(index+1)%targets.size()])
 
 func update_selection() -> void:
-	selection_ring.visible = enabled and target_valid(selected)
+	selection_ring.visible = enabled and selection_valid(selected)
 	if selection_ring.visible:
 		selection_ring.global_position = selected.global_position+Vector3(0,0.06,0)
 
 func enqueue_action(id: String, target: Node = null) -> bool:
 	if not enabled or player.health <= 0 or not ACTIONS.has(id): return false
+	if player.energy < ACTIONS[id].cost:
+		message("Énergía insuficiente para %s" % action_name(id))
+		return false
 	if is_self_action(id):
 		target = player
 		if id == "medkit" and medkits <= 0:
@@ -160,21 +173,11 @@ func basic_attack() -> bool:
 func use_ability(id: int) -> bool:
 	return enqueue_action("push" if id == 1 else "lightning")
 
-func clear_energy_pending() -> void:
-	energy_pending = false
-	energy_pending_order = {}
-	if ability_error.begins_with("Q01 pendiente"):
-		ability_error = ""
-		error_time = 0
-
 func cancel_queued(index: int) -> bool:
-	var cancelled = clock.cancel(index)
-	if cancelled and index == 0: clear_energy_pending()
-	return cancelled
+	return clock.cancel(index)
 
 func clear_queue() -> void:
 	clock.clear_pending()
-	clear_energy_pending()
 
 func disengage() -> void:
 	engaged = false
@@ -195,7 +198,6 @@ func stop() -> void:
 	enabled = false
 	engaged = false
 	clock.reset()
-	clear_energy_pending()
 	selected = null
 	last_offensive_target = null
 	movement_direction = Vector3.ZERO
@@ -216,25 +218,36 @@ func _physics_process(delta: float) -> void:
 	clock.advance(delta)
 	# An impact may end the encounter and open a narrative pause.
 	if not enabled: return
-	actor_locked = not clock.current.is_empty() or energy_pending
+	actor_locked = not clock.current.is_empty()
 	if target_valid(clock.current.get("target")):
 		player.face_target(clock.current.target.global_position)
 	elif target_valid(last_offensive_target) and engaged:
 		player.face_target(last_offensive_target.global_position)
-	if not clock.current.is_empty() or clock.round_left > 0 or energy_pending: return
+	if not clock.current.is_empty() or clock.round_left > 0: return
 	var order: Dictionary = {}
+	var resource_failed = false
 	while not queue.is_empty():
 		var candidate: Dictionary = queue[0]
 		if ACTIONS.has(candidate.id) and (is_self_action(candidate.id) or target_valid(candidate.get("target"))):
-			if candidate.id == "medkit" and medkits <= 0:
-				queue.pop_front()
-				message("Orden descartada: no quedan botiquines")
+			if (candidate.id == "medkit" and medkits <= 0) or player.energy < ACTIONS[candidate.id].cost:
+				resource_failed = true
+				var medkit_failure: bool = candidate.id == "medkit"
+				for index in range(queue.size()-1,-1,-1):
+					var same_resource: bool = queue[index].id == "medkit" if medkit_failure else ACTIONS.get(queue[index].id,{}).get("cost",0) > 0
+					if same_resource:
+						queue.remove_at(index)
+				message("Botiquines agotados: órdenes retiradas" if medkit_failure else "Sin energía: poderes pendientes retirados")
+				record({"source":"resource","id":candidate.id,"reason":"insufficient_resource"})
 				continue
 			order = candidate
 			break
 		queue.pop_front()
 		message("Orden descartada: el destinatario ya no es un agresor vivo")
 	if order.is_empty():
+		if resource_failed:
+			clock.round_left = clock.round_seconds
+			last_result = "Acción perdida por falta de recursos · recuperando"
+			return
 		if not engaged: return
 		var recipient: KhEnemy = last_offensive_target
 		if not target_valid(recipient):
@@ -255,21 +268,14 @@ func _physics_process(delta: float) -> void:
 	if not is_self_action(order.id):
 		var d = player.global_position.distance_to(order.target.global_position)
 		if d > data.reach or not line_of_sight(order.target):
+			if order.get("automatic",false):
+				last_result = "Esperando a %s · fuera de alcance cuerpo a cuerpo" % order.target_name
+				return
 			approach(delta,order.target)
 			return
 		player.face_target(order.target.global_position)
 	approach_time = 0
 	stalled_time = 0
-	if player.energy < data.cost:
-		# Q01 has no agreed rule yet. Preserve this order and pause the development
-		# build through main rather than inventing a skip/penalty or silently waiting.
-		energy_pending = true
-		energy_pending_order = order.duplicate()
-		actor_locked = true
-		message("Q01 pendiente: %s sin energía. Retira esta orden o cancela combate (F)." % data.name)
-		last_result = ability_error
-		energy_rule_pending.emit(energy_pending_order)
-		return
 	if not queue.is_empty(): queue.pop_front()
 	player.energy -= data.cost
 	if order.id == "medkit": medkits -= 1

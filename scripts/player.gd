@@ -23,6 +23,7 @@ var distance_walked = 0.0
 var attack_bonus = 8
 var defence = 14
 var camera_follow_motion = false
+var interaction_target: KhEnemy
 
 func _ready() -> void:
 	floor_snap_length = 0.7
@@ -65,6 +66,10 @@ func camera_input(event: InputEventMouseMotion) -> void:
 		yaw -= event.relative.x*0.0026
 		pitch = clampf(pitch-event.relative.y*0.0023,-0.7,0.30)
 
+func orbit_camera(delta: float) -> void:
+	if control_enabled:
+		yaw -= Input.get_axis("move_left","move_right")*TURN_SPEED*delta
+
 func _physics_process(delta: float) -> void:
 	invulnerable = maxf(0,invulnerable-delta)
 	rig.guarding = false
@@ -73,16 +78,22 @@ func _physics_process(delta: float) -> void:
 	var direction = Vector3.ZERO
 	var running = false
 	var combat_controls_movement = tactical and (combat.engaged or combat.actor_locked or not combat.queue.is_empty())
+	orbit_camera(delta)
+	if Input.is_action_pressed("move_forward") or Input.is_action_pressed("move_back"):
+		interaction_target = null
 	if automation_mode:
 		direction = automation_direction
 		running = control_enabled and Input.is_action_pressed("sprint")
 	elif combat_controls_movement:
 		direction = combat.movement_direction
+	elif is_instance_valid(interaction_target) and interaction_target.health > 0:
+		direction = interaction_target.global_position-global_position
+		direction.y = 0
+		direction = direction.normalized()
 	elif control_enabled:
-		# A/D turn continuously; W/S use the actor's facing, independently of the orbit camera.
-		var turn = Input.get_axis("move_left","move_right")
-		rig.rotation.y -= turn*TURN_SPEED*delta
 		var advance = Input.get_axis("move_forward","move_back")
+		# W follows the camera heading; S backs up without turning the actor.
+		if advance < 0: rig.rotation.y = yaw
 		direction = Vector3(sin(rig.rotation.y),0,cos(rig.rotation.y))*advance
 		running = Input.is_action_pressed("sprint")
 	var speed = 6.6 if running else 3.6
@@ -105,7 +116,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 		camera_follow_motion = false
 	var flat_speed = Vector2(velocity.x,velocity.z).length()
-	if (automation_mode or combat_controls_movement) and direction.length() > 0.1 and (not tactical or not combat.actor_locked) and rig.attack_time <= 0:
+	if (automation_mode or combat_controls_movement or is_instance_valid(interaction_target)) and direction.length() > 0.1 and (not tactical or not combat.actor_locked) and rig.attack_time <= 0:
 		rig.rotation.y = lerp_angle(rig.rotation.y,atan2(-direction.x,-direction.z),delta*12)
 	rig.animate(delta,flat_speed)
 	update_camera(delta)

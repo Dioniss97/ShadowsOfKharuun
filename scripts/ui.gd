@@ -34,6 +34,13 @@ var main: Node
 var last_health = 340.0
 var legacy_actions: HBoxContainer
 var controls_label: Label
+var speech: Label
+var speech_time = 0.0
+
+func say(speaker: String, phrase: String) -> void:
+	speech.text = "%s: «%s»" % [speaker,phrase]
+	speech_time = 5.0
+	main.level.audio.speak(phrase)
 
 class Portrait extends Control:
 	func _draw() -> void:
@@ -231,6 +238,12 @@ func build_hud() -> void:
 	hud.add_child(toast)
 	place(toast,Vector2(-400,320),Vector2(800,42),Control.PRESET_CENTER_TOP)
 	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	speech = label("",17,IVORY)
+	hud.add_child(speech)
+	place(speech,Vector2(-400,138),Vector2(800,65),Control.PRESET_CENTER_TOP)
+	speech.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	speech.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	speech.hide()
 
 func clear_overlay() -> void:
 	if is_instance_valid(overlay):
@@ -257,12 +270,15 @@ func show_game() -> void:
 	legacy_actions.hide()
 	message.hide()
 	hint.show()
-	controls_label.text = "W/S · avanzar/retroceder · A/D · girar\nBOTÓN DERECHO · cámara  /  E · interactuar\nESPACIO · táctica  /  ESC · menú"
+	controls_label.text = "W/S · avanzar/retroceder · A/D · cámara\nCLIC · seleccionar / actuar\nESPACIO · táctica  /  ESC · menú"
+	speech_time = 0
 	controls_label.add_theme_font_size_override("font_size",11)
 	announce("EL UMBRAL DE CENIZA")
 
 func show_dialogue(dialogue: KhDialogue) -> void:
 	hud.hide()
+	speech_time = 0
+	speech.hide()
 	dialog_panel.show()
 	for child in dialog_content.get_children():
 		dialog_content.remove_child(child)
@@ -349,8 +365,8 @@ func show_pause() -> void:
 	v.add_child(title)
 	v.add_child(label("Clic / Tab: objetivo · Flechas / rueda: recorrer acciones",16))
 	v.add_child(label("1: empuje · 2: descarga · 3: básico · 4: ráfaga",16))
-	v.add_child(label("5: curación propia · 6: botiquín · E: interactuar",16))
-	v.add_child(label("F: liberar movimiento · W/S: avanzar/retroceder · A/D: girar",15,GOLD))
+	v.add_child(label("5: curación propia · 6: botiquín · Clic: seleccionar y actuar",16))
+	v.add_child(label("F: liberar movimiento · W/S: avanzar/retroceder · A/D: cámara",15,GOLD))
 	v.add_child(label("Botón derecho: girar cámara · Se centra al avanzar o retroceder",14,DIM))
 	var resume = button("Continuar  [ESC]",true)
 	v.add_child(resume)
@@ -370,8 +386,8 @@ func _process(delta: float) -> void:
 	var p = main.level.player
 	var combat = main.level.combat
 	var mission = main.mission
-	var movement_text = "F · liberar movimiento" if combat.engaged or not combat.current_action.is_empty() else "W/S · avanzar/retroceder · A/D · girar"
-	controls_label.text = movement_text + "\nBOTÓN DERECHO · cámara  /  E · interactuar\nESPACIO · táctica  /  ESC · menú"
+	var movement_text = "F · liberar movimiento" if combat.engaged or not combat.current_action.is_empty() else "W/S · avanzar/retroceder · A/D · cámara"
+	controls_label.text = movement_text + "\nBOTÓN DERECHO · cámara  /  CLIC · seleccionar\nESPACIO · táctica  /  ESC · menú"
 	if p.health < last_health: flash.color.a = 0.17
 	last_health = p.health
 	health_bar.value = p.health/p.max_health*100
@@ -382,7 +398,9 @@ func _process(delta: float) -> void:
 	timer_label.text = "%02d:%02d" % [int(mission.elapsed)/60,int(mission.elapsed)%60]
 	# Name and health now share the projected card above the selected enemy.
 	target_panel.hide()
-	hint.text = "E  Hablar con el guardián" if mission.state == KhMission.State.EXPLORATION and p.position.z < -6.5 else ("E  Reclamar el secreto del templo al acercarte al altar" if mission.state == KhMission.State.TEMPLE else "")
+	hint.text = "Selecciona al guardián y vuelve a clicar para hablar" if mission.state == KhMission.State.GUARDIAN_WAIT else ("E  Reclamar el secreto del templo al acercarte al altar" if mission.state == KhMission.State.TEMPLE else "")
 	if not main.get_tree().paused:
 		toast_time = maxf(0,toast_time-delta)
+		speech_time = maxf(0,speech_time-delta)
+	speech.visible = speech_time > 0
 	toast.modulate.a = 0 if main.tactical_paused else minf(1,toast_time)

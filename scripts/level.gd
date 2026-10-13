@@ -2,6 +2,7 @@ class_name KhLevel
 extends Node3D
 
 signal reached_gate
+signal npc_interacted(enemy: KhEnemy)
 var player: KhPlayer
 var enemies: Array = []
 var guardian: KhEnemy
@@ -24,6 +25,16 @@ var relic: MeshInstance3D
 var relic_label: Label3D
 var relic_position = Vector3(0,3.3,-34.5)
 var temple_open = false
+
+func can_talk(enemy: KhEnemy) -> bool:
+	if not combat.enabled or not combat.selection_valid(enemy) or enemy.active: return false
+	return mission.state in [KhMission.State.EXPLORATION, KhMission.State.GUARDIAN_WAIT, KhMission.State.TEMPLE]
+
+func request_talk(enemy: KhEnemy) -> bool:
+	if not can_talk(enemy): return false
+	player.interaction_target = enemy
+	combat.last_result = "Acercándose para hablar con %s" % enemy.display_name
+	return true
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -315,9 +326,19 @@ func begin_mission() -> void:
 
 func _process(_delta: float) -> void:
 	if mission != null and mission.state == KhMission.State.EXPLORATION and not gate_triggered:
-		if player.global_position.z < -10.0 or (player.global_position.z < -6.5 and Input.is_action_just_pressed("interact")):
+		if player.global_position.z < -10.0:
 			gate_triggered = true
+			player.interaction_target = null
 			reached_gate.emit()
+	var npc = player.interaction_target
+	if is_instance_valid(npc) and not npc.active and player.global_position.distance_to(npc.global_position) <= 3.8:
+		var ray = PhysicsRayQueryParameters3D.create(player.global_position+Vector3.UP,npc.global_position+Vector3.UP,1)
+		if get_world_3d().direct_space_state.intersect_ray(ray).is_empty():
+			player.interaction_target = null
+			player.velocity.x = 0
+			player.velocity.z = 0
+			player.face_target(npc.global_position)
+			npc_interacted.emit(npc)
 
 func start_acolytes() -> void:
 	combat.enabled = true
@@ -351,6 +372,7 @@ func stop_combat() -> void:
 	combat.enabled = false
 	combat.stop()
 	player.control_enabled = false
+	player.interaction_target = null
 	player.automation_direction = Vector3.ZERO
 	for e in enemies:
 		e.active = false

@@ -2,7 +2,8 @@ class_name KhTacticalUI
 extends CanvasLayer
 
 # The three selectors describe action categories; pending orders are separate.
-const CATEGORIES = [["attack", "flurry"], ["push", "lightning", "heal"], []]
+const CATEGORIES = [["attack", "flurry"], ["push", "lightning"], []]
+const PERSONAL_CATEGORIES = [["medkit"], ["heal"]]
 const CATEGORY_NAMES = ["ARMA", "ENERGÍA", "ARROJADIZOS"]
 const SHORTCUTS = {"attack":"3", "flurry":"4", "push":"1", "lightning":"2", "heal":"5", "medkit":"6"}
 const SELECTOR_SIZE = Vector2(198, 112)
@@ -39,6 +40,10 @@ class ActionGlyph extends Control:
 					draw_arc(c, 19, 0, TAU, 32, color, 2.0, true)
 				draw_line(c + Vector2(-10, 0), c + Vector2(10, 0), color, 5.0, true)
 				draw_line(c + Vector2(0, -10), c + Vector2(0, 10), color, 5.0, true)
+			"talk":
+				draw_arc(c+Vector2(-6,-7),8,0,TAU,24,color,2,true)
+				draw_line(c+Vector2(-6,1),c+Vector2(-6,16),color,3,true)
+				for radius in [7.0,14.0]: draw_arc(c+Vector2(7,-7),radius,-0.7,0.7,12,color,2,true)
 			_:
 				draw_rect(Rect2(c - Vector2(15, 15), Vector2(30, 30)), color, false, 1.0)
 				draw_line(c - Vector2(12, 12), c + Vector2(12, 12), color, 1.0, true)
@@ -67,13 +72,17 @@ var retreat_button: Button
 var medkit_button: Button
 var medkit_label: Label
 var medkit_glyph: ActionGlyph
+var heal_button: Button
+var heal_glyph: ActionGlyph
+var personal_indices = [0,0]
+var selection_reticle: Control
+var talk_button: Button
 var target_selectors: PanelContainer
 var target_name_label: Label
 var target_health_bar: ProgressBar
 var target_head_screen = Vector2.ZERO
 var help_overlay: Control
 var help_seen = false
-var energy_notice: Label
 var context_hint: Label
 var context_time = 0.0
 var was_engaged = false
@@ -92,6 +101,30 @@ func _ready() -> void:
 	_build_personal_menu()
 	_build_orders()
 	_build_help()
+	selection_reticle = SelectionReticle.new()
+	root.add_child(selection_reticle)
+	selection_reticle.size = Vector2(56,56)
+	selection_reticle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	talk_button = _button("",44,true)
+	root.add_child(talk_button)
+	talk_button.size = Vector2(120,44)
+	talk_button.tooltip_text = "Hablar con el personaje seleccionado"
+	talk_button.pressed.connect(func():
+		var combat = _combat()
+		if combat != null: combat.level.request_talk(combat.selected))
+	var voice = ActionGlyph.new()
+	talk_button.add_child(voice)
+	voice.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	voice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	voice.set_action("talk",true)
+	talk_button.hide()
+	selection_reticle.hide()
+
+class SelectionReticle extends Control:
+	func _draw() -> void:
+		for index in range(4):
+			var angle = float(index)*PI/2
+			draw_arc(size*0.5,25,angle+0.16,angle+PI/2-0.16,12,KhUI.GOLD,3,true)
 
 func _place(control: Control, position: Vector2, dimensions: Vector2, preset: int) -> void:
 	control.set_anchors_and_offsets_preset(preset)
@@ -220,7 +253,7 @@ func _build_selectors() -> void:
 	target_selectors.hide()
 
 func _build_personal_menu() -> void:
-	var personal = _panel(Vector2(25, -154), Vector2(260, 130), Control.PRESET_BOTTOM_LEFT)
+	var personal = _panel(Vector2(25, -202), Vector2(300, 178), Control.PRESET_BOTTOM_LEFT)
 	var column = VBoxContainer.new()
 	column.add_theme_constant_override("separation", 5)
 	personal.add_child(column)
@@ -228,20 +261,39 @@ func _build_personal_menu() -> void:
 	var row = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 7)
 	column.add_child(row)
-	var medkit_column = VBoxContainer.new()
-	medkit_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(medkit_column)
-	medkit_button = _button("", 54, true)
-	medkit_button.pressed.connect(_add_order.bind("medkit"))
-	medkit_column.add_child(medkit_button)
-	medkit_glyph = ActionGlyph.new()
-	medkit_glyph.action = "medkit"
-	medkit_button.add_child(medkit_glyph)
-	medkit_glyph.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	medkit_glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	medkit_label = KhUI.label("Botiquín ×3 [6]", 11)
-	medkit_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	medkit_column.add_child(medkit_label)
+	for category in range(PERSONAL_CATEGORIES.size()):
+		var item = VBoxContainer.new()
+		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(item)
+		var caption = KhUI.label("OBJETOS" if category == 0 else "PODERES",9,KhUI.GOLD)
+		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		item.add_child(caption)
+		var up = _selector_button("▲",14)
+		item.add_child(up)
+		up.disabled = PERSONAL_CATEGORIES[category].size() < 2
+		up.pressed.connect(_cycle_personal.bind(category,-1))
+		var action_button = _selector_button("",42,true)
+		item.add_child(action_button)
+		action_button.pressed.connect(_enqueue_personal.bind(category))
+		action_button.gui_input.connect(_personal_input.bind(category,action_button))
+		var glyph = ActionGlyph.new()
+		action_button.add_child(glyph)
+		glyph.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var down = _selector_button("▼",14)
+		item.add_child(down)
+		down.disabled = PERSONAL_CATEGORIES[category].size() < 2
+		down.pressed.connect(_cycle_personal.bind(category,1))
+		var name_label = KhUI.label("×3 [6]" if category == 0 else "Curar [5]",11)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		item.add_child(name_label)
+		if category == 0:
+			medkit_button = action_button
+			medkit_glyph = glyph
+			medkit_label = name_label
+		else:
+			heal_button = action_button
+			heal_glyph = glyph
 	for future in ["Escudo", "Forma"]:
 		var empty = VBoxContainer.new()
 		empty.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -315,11 +367,6 @@ func _build_orders() -> void:
 	root.add_child(context_hint)
 	_place(context_hint, Vector2(-400, -254), Vector2(800, 25), Control.PRESET_CENTER_BOTTOM)
 	context_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	energy_notice = KhUI.label("Orden sin energía · retírala de la cola o pulsa F para continuar", 14, Color(1, 0.68, 0.38))
-	root.add_child(energy_notice)
-	_place(energy_notice, Vector2(-470, 320), Vector2(940, 34), Control.PRESET_CENTER_TOP)
-	energy_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	energy_notice.hide()
 
 func _build_help() -> void:
 	help_overlay = Control.new()
@@ -345,7 +392,7 @@ func _build_help() -> void:
 	column.add_child(KhUI.label("2  Flechas o rueda recorren ataques y poderes; clic los encola.", 17))
 	column.add_child(KhUI.label("3  Puedes dar cada orden a un enemigo diferente.", 17))
 	column.add_child(KhUI.label("4  Botiquines y curación propia también ocupan una acción.", 17))
-	column.add_child(KhUI.label("ESPACIO reanuda. La cola vacía mantiene el ataque básico.\nF cancela el combate y libera movimiento; los enemigos siguen atacando.", 15))
+	column.add_child(KhUI.label("ESPACIO reanuda. Sin órdenes, esperas al alcance cuerpo a cuerpo.\nF cancela el combate y libera movimiento; los enemigos siguen atacando.", 15))
 	var row = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	column.add_child(row)
@@ -372,6 +419,53 @@ func reset_help() -> void:
 	context_time = 0
 	was_engaged = false
 	category_indices = [0, 0, 0]
+	personal_indices = [0,0]
+
+func _cycle_personal(category: int, direction: int) -> void:
+	personal_indices[category] = posmod(personal_indices[category]+direction,PERSONAL_CATEGORIES[category].size())
+
+func _enqueue_personal(category: int) -> void:
+	_add_order(PERSONAL_CATEGORIES[category][personal_indices[category]])
+
+func _personal_input(event: InputEvent, category: int, control: Control) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+		_cycle_personal(category,-1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1)
+		control.accept_event()
+
+func _position_context(combat: Node) -> void:
+	if not combat.enabled or not combat.selection_valid(combat.selected):
+		selection_reticle.hide()
+		talk_button.hide()
+		return
+	var enemy: KhEnemy = combat.selected
+	var camera = get_viewport().get_camera_3d()
+	var center: Vector3 = enemy.rig.to_global(Vector3(0,1.0,0))
+	if camera.is_position_behind(center):
+		selection_reticle.hide()
+		talk_button.hide()
+		return
+	var query = PhysicsRayQueryParameters3D.create(camera.global_position,center,1)
+	if not enemy.get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+		selection_reticle.hide()
+		talk_button.hide()
+		return
+	var screen = root.get_global_transform_with_canvas().affine_inverse()*camera.unproject_position(center)
+	if not Rect2(Vector2.ZERO,root.size).has_point(screen):
+		selection_reticle.hide()
+		talk_button.hide()
+		return
+	selection_reticle.position = screen-Vector2(28,28)
+	selection_reticle.show()
+	if enemy.active or not combat.level.can_talk(enemy):
+		talk_button.hide()
+		return
+	var head: Vector3 = enemy.rig.to_global(Vector3(0,TARGET_HEAD_HEIGHT,0))
+	var action_position = root.get_global_transform_with_canvas().affine_inverse()*camera.unproject_position(head)-Vector2(60,66)
+	if action_position.y < 8 or action_position.x < 8 or action_position.x+120 > root.size.x-8:
+		talk_button.hide()
+		return
+	talk_button.position = action_position
+	talk_button.show()
 
 func _combat() -> Node:
 	if not is_instance_valid(main) or not is_instance_valid(main.level): return null
@@ -427,11 +521,14 @@ func _process(delta: float) -> void:
 	root.visible = combat != null and main.ui.hud.visible and not main.paused
 	if not root.visible:
 		target_selectors.hide()
+		selection_reticle.hide()
+		talk_button.hide()
 		return
 	pause_banner.visible = main.tactical_paused
 	pause_button.text = "Reanudar [ESPACIO]" if main.tactical_paused else "Pausa [ESPACIO]"
 	var selected_valid: bool = combat.target_valid(combat.selected)
 	_position_target_selectors(combat)
+	_position_context(combat)
 	for category in range(3):
 		var actions: Array = CATEGORIES[category]
 		var unavailable: bool = actions.is_empty()
@@ -445,7 +542,7 @@ func _process(delta: float) -> void:
 			continue
 		var id: String = actions[category_indices[category]]
 		var self_target = id == "heal"
-		action_buttons[category].disabled = not combat.enabled or combat.queue.size() >= 4 or (not self_target and not selected_valid)
+		action_buttons[category].disabled = not combat.enabled or combat.queue.size() >= 4 or (not self_target and not selected_valid) or combat.player.energy < combat.ACTIONS[id].cost
 		var cost: int = int(combat.ACTIONS[id].get("cost", 0))
 		selector_labels[category].text = "Sobre ti" if self_target else combat.action_name(id)
 		selector_labels[category].add_theme_color_override("font_color", KhUI.IVORY)
@@ -453,10 +550,13 @@ func _process(delta: float) -> void:
 		var effect = " · dos intentos de impacto" if id == "flurry" else (" · un impacto" if id == "attack" else "")
 		action_buttons[category].tooltip_text = "%s [%s] · %s%s%s\nClic: encolar · flechas/rueda: cambiar sin dar una orden" % [combat.action_name(id), SHORTCUTS[id], destination, " · %d de energía" % cost if cost > 0 else "", effect]
 		selector_glyphs[category].set_action(id, not action_buttons[category].disabled)
-	medkit_label.text = "Botiquín ×%d [6]" % combat.medkits
+	medkit_label.text = "×%d [6]" % combat.medkits if combat.medkits > 0 else "Agotado"
 	medkit_button.disabled = not combat.enabled or combat.medkits <= 0 or combat.queue.size() >= 4
 	medkit_button.tooltip_text = "Botiquines agotados" if combat.medkits <= 0 else "Sobre ti · encola una curación. Consume una unidad al ejecutar, aunque tengas toda la salud."
-	medkit_glyph.set_action("medkit", not medkit_button.disabled)
+	medkit_glyph.set_action("medkit" if combat.medkits > 0 else "empty", not medkit_button.disabled)
+	heal_button.disabled = not combat.enabled or combat.queue.size() >= 4 or combat.player.energy < combat.ACTIONS.heal.cost
+	heal_button.tooltip_text = "Curación propia [5] · Sobre ti · 28 de energía · una acción"
+	heal_glyph.set_action("heal",not heal_button.disabled)
 	var current: Dictionary = combat.current_action
 	if not current.is_empty():
 		current_label.text = "En curso: %s → %s" % [combat.action_name(str(current.get("id", "attack"))), str(current.get("target_name", "Tú"))]
@@ -464,9 +564,9 @@ func _process(delta: float) -> void:
 		var next_order: Dictionary = combat.queue[0]
 		current_label.text = "Próxima: %s → %s" % [combat.action_name(str(next_order.get("id", "attack"))), str(next_order.get("target_name", "Tú"))]
 	elif combat.engaged and combat.target_valid(combat.last_offensive_target):
-		current_label.text = "En curso: básico automático → %s" % combat.last_offensive_target.display_name
+		current_label.text = "Básico automático al entrar en alcance → %s" % combat.last_offensive_target.display_name
 	elif combat.engaged and selected_valid:
-		current_label.text = "En curso: aproximación → %s" % combat.selected.display_name
+		current_label.text = "Esperando alcance cuerpo a cuerpo → %s" % combat.selected.display_name
 	else:
 		current_label.text = "Movimiento libre · clic en enemigo para combatir"
 	var round_active: bool = combat.engaged or not current.is_empty() or combat.round_left > 0
@@ -489,7 +589,6 @@ func _process(delta: float) -> void:
 	retreat_button.disabled = not combat.engaged and combat.queue.is_empty() and current.is_empty()
 	pause_button.disabled = not combat.enabled
 	result_label.text = combat.ability_error if combat.error_time > 0 else combat.last_result
-	energy_notice.visible = combat.energy_pending
 	if was_engaged and not combat.engaged and combat.enabled:
 		_context_once("retreat", "Movimiento libre: W/S avanzar y retroceder; A/D girar. Los enemigos te persiguen.")
 	was_engaged = combat.engaged

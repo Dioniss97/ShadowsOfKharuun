@@ -10,6 +10,7 @@ var dialogue_paused = false
 var tactical_ui: KhTacticalUI
 var encounters_started: Array = []
 var seeking_initial_target = false
+var context_cursor: KhContextCursor
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -35,9 +36,12 @@ func _ready() -> void:
 	tactical_ui = KhTacticalUI.new()
 	tactical_ui.main = self
 	add_child(tactical_ui)
+	context_cursor = KhContextCursor.new()
+	context_cursor.main = self
+	add_child(context_cursor)
 	create_level()
 	ui.show_menu()
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	var args = OS.get_cmdline_user_args()
 	automated = "--demo-test" in args or "--demo-capture" in args or "--auto-test" in args or "--capture" in args or "--playtest" in args or "--tactical-test" in args or "--tactical-capture" in args
 	if automated:
@@ -75,7 +79,15 @@ func create_level(duel: bool = false) -> void:
 	level.player.died.connect(func(): mission.transition(KhMission.State.DEFEAT))
 	for e in level.enemies:
 		e.died.connect(func(enemy): mission.enemy_died(enemy.guardian))
-	level.combat.energy_rule_pending.connect(on_energy_pending)
+	level.npc_interacted.connect(on_npc_interacted)
+
+func on_npc_interacted(enemy: KhEnemy) -> void:
+	if enemy.guardian:
+		if mission.state == KhMission.State.GUARDIAN_WAIT: mission.transition(KhMission.State.GUARDIAN_DIALOGUE)
+		elif mission.state == KhMission.State.EXPLORATION: mission.transition(KhMission.State.DIALOGUE)
+		else: ui.say(enemy.display_name,"El umbral está abierto. Reclama lo que has venido a buscar.")
+	else:
+		ui.say(enemy.display_name,enemy.next_phrase())
 
 func new_game() -> void:
 	reset_pause()
@@ -86,7 +98,7 @@ func new_game() -> void:
 	mission.reset()
 	level.begin_mission()
 	ui.show_game()
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 func new_duel(start_paused: bool = true) -> void:
 	reset_pause()
@@ -97,7 +109,7 @@ func new_duel(start_paused: bool = true) -> void:
 	mission.reset(true)
 	level.begin_mission()
 	ui.show_game()
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	if start_paused:
 		get_tree().physics_frame.connect(func(): call_deferred("begin_encounter", "duel"), CONNECT_ONE_SHOT)
 	else:
@@ -117,7 +129,7 @@ func reset_pause() -> void:
 
 func apply_pause() -> void:
 	get_tree().paused = paused or tactical_paused or dialogue_paused
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 func begin_encounter(id: String) -> void:
 	if id in encounters_started or mission.state not in [KhMission.State.COMBAT, KhMission.State.BOSS, KhMission.State.DUEL]: return
@@ -130,18 +142,10 @@ func begin_encounter(id: String) -> void:
 	if id == "acolytes": tactical_ui.show_help()
 
 func toggle_tactical_pause() -> void:
-	if paused or dialogue_paused or mission.state not in [KhMission.State.EXPLORATION, KhMission.State.COMBAT, KhMission.State.BOSS, KhMission.State.DUEL, KhMission.State.TEMPLE]: return
-	if tactical_paused and level.combat.energy_pending:
-		level.combat.message("Orden sin energía · retírala de la cola o pulsa F para continuar")
-		return
+	if paused or dialogue_paused or mission.state not in [KhMission.State.EXPLORATION, KhMission.State.COMBAT, KhMission.State.BOSS, KhMission.State.DUEL, KhMission.State.TEMPLE, KhMission.State.GUARDIAN_WAIT]: return
 	tactical_paused = not tactical_paused
 	if not tactical_paused: tactical_ui.hide_help()
 	apply_pause()
-
-func on_energy_pending(_order: Dictionary) -> void:
-	tactical_paused = true
-	apply_pause()
-	level.combat.message("Orden sin energía · retírala de la cola o pulsa F para continuar")
 
 func cancel_combat() -> void:
 	seeking_initial_target = false
@@ -155,7 +159,7 @@ func show_menu() -> void:
 	level.menu_camera.make_current()
 	mission.transition(KhMission.State.MENU)
 	ui.show_menu()
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 func on_state_changed(state: int) -> void:
 	if not is_instance_valid(level): return
@@ -165,6 +169,7 @@ func on_state_changed(state: int) -> void:
 			level.enemies[0].activate()
 		KhMission.State.DIALOGUE, KhMission.State.GUARDIAN_DIALOGUE:
 			level.combat.stop()
+			level.player.interaction_target = null
 			level.player.control_enabled = false
 			level.player.automation_direction = Vector3.ZERO
 			dialogue_paused = true
@@ -172,6 +177,15 @@ func on_state_changed(state: int) -> void:
 			apply_pause()
 			if state == KhMission.State.GUARDIAN_DIALOGUE: dialogue.begin_guardian()
 			else: dialogue.begin()
+		KhMission.State.GUARDIAN_WAIT:
+			level.combat.stop()
+			level.combat.enabled = true
+			level.player.control_enabled = true
+			level.player.velocity = Vector3.ZERO
+			dialogue_paused = false
+			tactical_paused = false
+			apply_pause()
+			ui.announce("EL GUARDIÁN ESPERA · SELECCIÓNALO Y HABLA")
 		KhMission.State.COMBAT, KhMission.State.BOSS:
 			ui.hide_dialogue()
 			dialogue_paused = false
@@ -199,7 +213,7 @@ func on_state_changed(state: int) -> void:
 			level.audio.stop_voice()
 			if state == KhMission.State.VICTORY: level.audio.play_effect("victory")
 			ui.show_end(state == KhMission.State.VICTORY, mission.elapsed)
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 func toggle_pause() -> void:
 	if mission.state in [KhMission.State.MENU, KhMission.State.VICTORY, KhMission.State.DEFEAT]: return
@@ -211,7 +225,9 @@ func toggle_pause() -> void:
 		if dialogue_paused: ui.show_dialogue(dialogue)
 
 func _process(delta: float) -> void:
-	if tactical_paused and not paused and is_instance_valid(level): level.player.update_camera(delta)
+	if tactical_paused and not paused and is_instance_valid(level):
+		level.player.orbit_camera(delta)
+		level.player.update_camera(delta)
 	if seeking_initial_target and not get_tree().paused and level.combat.enabled:
 		if level.combat.engaged: seeking_initial_target = false
 		else:

@@ -2,7 +2,7 @@ class_name KhMission
 extends Node
 
 signal changed(state: int)
-enum State { MENU, EXPLORATION, DIALOGUE, COMBAT, BOSS, VICTORY, DEFEAT, DUEL, GUARDIAN_DIALOGUE, TEMPLE }
+enum State { MENU, EXPLORATION, DIALOGUE, COMBAT, BOSS, VICTORY, DEFEAT, DUEL, GUARDIAN_DIALOGUE, TEMPLE, GUARDIAN_WAIT }
 var state = State.MENU
 var dialogue_choice = -1
 var slain_acolytes = 0
@@ -25,7 +25,8 @@ func transition(next: int) -> bool:
 		State.MENU: [State.EXPLORATION, State.DUEL],
 		State.EXPLORATION: [State.DIALOGUE, State.MENU, State.DEFEAT],
 		State.DIALOGUE: [State.COMBAT, State.MENU],
-		State.COMBAT: [State.GUARDIAN_DIALOGUE, State.DEFEAT, State.MENU],
+		State.COMBAT: [State.GUARDIAN_WAIT, State.DEFEAT, State.MENU],
+		State.GUARDIAN_WAIT: [State.GUARDIAN_DIALOGUE, State.DEFEAT, State.MENU],
 		State.GUARDIAN_DIALOGUE: [State.BOSS, State.TEMPLE, State.MENU],
 		State.BOSS: [State.TEMPLE, State.DEFEAT, State.MENU],
 		State.TEMPLE: [State.VICTORY, State.DEFEAT, State.MENU],
@@ -50,14 +51,14 @@ func enemy_died(guardian: bool) -> void:
 		transition(State.TEMPLE)
 	elif not guardian and state == State.COMBAT:
 		slain_acolytes += 1
-		if slain_acolytes == 3: transition(State.GUARDIAN_DIALOGUE)
+		if slain_acolytes == 3: transition(State.GUARDIAN_WAIT)
 
 func claim_temple() -> bool:
 	if state != State.TEMPLE or guardian_resolution.is_empty(): return false
 	return transition(State.VICTORY)
 
 func _process(delta: float) -> void:
-	if state in [State.EXPLORATION, State.COMBAT, State.BOSS, State.DUEL, State.TEMPLE]:
+	if state in [State.EXPLORATION, State.COMBAT, State.BOSS, State.DUEL, State.TEMPLE, State.GUARDIAN_WAIT]:
 		elapsed += delta
 
 func objective() -> String:
@@ -66,6 +67,7 @@ func objective() -> String:
 		State.DIALOGUE: return "Escucha al guardián"
 		State.COMBAT: return "Derrota a los acólitos · %d / 3" % slain_acolytes
 		State.GUARDIAN_DIALOGUE: return "Decide qué hacer con el guardián"
+		State.GUARDIAN_WAIT: return "Selecciona al guardián y habla con él"
 		State.BOSS: return "Derrota al guardián de Kharuun"
 		State.TEMPLE: return "Entra al templo · reclama el núcleo [E]"
 		State.DUEL: return "Prueba interna · derrota al centinela"

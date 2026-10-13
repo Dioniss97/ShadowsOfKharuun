@@ -2,7 +2,7 @@
 
 Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. Esta rama reúne exploración, combate táctico y decisiones narrativas en una sola misión. Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
 
-El código de `feature/temple-tactical-demo` es una **build de desarrollo de la segunda vuelta, prevista como 0.3.0**. Sigue pendiente decidir Q01, el comportamiento de una orden sin energía, y recoger una prueba humana de claridad y equilibrio. No se ha publicado una etiqueta final `v0.3.0`. La última entrega estable conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0); describía el duelo táctico y la misión original por separado.
+El código de `feature/temple-tactical-demo` es la **candidata 0.3.0-rc.1 para QA humana**. D01–D32 y B1–B6 están implementados y comprobados; falta tu evaluación de claridad y equilibrio antes del merge y etiqueta final `v0.3.0`. El recorrido sugerido está en [QA_0_3_0.md](QA_0_3_0.md). La última entrega estable conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
 
 Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Seguimiento: [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los acuerdos están en [DISENO_DEMO.md](DISENO_DEMO.md), los estados en [PENDIENTES.md](PENDIENTES.md) y la evidencia de cada entrega en [RESULTADO.md](RESULTADO.md).
 
@@ -11,10 +11,11 @@ Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/S
 | Control | Acción |
 |---|---|
 | W / S | Avanzar / retroceder manteniendo el frente, durante exploración o tras cancelar combate |
-| A / D | Girar continuamente a izquierda / derecha; combinar con W describe un arco o círculo |
+| A / D | Orbitar cámara sin mover al actor en reposo o combate; W sigue el rumbo de la vista |
 | Shift | Correr durante movimiento libre |
 | Botón derecho mantenido + ratón | Orbitar la cámara; al soltar conserva la vista estando quieto o pausado. Se recentra suave y rápido solo al desplazarte |
-| Clic izquierdo sobre enemigo / Tab | Seleccionar un agresor para nuevas órdenes e iniciar el enfrentamiento |
+| Clic izquierdo sobre personaje / Tab | Primer clic selecciona; sobre el hostil seleccionado, segundo clic encola básico. Tab recorre agresores |
+| Segundo clic sobre neutral seleccionado / icono de voz | Acercarse y hablar: frase de acólito o conversación del guardián |
 | Flechas o rueda sobre un selector | Recorrer ataques o poderes sin encolar nada |
 | Clic sobre el icono del selector | Añadir su acción contra la selección actual; curación siempre actúa sobre ti |
 | 1 / 2 | Encolar empuje / descarga |
@@ -24,11 +25,12 @@ Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/S
 | Limpiar cola | Retirar todas las órdenes pendientes; continúa la acción actual |
 | F / Cancelar combate | Detener órdenes y ataque automático; recuperar WASD |
 | Espacio | Pausa táctica; seleccionar y preparar órdenes mientras el mundo está congelado |
-| E | Hablar cerca del umbral, continuar una respuesta o reclamar el núcleo al acercarte a él |
+| E / Intro durante diálogo | Continuar una respuesta; también puedes pulsar el botón |
+| E junto al núcleo | Reclamar el objetivo final dentro del templo |
 | 1, 2, 3 o ratón durante diálogo | Elegir entre las respuestas disponibles |
 | Escape | Menú de pausa / continuar |
 
-Durante el combate automático, **WASD conserva las órdenes**. Pulsa F primero para moverte libremente. Los enemigos siguen atacando y persiguen por toda la zona accesible: cancelar combate no los detiene ni los devuelve a su posición inicial.
+Durante el combate automático, **W/S conserva las órdenes y A/D orbita sin mover al actor**. Pulsa F primero para desplazarte libremente. Los enemigos siguen atacando y persiguen por toda la zona accesible. En exploración, W/S también cancela la aproximación iniciada para hablar con un NPC.
 
 Los tres selectores son una tarjeta compacta sobre el enemigo seleccionado y siguen su posición y la cámara. Se muestran durante el enfrentamiento, incluso en pausa táctica, y se ocultan al cancelar con F o fuera del combate. Si el enemigo no está visible, la tarjeta se oculta en lugar de quedarse en el centro.
 
@@ -38,25 +40,25 @@ Cada combatiente tiene su propia ronda. El primer encuentro con los acólitos y 
 
 Hay una acción en curso y **cuatro órdenes pendientes**. Los tres selectores de arriba son categorías —arma, energía y arrojadizos—; no son las ranuras de la cola. El panel central muestra acción y destinatario, y cada orden conserva el enemigo al que se dirigió cuando la añadiste. Cambiar la selección sirve para preparar la siguiente orden.
 
-Al terminar la cola, el básico automático sigue contra el último enemigo al que ejecutaste una acción ofensiva. Por ejemplo, `básico A → descarga B → ráfaga A` continúa con `básico A`, aunque después selecciones B. Curarte conserva ese destinatario. Si muere y no quedan órdenes válidas, el personaje continúa contra otro agresor vivo, visible y alcanzable, sin otra pausa inicial.
+Al terminar la cola, el básico automático sigue contra el último enemigo al que ejecutaste una acción ofensiva. Por ejemplo, `básico A → descarga B → ráfaga A` continúa con `básico A`, aunque después selecciones B. Curarte conserva ese destinatario. Si muere y no quedan órdenes válidas, se elige otro agresor vivo, visible y alcanzable, sin otra pausa inicial. **Con cola vacía, el protagonista espera quieto hasta que ese enemigo entra en alcance cuerpo a cuerpo**; una orden explícita sí permite aproximarse.
 
 La ráfaga tiene dos intentos de impacto independientes en una sola ronda. Los poderes disponibles son empuje, descarga y curación propia; cuestan energía y una acción, **sin recarga adicional**. El botiquín y la curación energética usan la misma cola. Empiezas con **tres botiquines**, con contador en el menú inferior izquierdo.
 
-El recurso se consume al comenzar a ejecutar la orden, no al añadirla. Cancelar una orden pendiente lo conserva; cancelar una acción que ya empezó no devuelve el recurso. Curarte con la salud completa también consume la acción y el recurso. Un botiquín agotado se distingue de los huecos futuros; si un botiquín pendiente llega a ejecutarse cuando ya no queda ninguno, esta build descarta la orden con aviso y sigue la cola.
+El recurso se consume al comenzar a ejecutar la orden, no al añadirla. Cancelar una orden pendiente lo conserva; cancelar una acción que ya empezó no devuelve el recurso. Curarte con salud completa también consume acción y recurso. Botiquín y curación propia están en selectores separados abajo a la izquierda; al agotarse botiquines desaparece su icono y aparece «Agotado».
+
+Un poder sin energía suficiente se muestra gris y no se puede encolar. Si al ejecutarse una orden ya no tiene recursos, se elimina junto con las demás pendientes del mismo recurso. Si quedan otras órdenes válidas, la siguiente usa esa oportunidad sin perder ronda. Si no queda ninguna, se pierde una ronda y el básico automático vuelve en la siguiente. Los relojes de los combatientes siguen siendo independientes.
 
 Escudo, formas y arrojadizos aparecen como huecos vacíos desactivados. Ataque crítico, ataque fuerte, granadas, formas, bloqueos entre sables, inventario completo y progresión quedan para otra vuelta. Defensa se conserva como estadística pasiva de acierto; no es una orden seleccionable.
 
 ## Diálogo y final
 
-Tras caer los acólitos, el guardián ofrece enseñanza. Rechazarla inicia combate; escuchar permite después aceptar paso pacífico o atacarlo. La ruta pacífica conserva al guardián vivo y no agresivo. La lección tiene efecto narrativo en esta demo: no hay karma, afiliación persistente ni nuevos poderes aprendidos.
+En exploración, selecciona y habla con acólitos neutrales: rotan tres frases en orden. Acercarte al guardián inicia automáticamente la primera conversación, cuyo desenlace es el encuentro con los acólitos. Después de derrotarlos, vuelves a seleccionar al guardián y a usar la voz para abrir la segunda conversación; mientras tanto la puerta sigue cerrada. Rechazar inicia combate; escuchar permite aceptar paso pacífico o atacarlo. La ruta pacífica conserva al guardián vivo y no agresivo. La lección tiene efecto narrativo: no hay karma, afiliación persistente ni nuevos poderes aprendidos.
 
 La conversación congela tiempo, movimiento, daño y regeneración. Conservas salud, energía y botiquines entre encuentros, sin regalo automático. Resolver al guardián abre el acceso al templo; la victoria solo llega al reclamar el núcleo con E. Tras morir, reinicias toda la misión con recursos iniciales, tres botiquines y elecciones restablecidas.
 
-## Caso pendiente de energía
+## Cierre pendiente
 
-Q01 espera la comprobación del usuario en KOTOR. Para poder probar el resto sin imponer una regla aún no acordada, **esta build de desarrollo pausa el mundo cuando la próxima orden no tiene energía suficiente**, conserva la orden y muestra un aviso. Retira esa orden, limpia la cola o pulsa F; después pulsa Espacio para continuar. No consume un turno fallido, salta la orden ni la sustituye por un básico automáticamente.
-
-Esta pausa es una protección provisional del desarrollo, no la regla final del juego. La decisión pendiente y la prueba humana de equilibrio impiden presentar 0.3.0 como entrega cerrada.
+Falta tu prueba humana con [QA_0_3_0.md](QA_0_3_0.md). Tras validar el alcance se integra la PR #14 y se etiqueta v0.3.0; las issues cubiertas se cierran conservando su historial. El trabajo se detiene en esa versión hasta definir 0.4.
 
 ## Dependencias y verificación
 

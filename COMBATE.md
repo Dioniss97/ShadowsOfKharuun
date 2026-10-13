@@ -1,6 +1,6 @@
 # Combate de la misión unificada
 
-Referencia técnica de la **build de desarrollo de la segunda vuelta, prevista como 0.3.0**, en `feature/temple-tactical-demo`. No hay etiqueta final `v0.3.0`: la candidata implementa D01–D32/B1–B6 y espera QA humana. El diseño humano vigente está en [DISENO_DEMO.md](DISENO_DEMO.md); implementación y evidencia se registran en [PENDIENTES.md](PENDIENTES.md) y [RESULTADO.md](RESULTADO.md).
+Referencia técnica de la **build de desarrollo de la segunda vuelta, prevista como 0.3.0**, en `feature/temple-tactical-demo`. No hay etiqueta final `v0.3.0`: la candidata implementa D01–D36/B1–B8; D27 sustituida por D33 y espera QA humana. El diseño humano vigente está en [DISENO_DEMO.md](DISENO_DEMO.md); implementación y evidencia se registran en [PENDIENTES.md](PENDIENTES.md) y [RESULTADO.md](RESULTADO.md).
 
 La primera iteración permanece en Git, etiqueta [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0). Sus reglas de WASD, recargas, Defensa y continuación contra la selección anterior fueron sustituidas. Este documento describe el código de la misión unificada.
 
@@ -42,7 +42,7 @@ Un poder que supera la energía actual se muestra gris y no se puede encolar. Si
 
 Ejemplo: con energía para una descarga, `descarga → descarga → ráfaga` ejecuta la primera descarga y después la ráfaga; elimina la segunda descarga sin añadir una ronda vacía. Con solo `descarga → descarga`, la segunda causa una ronda perdida antes del básico posterior.
 
-Abajo a la izquierda hay dos selectores separados: consumibles (tres botiquines) y poderes personales (curación propia). La tarjeta flotante solo contiene básico/ráfaga, empuje/descarga y arrojadizos vacíos. Al agotar botiquines desaparece su icono y el hueco indica Agotado, distinto de las funciones futuras.
+Abajo a la izquierda hay dos selectores separados: poderes personales primero (curación propia) y consumibles después (tres botiquines). La tarjeta flotante solo contiene básico/ráfaga, empuje/descarga y arrojadizos vacíos. Al agotar botiquines desaparece su icono y el hueco indica Agotado, distinto de las funciones futuras.
 
 ## Pausa, retirada y cámara
 
@@ -52,13 +52,13 @@ Espacio congela movimiento, daño, rondas, estados y recursos, permitiendo selec
 
 WASD no borra ni interrumpe órdenes del combate automático. F o Cancelar combate interrumpen la acción, vacían la cola y paran el básico automático, devolviendo movimiento libre sin reenganche involuntario. Los agresores conservan su actividad y persiguen por toda la zona accesible.
 
-Arrastrar con el botón derecho permite orbitar la cámara. Al soltar conserva su orientación si el protagonista está quieto o el mundo pausado; se recentra suave y rápido al desplazarse. A/D orbita la cámara sin mover ni girar al actor en reposo, pausa o combate. W orienta al actor y avanza según la cámara; S retrocede manteniendo el frente. Combinar W con A/D sigue continuamente el giro de la vista. Durante acciones ofensivas el personaje encara su destinatario y orbitar no cambia esa orden.
+Arrastrar con el botón derecho permite orbitar la cámara. Al soltar conserva su orientación si el protagonista está quieto o el mundo pausado; se recentra suave y rápido al desplazarse. A/D gira continuamente al actor en movimiento libre. W avanza según su frente y W+A/D curva/círculo; S retrocede sin invertirlo. En pausa se congela el giro del actor y en combate se conserva su destinatario; F libera el movimiento. Durante acciones ofensivas el personaje encara su destinatario y orbitar no cambia esa orden.
 
 Los tres selectores se proyectan sobre el enemigo seleccionado en una tarjeta compacta con nombre y vida, dejando la cara libre. Siguen al actor y a la cámara, se muestran también en pausa táctica y se ocultan fuera de combate, tras F o ante una selección no visible/válida. Flechas y rueda consumen sus eventos de interfaz y recorren sin encolar; clic en el icono conserva el destinatario seleccionado para esa nueva orden.
 
 ## Continuidad de la misión
 
-Menú → exploración → diálogo inicial automático al acercarse al guardián → acólitos → espera libre con puerta cerrada → segunda conversación al seleccionar y hablar con el guardián. Los neutrales usan primer clic para seleccionar, segundo sobre actor/icono de voz para hablar; los acólitos rotan tres frases en orden. Si están lejos, el personaje se acerca para hablar y W/S permite cancelar esa aproximación. Rechazarlo o atacarlo tras escuchar inicia su encuentro; aceptar después de escuchar habilita paso pacífico con guardián vivo y no agresivo. Resolverlo abre la entrada al templo. Solo reclamar el núcleo permite completar la misión.
+Menú → exploración → diálogo inicial automático al acercarse al guardián → acólitos → espera libre con puerta cerrada → segunda conversación al seleccionar y hablar con el guardián. Los neutrales usan primer clic para seleccionar, segundo sobre actor/icono de voz para hablar; los acólitos rotan tres frases en orden. Si están lejos, el personaje se acerca para hablar y W/S permite cancelar esa aproximación. Rechazarlo o atacarlo tras escuchar inicia su encuentro; aceptar después de escuchar habilita paso pacífico con guardián vivo y no agresivo. Resolverlo abre la entrada al templo. Solo reclamar el núcleo con clic y cursor de mano, tras aproximación física si hace falta, permite completar la misión. E deja de reclamarlo.
 
 No hay reposición de salud, energía ni botiquines al pasar al guardián. El diálogo conserva los valores de entrada y congela tiempo y recursos. Reiniciar después de morir restablece la misión completa: recursos iniciales, tres botiquines, enemigos, encuentros, cola y elecciones.
 
@@ -71,3 +71,6 @@ La suite de `tests/temple_runner.gd` cubre órdenes mezcladas A/B, selección in
 Las comprobaciones efectivamente ejecutadas y sus límites se publican en [RESULTADO.md](RESULTADO.md), sin equiparar pruebas de transición o un bot con la valoración humana de dificultad. La regla de energía está comprobada; falta la valoración humana de claridad y equilibrio.
 
 Referencias visuales y de diseño: capturas de KOTOR II aportadas por el usuario y [manual de KOTOR II](https://cdn.akamai.steamstatic.com/steam/apps/208580/manuals/KOTORII_Manual.pdf). Las reglas y los números de Kharuun corresponden a los acuerdos de este prototipo.
+
+
+D34/D36: sin barras 3D generales; la selección viva y visible, incluso neutral, tiene nombre/vida. Los selectores ofensivos conservan su visibilidad exclusiva de combate. La cola compacta conserva cuatro pendientes, cancelación por icono y destinos en tooltips; acción actual a la derecha y Cancelar debajo.

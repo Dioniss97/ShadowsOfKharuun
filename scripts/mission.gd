@@ -69,7 +69,7 @@ func objective() -> String:
 		State.GUARDIAN_DIALOGUE: return "Decide qué hacer con el guardián"
 		State.GUARDIAN_WAIT: return "Selecciona al guardián y habla con él"
 		State.BOSS: return "Derrota al guardián de Kharuun"
-		State.TEMPLE: return "Entra al templo · reclama el núcleo [E]"
+		State.TEMPLE: return "Entra al templo y clica el núcleo"
 		State.DUEL: return "Prueba interna · derrota al centinela"
 		State.VICTORY: return "El núcleo de Kharuun es tuyo"
 	return ""

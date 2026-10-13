@@ -151,38 +151,42 @@ func build_hud() -> void:
 	root.add_child(hud)
 	hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var objective = panel_at(hud,Vector2(28,25),Vector2(390,84),Control.PRESET_TOP_LEFT)
+	var objective = panel_at(hud,Vector2(18,16),Vector2(300,60),Control.PRESET_TOP_LEFT)
 	var objective_box = VBoxContainer.new()
 	objective.add_child(objective_box)
-	objective_box.add_child(label("KHARUUN  /  OBJETIVO",11,GOLD))
-	objective_label = label("Alcanza la entrada del templo",18)
+	objective_box.add_child(label("KHARUUN / OBJETIVO",9,GOLD))
+	objective_label = label("Alcanza la entrada del templo",13)
 	objective_box.add_child(objective_label)
-	var status = panel_at(hud,Vector2(-290,-188),Vector2(265,164),Control.PRESET_BOTTOM_RIGHT)
+	var status = panel_at(hud,Vector2(-142,-126),Vector2(124,110),Control.PRESET_BOTTOM_RIGHT)
+	var status_style = status.get_theme_stylebox("panel").duplicate()
+	status_style.content_margin_left = 6
+	status_style.content_margin_right = 6
+	status_style.content_margin_top = 5
+	status_style.content_margin_bottom = 5
+	status_style.border_color = Color(0.12,0.52,0.47)
+	status.add_theme_stylebox_override("panel",status_style)
 	var status_box = VBoxContainer.new()
 	status_box.add_theme_constant_override("separation",4)
 	status.add_child(status_box)
 	var portrait_row = HBoxContainer.new()
-	portrait_row.add_theme_constant_override("separation",10)
+	portrait_row.add_theme_constant_override("separation",6)
 	status_box.add_child(portrait_row)
 	var portrait = Portrait.new()
-	portrait.custom_minimum_size = Vector2(48,56)
+	portrait.custom_minimum_size = Vector2(64,64)
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	portrait_row.add_child(portrait)
-	var identity = VBoxContainer.new()
-	portrait_row.add_child(identity)
-	identity.add_child(label("TU PERSONAJE",11,GOLD))
-	identity.add_child(label("Salud y energía",13))
-	identity.add_child(label("Curación: sobre ti",10,DIM))
-	health_label = label("VITALIDAD   340 / 340",12)
+	health_bar = bar(Color(0.70,0.15,0.12),64)
+	health_bar.custom_minimum_size = Vector2(10,64)
+	health_bar.fill_mode = ProgressBar.FILL_BOTTOM_TO_TOP
+	portrait_row.add_child(health_bar)
+	energy_bar = bar(Color(0.23,0.49,0.70),64)
+	energy_bar.custom_minimum_size = Vector2(10,64)
+	energy_bar.fill_mode = ProgressBar.FILL_BOTTOM_TO_TOP
+	portrait_row.add_child(energy_bar)
+	health_label = label("Vida 340/340",9)
 	status_box.add_child(health_label)
-	health_bar = bar(Color(0.70,0.15,0.12),11)
-	health_bar.custom_minimum_size.x = 200
-	status_box.add_child(health_bar)
-	energy_label = label("ENERGÍA   100 / 100",12,Color(0.57,0.72,0.85))
+	energy_label = label("Energía 100/100",9,Color(0.57,0.72,0.85))
 	status_box.add_child(energy_label)
-	energy_bar = bar(Color(0.23,0.49,0.70),7)
-	energy_bar.custom_minimum_size.x = 200
-	status_box.add_child(energy_bar)
 	var actions = HBoxContainer.new()
 	legacy_actions = actions
 	hud.add_child(actions)
@@ -270,7 +274,7 @@ func show_game() -> void:
 	legacy_actions.hide()
 	message.hide()
 	hint.show()
-	controls_label.text = "W/S · avanzar/retroceder · A/D · cámara\nCLIC · seleccionar / actuar\nESPACIO · táctica  /  ESC · menú"
+	controls_label.text = "W/S · avanzar/retroceder · A/D · girar\nCLIC · seleccionar / actuar\nESPACIO · táctica  /  ESC · menú"
 	speech_time = 0
 	controls_label.add_theme_font_size_override("font_size",11)
 	announce("EL UMBRAL DE CENIZA")
@@ -366,7 +370,7 @@ func show_pause() -> void:
 	v.add_child(label("Clic / Tab: objetivo · Flechas / rueda: recorrer acciones",16))
 	v.add_child(label("1: empuje · 2: descarga · 3: básico · 4: ráfaga",16))
 	v.add_child(label("5: curación propia · 6: botiquín · Clic: seleccionar y actuar",16))
-	v.add_child(label("F: liberar movimiento · W/S: avanzar/retroceder · A/D: cámara",15,GOLD))
+	v.add_child(label("F: liberar movimiento · W/S: avanzar/retroceder · A/D: girar",15,GOLD))
 	v.add_child(label("Botón derecho: girar cámara · Se centra al avanzar o retroceder",14,DIM))
 	var resume = button("Continuar  [ESC]",true)
 	v.add_child(resume)
@@ -386,19 +390,19 @@ func _process(delta: float) -> void:
 	var p = main.level.player
 	var combat = main.level.combat
 	var mission = main.mission
-	var movement_text = "F · liberar movimiento" if combat.engaged or not combat.current_action.is_empty() else "W/S · avanzar/retroceder · A/D · cámara"
+	var movement_text = "F · liberar movimiento" if combat.engaged or not combat.current_action.is_empty() else "W/S · avanzar/retroceder · A/D · girar"
 	controls_label.text = movement_text + "\nBOTÓN DERECHO · cámara  /  CLIC · seleccionar\nESPACIO · táctica  /  ESC · menú"
 	if p.health < last_health: flash.color.a = 0.17
 	last_health = p.health
 	health_bar.value = p.health/p.max_health*100
 	energy_bar.value = p.energy
-	health_label.text = "VITALIDAD   %d / %d" % [ceili(p.health),int(p.max_health)]
-	energy_label.text = "ENERGÍA   %d / 100" % int(p.energy)
+	health_label.text = "Vida %d/%d" % [ceili(p.health),int(p.max_health)]
+	energy_label.text = "Energía %d/100" % int(p.energy)
 	objective_label.text = mission.objective()
 	timer_label.text = "%02d:%02d" % [int(mission.elapsed)/60,int(mission.elapsed)%60]
 	# Name and health now share the projected card above the selected enemy.
 	target_panel.hide()
-	hint.text = "Selecciona al guardián y vuelve a clicar para hablar" if mission.state == KhMission.State.GUARDIAN_WAIT else ("E  Reclamar el secreto del templo al acercarte al altar" if mission.state == KhMission.State.TEMPLE else "")
+	hint.text = "Selecciona al guardián y vuelve a clicar para hablar" if mission.state == KhMission.State.GUARDIAN_WAIT else ("Clica el núcleo para reclamarlo" if mission.state == KhMission.State.TEMPLE else "")
 	if not main.get_tree().paused:
 		toast_time = maxf(0,toast_time-delta)
 		speech_time = maxf(0,speech_time-delta)

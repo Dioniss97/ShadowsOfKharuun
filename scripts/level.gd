@@ -22,6 +22,7 @@ var module_scene = preload("res://scenes/architecture.tscn")
 var temple_gate: StaticBody3D
 var portal_surface: MeshInstance3D
 var relic: MeshInstance3D
+var relic_interaction: Area3D
 var relic_label: Label3D
 var relic_position = Vector3(0,3.3,-34.5)
 var temple_open = false
@@ -34,6 +35,22 @@ func request_talk(enemy: KhEnemy) -> bool:
 	if not can_talk(enemy): return false
 	player.interaction_target = enemy
 	combat.last_result = "Acercándose para hablar con %s" % enemy.display_name
+	return true
+
+func relic_at_screen(screen: Vector2) -> bool:
+	if not temple_open or mission.state != KhMission.State.TEMPLE: return false
+	var origin = player.camera.project_ray_origin(screen)
+	var query = PhysicsRayQueryParameters3D.create(origin,origin+player.camera.project_ray_normal(screen)*100,13)
+	query.collide_with_areas = true
+	var hit = get_world_3d().direct_space_state.intersect_ray(query)
+	return not hit.is_empty() and hit.collider == relic_interaction
+
+func request_relic() -> bool:
+	if not temple_open or mission.state != KhMission.State.TEMPLE: return false
+	combat.disengage()
+	combat.selected = null
+	player.interaction_target = relic_interaction
+	combat.last_result = "Acercándose para reclamar el núcleo"
 	return true
 
 func _ready() -> void:
@@ -227,12 +244,22 @@ func build_temple() -> void:
 	KhGeometry.box(self,Vector3(0,5.2,-39.5),Vector3(10,6,0.4),stone,true)
 	KhGeometry.cylinder(self,Vector3(0,2.75,-34.5),0.7,0.7,bronze)
 	relic = KhGeometry.sphere(self,relic_position,0.3,KhGeometry.material(Color(0.5,0.85,1),0.2,3))
+	relic_interaction = Area3D.new()
+	add_child(relic_interaction)
+	relic_interaction.position = relic_position
+	relic_interaction.collision_layer = 0
+	relic_interaction.collision_mask = 0
+	var relic_shape = CollisionShape3D.new()
+	var sphere = SphereShape3D.new()
+	sphere.radius = 0.48
+	relic_shape.shape = sphere
+	relic_interaction.add_child(relic_shape)
 	relic_label = Label3D.new()
 	add_child(relic_label)
 	relic_label.position = Vector3(0,4.8,-34.5)
-	relic_label.text = "NÚCLEO DE KHARUUN\n[E] Reclamar"
-	relic_label.font_size = 44
-	relic_label.pixel_size = 0.007
+	relic_label.text = "NÚCLEO DE KHARUUN\nClic para reclamar"
+	relic_label.font_size = 32
+	relic_label.pixel_size = 0.005
 	relic_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	relic_label.modulate = Color(0.7,0.9,1)
 	relic_label.outline_size = 8
@@ -331,7 +358,11 @@ func _process(_delta: float) -> void:
 			player.interaction_target = null
 			reached_gate.emit()
 	var npc = player.interaction_target
-	if is_instance_valid(npc) and not npc.active and player.global_position.distance_to(npc.global_position) <= 3.8:
+	if npc == relic_interaction and is_instance_valid(npc):
+		if player.global_position.distance_to(relic_position) <= 2.3:
+			player.interaction_target = null
+			claim_relic()
+	elif npc is KhEnemy and not npc.active and player.global_position.distance_to(npc.global_position) <= 3.8:
 		var ray = PhysicsRayQueryParameters3D.create(player.global_position+Vector3.UP,npc.global_position+Vector3.UP,1)
 		if get_world_3d().direct_space_state.intersect_ray(ray).is_empty():
 			player.interaction_target = null
@@ -339,6 +370,8 @@ func _process(_delta: float) -> void:
 			player.velocity.z = 0
 			player.face_target(npc.global_position)
 			npc_interacted.emit(npc)
+	if temple_open:
+		relic_label.hide()
 
 func start_acolytes() -> void:
 	combat.enabled = true
@@ -353,8 +386,9 @@ func start_boss() -> void:
 func open_temple() -> void:
 	temple_open = true
 	temple_gate.collision_layer = 0
+	relic_interaction.collision_layer = 8
 	portal_surface.hide()
-	relic_label.show()
+	relic_label.hide()
 	if mission.guardian_resolution == "peaceful":
 		guardian.stop_tactical()
 		guardian.rig.combat_stance = false
@@ -365,6 +399,7 @@ func claim_relic() -> bool:
 	if not temple_open or mission.state != KhMission.State.TEMPLE or player.global_position.distance_to(relic_position) > 2.3: return false
 	if not mission.claim_temple(): return false
 	relic.hide()
+	relic_interaction.collision_layer = 0
 	relic_label.hide()
 	return true
 

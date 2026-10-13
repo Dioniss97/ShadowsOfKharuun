@@ -15,7 +15,6 @@ var timer = 0.0
 var stun = 0.0
 var knockback = Vector3.ZERO
 var telegraph: MeshInstance3D
-var bar: MeshInstance3D
 var slam = false
 var attacks = 0
 var level: Node3D
@@ -53,33 +52,12 @@ func _ready() -> void:
 	rig.build(Color(0.24,0.025,0.045) if guardian else Color(0.14,0.045,0.07),Color(1,0.065,0.08),guardian)
 	telegraph = KhGeometry.ring(self,Vector3(0,0.05,0),1.65,KhGeometry.material(Color(1,0.12,0.04),0.3,2),0.055)
 	telegraph.visible = false
-	var hp_node = Node3D.new()
-	add_child(hp_node)
-	hp_node.position.y = 2.5 if not guardian else 3.15
-	var quad = QuadMesh.new()
-	quad.size = Vector2(0.94,0.075)
-	var bg = KhGeometry.mesh(hp_node,quad,Vector3.ZERO,KhGeometry.material(Color(0.035,0.018,0.025)))
-	bg.material_override.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	bg.material_override.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	bg.material_override.no_depth_test = true
-	bg.material_override.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	var fill = QuadMesh.new()
-	fill.size = Vector2(0.90,0.042)
-	bar = KhGeometry.mesh(hp_node,fill,Vector3.ZERO,KhGeometry.material(Color(0.8,0.11,0.10),0.8,0.6))
-	bar.material_override.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	bar.material_override.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	bar.material_override.no_depth_test = true
-	bar.material_override.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	bar.material_override.render_priority = 1
-	hp_node.visible = false
-	bar.set_meta("holder",hp_node)
 
 func activate() -> void:
 	if mode == Mode.DEAD:
 		return
 	active = true
 	mode = Mode.CHASE
-	bar.get_meta("holder").visible = true
 	rig.combat_stance = true
 
 func _physics_process(delta: float) -> void:
@@ -231,7 +209,6 @@ func take_damage(amount: float, force: Vector3 = Vector3.ZERO) -> void:
 	if mode == Mode.DEAD or not active:
 		return
 	health = maxf(0,health-amount)
-	bar.scale.x = maxf(0.001,health/max_health)
 	rig.hit()
 	knockback = force
 	stun = (1.3 if force.length() > 0.1 else 0.0) if tactical_mode else (0.22 if guardian else 0.44)
@@ -249,7 +226,6 @@ func take_damage(amount: float, force: Vector3 = Vector3.ZERO) -> void:
 		mode = Mode.DEAD
 		active = false
 		telegraph.visible = false
-		bar.get_meta("holder").visible = false
 		rig.dying = true
 		collision_layer = 0
 		collision_mask = 1

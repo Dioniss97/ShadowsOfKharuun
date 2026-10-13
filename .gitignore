@@ -14,6 +14,7 @@ tests/tactical_capture_report.json
 tests/demo_report.json
 tests/demo_logic_report.json
 tests/demo_capture_report.json
+tests/demo_hud_capture_report.json
 tests/demo_playthrough_report.json
 tools/sandbox-appdata/
 *.tmp

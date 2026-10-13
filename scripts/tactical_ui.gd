@@ -3,10 +3,10 @@ extends CanvasLayer
 
 # The three selectors describe action categories; pending orders are separate.
 const CATEGORIES = [["attack", "flurry"], ["push", "lightning"], []]
-const PERSONAL_CATEGORIES = [["medkit"], ["heal"]]
+const PERSONAL_CATEGORIES = [["heal"], ["medkit"]]
 const CATEGORY_NAMES = ["ARMA", "ENERGÍA", "ARROJADIZOS"]
 const SHORTCUTS = {"attack":"3", "flurry":"4", "push":"1", "lightning":"2", "heal":"5", "medkit":"6"}
-const SELECTOR_SIZE = Vector2(198, 112)
+const SELECTOR_SIZE = Vector2(150, 72)
 const TARGET_HEAD_HEIGHT = 2.15
 
 class ActionGlyph extends Control:
@@ -58,6 +58,12 @@ var root: Control
 var pause_banner: PanelContainer
 var pause_button: Button
 var current_label: Label
+var current_button: Button
+var current_glyph: ActionGlyph
+var queue_glyphs: Array[ActionGlyph] = []
+var orders_panel: PanelContainer
+var personal_panel: PanelContainer
+var target_info: PanelContainer
 var round_label: Label
 var round_bar: ProgressBar
 var result_label: Label
@@ -77,6 +83,7 @@ var heal_glyph: ActionGlyph
 var personal_indices = [0,0]
 var selection_reticle: Control
 var talk_button: Button
+var relic_button: Button
 var target_selectors: PanelContainer
 var target_name_label: Label
 var target_health_bar: ProgressBar
@@ -105,9 +112,9 @@ func _ready() -> void:
 	root.add_child(selection_reticle)
 	selection_reticle.size = Vector2(56,56)
 	selection_reticle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	talk_button = _button("",44,true)
+	talk_button = _button("",40,true)
 	root.add_child(talk_button)
-	talk_button.size = Vector2(120,44)
+	talk_button.size = Vector2(48,40)
 	talk_button.tooltip_text = "Hablar con el personaje seleccionado"
 	talk_button.pressed.connect(func():
 		var combat = _combat()
@@ -119,6 +126,18 @@ func _ready() -> void:
 	voice.set_action("talk",true)
 	talk_button.hide()
 	selection_reticle.hide()
+	relic_button = _button("",40,true)
+	root.add_child(relic_button)
+	relic_button.size = Vector2(40,40)
+	relic_button.tooltip_text = "Núcleo de Kharuun · Reclamar\nClic: acercarse y recoger"
+	relic_button.pressed.connect(func(): main.level.request_relic())
+	var hand = KhContextCursor.Pointer.new()
+	relic_button.add_child(hand)
+	hand.context = "hand"
+	hand.position = Vector2(3,3)
+	hand.size = Vector2(34,34)
+	hand.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	relic_button.hide()
 
 class SelectionReticle extends Control:
 	func _draw() -> void:
@@ -137,7 +156,7 @@ func _panel(position: Vector2, dimensions: Vector2, preset: int) -> PanelContain
 	var panel = PanelContainer.new()
 	root.add_child(panel)
 	_place(panel, position, dimensions, preset)
-	var panel_style = KhUI.style(Color(0.027, 0.029, 0.042, 0.95), Color(0.35, 0.25, 0.17))
+	var panel_style = KhUI.style(Color(0.018, 0.035, 0.038, 0.87), Color(0.12, 0.52, 0.47))
 	panel_style.content_margin_left = 10
 	panel_style.content_margin_right = 10
 	panel_style.content_margin_top = 8
@@ -162,7 +181,7 @@ func _button(title: String, height: float = 32.0, accent: bool = false) -> Butto
 	return button
 
 func _build_pause_banner() -> void:
-	pause_banner = _panel(Vector2(-310, 142), Vector2(282, 46), Control.PRESET_TOP_RIGHT)
+	pause_banner = _panel(Vector2(-258, 126), Vector2(240, 40), Control.PRESET_TOP_RIGHT)
 	pause_banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var banner_style = pause_banner.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	banner_style.content_margin_top = 4
@@ -205,14 +224,25 @@ func _build_selectors() -> void:
 	contents.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	contents.add_theme_constant_override("separation", 3)
 	target_selectors.add_child(contents)
-	target_name_label = KhUI.label("", 12, KhUI.GOLD)
+	target_info = _panel(Vector2.ZERO,Vector2(180,30),Control.PRESET_TOP_LEFT)
+	target_info.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var info_style = target_info.get_theme_stylebox("panel").duplicate()
+	info_style.content_margin_top = 2
+	info_style.content_margin_bottom = 2
+	target_info.add_theme_stylebox_override("panel",info_style)
+	var info = VBoxContainer.new()
+	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_theme_constant_override("separation",1)
+	target_info.add_child(info)
+	target_name_label = KhUI.label("",10,Color(0.35,0.85,0.75))
 	target_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	target_name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	contents.add_child(target_name_label)
-	target_health_bar = main.ui.bar(Color(0.71, 0.09, 0.12), 5)
+	info.add_child(target_name_label)
+	target_health_bar = main.ui.bar(Color(0.71,0.09,0.12),4)
 	target_health_bar.custom_minimum_size.x = 0
 	target_health_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	contents.add_child(target_health_bar)
+	info.add_child(target_health_bar)
+	target_info.hide()
 	var row = HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_theme_constant_override("separation", 6)
@@ -220,17 +250,17 @@ func _build_selectors() -> void:
 	for category in range(3):
 		var column = VBoxContainer.new()
 		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		column.custom_minimum_size.x = 56
+		column.custom_minimum_size.x = 40
 		column.add_theme_constant_override("separation", 1)
 		column.mouse_filter = Control.MOUSE_FILTER_STOP
 		column.gui_input.connect(_selector_input.bind(category, column))
 		row.add_child(column)
 		column.tooltip_text = CATEGORY_NAMES[category]
-		var up = _selector_button("▲", 14)
+		var up = _selector_button("▲", 12)
 		column.add_child(up)
 		up.pressed.connect(_cycle_category.bind(category, -1))
 		up.gui_input.connect(_selector_input.bind(category, up))
-		var select = _selector_button("", 36, category < 2)
+		var select = _selector_button("", 34, category < 2)
 		select.gui_input.connect(_selector_input.bind(category, select))
 		select.pressed.connect(_enqueue_selected.bind(category))
 		column.add_child(select)
@@ -244,35 +274,34 @@ func _build_selectors() -> void:
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		selector_labels.append(name_label)
-		var down = _selector_button("▼", 14)
+		var down = _selector_button("▼", 12)
 		column.add_child(down)
 		down.pressed.connect(_cycle_category.bind(category, 1))
 		down.gui_input.connect(_selector_input.bind(category, down))
 		selector_arrows.append([up, down])
 		column.add_child(name_label)
+		name_label.hide()
 	target_selectors.hide()
 
 func _build_personal_menu() -> void:
-	var personal = _panel(Vector2(25, -202), Vector2(300, 178), Control.PRESET_BOTTOM_LEFT)
-	var column = VBoxContainer.new()
-	column.add_theme_constant_override("separation", 5)
-	personal.add_child(column)
-	column.add_child(KhUI.label("EQUIPO PERSONAL", 11, KhUI.GOLD))
+	personal_panel = _panel(Vector2(16,-100),Vector2(232,84),Control.PRESET_BOTTOM_LEFT)
+	var panel_style = personal_panel.get_theme_stylebox("panel").duplicate()
+	panel_style.content_margin_top = 4
+	panel_style.content_margin_bottom = 4
+	personal_panel.add_theme_stylebox_override("panel",panel_style)
 	var row = HBoxContainer.new()
-	row.add_theme_constant_override("separation", 7)
-	column.add_child(row)
+	row.add_theme_constant_override("separation",5)
+	personal_panel.add_child(row)
 	for category in range(PERSONAL_CATEGORIES.size()):
 		var item = VBoxContainer.new()
 		item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		item.add_theme_constant_override("separation",1)
 		row.add_child(item)
-		var caption = KhUI.label("OBJETOS" if category == 0 else "PODERES",9,KhUI.GOLD)
-		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		item.add_child(caption)
-		var up = _selector_button("▲",14)
+		var up = _selector_button("▲",10)
 		item.add_child(up)
 		up.disabled = PERSONAL_CATEGORIES[category].size() < 2
 		up.pressed.connect(_cycle_personal.bind(category,-1))
-		var action_button = _selector_button("",42,true)
+		var action_button = _selector_button("",32,true)
 		item.add_child(action_button)
 		action_button.pressed.connect(_enqueue_personal.bind(category))
 		action_button.gui_input.connect(_personal_input.bind(category,action_button))
@@ -280,92 +309,105 @@ func _build_personal_menu() -> void:
 		action_button.add_child(glyph)
 		glyph.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var down = _selector_button("▼",14)
+		var down = _selector_button("▼",10)
 		item.add_child(down)
 		down.disabled = PERSONAL_CATEGORIES[category].size() < 2
 		down.pressed.connect(_cycle_personal.bind(category,1))
-		var name_label = KhUI.label("×3 [6]" if category == 0 else "Curar [5]",11)
+		var name_label = KhUI.label("Curación" if category == 0 else "×3",9)
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		item.add_child(name_label)
-		if category == 0:
+		if category == 1:
 			medkit_button = action_button
 			medkit_glyph = glyph
 			medkit_label = name_label
 		else:
 			heal_button = action_button
 			heal_glyph = glyph
-	for future in ["Escudo", "Forma"]:
+	for future in ["Escudo","Forma"]:
 		var empty = VBoxContainer.new()
 		empty.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		empty.add_theme_constant_override("separation",1)
 		row.add_child(empty)
-		var unavailable = _button("—", 54)
-		unavailable.disabled = true
-		unavailable.tooltip_text = "%s · reservado para otra iteración" % future
-		empty.add_child(unavailable)
-		var caption = KhUI.label(future, 11, KhUI.DIM)
+		for caption in ["▲","—","▼"]:
+			var unavailable = _selector_button(caption,32 if caption == "—" else 10)
+			unavailable.disabled = true
+			unavailable.tooltip_text = "%s · hueco para otra iteración" % future
+			empty.add_child(unavailable)
+		var caption = KhUI.label(future,9,KhUI.DIM)
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		empty.add_child(caption)
-	column.add_child(KhUI.label("Huecos vacíos: aún no disponibles", 10, KhUI.DIM))
 
 func _build_orders() -> void:
-	var panel = _panel(Vector2(-304, -196), Vector2(608, 172), Control.PRESET_CENTER_BOTTOM)
+	orders_panel = _panel(Vector2(-122,-106),Vector2(244,90),Control.PRESET_CENTER_BOTTOM)
+	var panel_style = orders_panel.get_theme_stylebox("panel").duplicate()
+	panel_style.content_margin_left = 5
+	panel_style.content_margin_right = 5
+	panel_style.content_margin_top = 4
+	panel_style.content_margin_bottom = 4
+	panel_style.border_color = Color(0.8,0.3,0.12)
+	orders_panel.add_theme_stylebox_override("panel",panel_style)
 	var column = VBoxContainer.new()
-	column.add_theme_constant_override("separation", 6)
-	panel.add_child(column)
-	var header = HBoxContainer.new()
-	column.add_child(header)
-	var caption = KhUI.label("ÓRDENES · cada acción conserva su destinatario", 11, KhUI.DIM)
-	caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(caption)
-	round_label = KhUI.label("Ronda: en espera", 12, KhUI.GOLD)
-	header.add_child(round_label)
-	round_bar = ProgressBar.new()
-	round_bar.custom_minimum_size.y = 5
-	round_bar.show_percentage = false
-	for state in ["background", "fill"]:
-		var progress_style = KhUI.style(Color(0.53, 0.31, 0.16) if state == "fill" else Color(0.075, 0.055, 0.065), KhUI.GOLD, 0)
-		progress_style.content_margin_left = 0
-		progress_style.content_margin_right = 0
-		progress_style.content_margin_top = 0
-		progress_style.content_margin_bottom = 0
-		round_bar.add_theme_stylebox_override(state, progress_style)
-	column.add_child(round_bar)
-	current_label = KhUI.label("En curso: esperando órdenes", 13)
-	current_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	column.add_child(current_label)
-	var queue_row = HBoxContainer.new()
-	queue_row.add_theme_constant_override("separation", 6)
-	column.add_child(queue_row)
+	column.add_theme_constant_override("separation",3)
+	orders_panel.add_child(column)
+	var row = HBoxContainer.new()
+	row.add_theme_constant_override("separation",3)
+	column.add_child(row)
 	for index in range(4):
-		var slot = _button("%d · —" % (index + 1), 44)
-		slot.add_theme_font_size_override("font_size", 11)
-		slot.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		queue_row.add_child(slot)
+		var slot = _selector_button("",30)
+		slot.custom_minimum_size.x = 29
+		row.add_child(slot)
 		slot.pressed.connect(_cancel_order.bind(index))
 		queue_buttons.append(slot)
+		var glyph = ActionGlyph.new()
+		slot.add_child(glyph)
+		glyph.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		queue_glyphs.append(glyph)
+	row.add_child(KhUI.label("›",21,KhUI.GOLD))
+	current_button = _selector_button("",44,true)
+	current_button.custom_minimum_size.x = 46
+	row.add_child(current_button)
+	current_glyph = ActionGlyph.new()
+	current_button.add_child(current_glyph)
+	current_glyph.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	current_glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	round_label = KhUI.label("",9,KhUI.IVORY)
+	current_button.add_child(round_label)
+	_place(round_label,Vector2(0,-11),Vector2(46,11),Control.PRESET_BOTTOM_LEFT)
+	round_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	current_label = KhUI.label("",11)
+	column.add_child(current_label)
+	current_label.hide()
+	round_bar = main.ui.bar(Color(0.72,0.30,0.13),3)
+	round_bar.custom_minimum_size.x = 0
+	column.add_child(round_bar)
 	var controls = HBoxContainer.new()
-	controls.add_theme_constant_override("separation", 6)
+	controls.add_theme_constant_override("separation",3)
 	column.add_child(controls)
-	pause_button = _button("Pausa [ESPACIO]", 32, true)
+	pause_button = _selector_button("Ⅱ",24)
+	pause_button.custom_minimum_size.x = 24
+	pause_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	pause_button.tooltip_text = "Pausar / reanudar [Espacio]"
 	pause_button.pressed.connect(_toggle_pause)
 	controls.add_child(pause_button)
-	clear_button = _button("Limpiar cola", 32)
-	clear_button.tooltip_text = "Retira las órdenes pendientes; la acción actual continúa."
-	clear_button.pressed.connect(_clear_orders)
-	controls.add_child(clear_button)
-	retreat_button = _button("Cancelar combate [F]", 32)
-	retreat_button.tooltip_text = "Cancela órdenes y autoataque. Recuperas el movimiento; los enemigos siguen atacando."
+	retreat_button = _selector_button("Cancelar combate",24)
+	retreat_button.tooltip_text = "[F] Cancela órdenes y libera movimiento; los enemigos siguen atacando."
 	retreat_button.pressed.connect(_retreat)
 	controls.add_child(retreat_button)
-	result_label = KhUI.label("", 13, KhUI.GOLD)
+	clear_button = _selector_button("×",24)
+	clear_button.custom_minimum_size.x = 24
+	clear_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	clear_button.tooltip_text = "Limpiar cola · la acción actual continúa"
+	clear_button.pressed.connect(_clear_orders)
+	controls.add_child(clear_button)
+	result_label = KhUI.label("",12,KhUI.GOLD)
 	root.add_child(result_label)
-	_place(result_label, Vector2(-365, -225), Vector2(730, 23), Control.PRESET_CENTER_BOTTOM)
+	_place(result_label,Vector2(-280,16),Vector2(560,24),Control.PRESET_CENTER_TOP)
 	result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	result_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	context_hint = KhUI.label("", 12)
+	context_hint = KhUI.label("",11)
 	root.add_child(context_hint)
-	_place(context_hint, Vector2(-400, -254), Vector2(800, 25), Control.PRESET_CENTER_BOTTOM)
+	_place(context_hint,Vector2(-360,-135),Vector2(720,23),Control.PRESET_CENTER_BOTTOM)
 	context_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 func _build_help() -> void:
@@ -460,8 +502,8 @@ func _position_context(combat: Node) -> void:
 		talk_button.hide()
 		return
 	var head: Vector3 = enemy.rig.to_global(Vector3(0,TARGET_HEAD_HEIGHT,0))
-	var action_position = root.get_global_transform_with_canvas().affine_inverse()*camera.unproject_position(head)-Vector2(60,66)
-	if action_position.y < 8 or action_position.x < 8 or action_position.x+120 > root.size.x-8:
+	var action_position = root.get_global_transform_with_canvas().affine_inverse()*camera.unproject_position(head)-Vector2(24,54)
+	if action_position.y < 8 or action_position.x < 8 or action_position.x+48 > root.size.x-8:
 		talk_button.hide()
 		return
 	talk_button.position = action_position
@@ -471,50 +513,61 @@ func _combat() -> Node:
 	if not is_instance_valid(main) or not is_instance_valid(main.level): return null
 	return main.level.combat
 
-func _position_target_selectors(combat: Node) -> void:
-	if not combat.enabled or not combat.engaged or not combat.target_valid(combat.selected):
-		target_selectors.hide()
+func _position_relic() -> void:
+	var level = main.level
+	if not level.temple_open or main.mission.state != KhMission.State.TEMPLE:
+		relic_button.hide()
 		return
-	if main.mission.state not in [KhMission.State.COMBAT, KhMission.State.BOSS, KhMission.State.DUEL]:
+	var camera = level.player.camera
+	var world: Vector3 = level.relic_position+Vector3(0,1.5,0)
+	var ray = PhysicsRayQueryParameters3D.create(camera.global_position,level.relic_position,1)
+	if camera.is_position_behind(world) or not level.get_world_3d().direct_space_state.intersect_ray(ray).is_empty():
+		relic_button.hide()
+		return
+	var screen = root.get_global_transform_with_canvas().affine_inverse()*camera.unproject_position(world)
+	var pos = screen-Vector2(20,40)
+	if pos.x < 8 or pos.y < 8 or pos.x+40 > root.size.x-8 or pos.y+40 > root.size.y-8:
+		relic_button.hide()
+		return
+	relic_button.position = pos
+	relic_button.show()
+
+func _position_target_selectors(combat: Node) -> void:
+	if not combat.enabled or not combat.selection_valid(combat.selected):
 		target_selectors.hide()
+		target_info.hide()
 		return
 	var enemy: KhEnemy = combat.selected
 	var camera = get_viewport().get_camera_3d()
-	if not is_instance_valid(camera):
-		target_selectors.hide()
-		return
-	# Rig scale includes the taller guardian. The card ends above the head rather
-	# than hiding a face, and follows UI selection independently of queued orders.
-	var head_world: Vector3 = enemy.rig.to_global(Vector3(0, TARGET_HEAD_HEIGHT, 0))
-	if camera.is_position_behind(head_world):
-		target_selectors.hide()
-		return
+	var head_world: Vector3 = enemy.rig.to_global(Vector3(0,TARGET_HEAD_HEIGHT,0))
 	var projected = camera.unproject_position(head_world)
-	if not get_viewport().get_visible_rect().has_point(projected):
+	var query = PhysicsRayQueryParameters3D.create(camera.global_position,head_world,1)
+	if camera.is_position_behind(head_world) or not get_viewport().get_visible_rect().has_point(projected) or not enemy.get_world_3d().direct_space_state.intersect_ray(query).is_empty():
 		target_selectors.hide()
+		target_info.hide()
 		return
-	var query = PhysicsRayQueryParameters3D.create(camera.global_position, head_world, 1)
-	query.exclude = [enemy.get_rid(), combat.player.get_rid()]
-	if not enemy.get_world_3d().direct_space_state.intersect_ray(query).is_empty():
-		target_selectors.hide()
-		return
-	target_head_screen = root.get_global_transform_with_canvas().affine_inverse() * projected
+	target_head_screen = root.get_global_transform_with_canvas().affine_inverse()*projected
 	target_name_label.text = enemy.display_name
-	target_name_label.tooltip_text = "Objetivo seleccionado: " + enemy.display_name
-	target_health_bar.value = enemy.health / enemy.max_health * 100.0
+	target_health_bar.value = enemy.health/enemy.max_health*100.0
+	target_info.tooltip_text = "%s · salud %d/%d" % [enemy.display_name,ceili(enemy.health),int(enemy.max_health)]
+	var offensive: bool = combat.engaged and combat.target_valid(enemy) and main.mission.state in [KhMission.State.COMBAT,KhMission.State.BOSS,KhMission.State.DUEL]
 	var dimensions = target_selectors.size.max(SELECTOR_SIZE)
-	var panel_position = target_head_screen - Vector2(dimensions.x * 0.5, dimensions.y + 14)
-	panel_position.x = clampf(panel_position.x, 8.0, maxf(8.0, root.size.x - dimensions.x - 8.0))
-	panel_position.y = maxf(8.0, panel_position.y)
-	# The target card has priority over the optional corner pause notice. The
-	# queue's Resume button still indicates pause if their screen bounds overlap.
-	if pause_banner.visible and Rect2(panel_position, dimensions).intersects(pause_banner.get_global_rect()):
-		pause_banner.hide()
-	if panel_position.y < 8.0 or panel_position.y + dimensions.y > target_head_screen.y - 6.0:
+	var action_height = dimensions.y+4 if offensive else (44.0 if combat.level.can_talk(enemy) else 0.0)
+	var panel_position = target_head_screen-Vector2(dimensions.x*0.5,dimensions.y+12)
+	panel_position.x = clampf(panel_position.x,8,root.size.x-dimensions.x-8)
+	var info_position = target_head_screen-Vector2(target_info.size.x*0.5,action_height+target_info.size.y+12)
+	info_position.x = clampf(info_position.x,8,root.size.x-target_info.size.x-8)
+	if info_position.y < 8:
 		target_selectors.hide()
+		target_info.hide()
 		return
-	target_selectors.position = panel_position
-	target_selectors.show()
+	target_info.position = info_position
+	target_info.show()
+	if offensive:
+		target_selectors.position = panel_position
+		target_selectors.show()
+	else: target_selectors.hide()
+	if pause_banner.visible and (target_info.get_global_rect().intersects(pause_banner.get_global_rect()) or (offensive and target_selectors.get_global_rect().intersects(pause_banner.get_global_rect()))): pause_banner.hide()
 
 func _process(delta: float) -> void:
 	var combat = _combat()
@@ -523,12 +576,15 @@ func _process(delta: float) -> void:
 		target_selectors.hide()
 		selection_reticle.hide()
 		talk_button.hide()
+		target_info.hide()
+		relic_button.hide()
 		return
 	pause_banner.visible = main.tactical_paused
-	pause_button.text = "Reanudar [ESPACIO]" if main.tactical_paused else "Pausa [ESPACIO]"
+	pause_button.text = "▶" if main.tactical_paused else "Ⅱ"
 	var selected_valid: bool = combat.target_valid(combat.selected)
 	_position_target_selectors(combat)
 	_position_context(combat)
+	_position_relic()
 	for category in range(3):
 		var actions: Array = CATEGORIES[category]
 		var unavailable: bool = actions.is_empty()
@@ -550,7 +606,7 @@ func _process(delta: float) -> void:
 		var effect = " · dos intentos de impacto" if id == "flurry" else (" · un impacto" if id == "attack" else "")
 		action_buttons[category].tooltip_text = "%s [%s] · %s%s%s\nClic: encolar · flechas/rueda: cambiar sin dar una orden" % [combat.action_name(id), SHORTCUTS[id], destination, " · %d de energía" % cost if cost > 0 else "", effect]
 		selector_glyphs[category].set_action(id, not action_buttons[category].disabled)
-	medkit_label.text = "×%d [6]" % combat.medkits if combat.medkits > 0 else "Agotado"
+	medkit_label.text = "×%d" % combat.medkits if combat.medkits > 0 else "Agotado"
 	medkit_button.disabled = not combat.enabled or combat.medkits <= 0 or combat.queue.size() >= 4
 	medkit_button.tooltip_text = "Botiquines agotados" if combat.medkits <= 0 else "Sobre ti · encola una curación. Consume una unidad al ejecutar, aunque tengas toda la salud."
 	medkit_glyph.set_action("medkit" if combat.medkits > 0 else "empty", not medkit_button.disabled)
@@ -570,27 +626,36 @@ func _process(delta: float) -> void:
 	else:
 		current_label.text = "Movimiento libre · clic en enemigo para combatir"
 	var round_active: bool = combat.engaged or not current.is_empty() or combat.round_left > 0
-	round_label.text = "Ronda: %.1f s" % maxf(combat.round_left, 0.0) if round_active else "Ronda: en espera"
+	round_label.text = "%.1f s" % maxf(combat.round_left,0.0) if combat.round_left > 0 else ""
 	round_bar.value = clampf((1.0 - combat.round_left / maxf(combat.round_seconds, 0.01)) * 100.0, 0.0, 100.0) if round_active else 0.0
 	for index in range(queue_buttons.size()):
 		var slot = queue_buttons[index]
 		var occupied: bool = index < combat.queue.size()
 		slot.disabled = not occupied
+		queue_glyphs[index].visible = occupied
 		if occupied:
 			var order: Dictionary = combat.queue[index]
 			var order_name: String = combat.action_name(str(order.get("id", "attack")))
 			var target_name = str(order.get("target_name", "Tú"))
-			slot.text = "%d · %s\n→ %s ×" % [index + 1, order_name, _short_target_name(target_name)]
+			slot.text = ""
+			queue_glyphs[index].set_action(str(order.id),true)
 			slot.tooltip_text = "%s → %s\nClic: cancelar esta orden pendiente" % [order_name, target_name]
 		else:
-			slot.text = "%d · —" % (index + 1)
+			slot.text = ""
+			queue_glyphs[index].set_action("empty",false)
 			slot.tooltip_text = "Orden pendiente vacía"
+	orders_panel.visible = combat.engaged or not current.is_empty() or not combat.queue.is_empty()
+	var shown: Dictionary = current
+	current_glyph.set_action(str(shown.get("id","empty")),not shown.is_empty())
+	current_glyph.visible = not shown.is_empty()
+	current_button.tooltip_text = current_label.text+"\n"+combat.last_result
 	clear_button.disabled = combat.queue.is_empty()
 	retreat_button.disabled = not combat.engaged and combat.queue.is_empty() and current.is_empty()
 	pause_button.disabled = not combat.enabled
-	result_label.text = combat.ability_error if combat.error_time > 0 else combat.last_result
+	result_label.text = combat.ability_error
+	result_label.visible = combat.error_time > 0
 	if was_engaged and not combat.engaged and combat.enabled:
-		_context_once("retreat", "Movimiento libre: W/S avanzar y retroceder; A/D girar. Los enemigos te persiguen.")
+		_context_once("retreat", "Movimiento libre: W/S avanzar y retroceder; A/D girar el personaje.")
 	was_engaged = combat.engaged
 	if not main.get_tree().paused: context_time = maxf(0, context_time - delta)
 	context_hint.visible = context_time > 0

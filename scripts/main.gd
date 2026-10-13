@@ -14,6 +14,7 @@ var context_cursor: KhContextCursor
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	DisplayServer.window_set_title("Shadows of Kharuun · 0.3.0 RC2")
 	setup_input()
 	mission = KhMission.new()
 	mission.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -43,11 +44,11 @@ func _ready() -> void:
 	ui.show_menu()
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	var args = OS.get_cmdline_user_args()
-	automated = "--demo-test" in args or "--demo-capture" in args or "--auto-test" in args or "--capture" in args or "--playtest" in args or "--tactical-test" in args or "--tactical-capture" in args
+	automated = "--hud-capture" in args or "--demo-test" in args or "--demo-capture" in args or "--auto-test" in args or "--capture" in args or "--playtest" in args or "--tactical-test" in args or "--tactical-capture" in args
 	if automated:
 		var runner = load("res://tests/temple_runner.gd").new()
 		runner.main = self
-		runner.capture = "--demo-capture" in args or "--capture" in args or "--tactical-capture" in args
+		runner.capture = "--hud-capture" in args or "--demo-capture" in args or "--capture" in args or "--tactical-capture" in args
 		add_child(runner)
 	elif "--duel" in args: new_duel()
 	elif "--mission" in args: new_game()
@@ -205,8 +206,8 @@ func on_state_changed(state: int) -> void:
 			level.combat.enabled = true
 			level.player.control_enabled = true
 			level.open_temple()
-			level.combat.last_result = "Umbral abierto · busca el altar y pulsa E"
-			ui.announce("EL UMBRAL SE ABRE · RECLAMA EL NÚCLEO [E]")
+			level.combat.last_result = "Umbral abierto · clica el núcleo para reclamarlo"
+			ui.announce("EL UMBRAL SE ABRE")
 		KhMission.State.VICTORY, KhMission.State.DEFEAT:
 			reset_pause()
 			level.stop_combat()
@@ -226,7 +227,6 @@ func toggle_pause() -> void:
 
 func _process(delta: float) -> void:
 	if tactical_paused and not paused and is_instance_valid(level):
-		level.player.orbit_camera(delta)
 		level.player.update_camera(delta)
 	if seeking_initial_target and not get_tree().paused and level.combat.enabled:
 		if level.combat.engaged: seeking_initial_target = false
@@ -257,7 +257,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and tactical_paused:
 		level.player.camera_input(event)
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		level.combat.select_screen(event.position)
+		if level.relic_at_screen(event.position): level.request_relic()
+		else: level.combat.select_screen(event.position)
 	var commands = {"queue_attack": "attack", "queue_flurry": "flurry", "push": "push", "lightning": "lightning", "queue_heal": "heal", "queue_medkit": "medkit"}
 	for action in commands:
 		if event.is_action_pressed(action):
@@ -267,4 +268,3 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cycle_target"): level.combat.cycle_target()
 	if event.is_action_pressed("disengage"):
 		cancel_combat()
-	if event.is_action_pressed("interact") and not tactical_paused: level.claim_relic()

@@ -4,13 +4,13 @@ Las versiones identifican entregas jugables verificadas, mediante etiquetas Git 
 
 Última entrega estable: **v0.2.0**. Versión del árbol actual: **demo 0.3 en desarrollo**, sin etiqueta final de entrega. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
 
-El árbol de `feature/temple-tactical-demo` contiene una build jugable de desarrollo de 0.3.0. La última entrega estable permanece en `v0.2.0`; D01–D32/B1–B6 implementadas; la aceptación humana del usuario es el control final antes de presentar la entrega. Las decisiones de diseño de esta ronda están cerradas.
+El árbol de `feature/temple-tactical-demo` contiene una build jugable de desarrollo de 0.3.0. La última entrega estable permanece en `v0.2.0`; D01–D36/B1–B8 implementadas; D27 sustituida por D33; la aceptación humana del usuario es el control final antes de presentar la entrega. Las decisiones de diseño de esta ronda están cerradas.
 
 ## Sin publicar
 
 ### Demo 0.3 en desarrollo
 
-- Correcciones B1/B2 de la prueba humana: órbita persistente en reposo/pausa y retorno solo al desplazarse; A/D orbita cámara sin mover el actor; W sigue la vista y S mantiene el frente. Selectores compactos sobre el enemigo seleccionado, ocultos fuera de combate y tras F, con seguimiento de actor/cámara y sin cubrir su cara. Issues #15/#16 en el mismo PR borrador #14.
+- Correcciones B1/B2 de la prueba humana: órbita persistente en reposo/pausa y retorno solo al desplazarse; A/D gira el actor continuamente; W sigue su frente y S mantiene el frente. Selectores compactos sobre el enemigo seleccionado, ocultos fuera de combate y tras F, con seguimiento de actor/cámara y sin cubrir su cara. Issues #15/#16 en el mismo PR borrador #14.
 
 - Misión del templo unificada con combate táctico, cola con destinatarios independientes y autoataque al último destinatario ofensivo ejecutado.
 - HUD con tres selectores de categorías, cuatro órdenes pendientes, botiquines con contador, huecos futuros desactivados y retrato/recursos. Ayuda breve omitible y avisos contextuales.
@@ -23,6 +23,9 @@ El árbol de `feature/temple-tactical-demo` contiene una build jugable de desarr
 - D32/B6 (#20) implementadas: separar en el HUD inferior izquierdo el selector de consumibles del selector de poderes personales y mover allí la curación propia. Velocidad de la Fuerza y otros poderes que alteren atributos quedan pospuestos (FUT-09). No se crea `v0.3.0` final hasta implementar, verificar y recibir la aceptación humana. Evidencia y limitaciones en RESULTADO.
 
 - B3: cola vacía espera al alcance cuerpo a cuerpo; las órdenes explícitas permiten aproximación. B4: selección/voz, frases neutrales y segundo diálogo manual con acceso condicionado. B5: cursor propio, retícula segmentada y clic contextual que encola básico al objetivo. Guía de QA humana y menú de candidata 0.3.0.
+
+- QA posterior, candidata RC2: D33 sustituye la órbita A/D por giro continuo del actor; conducir con W+A/D y retroceso S sin inversión. Vida solo sobre selección hostil/neutral, sin barras 3D colectivas. Orbe por ratón con mano y aproximación física; E ya no reclama el núcleo.
+- HUD inspirado en KOTOR II: poderes personales primero a la izquierda, consumibles después; cola de cuatro iconos y acción actual con Cancelar debajo; retrato/recursos compactos. Issues B7/B8 #21/#22 en el mismo milestone/PR. Pruebas adicionales de UI ancha separadas de la misión completa.
 
 ### Documentación y organización
 

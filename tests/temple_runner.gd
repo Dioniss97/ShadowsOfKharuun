@@ -7,8 +7,10 @@ var capture = false
 var results: Array = []
 var failures = 0
 var bot_report: Dictionary = {}
+var hud_only = false
 
 func _ready() -> void:
+	hud_only = "--hud-capture" in OS.get_cmdline_user_args()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("run")
 
@@ -56,7 +58,7 @@ func drag_camera(relative: Vector2) -> void:
 
 func hover_actor(actor: Node3D) -> Vector2:
 	var camera: Camera3D = get_viewport().get_camera_3d()
-	var point = get_viewport().get_final_transform()*camera.unproject_position(actor.global_position+Vector3.UP)
+	var point = get_viewport().get_final_transform()*camera.unproject_position(actor.global_position+(Vector3.ZERO if actor is Area3D else Vector3.UP))
 	var motion = InputEventMouseMotion.new()
 	motion.position = point
 	motion.global_position = point
@@ -463,31 +465,44 @@ func test_free_movement_camera() -> void:
 	var orbit_yaw: float = player.yaw
 	await right_mouse_state(false)
 	await frames(40)
-	check(absf(orbit_yaw)>0.4 and absf(angle_difference(orbit_yaw,player.yaw))<0.002 and player.forward().dot(original_forward)>0.999,"B1: RMB mantiene órbita en reposo sin mover o girar actor")
+	check(absf(orbit_yaw)>0.4 and absf(angle_difference(orbit_yaw,player.yaw))<0.002 and player.forward().dot(original_forward)>0.999,"D33: parado conserva cámara libre sin girar al personaje")
+	check(Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.01,"D33: arrastrar cámara parado no desplaza al personaje")
 	await tap_key(KEY_SPACE)
-	before = player.global_position
-	var paused_heading: float = player.rig.rotation.y
-	await key_state(KEY_A,true)
+	await drag_camera(Vector2(-170,45))
+	orbit_yaw = player.yaw
+	var orbit_pitch: float = player.pitch
+	await right_mouse_state(false)
+	await frames(40)
+	check(main.tactical_paused and absf(angle_difference(orbit_yaw,player.yaw))<0.002 and is_equal_approx(player.pitch,orbit_pitch) and absf(angle_difference(player.camera_pivot.rotation.y,orbit_yaw))<0.015,"D33: pausa permite arrastrar y mantiene orientación al soltar")
 	await key_state(KEY_W,true)
-	await frames(20)
+	await key_state(KEY_A,true)
+	await frames(15)
 	await key_state(KEY_A,false)
 	await key_state(KEY_W,false)
-	check(absf(angle_difference(orbit_yaw,player.yaw))>0.6 and player.global_position.distance_to(before)<0.01 and is_equal_approx(player.rig.rotation.y,paused_heading),"B1: A orbita durante pausa sin que W mueva o gire actor")
-	orbit_yaw = player.yaw
-	await frames(35)
-	check(absf(angle_difference(orbit_yaw,player.yaw))<0.002,"B1: soltar A en pausa conserva órbita")
+	check(Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.01 and player.forward().dot(original_forward)>0.999 and absf(angle_difference(orbit_yaw,player.yaw))<0.002,"D33: W+A durante pausa no mueve, gira ni recentra el personaje o la cámara")
 	await screenshot("demo_b1_paused_orbit")
 	await unpause()
-	before = player.global_position
-	var intended = Vector3(-sin(player.yaw),0,-cos(player.yaw))
+	await drag_camera(Vector2(180,-45))
+	await right_mouse_state(false)
+	var return_start: float = absf(angle_difference(player.yaw,player.rig.rotation.y))
 	await key_state(KEY_W,true)
-	await frames(20)
-	await key_state(KEY_W,false)
-	var travelled: Vector3 = player.global_position-before
-	travelled.y = 0
-	check(travelled.length()>0.8 and travelled.normalized().dot(intended)>0.99 and player.forward().dot(intended)>0.99,"B1: W avanza y orienta actor según rumbo de cámara")
+	await frames(4)
+	var return_partial: float = absf(angle_difference(player.yaw,player.rig.rotation.y))
+	check(return_start>0.4 and return_partial>0.025 and return_partial<return_start*0.65,"D33: desplazarse inicia retorno rápido y gradual hacia el frente",str([return_start,return_partial]))
+	await frames(35)
+	check(absf(angle_difference(player.yaw,player.rig.rotation.y))<0.025 and absf(angle_difference(player.camera_pivot.rotation.y,player.rig.rotation.y))<0.04,"D33: avanzar centra cámara detrás sin depender de la órbita anterior")
+	await drag_camera(Vector2(160,0))
+	orbit_yaw = player.yaw
 	await frames(15)
-	check(absf(angle_difference(player.camera_pivot.rotation.y,player.rig.rotation.y))<0.04,"B1: cámara centra suave y rápido detrás del nuevo avance")
+	check(absf(angle_difference(orbit_yaw,player.yaw))<0.002 and absf(angle_difference(player.yaw,player.rig.rotation.y))>0.3,"D33: mantener botón derecho permite órbita libre también avanzando")
+	await right_mouse_state(false)
+	await frames(32)
+	check(absf(angle_difference(player.yaw,player.rig.rotation.y))<0.025,"D33: soltar el arrastre durante desplazamiento vuelve al frente")
+	await key_state(KEY_W,false)
+	await frames(12)
+	orbit_yaw = player.yaw
+	await frames(25)
+	check(absf(angle_difference(orbit_yaw,player.yaw))<0.002,"D33: detenerse vuelve a conservar la orientación de cámara")
 	await free_movement_fixture()
 	player = main.level.player
 	before = player.global_position
@@ -499,29 +514,42 @@ func test_free_movement_camera() -> void:
 	await key_state(KEY_S,false)
 	var backward: Vector3 = player.global_position-before
 	backward.y = 0
-	check(backward.dot(original_forward)<-1.0 and player.forward().dot(original_forward)>0.999,"B1: S retrocede conservando frente sin invertir cámara")
-	check(absf(angle_difference(player.yaw,player.rig.rotation.y))<0.025,"B1: retorno al retroceder conserva frente")
+	check(backward.dot(original_forward)<-1.0 and player.forward().dot(original_forward)>0.999,"D33: S retrocede conservando el frente del personaje",str([backward,player.forward()]))
+	check(absf(angle_difference(player.yaw,player.rig.rotation.y))<0.025,"D33: retroceder centra cámara al frente y evita giro de 180 grados")
 	for key in [KEY_A,KEY_D]:
 		await free_movement_fixture()
 		player = main.level.player
 		before = player.global_position
-		original_forward = player.forward()
 		await key_state(key,true)
 		await frames(20)
-		var first_turn: float = angle_difference(0,player.yaw)
+		var first_turn: float = angle_difference(0,player.rig.rotation.y)
 		await frames(20)
-		var second_turn: float = angle_difference(0,player.yaw)
+		var second_turn: float = angle_difference(0,player.rig.rotation.y)
 		await key_state(key,false)
 		var turn_sign = 1 if key == KEY_A else -1
-		check(first_turn*turn_sign>0.5 and second_turn*turn_sign>first_turn*turn_sign+0.5 and Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.01 and player.forward().dot(original_forward)>0.999,"B1: A/D gira cámara continuamente con actor inmóvil",str([first_turn,second_turn]))
+		check(first_turn*turn_sign>0.5 and second_turn*turn_sign>first_turn*turn_sign+0.5 and Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()<0.01,"D33: mantener %s gira continuamente en sitio, sin desplazamiento diagonal" % ("A" if key == KEY_A else "D"),str([first_turn,second_turn]))
+	for key in [KEY_A,KEY_D]:
+		await free_movement_fixture()
+		player = main.level.player
+		before = player.global_position
+		var distance_before: float = player.distance_walked
 		await key_state(KEY_W,true)
 		await key_state(key,true)
 		await frames(20)
+		var first_position: Vector3 = player.global_position
 		var first_heading: float = player.rig.rotation.y
 		await frames(20)
-		check(absf(angle_difference(first_heading,player.rig.rotation.y))>0.6,"B1: W+A/D sigue el giro continuo de cámara")
+		var first_segment: Vector3 = first_position-before
+		var second_segment: Vector3 = player.global_position-first_position
+		first_segment.y = 0
+		second_segment.y = 0
+		check(absf(angle_difference(first_heading,player.rig.rotation.y))>0.6 and first_segment.normalized().dot(second_segment.normalized())<0.9,"D33: W+%s curva trayectoria mientras continúa girando" % ("A" if key == KEY_A else "D"),str([first_segment,second_segment,first_heading,player.rig.rotation.y]))
+		await frames(130)
 		await key_state(key,false)
 		await key_state(KEY_W,false)
+		await frames(10)
+		var circle_distance = Vector2(player.global_position.x-before.x,player.global_position.z-before.z).length()
+		check(player.distance_walked-distance_before>9.0 and circle_distance<1.0 and absf(angle_difference(0,player.rig.rotation.y))<0.4,"D33: mantener W+%s completa una vuelta, sin repetir pulsaciones" % ("A" if key == KEY_A else "D"),str([circle_distance,player.distance_walked-distance_before,player.rig.rotation.y]))
 
 func test_hud_events() -> void:
 	await hud_fixture()
@@ -530,6 +558,13 @@ func test_hud_events() -> void:
 	var player = main.level.player
 	var a = main.level.enemies[0]
 	var b = main.level.enemies[1]
+	check(hud.heal_button.get_global_rect().position.x < hud.medkit_button.get_global_rect().position.x,"D36: poderes personales a la izquierda de consumibles")
+	check(hud.orders_panel.size.x <= 250 and hud.orders_panel.size.y <= 100 and hud.personal_panel.size.y <= 90,"D36: cola y menú personal compactos dejan libre la escena",str([hud.orders_panel.size,hud.personal_panel.size]))
+	var floating_bars = 0
+	for enemy in main.level.enemies:
+		for mesh in enemy.find_children("*","MeshInstance3D",true,false):
+			if mesh.material_override is StandardMaterial3D and mesh.material_override.billboard_mode != BaseMaterial3D.BILLBOARD_DISABLED: floating_bars += 1
+	check(floating_bars == 0 and hud.target_info.visible,"D34: sin barras 3D colectivas; vida solo sobre selección")
 	combat.clear_queue()
 	combat.select_target(a)
 	await frames(4)
@@ -548,6 +583,7 @@ func test_hud_events() -> void:
 	check(combat.queue.size() == 2 and combat.queue[1].id == "lightning" and combat.queue[1].target == b and combat.queue[0].target == a,"Clic en poder encola descarga B y conserva ráfaga A")
 	await click_control(hud.medkit_button)
 	check(combat.queue.size() == 3 and combat.queue[2].id == "medkit" and combat.queue[2].target == player and combat.medkits == 3 and player.energy == energy_before,"Botiquín personal añade orden propia y no gasta al encolar")
+	check(not hud.current_glyph.visible and not hud.queue_glyphs[3].visible,"D36: ranura actual vacía no duplica una pendiente; huecos de cola quedan en blanco")
 	await screenshot("demo_hud_mixed_targets")
 	await click_control(hud.queue_buttons[1])
 	check(combat.queue.size() == 2 and combat.queue[0].id == "flurry" and combat.queue[1].id == "medkit","Clic en pendiente cancela solo esa orden")
@@ -838,8 +874,10 @@ func test_story_and_final() -> void:
 		player.velocity = Vector3.ZERO
 		player.snap_camera()
 		await screenshot("demo_temple_"+route)
-		await tap_key(KEY_E)
-		check(main.mission.state == KhMission.State.VICTORY,"Reclamar con E produce final común: "+route)
+		await hover_actor(level.relic_interaction)
+		check(main.context_cursor.context == "hand","D35: orbe accesible muestra mano: "+route,main.context_cursor.context)
+		await click_actor(level.relic_interaction)
+		check(main.mission.state == KhMission.State.VICTORY,"Reclamar con ratón produce final común: "+route)
 		await screenshot("demo_final_"+route)
 		main.ui.menu_requested.emit()
 		await frames(3)
@@ -914,7 +952,7 @@ func test_contextual_clicks() -> void:
 	hero.snap_camera()
 	await frames(4)
 	await click_actor(a)
-	check(main.level.combat.selected == a and a.phrase_index == 0 and main.tactical_ui.talk_button.visible and main.mission.state == KhMission.State.EXPLORATION,"B4: primer clic neutral ofrece voz sin iniciar diálogo ni combate")
+	check(main.level.combat.selected == a and a.phrase_index == 0 and main.tactical_ui.talk_button.visible and main.tactical_ui.target_info.visible and main.mission.state == KhMission.State.EXPLORATION,"B4: primer clic neutral ofrece voz sin iniciar diálogo ni combate")
 	check(main.context_cursor.context == "talk","B4: neutral seleccionado muestra cursor de voz",main.context_cursor.context)
 	for index in range(4):
 		await click_control(main.tactical_ui.talk_button)
@@ -991,7 +1029,7 @@ func test_normal_playthrough() -> void:
 			if player.global_position.distance_to(main.level.relic_position)<=2.0:
 				player.automation_direction = Vector3.ZERO
 				await screenshot("demo_normal_temple")
-				await tap_key(KEY_E)
+				await click_actor(main.level.relic_interaction)
 			continue
 		if main.mission.state not in [KhMission.State.COMBAT,KhMission.State.BOSS]: continue
 		if main.tactical_paused: await unpause()
@@ -1011,16 +1049,71 @@ func test_normal_playthrough() -> void:
 	var enemy_initial: Array = []
 	for enemy in main.level.enemies: enemy_initial.append({"name":enemy.display_name,"max_health":enemy.max_health,"health":enemy.health,"attacks":enemy.attacks})
 	bot_report = {"passed":won,"isolated_fixture":false,"production_stats":true,"teleports":0,"direct_damage_calls":0,"exploration_frames":exploration_frames,"combat_frames":played_frames,"seconds":main.mission.elapsed,"state":main.mission.state,"hero_max_health":player.max_health,"hero_health":player.health,"hero_energy":player.energy,"medkits_remaining":combat.medkits,"damage_taken":damage_taken,"healing_received":healing_received,"kills":main.mission.kills,"route":main.mission.guardian_resolution,"resolved_actions":combat.resolved_actions,"energy_guard_triggered":interrupted_by_energy,"distance_walked":player.distance_walked,"position":str(player.global_position),"enemies":enemy_initial,"events":combat.event_log.duplicate(true)}
-	check(won and player.health>0 and main.mission.kills == 4 and not interrupted_by_energy,"Bot normal completa acólitos, guardián, entrada y E final sin alterar estadísticas",JSON.stringify({"seconds":bot_report.seconds,"hero_health":player.health,"energy":player.energy,"medkits":combat.medkits,"kills":main.mission.kills,"damage_taken":damage_taken,"healing_received":healing_received,"actions":combat.resolved_actions,"position":str(player.global_position)}))
+	check(won and player.health>0 and main.mission.kills == 4 and not interrupted_by_energy,"Bot normal completa acólitos, guardián, entrada y clic final sin alterar estadísticas",JSON.stringify({"seconds":bot_report.seconds,"hero_health":player.health,"energy":player.energy,"medkits":combat.medkits,"kills":main.mission.kills,"damage_taken":damage_taken,"healing_received":healing_received,"actions":combat.resolved_actions,"position":str(player.global_position)}))
 	var report_file = FileAccess.open("res://tests/demo_playthrough_report.json",FileAccess.WRITE)
 	if report_file:
 		report_file.store_string(JSON.stringify(bot_report,"\t"))
 		report_file.close()
 	if won: await screenshot("demo_normal_victory")
 
+func test_orb_approach() -> void:
+	await fresh_encounter()
+	check(not main.level.request_relic() and main.level.relic_interaction.collision_layer == 0,"D35: orbe cerrado no admite interacción antes de resolver guardián")
+	await guardian_fixture()
+	main.dialogue.choose(1)
+	main.dialogue.choose(0)
+	main.dialogue.continue_dialogue()
+	await frames(4)
+	var level = main.level
+	var player = level.player
+	player.global_position = Vector3(0,2.4,-28.5)
+	player.velocity = Vector3.ZERO
+	player.yaw = 0
+	player.snap_camera()
+	await frames(4)
+	await tap_key(KEY_E)
+	check(main.mission.state == KhMission.State.TEMPLE,"D35: E ya no reclama el núcleo")
+	await hover_actor(level.relic_interaction)
+	check(main.context_cursor.context == "hand","D35: mano identifica núcleo visible antes de acercarse",main.context_cursor.context)
+	var obstacle = StaticBody3D.new()
+	level.add_child(obstacle)
+	obstacle.global_position = level.relic_position+Vector3(0,0,2)
+	var collision = CollisionShape3D.new()
+	var shape = BoxShape3D.new()
+	shape.size = Vector3(1,1,0.5)
+	collision.shape = shape
+	obstacle.add_child(collision)
+	await frames(4)
+	await hover_actor(level.relic_interaction)
+	check(main.context_cursor.context != "hand" and not level.relic_at_screen(main.context_cursor.mouse_position),"D35: obstáculo oculta mano e impide clicar núcleo a través de paredes")
+	obstacle.queue_free()
+	await frames(4)
+	check(main.tactical_ui.relic_button.visible,"D35: mano clickable sobre altar mantiene visible interacción aunque cuerpo tape orbe")
+	await click_control(main.tactical_ui.relic_button)
+	check(player.interaction_target == level.relic_interaction and main.mission.state == KhMission.State.TEMPLE,"D35: clic distante inicia aproximación física, sin victoria anticipada")
+	await tap_key(KEY_SPACE)
+	var before: Vector3 = player.global_position
+	await frames(25)
+	check(player.global_position == before and main.mission.state == KhMission.State.TEMPLE,"D35: pausa congela acercamiento al núcleo")
+	await unpause()
+	await key_state(KEY_S,true)
+	await key_state(KEY_S,false)
+	check(player.interaction_target == null and main.mission.state == KhMission.State.TEMPLE,"D35: movimiento manual cancela aproximación al núcleo")
+	await frames(8)
+	await hover_actor(level.relic_interaction)
+	await screenshot("demo_rc2_orb_hand")
+	await click_actor(level.relic_interaction)
+	for _i in range(300):
+		if main.mission.state == KhMission.State.VICTORY: break
+		await get_tree().physics_frame
+	check(main.mission.state == KhMission.State.VICTORY and player.global_position.distance_to(level.relic_position) <= 2.3,"D35: clic y movimiento real reclaman núcleo únicamente al entrar en alcance")
+	main.restart_current()
+	await frames(4)
+	check(not main.level.temple_open and main.level.relic_interaction.collision_layer == 0,"D35: reinicio vuelve a bloquear orbe y mano")
+
 func finish() -> void:
-	var report = {"engine":Engine.get_version_info(),"renderer":RenderingServer.get_current_rendering_method(),"capture":capture,"failures":failures,"checks":results,"normal_playthrough":bot_report,"q01":"D31 implemented: prune resource category; next valid order uses same opportunity, otherwise lose round."}
-	for path in ["res://tests/demo_report.json","res://tests/demo_capture_report.json" if capture else "res://tests/demo_logic_report.json"]:
+	var report = {"engine":Engine.get_version_info(),"renderer":RenderingServer.get_current_rendering_method(),"capture":capture,"failures":failures,"checks":results,"normal_playthrough":bot_report,"hud_only":hud_only,"q01":"D31 implemented: prune resource category; next valid order uses same opportunity, otherwise lose round."}
+	for path in ["res://tests/demo_hud_capture_report.json" if hud_only else "res://tests/demo_report.json","res://tests/demo_hud_capture_report.json" if hud_only else ("res://tests/demo_capture_report.json" if capture else "res://tests/demo_logic_report.json")]:
 		var file = FileAccess.open(path,FileAccess.WRITE)
 		if file:
 			file.store_string(JSON.stringify(report,"\t"))
@@ -1033,6 +1126,13 @@ func run() -> void:
 	await frames(8)
 	check(is_instance_valid(main) and main.has_method("new_game") and main.level.has_method("claim_relic"),"API de demo unificada disponible")
 	if not main.level.has_method("claim_relic"):
+		finish()
+		return
+	if hud_only:
+		await test_hud_events()
+		await test_hud_target_attachment()
+		await test_contextual_clicks()
+		await test_orb_approach()
 		finish()
 		return
 	test_clock_and_rig()
@@ -1050,5 +1150,6 @@ func run() -> void:
 	await test_defeat_restart()
 	await test_passive_engagement()
 	await test_contextual_clicks()
+	await test_orb_approach()
 	await test_normal_playthrough()
 	finish()

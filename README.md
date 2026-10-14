@@ -4,7 +4,7 @@ Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. Es
 
 Versión estable: **[v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0)**, integrada en `main` con QA humana aprobada el 14 de octubre de 2026. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y comprobados. La candidata aceptada fue RC2 (`f8ada97`); el cierre solo actualiza versión, textos y documentación. El recorrido reproducible está en [QA_0_3_0.md](QA_0_3_0.md). La entrega anterior conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
 
-Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Seguimiento: [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los acuerdos están en [DISENO_DEMO.md](DISENO_DEMO.md), los estados en [PENDIENTES.md](PENDIENTES.md) y la evidencia de cada entrega en [RESULTADO.md](RESULTADO.md).
+Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Seguimiento: [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Las decisiones entregadas en 0.3.0 están en [DISENO_DEMO.md](DISENO_DEMO.md), su seguimiento histórico en [PENDIENTES.md](PENDIENTES.md) y las nuevas tareas se gestionan en [GitHub Issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues). Procedimiento vigente en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md) y evidencia de la entrega en [RESULTADO.md](RESULTADO.md).
 
 ## Controles de la misión unificada
 

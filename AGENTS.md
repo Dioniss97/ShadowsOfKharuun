@@ -1,16 +1,27 @@
-# Shadows of Kharuun: contexto del proyecto
+# Shadows of Kharuun — instrucciones para agentes
 
-Proyecto Godot para un jugador, centrado en historia. Comunicar en español.
+RPG narrativo 3D para un jugador, desarrollado en Godot con Blender previsto para arte. Comunicar en español. Evitar sobreingeniería y distinguir decisiones aprobadas, propuestas, implementación real y verificación.
 
-- Antes de planificar o cambiar el juego, consultar `DISENO_DEMO.md` y `PENDIENTES.md`. Contienen las decisiones actuales, las dudas y el trabajo pendiente. `ORGANIZACION.md` define la rutina y el punto de reanudación; `CHANGELOG.md` identifica entregas reales.
-- `COMBATE.md` describe las reglas de la build actual y `RESULTADO.md` sus comprobaciones y límites. `README.md` explica cómo ejecutar y probarla. Última entrega estable: `v0.3.0`, integrada en `main` mediante PR #14, con QA humana aprobada el 14 de octubre de 2026. Los documentos y pruebas históricos de 0.2.0 se conservan en `v0.2.0`.
-- Registrar nuevas respuestas del usuario en `DISENO_DEMO.md`; actualizar tareas y criterios en `PENDIENTES.md`. Distinguir confirmado, propuesta, pendiente e implementado/verificado. Las instrucciones nuevas del usuario prevalecen sobre estos documentos.
-- En una ronda de estudio, revisión o preguntas, modificar solo documentación; no interpretar respuestas de diseño como una petición de implementar. Cuando el usuario pida implementar, proceder dentro del alcance autorizado sin pedir una aprobación redundante.
-- Si aparece una duda de comportamiento importante que los acuerdos no resuelven, plantear opciones clicables mediante la herramienta de preguntas disponible y continuar el trabajo independiente. No reabrir decisiones confirmadas. Resolver ajustes técnicos rutinarios y valores iniciales de equilibrio con criterio propio, dejando constancia de que son provisionales.
-- Para una entrega jugable, comprobar los flujos afectados, órdenes con distintos destinatarios, recursos, pausa, colisiones y final/reinicio; usar las herramientas locales de `tools/` descritas en `README.md`. No marcar una tarea como verificada sin evidencia.
-- Al empezar, comprobar rama y cambios locales y escoger una tarea concreta. Al cerrar, actualizar estado, decisiones, pruebas y siguiente paso. Una duda bloquea solo su parte dependiente; no bloquear trabajo independiente.
-- Versionar entregas verificadas con etiquetas Git locales `vX.Y.Z` y changelog. Los cambios solo de documentación no cambian la versión jugable. No mover etiquetas ni presentar funciones planificadas como entregadas.
-- GitHub privado: `Dioniss97/ShadowsOfKharuun`; `origin` usa HTTPS con las credenciales existentes. Las 21 issues DEMO/B y el milestone `Demo 0.3.0` están cerrados; PR #14 fusionada. Actualizar issue y resumen local al avanzar, enlazando commit y evidencia al cerrar. Detener el trabajo en `v0.3.0` hasta que el usuario defina 0.4; las tareas FUT no autorizan producción por sí solas.
-- Engram 3.3.2 está configurado con MCP y plugin de Codex; `.engram/config.json` fija este proyecto. Al disponer de sus herramientas, confirmar el proyecto con `mem_current_project` y recuperar contexto antes de repetir decisiones. Respetar la sesión registrada por el plugin para escrituras; no inventar una sesión Codex. Verificar recuerdos contra el diseño vigente; no crear otra especificación ni importar recuerdos ajenos. Si las herramientas no están cargadas, continuar con los documentos locales y distinguirlo de una conexión de agente verificada.
-- Para este proyecto, consultar `mem_search` y `mem_context` con `project = shadowsofkharuun` y `scope = project`; no usar `all_projects = true` ni buscar contexto ajeno si el proyecto está vacío. Recuperar por ID solo recuerdos obtenidos previamente mediante una búsqueda filtrada: `mem_get_observation` no filtra la propiedad por proyecto. Guardar con ese proyecto y ámbito explícitos. Las memorias ajenas se conservan, sin borrar, migrar, fusionar ni exportar. Si el hook rechaza una escritura, registrar el pendiente en los MD y reparar la vinculación del cliente; no recurrir a CLI, HTTP o SQL para eludirlo.
-- No añadir multijugador ni ampliar el universo, mapa o sistemas fuera de la iteración acordada.
+## Documentos y fuente de verdad
+
+1. **Leer `GESTION_DESARROLLO.md` antes de organizar tareas**: es la guía vigente y prevalece sobre instrucciones antiguas de gestión.
+2. **Leer `ORGANIZACION.md`** para convenciones del entorno, versión estable y rutina de trabajo.
+3. **Consultar el diseño correspondiente al trabajo activo**. `DISENO_DEMO.md` especifica lo aceptado en **v0.3.0**, no el backlog ni las decisiones de la siguiente versión. Para 0.4.0 consultar su documento propio cuando exista (p. ej. `DISENO_0_4_0.md`).
+4. `README.md` explica cómo ejecutar la versión estable, `COMBATE.md` detalla el combate actual, `RESULTADO.md` y `QA_0_3_0.md` conservan evidencia, y `CHANGELOG.md` registra entregas.
+5. **GitHub Issues es la única fuente de estado operativo de tareas.** No copiar ni mantener en paralelo sus estados en `PENDIENTES.md`: ese documento es registro histórico de 0.3.0 y propuestas FUT sin aprobación automática.
+
+## Decisiones, planificación e implementación
+
+- Distinguir `propuesta`, `pendiente de decisión`, `aprobada` y `descartada/sustituida` para **decisiones Markdown**; y `planificado`, `en-curso`, `verificado-en-rama` y `cerrada/entregada` para **issues**. Una decisión aprobada no implica que exista código.
+- Durante exploración o diseño, no cambiar escenas/scripts ni interpretar la aprobación de una idea como petición de implementarla. Puede documentarse lo solicitado. Ejecutar desarrollo **solo cuando el usuario autorice el alcance**.
+- No crear milestones, issues o PRs para versiones futuras sin alcance aprobado; las ideas FUT no son compromisos. Un milestone agrupa una versión; una issue padre representa una funcionalidad divisible, no una segunda tarjeta «release».
+- Mantener IDs de decisión rastreables, criterios observables, decisiones sustituidas y enlaces a issues pertinentes. No reabrir acuerdos vigentes por falta de contexto ni convertir hipótesis en hechos.
+- Antes de editar, comprobar rama, HEAD y cambios locales/no integrados. Trabajar en el alcance autorizado, evitando mezclar trabajo ajeno. Crear commits coherentes y PRs revisables; no sobreescribir la rama o cambios locales del usuario.
+- Validar flujos afectados y regresiones, incluyendo pruebas reales de Godot/GPU cuando proceda. No marcar `verificado-en-rama` sin evidencia. La QA humana exigida debe quedar registrada antes de entregar. Nunca etiquetar trabajo futuro como versión estable.
+- Al cerrar una sesión, registrar qué se hizo, qué falta, qué evidencia existe y el próximo paso **en el lugar correspondiente**, evitando duplicar el estado de la issue en Markdown.
+
+## Engram
+
+Memoria MCP **auxiliar**, subordinada a Git y GitHub. Proyecto exclusivo `shadowsofkharuun`: usar `project = shadowsofkharuun` y `scope = project`; no usar `all_projects` ni recuperar recuerdos ajenos. Recuperar por ID solo registros obtenidos con búsqueda filtrada. Si no carga o no puede escribir por fallo de identificación de sesión, continuar con Git/Issues y registrar la limitación; no usar CLI/SQL/HTTP para eludir hooks. No borrar ni reasignar memorias de otros proyectos.
+
+**Base estable comprobada:** `v0.3.0` en `main`, PR #14 integrada y milestone Demo 0.3.0 cerrado. Planificar versiones siguientes está permitido; implementarlas requiere autorización. No introducir multijugador ni ampliar sistemas/universo fuera del alcance aprobado.

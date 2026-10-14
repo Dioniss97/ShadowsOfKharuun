@@ -1,6 +1,6 @@
 # Combate de la misión unificada
 
-Referencia técnica de la **0.3.0, con QA humana aprobada el 14 de octubre de 2026**. Implementa D01–D36/B1–B8; D27 está sustituida por D33. La promoción de RC2 a versión final conserva estas reglas. El diseño humano vigente está en [DISENO_DEMO.md](DISENO_DEMO.md); implementación y evidencia se registran en [PENDIENTES.md](PENDIENTES.md) y [RESULTADO.md](RESULTADO.md).
+Referencia técnica de la **0.3.0, con QA humana aprobada el 14 de octubre de 2026**. Implementa D01–D36/B1–B8; D27 está sustituida por D33. La promoción de RC2 a versión final conserva estas reglas. El diseño aprobado de 0.3.0 está en [DISENO_DEMO.md](DISENO_DEMO.md); el seguimiento de sus issues se conserva históricamente en [PENDIENTES.md](PENDIENTES.md), y la evidencia en [RESULTADO.md](RESULTADO.md). Las versiones nuevas usan GitHub Issues como backlog operativo según [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md).
 
 La primera iteración permanece en Git, etiqueta [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0). Sus reglas de WASD, recargas, Defensa y continuación contra la selección anterior fueron sustituidas. Este documento describe el código de la misión unificada.
 

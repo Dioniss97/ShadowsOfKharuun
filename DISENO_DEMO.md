@@ -1,8 +1,8 @@
-# Diseño vigente: segunda vuelta de la demo
+# Diseño aprobado y entregado — Demo 0.3.0
 
 Actualizado: 14 de octubre de 2026. Estado: **v0.3.0 estable, integrada en main; QA humana aprobada; D01–D36/B1–B8 implementados y comprobados (D27 sustituida por D33); milestone cerrado**.
 
-Este documento conserva los acuerdos humanos de esta conversación y permite retomar el proyecto sin reconstruirla. Las tareas están en [PENDIENTES.md](PENDIENTES.md). Las instrucciones para trabajar con estos documentos están en [AGENTS.md](AGENTS.md); la rutina, versiones y punto de reanudación están en [ORGANIZACION.md](ORGANIZACION.md).
+Este documento conserva las decisiones y reglas entregadas en **v0.3.0** como base verificada de futuras iteraciones; no representa el diseño ni el backlog de 0.4.0. Las tareas históricas se conservan en [PENDIENTES.md](PENDIENTES.md) y las nuevas tareas se gestionan en GitHub Issues. Consultar [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md) para planificar una nueva versión.
 
 ## Estado real y objetivo
 
@@ -135,7 +135,7 @@ Valores iniciales para la prueba humana: salud 340, energía 100, regeneración 
 
 El núcleo reclamable del templo es el mismo en ambas rutas. Se añadió una cámara pequeña detrás del portal existente y un marcador visible del altar para concretar D20. D31/D32 están implementadas y comprobadas; D33–D36 se incorporaron en RC2 y recibieron la aprobación humana global. El cierre integra y etiqueta 0.3.0 sin nuevos cambios de comportamiento. El proyecto queda detenido hasta definir 0.4.
 
-## Casos que deberá cubrir la verificación
+## Casos de regresión verificados para 0.3.0
 
 1. Misión completa: menú → exploración → primera conversación con el guardián → acólitos → segunda conversación y resolución de combate o pacífica → templo/orbe → final; derrota, repetición y vuelta al menú.
 2. Pausa inicial una vez por encuentro, órdenes durante ella y ausencia de agresión durante diálogo/presentación.

@@ -1,8 +1,10 @@
-# Trabajo pendiente de la demo
+# Registro de tareas de la demo 0.3.0 (histórico)
 
 Actualizado: 14 de octubre de 2026. Especificación: [DISENO_DEMO.md](DISENO_DEMO.md). **v0.3.0 estable con QA humana aprobada** mediante «Apruebo el QA de la 0.3.0». RC2 (`f8ada97`) cumple D01–D36/B1–B8 (D27 sustituida por D33), con pruebas completadas sin fallos; Q01/Q10 resueltas e implementadas. PR #14 integrada en `main`; DEMO-01–13 y B1–B8 cerradas: **21 issues cerradas, 0 abiertas** en el milestone, también cerrado. La etiqueta `v0.3.0` conserva la entrega. Se espera la definición de 0.4. Evidencia en [RESULTADO.md](RESULTADO.md); recorrido humano en [QA_0_3_0.md](QA_0_3_0.md); rutina en [ORGANIZACION.md](ORGANIZACION.md). Los IDs enlazan al [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1).
 
-Estados: **Pendiente de decisión**, **Planificado**, **En curso**, **Implementado**, **Verificado**, **Aceptado**, **Cerrado**, **Pospuesto**. Verificado requiere evidencia real; Aceptado registra la aprobación humana y Cerrado la integración de la entrega. Actualizar este archivo y el diseño tras cada respuesta o entrega; no depender de recordar la conversación.
+Este documento conserva el seguimiento y la aceptación de **v0.3.0** como histórico. El progreso de las nuevas versiones se registra **exclusivamente en GitHub Issues**; no se añadirán aquí columnas de estado que haya que sincronizar. Las propuestas FUT siguen siendo ideas sin versión aprobada. Procedimiento en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md).
+
+Los estados de las tablas de 0.3.0 son **fotografías históricas de su cierre**, no un segundo tablero operativo. Sus evidencias y enlaces se conservan; los cambios futuros de tareas pertenecen a GitHub Issues y los cambios de diseño a la especificación de su versión.
 
 ## Primera entrega
 
@@ -47,7 +49,7 @@ Estas incidencias pertenecen al mismo milestone y PR #14 de 0.3.0. Las correccio
 
 La evidencia anterior `b54514e` conserva la comprobación de B2 y de la cámara anterior. RC1 comprobó D27, que ahora se sustituye por D33. RC2 vuelve a comprobar el giro del actor y comprueba D28–D32, cursor/retícula, voz, recursos y rutas completas. Resultados vigentes en RESULTADO; QA humana aprobada el 14 de octubre de 2026.
 
-## Iteraciones posteriores
+## Propuestas FUT sin aprobación de versión
 
 | ID | Función | Estado |
 |---|---|---|

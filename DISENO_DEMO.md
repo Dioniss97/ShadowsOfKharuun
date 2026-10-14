@@ -1,12 +1,12 @@
 # Diseño vigente: segunda vuelta de la demo
 
-Actualizado: 14 de octubre de 2026. Estado: **0.3.0 con QA humana aprobada; D01–D36/B1–B8 implementados y comprobados (D27 sustituida por D33); cierre de entrega autorizado**.
+Actualizado: 14 de octubre de 2026. Estado: **v0.3.0 estable, integrada en main; QA humana aprobada; D01–D36/B1–B8 implementados y comprobados (D27 sustituida por D33); milestone cerrado**.
 
 Este documento conserva los acuerdos humanos de esta conversación y permite retomar el proyecto sin reconstruirla. Las tareas están en [PENDIENTES.md](PENDIENTES.md). Las instrucciones para trabajar con estos documentos están en [AGENTS.md](AGENTS.md); la rutina, versiones y punto de reanudación están en [ORGANIZACION.md](ORGANIZACION.md).
 
 ## Estado real y objetivo
 
-La entrega anterior **0.2.0**, etiqueta `v0.2.0` y commit `f516f41`, tenía misión original de acción y duelo táctico separados. Su informe histórico permanece en esa etiqueta. **0.3.0** reúne la misión y el combate táctico, con D01–D36/B1–B8; D27 fue sustituida por D33. Q01/Q10 están resueltas e implementadas según la observación del usuario en KOTOR II. El usuario aceptó globalmente RC2 (`f8ada97`) el 14 de octubre: «Apruebo el QA de la 0.3.0». Las pruebas y sus límites están en [RESULTADO.md](RESULTADO.md); está autorizado integrar y etiquetar la entrega, y detenerse hasta definir 0.4.
+La entrega anterior **0.2.0**, etiqueta `v0.2.0` y commit `f516f41`, tenía misión original de acción y duelo táctico separados. Su informe histórico permanece en esa etiqueta. **0.3.0** reúne la misión y el combate táctico, con D01–D36/B1–B8; D27 fue sustituida por D33. Q01/Q10 están resueltas e implementadas según la observación del usuario en KOTOR II. El usuario aceptó globalmente RC2 (`f8ada97`) el 14 de octubre: «Apruebo el QA de la 0.3.0». Las pruebas y sus límites están en [RESULTADO.md](RESULTADO.md); la entrega queda integrada y etiquetada, con las 21 issues y milestone cerrados. Esperar la definición de 0.4.
 
 El objetivo entregado es **una única demo del asalto al templo con combate táctico integrado**, conservando exploración, diálogo, tres acólitos, guardián y finales. El jugador habla primero con el guardián para iniciar el encuentro con los acólitos y vuelve a hablar con él tras vencerlos para elegir entre combatir o conseguir el paso pacífico. El duelo se conserva internamente para pruebas. El proyecto es para un jugador y prioriza la historia.
 
@@ -119,7 +119,7 @@ En el ejemplo `Descarga, Descarga, Ráfaga`, si la segunda descarga ya no se pue
 
 Las propuestas no equivalen a respuestas del usuario. Si una duda pendiente es necesaria para el comportamiento que se está implementando y no se puede resolver por los acuerdos, consultarla con opciones. El usuario prefiere resolverlas antes de programar y recibir ese mismo formato si surge una duda importante durante el trabajo.
 
-## Implementación de desarrollo y límites
+## Implementación entregada y límites
 
 El usuario autorizó empezar a producir esta segunda vuelta el 12 de octubre. La misión, cola por destinatario, HUD, ataques, recursos, cámara, retirada y ramas del guardián están implementados en `feature/temple-tactical-demo`. El menú presenta una única misión principal; el duelo queda como herramienta interna mediante `--duel`.
 
@@ -133,7 +133,7 @@ Ajustes técnicos: el botiquín agotado sigue D31 y nunca deja contador negativo
 
 Valores iniciales para la prueba humana: salud 340, energía 100, regeneración 3/s, tres botiquines de 95; básico 26, ráfaga 17 × 2; empuje 30 por 24 de energía, descarga 58 por 32 y curación 68 por 28; ronda del jugador 2,6 s. Acólitos con 160 de salud y ronda de 3,8 s; guardián con 520 y ronda de 3 s. Son valores de equilibrio propios, modificables con evidencia. La defensa sigue siendo una estadística pasiva de acierto.
 
-El núcleo reclamable del templo es el mismo en ambas rutas. Se añadió una cámara pequeña detrás del portal existente y un marcador visible del altar para concretar D20. D31/D32 están implementadas y comprobadas; D33–D36 se incorporaron en RC2 y recibieron la aprobación humana global. El cierre actual integra y etiqueta 0.3.0 sin nuevos cambios de comportamiento. Después se detiene hasta definir 0.4.
+El núcleo reclamable del templo es el mismo en ambas rutas. Se añadió una cámara pequeña detrás del portal existente y un marcador visible del altar para concretar D20. D31/D32 están implementadas y comprobadas; D33–D36 se incorporaron en RC2 y recibieron la aprobación humana global. El cierre integra y etiqueta 0.3.0 sin nuevos cambios de comportamiento. El proyecto queda detenido hasta definir 0.4.
 
 ## Casos que deberá cubrir la verificación
 

@@ -4,7 +4,7 @@ Las versiones identifican entregas jugables verificadas mediante etiquetas Git i
 
 ## 0.3.0 — 2026-10-14
 
-QA humana aprobada por el usuario: «Apruebo el QA de la 0.3.0». Candidata aceptada: RC2 (`f8ada97`). Integración de PR #14 y publicación de `v0.3.0` autorizadas; el cierre solo actualiza versión, textos y documentación.
+Etiqueta: [v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0). QA humana aprobada por el usuario: «Apruebo el QA de la 0.3.0». Candidata aceptada: RC2 (`f8ada97`). PR #14 integrada en `main` (`1304678`), 21 issues y milestone cerrados; el cierre solo actualiza versión, textos y documentación.
 
 ### Añadido y corregido
 

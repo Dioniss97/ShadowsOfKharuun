@@ -1,6 +1,6 @@
 # Organización mínima del trabajo
 
-Actualizado: 14 de octubre de 2026. QA humana de 0.3.0 aprobada; cierre de integración y publicación autorizado. Después se espera la definición de 0.4.
+Actualizado: 14 de octubre de 2026. **v0.3.0 estable en main**, QA humana aprobada, PR #14 fusionada, 21 issues y milestone cerrados. Se espera la definición de 0.4.
 
 ## Qué registra cada lugar
 
@@ -25,11 +25,11 @@ Las nuevas instrucciones del usuario prevalecen. El diseño distingue intención
 |---|---|---|
 | 0.1.0 | `138d459` | Misión original verificada. Etiqueta retrospectiva `v0.1.0`. |
 | 0.2.0 | `f516f41` | Misión original y duelo táctico verificados. Etiqueta retrospectiva `v0.2.0`; entrega anterior. |
-| 0.3.0 | RC2 aceptada: `f8ada97`; entrega: `v0.3.0` | Misión unificada implementada, comprobada y aceptada por el usuario; integración/publicación autorizadas. |
+| 0.3.0 | RC2 aceptada: `f8ada97`; entrega: `v0.3.0` | Misión unificada implementada, comprobada y aceptada por el usuario; integrada en `main` mediante PR #14 (`1304678`). |
 
 Convención para este prototipo: `0.MINOR.PATCH`. Incrementar MINOR cuando una entrega añade un conjunto importante de funciones; PATCH para correcciones o ajustes pequeños de una entrega. Los cambios solo de documentación conservan la versión jugable. No crear etiquetas definitivas para funciones meramente acordadas ni reutilizar/mover una etiqueta existente.
 
-La rama de implementación es `feature/temple-tactical-demo`, creada desde `origin/main` después de `c0aab67`. La PR #14 integra la misión unificada en `main` tras la aprobación humana del 14 de octubre. El remoto conserva `feature/tactical-duel` y `master`; esta última identifica la primera entrega. No imponer GitFlow ni ramas de release adicionales.
+La rama local de reanudación es `main`, sincronizada con `origin/main`. La rama de implementación `feature/temple-tactical-demo`, creada desde `origin/main` después de `c0aab67`, se integró mediante PR #14 tras la aprobación humana del 14 de octubre. El remoto conserva las ramas históricas; `master` identifica la primera entrega. No imponer GitFlow ni ramas de release adicionales.
 
 Implementación inicial en `2a6cd6b`; RC2 aceptada en `f8ada97`; [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). La promoción final solo cambia versión/textos/documentación, sin nuevas mecánicas. Las 21 issues se cierran al integrar y conservan su historial y criterios.
 
@@ -39,7 +39,7 @@ La carpeta del Godot portátil está excluida de Git y debe conservarse o descar
 
 ## Backlog en GitHub
 
-Milestone: [Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). DEMO-01–13 y B1–B8 (#15–22) implementadas y aceptadas; la comprobación de RC2 incluye D33–D36 y HUD ancho. La aprobación global cierra DEMO-10/11. El cierre de las 21 issues y milestone está autorizado junto con la integración de PR #14.
+Milestone: [Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1), **cerrado con 21 issues cerradas y 0 abiertas**. DEMO-01–13 y B1–B8 (#15–22) implementadas, aceptadas e integradas. La comprobación de RC2 incluye D33–D36 y HUD ancho; la aprobación global cierra DEMO-10/11. La PR #14 está fusionada.
 
 Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local y los enlaces. Al cambiar estado o cerrar una tarea, actualizar ambos, añadir evidencia/commit al issue y mantener el acuerdo detallado en `DISENO_DEMO.md`. Si GitHub no está disponible, registrar el avance local y señalar la sincronización pendiente. Las FUT pospuestas permanecen en los MD, sin crear tarjetas fuera del alcance actual.
 
@@ -50,7 +50,7 @@ Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local
 3. Consultar las preguntas de esa tarea. Una duda sobre energía no bloquea cámara, interfaz o redacción independientes. Marcar exactamente qué parte espera respuesta.
 4. Si Engram está disponible, confirmar el proyecto y recuperar contexto con `project = shadowsofkharuun`, `scope = project` y sin `all_projects`; verificarlo contra los documentos actuales. Ignorar memorias ajenas incluso si falta contexto del juego.
 
-El usuario aprobó expresamente la QA de 0.3.0 el 14 de octubre de 2026. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y aceptados. El cierre actual integra la PR, cierra los issues cubiertos y milestone, y publica `v0.3.0`. Después se detiene hasta que el usuario defina 0.4; no escoger una tarea FUT por iniciativa propia.
+El usuario aprobó expresamente la QA de 0.3.0 el 14 de octubre de 2026. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados, aceptados e integrados; `v0.3.0` identifica la entrega. El proyecto queda detenido hasta que el usuario defina 0.4; no escoger una tarea FUT por iniciativa propia.
 
 ## Durante el trabajo y al terminar
 
@@ -119,9 +119,9 @@ Referencias: [Changesets](https://github.com/changesets/changesets), [guía Engr
 
 ## Punto de reanudación actual
 
-- Build local: **0.3.0**, `PLAY.bat`; RC2 `f8ada97` aceptada por el usuario el 14 de octubre de 2026.
+- Build local: **0.3.0**, `PLAY.bat`, rama `main`, etiqueta `v0.3.0`; RC2 `f8ada97` aceptada por el usuario el 14 de octubre de 2026.
 - D01–D36 y B1–B8 (D27 sustituida por D33) implementados. Evidencia vigente en RESULTADO, controles en README, guía humana en QA_0_3_0.md.
-- Próximo paso de cierre: integrar PR #14, cerrar las 21 issues/milestone y etiquetar v0.3.0. Después esperar instrucciones; no iniciar 0.4 sin definición del usuario.
+- PR #14 fusionada; 21 issues y milestone cerrados. Próximo paso: esperar instrucciones; no iniciar 0.4 sin definición del usuario.
 - Engram: lectura de proyecto verificada; escritura MCP pendiente del registro de sesión por el host. Este turno conserva el resumen en MD/Git y no intenta registrar otra sesión ni usar CLI como alternativa.
 
 

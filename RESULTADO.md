@@ -1,6 +1,6 @@
 # Resultado: 0.3.0 con QA humana aprobada
 
-QA humana aprobada el **14 de octubre de 2026** mediante la respuesta del usuario: «Apruebo el QA de la 0.3.0». La candidata aceptada es RC2, commit `f8ada97`, que incorpora D33–D36: conducción del actor, vida solo de la selección, orbe por ratón y HUD compacto. D27 queda sustituida por D33. El cierre de la [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) está autorizado, con D01–D36/B1–B8 y publicación de `v0.3.0`. No se ha recibido un informe humano desglosado por caso ni una nueva medición de duración; se registra la aceptación global expresa.
+QA humana aprobada el **14 de octubre de 2026** mediante la respuesta del usuario: «Apruebo el QA de la 0.3.0». La candidata aceptada es RC2, commit `f8ada97`, que incorpora D33–D36: conducción del actor, vida solo de la selección, orbe por ratón y HUD compacto. D27 queda sustituida por D33. La [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) está fusionada en `main` (`1304678`), con D01–D36/B1–B8; entrega estable [v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0). No se ha recibido un informe humano desglosado por caso ni una nueva medición de duración; se registra la aceptación global expresa.
 
 Abre `PLAY.bat`: el menú identifica **0.3.0**. El cierre cambia únicamente metadatos de versión, textos de menú/título y documentación; las reglas jugables aceptadas son las de RC2. [QA_0_3_0.md](QA_0_3_0.md) conserva el recorrido humano. Controles en [README.md](README.md), reglas en [COMBATE.md](COMBATE.md), decisiones en [DISENO_DEMO.md](DISENO_DEMO.md).
 
@@ -37,6 +37,6 @@ Lanzadores: `tools/DEMO_TEST.bat`, `tools/DEMO_CAPTURE.bat` o `tools/QA.ps1`. Su
 
 RC1 (`22ee5fd`) comprobó 187 casos lógicos, 211 con GPU y 24 capturas. La implementación anterior `b54514e` comprobó 157/179 y la primera integración `2a6cd6b` permanece en Git. Esas cifras y la órbita A/D retirada no aceptan D33–D36.
 
-La aceptación humana global cierra DEMO-10/11 y B1–B8 para esta entrega. Se procede a integrar la PR, cerrar los 21 issues cubiertos y el milestone, y publicar `v0.3.0`. Después se detiene el trabajo hasta definir 0.4. Los costes/daños siguen siendo valores propios provisionales; mapa/universo, multijugador, modelos Blender, escudos, formas, granadas, compañeros, karma y progresión quedan fuera de esta versión.
+La aceptación humana global cierra DEMO-10/11 y B1–B8 para esta entrega. PR integrada, 21 issues y milestone cerrados; etiqueta `v0.3.0` identifica la entrega final. El trabajo se detiene hasta definir 0.4. Los costes/daños siguen siendo valores propios provisionales; mapa/universo, multijugador, modelos Blender, escudos, formas, granadas, compañeros, karma y progresión quedan fuera de esta versión.
 
 Engram confirmó lectura exclusiva del proyecto `shadowsofkharuun`. El host no confirmó identidad de sesión para escrituras; la aprobación y el cierre quedan en MD/Git, sin crear otra sesión ni guardar por CLI. Próximo paso tras publicar: esperar la definición humana de 0.4.

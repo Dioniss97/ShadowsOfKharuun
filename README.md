@@ -2,7 +2,7 @@
 
 Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. Esta rama reúne exploración, combate táctico y decisiones narrativas en una sola misión. Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
 
-La **0.3.0 tiene QA humana aprobada el 14 de octubre de 2026**. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y comprobados. La candidata aceptada fue RC2 (`f8ada97`); el cierre solo actualiza versión, textos y documentación. El recorrido reproducible está en [QA_0_3_0.md](QA_0_3_0.md). La entrega anterior conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
+Versión estable: **[v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0)**, integrada en `main` con QA humana aprobada el 14 de octubre de 2026. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y comprobados. La candidata aceptada fue RC2 (`f8ada97`); el cierre solo actualiza versión, textos y documentación. El recorrido reproducible está en [QA_0_3_0.md](QA_0_3_0.md). La entrega anterior conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
 
 Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Seguimiento: [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los acuerdos están en [DISENO_DEMO.md](DISENO_DEMO.md), los estados en [PENDIENTES.md](PENDIENTES.md) y la evidencia de cada entrega en [RESULTADO.md](RESULTADO.md).
 
@@ -58,7 +58,7 @@ La conversación congela tiempo, movimiento, daño y regeneración. Conservas sa
 
 ## Aceptación y cierre
 
-El usuario confirmó: «Apruebo el QA de la 0.3.0». Está autorizado integrar la PR #14, cerrar las 21 issues cubiertas y el milestone, y publicar `v0.3.0`. El trabajo se detiene en esa versión hasta que el usuario defina 0.4.
+El usuario confirmó: «Apruebo el QA de la 0.3.0». La [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) está fusionada; las 21 issues y el milestone están cerrados, con historial conservado. La entrega queda identificada por `v0.3.0`. El trabajo se detiene en esa versión hasta que el usuario defina 0.4.
 
 ## Dependencias y verificación
 

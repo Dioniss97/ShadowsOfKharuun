@@ -48,7 +48,7 @@ func _ready() -> void:
 	quit.custom_minimum_size.y = 48
 	content.add_child(quit)
 	quit.pressed.connect(func(): quit_requested.emit())
-	content.add_child(KhUI.label("DEMO 0.3.0 RC2  ·  CANDIDATA A VALIDACIÓN",12,KhUI.GOLD))
+	content.add_child(KhUI.label("DEMO 0.3.0  ·  ASALTO AL TEMPLO",12,KhUI.GOLD))
 	content.add_child(KhUI.label("Una misión · combate táctico · dos rutas",12,KhUI.DIM))
 	start.grab_focus()
 	var credit = KhUI.label("KHARUUN  /  EL UMBRAL DE CENIZA",12,Color(0.80,0.63,0.43))

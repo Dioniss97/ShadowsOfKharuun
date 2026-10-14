@@ -2,7 +2,7 @@
 
 Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. Esta rama reúne exploración, combate táctico y decisiones narrativas en una sola misión. Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
 
-El código de `feature/temple-tactical-demo` es la **candidata 0.3.0-rc.2 para QA humana**. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y comprobados; falta tu evaluación de claridad y equilibrio antes del merge y etiqueta final `v0.3.0`. El recorrido sugerido está en [QA_0_3_0.md](QA_0_3_0.md). La última entrega estable conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
+La **0.3.0 tiene QA humana aprobada el 14 de octubre de 2026**. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y comprobados. La candidata aceptada fue RC2 (`f8ada97`); el cierre solo actualiza versión, textos y documentación. El recorrido reproducible está en [QA_0_3_0.md](QA_0_3_0.md). La entrega anterior conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
 
 Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Seguimiento: [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los acuerdos están en [DISENO_DEMO.md](DISENO_DEMO.md), los estados en [PENDIENTES.md](PENDIENTES.md) y la evidencia de cada entrega en [RESULTADO.md](RESULTADO.md).
 
@@ -56,9 +56,9 @@ En exploración, selecciona y habla con acólitos neutrales: rotan tres frases e
 
 La conversación congela tiempo, movimiento, daño y regeneración. Conservas salud, energía y botiquines entre encuentros, sin regalo automático. Resolver al guardián abre el acceso al templo; la victoria solo llega al reclamar el núcleo con clic y cursor de mano. Tras morir, reinicias toda la misión con recursos iniciales, tres botiquines y elecciones restablecidas.
 
-## Cierre pendiente
+## Aceptación y cierre
 
-Falta tu prueba humana con [QA_0_3_0.md](QA_0_3_0.md). Tras validar el alcance se integra la PR #14 y se etiqueta v0.3.0; las issues cubiertas se cierran conservando su historial. El trabajo se detiene en esa versión hasta definir 0.4.
+El usuario confirmó: «Apruebo el QA de la 0.3.0». Está autorizado integrar la PR #14, cerrar las 21 issues cubiertas y el milestone, y publicar `v0.3.0`. El trabajo se detiene en esa versión hasta que el usuario defina 0.4.
 
 ## Dependencias y verificación
 
@@ -70,7 +70,7 @@ La voz usa el TTS de Windows si Godot encuentra una voz española; siempre hay s
 - `tools/DEMO_CAPTURE.bat`: suite con GPU y capturas reales en `screenshots/`.
 - `tools/TEST.bat`, `CAPTURE.bat`, `TACTICAL_TEST.bat`, `TACTICAL_CAPTURE.bat` y `PLAYTEST.bat`: alias de esa misma suite, que también incluye un bot con reglas normales. Ya no prueban dos experiencias principales separadas.
 - `tools/QA.ps1`: verificación desde terminales que permitan scripts locales; los `.bat` no requieren cambiar la política de PowerShell.
-- Informes locales en `tests/*_report.json`; logs en `tools/logs/`. [RESULTADO.md](RESULTADO.md) distingue los flujos comprobados de la revisión humana pendiente.
+- Informes locales en `tests/*_report.json`; logs en `tools/logs/`. [RESULTADO.md](RESULTADO.md) distingue las pruebas automáticas de la aprobación humana.
 
 El duelo queda como prueba interna: `PLAY.bat --duel`. El lanzador también admite `PLAY.bat --fullscreen` y `PLAY.bat --rendering-method gl_compatibility` para equipos sin Vulkan; este último reduce algunos efectos y no es el renderizado principal de verificación.
 

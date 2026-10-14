@@ -1,44 +1,27 @@
 # Historial de entregas
 
-Las versiones identifican entregas jugables verificadas, mediante etiquetas Git locales. La numeración de las dos entregas existentes se asigna el 12 de octubre de 2026; las etiquetas apuntan a los commits originales y no reescriben su historial.
+Las versiones identifican entregas jugables verificadas mediante etiquetas Git inmutables. Las dos primeras etiquetas se asignaron el 12 de octubre de 2026 a sus commits originales, sin reescribir el historial. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
 
-Última entrega estable: **v0.2.0**. Versión del árbol actual: **demo 0.3 en desarrollo**, sin etiqueta final de entrega. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
+## 0.3.0 — 2026-10-14
 
-El árbol de `feature/temple-tactical-demo` contiene una build jugable de desarrollo de 0.3.0. La última entrega estable permanece en `v0.2.0`; D01–D36/B1–B8 implementadas; D27 sustituida por D33; la aceptación humana del usuario es el control final antes de presentar la entrega. Las decisiones de diseño de esta ronda están cerradas.
+QA humana aprobada por el usuario: «Apruebo el QA de la 0.3.0». Candidata aceptada: RC2 (`f8ada97`). Integración de PR #14 y publicación de `v0.3.0` autorizadas; el cierre solo actualiza versión, textos y documentación.
 
-## Sin publicar
+### Añadido y corregido
 
-### Demo 0.3 en desarrollo
+- Una única misión del templo con combate táctico: rondas independientes, pausa inicial por encuentro, acción actual y cuatro órdenes pendientes. Cada orden conserva su destinatario; el básico posterior usa el último objetivo ofensivo ejecutado y espera quieto fuera del alcance cuerpo a cuerpo.
+- Básico y ráfaga con dos intentos de impacto; empuje, descarga, curación propia y tres botiquines. Gesto de la mano izquierda y efectos diferenciados; consumo al ejecutar incluso con salud llena, sin recargas adicionales ni orden Defensa.
+- Falta de recursos D31: retirar la orden impagable y las pendientes del mismo recurso; la siguiente válida ocupa esa oportunidad. Solo si no queda ninguna se pierde la ronda, con básico automático en la siguiente. Poderes inasequibles desactivados y botiquín agotado sin icono.
+- A/D gira continuamente al personaje; W+A/D conduce en curvas/círculos y S retrocede sin invertir el frente. RMB conserva la órbita al soltar quieto/pausado y retorna suave al desplazarse. F cancela combate y libera movimiento, con enemigos que siguen persiguiendo.
+- Cursor y retícula contextuales: seleccionar con primer clic; segundo clic en hostil encola básico, neutral permite voz. Acólitos neutrales rotan tres frases.
+- Vida/nombre solo del seleccionado, también neutral. Tarjeta ofensiva compacta sobre el enemigo solo en combate. Menú inferior izquierdo con poderes personales primero y consumibles después, huecos futuros desactivados; cola de iconos, acción actual y Cancelar compactos, con destinos en tooltip; retrato y recursos pequeños.
+- Primera conversación automática del guardián; segunda por clic tras los acólitos, con combate o paso pacífico. Diálogos congelan tiempo y recursos, sin regalos entre encuentros. Ambas rutas abren el templo y requieren reclamar el mismo núcleo con ratón/mano y aproximación física. Reinicio completo después de morir.
+- Ayuda breve omitible, avisos contextuales y lanzadores unificados; duelo conservado como prueba interna.
 
-- Correcciones B1/B2 de la prueba humana: órbita persistente en reposo/pausa y retorno solo al desplazarse; A/D gira el actor continuamente; W sigue su frente y S mantiene el frente. Selectores compactos sobre el enemigo seleccionado, ocultos fuera de combate y tras F, con seguimiento de actor/cámara y sin cubrir su cara. Issues #15/#16 en el mismo PR borrador #14.
+### Verificación y organización
 
-- Misión del templo unificada con combate táctico, cola con destinatarios independientes y autoataque al último destinatario ofensivo ejecutado.
-- HUD con tres selectores de categorías, cuatro órdenes pendientes, botiquines con contador, huecos futuros desactivados y retrato/recursos. Ayuda breve omitible y avisos contextuales.
-- Básico y ráfaga con dos impactos; empuje, descarga, curación propia y tres botiquines. Consumo al ejecutar incluso con salud llena, sin recargas adicionales ni orden Defensa.
-- Gesto con la mano izquierda, descarga desde la palma y curación verde; orientación y contacto del arma, cuerpos sólidos y comprobación de obstáculos.
-- Pausa inicial una vez por encuentro, WASD tras F, persecución por la zona accesible y retorno suave de cámara sin movimiento circular involuntario.
-- Diálogo ramificado del guardián después de los acólitos, recursos conservados y tiempo congelado mientras se lee. Combate y paso pacífico habilitan el mismo núcleo final del templo; reinicio completo tras derrota.
-- Suite nueva de misión y bot con reglas normales; lanzadores DEMO y anteriores actualizados. Runners y motor de acción sustituidos conservados en el historial Git, retirados del árbol actual.
-- D31/Q10 implementadas: si una orden de energía o botiquín ya no puede pagarse al ejecutarse, se elimina junto con las demás del mismo recurso. Si quedan órdenes válidas de otros tipos, la siguiente ocupa esa oportunidad sin perder turno; si no, se pierde la acción y el básico automático vuelve en la siguiente. El poder aparece gris si el coste supera la energía actual.
-- D32/B6 (#20) implementadas: separar en el HUD inferior izquierdo el selector de consumibles del selector de poderes personales y mover allí la curación propia. Velocidad de la Fuerza y otros poderes que alteren atributos quedan pospuestos (FUT-09). No se crea `v0.3.0` final hasta implementar, verificar y recibir la aceptación humana. Evidencia y limitaciones en RESULTADO.
+213 comprobaciones lógicas y 238 con GPU, sin fallos; las 238 incluyen 25 capturas reales de 1280×720. Suite parcial adicional de UI/interacción: 72 comprobaciones sin fallos y seis capturas de 1920×1080. Bot normal: victoria en 98,15 s simulados, 203/340 salud y 33 acciones, sin teletransporte ni daño directo. Evidencia automática de RC2 y aprobación humana separadas en [RESULTADO.md](RESULTADO.md).
 
-- B3: cola vacía espera al alcance cuerpo a cuerpo; las órdenes explícitas permiten aproximación. B4: selección/voz, frases neutrales y segundo diálogo manual con acceso condicionado. B5: cursor propio, retícula segmentada y clic contextual que encola básico al objetivo. Guía de QA humana y menú de candidata 0.3.0.
-
-- QA posterior, candidata RC2: D33 sustituye la órbita A/D por giro continuo del actor; conducir con W+A/D y retroceso S sin inversión. Vida solo sobre selección hostil/neutral, sin barras 3D colectivas. Orbe por ratón con mano y aproximación física; E ya no reclama el núcleo.
-- HUD inspirado en KOTOR II: poderes personales primero a la izquierda, consumibles después; cola de cuatro iconos y acción actual con Cancelar debajo; retrato/recursos compactos. Issues B7/B8 #21/#22 en el mismo milestone/PR. Pruebas adicionales de UI ancha separadas de la misión completa.
-
-### Documentación y organización
-
-- Decisiones confirmadas de la segunda vuelta guardadas en `DISENO_DEMO.md`, con IDs D/Q y distinción entre acuerdos, propuestas y reglas pendientes.
-- Tareas, dependencias y criterios de aceptación en `PENDIENTES.md`; instrucciones para retomar el proyecto en `AGENTS.md`.
-- Conversación ramificada del guardián y objetivo final común documentados. La falta de energía queda pendiente de la comprobación del usuario en KOTOR.
-- Convención de versiones, changelog y protocolo de inicio/cierre de trabajo; revisión de dependencias para que una duda local no bloquee toda la iteración.
-- Repositorio privado `Dioniss97/ShadowsOfKharuun` preparado, con historial, ramas y etiquetas subidos mediante HTTPS; milestone `Demo 0.3.0` con 13 tareas de demo y correcciones B1–B6 (#15–20).
-- Engram actualizado de 1.7.1 a 3.3.2 estable, con SHA256 verificado, respaldo de memoria/configuración y conservación de los registros anteriores. MCP y plugin oficial de Codex configurados, proyecto fijado y cinco resúmenes manuales de contexto guardados. Protocolo MCP probado; carga de herramientas/hooks en el agente requiere recargar Codex.
-- Revisión previa a producción: lectura de Engram desde el MCP de esta sesión verificada y política explícita de consultas exclusivas a `shadowsofkharuun`, conservando memorias ajenas. Instalado jq 1.8.2 oficial, dependencia ausente de los hooks; escritura de agente pendiente de recarga/registro confirmado del cliente.
-- Respuestas D21–D24 incorporadas al diseño y backlog: curación con salud llena consume ronda/recurso, persecución por toda la zona accesible, reinicio completo de misión y congelación de tiempo/recursos durante el diálogo. Q02/Q03/Q07 cerradas. Las 13 issues originales se revisaron sin iniciar implementación.
-
-La documentación y organización anteriores se mantienen. La build de desarrollo conserva la evidencia previa descrita en RESULTADO; las reglas de cámara, combate pasivo, interacción, fallo por recursos y HUD personal están implementadas y comprobadas. La aceptación humana final corresponde al usuario.
+Diseño D01–D36 (D27 sustituida por D33), criterios DEMO-01–13/B1–B8 y guía de QA conservados en Markdown/Git. Repo privado, PR #14 y milestone con 21 issues. Engram mantiene lectura exclusiva de `shadowsofkharuun`; sus memorias ajenas se conservan y las escrituras de agente esperan el registro del host. El proyecto se detiene después de esta entrega hasta que el usuario defina 0.4.
 
 ## 0.2.0 — 2026-10-12
 

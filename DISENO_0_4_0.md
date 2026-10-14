@@ -30,19 +30,26 @@ Los identificadores C04 registran acuerdos transversales recuperados de la conve
 
 ## 3. Propuesta prioritaria para 0.4.0 — **pendiente de aprobación**
 
-- **P04-01 — Contrato mínimo Blender–Godot:** definir una ubicación para `.blend`, una ruta para el `.glb` exportado, escala/orientación, importación y procedencia/licencias. Automatizar la exportación mediante script solo si facilita repetirla; no crear un sistema de builds artísticos general.
+- **P04-01 — Contrato mínimo Blender–Godot:** definir una ubicación para `.blend`, una ruta para el `.glb` exportado, escala/orientación, importación y procedencia/licencias. La elección del script de exportación Blender Python ya está aprobada como decisión técnica T04-06; el alcance global del pipeline sigue pendiente. No crear un sistema de builds artísticos general.
 - **P04-02 — Estatua Sith original:** producir **una única malla o conjunto artístico reutilizable** de estatua monumental para el templo, con aspecto coherente con una dirección de realismo estilizado oscuro (pendiente de referencias concretas). Varias instancias de esa misma pieza no obligan a crear múltiples modelos.
-- **P04-03 — Integración en la misión:** reemplazar la **geometría visual** de las estatuas de `scripts/architecture.gd` por el recurso importado o escena reutilizable, conservando posiciones, colisiones y comportamiento si no hay razón técnica para cambiarlos.
+- **P04-03 — Integración en la misión:** reemplazar la **geometría visual** de las estatuas de `scripts/architecture.gd` por el recurso importado o escena reutilizable, conservando posiciones, colisiones y comportamiento. La reutilización de **un mismo GLB en las dos instancias existentes** ya está aprobada como decisión técnica T04-04; implementar la integración aún requiere aprobar y autorizar el alcance.
 - **P04-04 — Revisión y QA:** validar tanto el resultado visual como la importación, materiales, rendimiento y regresiones del recorrido jugable de la 0.3.0. Mantener revisión humana explícita antes de aprobar una entrega artística.
 
 **Principio de alcance:** la 0.4.0 propuesta tiene como protagonista **una estatua**, no una remodelación completa del templo. No incorporar tareas adicionales por el mero hecho de que Blender esté configurado.
 
+### Decisiones técnicas aprobadas dentro del borrador (14-10-2026)
+
+Estas decisiones resuelven opciones concretas de arquitectura; **no aprueban todavía el alcance global de 0.4.0 ni autorizan implementar**. Se conservan los IDs T04-04 y T04-06 de la propuesta técnica debatida; otros puntos técnicos continúan como propuestas.
+
+- **T04-04 — Un GLB, dos instancias (aprobada):** producir **un único recurso de estatua** y utilizarlo en **ambas posiciones actuales** de `scripts/level.gd`: `(-10.8, 0, -13.8)` y `(10.8, 0, -13.8)`, conservando sus rotaciones actuales (`0` y `-0.05` rad), colisiones y funcionalidad. No crear un modelo independiente por posición. **Criterio verificable, tras autorización:** las dos instancias utilizan el mismo GLB y el recorrido jugable conserva las colisiones/transformaciones previas. Esta decisión resuelve Q04-03.
+- **T04-06 — Script Blender Python sencillo (aprobada):** la exportación de la fuente `.blend` al modelo `.glb` se realizará mediante **un script pequeño ejecutable con Blender Python**, específico para la estatua y reproducible por Codex. Se documentarán su invocación, versión de Blender, entrada y salida. **No** introducir un gestor de assets, una automatización general, dependencias adicionales ni CI artístico por defecto. **Criterio verificable, tras autorización:** Codex puede ejecutar el script en Windows para regenerar e importar el GLB en Godot. La elección del script resuelve esa parte de Q04-04; siguen pendientes las rutas y la comprobación del entorno local.
+
 ## 4. Criterios de aceptación propuestos (si se aprueba P04)
 
 1. **Fuente editable:** el recurso tiene fuente Blender versionada y trazabilidad de sus materiales/texturas; puede reconstruirse la exportación sin depender de una imagen generada ni de un archivo externo desconocido.
-2. **Exportación comprobada:** el modelo se entrega como `.glb` compatible con Godot, con escala, orientación, sombreado y materiales apropiados; la ruta fuente → exportación queda documentada y repetible.
+2. **Exportación comprobada:** el modelo se entrega como `.glb` compatible con Godot, con escala, orientación, sombreado y materiales apropiados; un script Blender Python sencillo permite repetir y documentar la exportación conforme a T04-06.
 3. **Calidad artística:** la estatua mantiene una silueta reconocible y un nivel de detalle superior al conjunto de cajas/cilindros actual; las capturas reales de Godot desde las vistas jugables permiten revisarla. **Su aceptación visual depende del usuario**, no solo del agente.
-4. **Integración segura:** sustituir el recurso no rompe interacciones, colisiones, navegación practicable, iluminación esencial ni la misión del templo. Las variantes/instancias existentes quedan coherentes.
+4. **Integración segura:** ambas instancias existentes utilizan el mismo GLB (T04-04), conservan sus posiciones/rotaciones y no se rompen interacciones, colisiones, navegación practicable, iluminación esencial ni la misión del templo.
 5. **Pruebas y evidencia:** documentar al menos una ejecución/importación verificable, capturas reales dentro de Godot y pruebas relevantes de regresión de la `v0.3.0`. No confundir pruebas automáticas con QA visual humana.
 6. **Procedencia:** conservar registro de autoría/origen/licencia de los assets; no incorporar modelos, voces, música ni texturas extraídos de KOTOR.
 7. **Cierre:** solo después de implementación autorizada, QA, PR y aprobación humana se actualizarán los informes de entrega y se creará `v0.4.0`. No crear tag anticipado.
@@ -57,11 +64,12 @@ Esos temas pueden estudiarse en sus conversaciones y documentos correspondientes
 
 - **Q04-01 — Aprobación del recorte:** ¿se confirma expresamente **0.4.0 = pipeline Blender–Godot + una estatua Sith original integrada**, sin inventario ni más arte ambiental? La conversación mostró acuerdo favorable con la orientación, pero aún no se ha registrado una aprobación inequívoca de este recorte como milestone.
 - **Q04-02 — Dirección visual:** confirmar referencias concretas de silueta, piedra/materiales, complejidad y acabado de la estatua. Puede resolverse al iniciar el issue artístico antes de producir su geometría; la ausencia de referencias no justifica generar modelos arbitrarios.
-- **Q04-03 — Alcance de sustitución:** ¿usar la misma estatua exportada en las posiciones ya existentes, o sustituir solo una instancia de prueba? Por defecto se propone conservar las instancias actuales reutilizando el mismo asset.
-- **Q04-04 — Pipeline mínimo:** elegir convenciones exactas de carpetas/exportación y cómo validar Blender disponible en el entorno local. No presuponer que Blender esté instalado o accesible desde el agente.
+- **Q04-04 — Pipeline mínimo (parcialmente resuelto):** **aprobada** la exportación con script Blender Python sencillo (T04-06). **Pendiente** concretar carpetas, parámetros/convenciones de exportación y verificar Blender disponible en el entorno local de Codex. No presuponer que esté instalado o accesible.
 - **Q04-05 — Calidad aceptable:** especificar en la revisión visual cómo reconocer que la estatua tiene calidad suficiente sin exigir fotorrealismo. Esta decisión se valida con capturas del juego, no con un número arbitrario de polígonos.
 
-Las preguntas no impiden redactar el diseño; sí impiden tratar como aprobada una funcionalidad concreta cuando afecten a su alcance o aceptación.
+**Q04-03 — Resuelta el 14-10-2026:** reutilizar el mismo GLB en ambas posiciones existentes (T04-04). No sigue abierta.
+
+Las preguntas restantes no impiden redactar el diseño; sí impiden tratar como aprobada una funcionalidad concreta cuando afecten a su alcance o aceptación.
 
 ## 7. Desglose de GitHub **previsto, no creado**
 
@@ -69,9 +77,9 @@ Las preguntas no impiden redactar el diseño; sí impiden tratar como aprobada u
 
 - **Milestone `0.4.0`**: agrupa los entregables; no necesita issue «hacer versión 0.4.0».
 - **Issue padre «Primera estatua artística integrada en la misión»**: representa el resultado verificable global, no una segunda copia del milestone.
-  - **Sub-issue A «Establecer pipeline mínimo Blender–Godot»**: rutas, formatos, convenciones, comprobación de exportación/importación y documentación.
+  - **Sub-issue A «Establecer pipeline mínimo Blender–Godot»**: rutas, formatos, convenciones, script Blender Python pequeño (T04-06), comprobación de exportación/importación y documentación.
   - **Sub-issue B «Modelar y revisar estatua Sith original»**: fuente editable, materiales, iteraciones y revisión visual del modelo exportado.
-  - **Sub-issue C «Integrar estatua en el templo y verificar la misión»**: escena reutilizable, sustitución visual, capturas reales, regresiones y aceptación humana.
+  - **Sub-issue C «Integrar estatua en el templo y verificar la misión»**: escena reutilizable con el mismo GLB en las dos estatuas (T04-04), sustitución visual, capturas reales, regresiones y aceptación humana.
 
 **Dependencias:** C queda bloqueada por las entregas de A y B; A y B pueden avanzar parcialmente en paralelo acordando escala y pose/emplazamiento. No registrar más bloqueos si no son reales.
 
@@ -79,7 +87,7 @@ Cada issue debe usar la plantilla `.github/ISSUE_TEMPLATE/funcionalidad-aprobada
 
 ## 8. Condiciones para pasar del borrador a la planificación aprobada
 
-1. Obtener confirmación del usuario para **Q04-01** y, cuando corresponda, perfilar Q04-02 y Q04-03.
+1. Obtener confirmación del usuario para **Q04-01** y perfilar las cuestiones que sigan abiertas (Q04-02, parte pendiente de Q04-04 y Q04-05). **Q04-03 ya está resuelta** por T04-04.
 2. Cambiar el estado de este documento a **alcance aprobado**, conservando qué ideas siguen abiertas o pospuestas.
 3. Crear el milestone `0.4.0`, la issue padre y sub-issues **nativas**, dependencias reales y etiquetas conforme a `GESTION_DESARROLLO.md`. Verificar enlaces, jerarquía y ausencia de duplicación.
 4. **No implementar el videojuego ni iniciar producción artística** hasta una autorización explícita posterior del usuario.

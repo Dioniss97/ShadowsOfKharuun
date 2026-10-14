@@ -34,6 +34,25 @@ var main: Node
 var last_health = 340.0
 var legacy_actions: HBoxContainer
 var controls_label: Label
+var speech: Label
+var speech_time = 0.0
+
+func say(speaker: String, phrase: String) -> void:
+	speech.text = "%s: «%s»" % [speaker,phrase]
+	speech_time = 5.0
+	main.level.audio.speak(phrase)
+
+class Portrait extends Control:
+	func _draw() -> void:
+		draw_rect(Rect2(Vector2.ZERO, size), Color(0.055, 0.042, 0.055))
+		var c = size * 0.5
+		draw_colored_polygon(PackedVector2Array([Vector2(3, size.y), Vector2(6, 40), c + Vector2(-13, 1), c + Vector2(13, 1), Vector2(size.x - 6, 40), Vector2(size.x - 3, size.y)]), Color(0.23, 0.19, 0.19))
+		draw_colored_polygon(PackedVector2Array([c + Vector2(-13, -18), c + Vector2(12, -19), c + Vector2(12, -2), c + Vector2(6, 10), c + Vector2(-7, 10), c + Vector2(-13, -3)]), Color(0.58, 0.45, 0.35))
+		draw_colored_polygon(PackedVector2Array([c + Vector2(-14, -6), c + Vector2(-16, -21), c + Vector2(0, -27), c + Vector2(14, -19), c + Vector2(13, -10), c + Vector2(2, -18), c + Vector2(-7, -13)]), Color(0.10, 0.075, 0.065))
+		draw_line(c + Vector2(-8, -6), c + Vector2(-3, -5), Color(0.15, 0.09, 0.07), 2.0, true)
+		draw_line(c + Vector2(3, -5), c + Vector2(8, -6), Color(0.15, 0.09, 0.07), 2.0, true)
+		draw_line(c + Vector2(-4, 4), c + Vector2(4, 4), Color(0.25, 0.13, 0.09), 1.0, true)
+		draw_rect(Rect2(Vector2.ZERO, size), GOLD, false, 1.0)
 
 static func style(bg: Color, border: Color = GOLD, width: int = 1) -> StyleBoxFlat:
 	var s = StyleBoxFlat.new()
@@ -132,23 +151,42 @@ func build_hud() -> void:
 	root.add_child(hud)
 	hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var objective = panel_at(hud,Vector2(28,25),Vector2(390,84),Control.PRESET_TOP_LEFT)
+	var objective = panel_at(hud,Vector2(18,16),Vector2(300,60),Control.PRESET_TOP_LEFT)
 	var objective_box = VBoxContainer.new()
 	objective.add_child(objective_box)
-	objective_box.add_child(label("KHARUUN  /  OBJETIVO",11,GOLD))
-	objective_label = label("Alcanza la entrada del templo",18)
+	objective_box.add_child(label("KHARUUN / OBJETIVO",9,GOLD))
+	objective_label = label("Alcanza la entrada del templo",13)
 	objective_box.add_child(objective_label)
-	var status = panel_at(hud,Vector2(28,-160),Vector2(278,132),Control.PRESET_BOTTOM_LEFT)
+	var status = panel_at(hud,Vector2(-142,-126),Vector2(124,110),Control.PRESET_BOTTOM_RIGHT)
+	var status_style = status.get_theme_stylebox("panel").duplicate()
+	status_style.content_margin_left = 6
+	status_style.content_margin_right = 6
+	status_style.content_margin_top = 5
+	status_style.content_margin_bottom = 5
+	status_style.border_color = Color(0.12,0.52,0.47)
+	status.add_theme_stylebox_override("panel",status_style)
 	var status_box = VBoxContainer.new()
+	status_box.add_theme_constant_override("separation",4)
 	status.add_child(status_box)
-	health_label = label("VITALIDAD   340 / 340",12)
+	var portrait_row = HBoxContainer.new()
+	portrait_row.add_theme_constant_override("separation",6)
+	status_box.add_child(portrait_row)
+	var portrait = Portrait.new()
+	portrait.custom_minimum_size = Vector2(64,64)
+	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	portrait_row.add_child(portrait)
+	health_bar = bar(Color(0.70,0.15,0.12),64)
+	health_bar.custom_minimum_size = Vector2(10,64)
+	health_bar.fill_mode = ProgressBar.FILL_BOTTOM_TO_TOP
+	portrait_row.add_child(health_bar)
+	energy_bar = bar(Color(0.23,0.49,0.70),64)
+	energy_bar.custom_minimum_size = Vector2(10,64)
+	energy_bar.fill_mode = ProgressBar.FILL_BOTTOM_TO_TOP
+	portrait_row.add_child(energy_bar)
+	health_label = label("Vida 340/340",9)
 	status_box.add_child(health_label)
-	health_bar = bar(Color(0.70,0.15,0.12),11)
-	status_box.add_child(health_bar)
-	energy_label = label("ENERGÍA   100 / 100",12,Color(0.57,0.72,0.85))
+	energy_label = label("Energía 100/100",9,Color(0.57,0.72,0.85))
 	status_box.add_child(energy_label)
-	energy_bar = bar(Color(0.23,0.49,0.70),7)
-	status_box.add_child(energy_bar)
 	var actions = HBoxContainer.new()
 	legacy_actions = actions
 	hud.add_child(actions)
@@ -174,10 +212,10 @@ func build_hud() -> void:
 		p.custom_minimum_size.x = 110
 		v.add_child(p)
 		ability_bars.append(p)
-	var controls = label("WASD  Mover   ·   SHIFT  Correr\nE  Interactuar   ·   ESC  Pausa",12,DIM)
+	var controls = label("W/S  Avanzar/retroceder  ·  A/D  Girar\nE  Interactuar   ·   ESC  Pausa",12,DIM)
 	controls_label = controls
 	hud.add_child(controls)
-	place(controls,Vector2(-315,-77),Vector2(295,56),Control.PRESET_BOTTOM_RIGHT)
+	place(controls,Vector2(-320,74),Vector2(295,65),Control.PRESET_TOP_RIGHT)
 	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	timer_label = label("00:00",15,GOLD)
 	hud.add_child(timer_label)
@@ -198,12 +236,18 @@ func build_hud() -> void:
 	message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint = label("",14,IVORY)
 	hud.add_child(hint)
-	place(hint,Vector2(-280,115),Vector2(560,28),Control.PRESET_CENTER)
+	place(hint,Vector2(-280,-282),Vector2(560,28),Control.PRESET_CENTER_BOTTOM)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	toast = label("",24,IVORY)
 	hud.add_child(toast)
-	place(toast,Vector2(-400,132),Vector2(800,42),Control.PRESET_CENTER_TOP)
+	place(toast,Vector2(-400,320),Vector2(800,42),Control.PRESET_CENTER_TOP)
 	toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	speech = label("",17,IVORY)
+	hud.add_child(speech)
+	place(speech,Vector2(-400,138),Vector2(800,65),Control.PRESET_CENTER_TOP)
+	speech.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	speech.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	speech.hide()
 
 func clear_overlay() -> void:
 	if is_instance_valid(overlay):
@@ -220,7 +264,6 @@ func show_menu() -> void:
 	menu = KhMenu.new()
 	root.add_child(menu)
 	menu.start_requested.connect(func(): main.new_game())
-	menu.duel_requested.connect(func(): main.new_duel())
 	menu.quit_requested.connect(func(): main.get_tree().quit())
 
 func show_game() -> void:
@@ -228,14 +271,18 @@ func show_game() -> void:
 	hud.show()
 	dialog_panel.hide()
 	last_health = main.level.player.health
-	legacy_actions.visible = not main.level.duel_mode
-	message.visible = not main.level.duel_mode
-	hint.visible = not main.level.duel_mode
-	controls_label.text = "WASD  Mover · BOTÓN DERECHO  Cámara\nESPACIO  Táctica · ESC  Menú" if main.level.duel_mode else "WASD  Mover   ·   SHIFT  Correr\nE  Interactuar   ·   ESC  Pausa"
+	legacy_actions.hide()
+	message.hide()
+	hint.show()
+	controls_label.text = "W/S · avanzar/retroceder · A/D · girar\nCLIC · seleccionar / actuar\nESPACIO · táctica  /  ESC · menú"
+	speech_time = 0
+	controls_label.add_theme_font_size_override("font_size",11)
 	announce("EL UMBRAL DE CENIZA")
 
 func show_dialogue(dialogue: KhDialogue) -> void:
 	hud.hide()
+	speech_time = 0
+	speech.hide()
 	dialog_panel.show()
 	for child in dialog_content.get_children():
 		dialog_content.remove_child(child)
@@ -246,8 +293,9 @@ func show_dialogue(dialogue: KhDialogue) -> void:
 	body_text.custom_minimum_size.y = 65
 	dialog_content.add_child(body_text)
 	if dialogue.awaiting_choice:
-		for i in range(3):
-			var b = button("%d.  %s" % [i+1,KhDialogue.OPTIONS[i]])
+		var options = dialogue.options()
+		for i in range(options.size()):
+			var b = button("%d.  %s" % [i+1,options[i]])
 			b.custom_minimum_size.y = 39
 			b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			dialog_content.add_child(b)
@@ -295,11 +343,15 @@ func show_end(victory: bool, elapsed: float) -> void:
 	var title = label(("DUELO COMPLETADO" if duel else "DEMO COMPLETADA") if victory else "HAS CAÍDO",39)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(title)
-	var text = label(("Has dominado las rondas del centinela.\nEl umbral aún guarda su secreto." if duel else "«El templo ha caído. Pero algo antiguo\ncomienza a despertar».") if victory else "La sombra aún espera. Regresa al umbral.",21)
+	var peaceful: bool = not duel and main.mission.guardian_resolution == "peaceful"
+	var ending = "Has reclamado el secreto del templo.\nEl guardián sigue vivo: tu pacto ha abierto el camino." if peaceful else "Has reclamado el secreto del templo.\nEl guardián cayó, pero algo antiguo comienza a despertar."
+	if duel: ending = "Has dominado las rondas del centinela.\nEl umbral aún guarda su secreto."
+	var text = label(ending if victory else "La sombra aún espera. Regresa al inicio de la misión.",20)
 	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(text)
 	if victory:
-		var stats = label("%d enemigo%s derrotado%s  ·  Tiempo %02d:%02d" % [main.mission.kills,"" if duel else "s","" if duel else "s",int(elapsed)/60,int(elapsed)%60],13,DIM)
+		var plural = "" if main.mission.kills == 1 else "s"
+		var stats = label("%d enemigo%s derrotado%s  ·  Tiempo %02d:%02d" % [main.mission.kills,plural,plural,int(elapsed)/60,int(elapsed)%60],13,DIM)
 		stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		v.add_child(stats)
 	var restart = button(("Repetir duelo" if duel else "Repetir misión") if victory else ("Reiniciar duelo" if duel else "Reiniciar misión"),true)
@@ -315,14 +367,11 @@ func show_pause() -> void:
 	var title = label("PAUSA",36)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	v.add_child(title)
-	if main.level.duel_mode:
-		v.add_child(label("Clic: objetivo · Botón derecho: cámara · WASD: mover",16))
-		v.add_child(label("1: empuje · 2: descarga · 3: ataque · 4: defensa",16))
-		v.add_child(label("Espacio: pausa táctica · Tab: objetivo · F: retirarse",14,GOLD))
-	else:
-		v.add_child(label("WASD: movimiento · Ratón: cámara · Shift: correr",16))
-		v.add_child(label("Clic: arma · 1: empuje · 2: descarga · E: interactuar",16))
-		v.add_child(label("Los círculos rojos anuncian ataques. Aléjate para esquivarlos.",14,GOLD))
+	v.add_child(label("Clic / Tab: objetivo · Flechas / rueda: recorrer acciones",16))
+	v.add_child(label("1: empuje · 2: descarga · 3: básico · 4: ráfaga",16))
+	v.add_child(label("5: curación propia · 6: botiquín · Clic: seleccionar y actuar",16))
+	v.add_child(label("F: liberar movimiento · W/S: avanzar/retroceder · A/D: girar",15,GOLD))
+	v.add_child(label("Botón derecho: girar cámara · Se centra al avanzar o retroceder",14,DIM))
 	var resume = button("Continuar  [ESC]",true)
 	v.add_child(resume)
 	resume.pressed.connect(func(): resume_requested.emit())
@@ -341,26 +390,21 @@ func _process(delta: float) -> void:
 	var p = main.level.player
 	var combat = main.level.combat
 	var mission = main.mission
+	var movement_text = "F · liberar movimiento" if combat.engaged or not combat.current_action.is_empty() else "W/S · avanzar/retroceder · A/D · girar"
+	controls_label.text = movement_text + "\nBOTÓN DERECHO · cámara  /  CLIC · seleccionar\nESPACIO · táctica  /  ESC · menú"
 	if p.health < last_health: flash.color.a = 0.17
 	last_health = p.health
 	health_bar.value = p.health/p.max_health*100
 	energy_bar.value = p.energy
-	health_label.text = "VITALIDAD   %d / %d" % [ceili(p.health),int(p.max_health)]
-	energy_label.text = "ENERGÍA   %d / 100" % int(p.energy)
+	health_label.text = "Vida %d/%d" % [ceili(p.health),int(p.max_health)]
+	energy_label.text = "Energía %d/100" % int(p.energy)
 	objective_label.text = mission.objective()
 	timer_label.text = "%02d:%02d" % [int(mission.elapsed)/60,int(mission.elapsed)%60]
-	var cooldowns = [combat.attack_cooldown,combat.push_cooldown,combat.lightning_cooldown]
-	var maxima = [0.80,7.0,10.0]
-	for i in range(3):
-		ability_labels[i].text = "%.1f s" % cooldowns[i] if cooldowns[i] > 0 else ("24 ENERGÍA" if i == 1 else ("32 ENERGÍA" if i == 2 else "LISTO"))
-		ability_bars[i].value = (1.0-cooldowns[i]/maxima[i])*100
-	message.text = combat.ability_error if combat.error_time > 0 else ""
-	if is_instance_valid(combat.selected) and combat.enabled:
-		target_panel.show()
-		target_label.text = combat.selected.display_name
-		target_bar.value = combat.selected.health/combat.selected.max_health*100
-	else: target_panel.hide()
-	hint.text = "E  Hablar con el guardián" if mission.state == KhMission.State.EXPLORATION and p.position.z < -6.5 else ("Acércate al enemigo · ataca · retrocede ante los círculos rojos" if mission.state == KhMission.State.COMBAT else "")
+	# Name and health now share the projected card above the selected enemy.
+	target_panel.hide()
+	hint.text = "Selecciona al guardián y vuelve a clicar para hablar" if mission.state == KhMission.State.GUARDIAN_WAIT else ("Clica el núcleo para reclamarlo" if mission.state == KhMission.State.TEMPLE else "")
 	if not main.get_tree().paused:
 		toast_time = maxf(0,toast_time-delta)
-	toast.modulate.a = 0 if main.level.duel_mode and main.tactical_paused else minf(1,toast_time)
+		speech_time = maxf(0,speech_time-delta)
+	speech.visible = speech_time > 0
+	toast.modulate.a = 0 if main.tactical_paused else minf(1,toast_time)

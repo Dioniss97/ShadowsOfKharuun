@@ -1,48 +1,42 @@
-# Resultado: primera iteración táctica
+# Resultado: 0.3.0 con QA humana aprobada
 
-Entrega local del 12 de octubre de 2026. Se han completado los pasos 1–3 del plan: reglas documentadas, corrección de arma y colisiones, y un duelo jugable para validar el núcleo del combate antes de adaptarlo a toda la misión.
+QA humana aprobada el **14 de octubre de 2026** mediante la respuesta del usuario: «Apruebo el QA de la 0.3.0». La candidata aceptada es RC2, commit `f8ada97`, que incorpora D33–D36: conducción del actor, vida solo de la selección, orbe por ratón y HUD compacto. D27 queda sustituida por D33. El cierre de la [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) está autorizado, con D01–D36/B1–B8 y publicación de `v0.3.0`. No se ha recibido un informe humano desglosado por caso ni una nueva medición de duración; se registra la aceptación global expresa.
 
-Abre `PLAY.bat` y elige **Duelo táctico · nueva iteración**. Empieza pausado: selecciona al centinela con clic o Tab, prepara órdenes y pulsa Espacio. La misión del templo continúa disponible en **Nueva partida · misión original**.
+Abre `PLAY.bat`: el menú identifica **0.3.0**. El cierre cambia únicamente metadatos de versión, textos de menú/título y documentación; las reglas jugables aceptadas son las de RC2. [QA_0_3_0.md](QA_0_3_0.md) conserva el recorrido humano. Controles en [README.md](README.md), reglas en [COMBATE.md](COMBATE.md), decisiones en [DISENO_DEMO.md](DISENO_DEMO.md).
 
-## Cambios comprobados
+## Cambios de esta QA
 
-- Espada orientada hacia delante, postura de combate y animación con preparación, contacto y recuperación. La locomoción conserva la orientación durante el golpe.
-- Jugador y enemigos sólidos: el movimiento físico ya no permite atravesar al adversario. Se mantienen accesibles el patio, el umbral y la rampa del templo.
-- Impacto diferido durante la animación, comprobado una sola vez y sujeto a alcance y visibilidad. La misión original también utiliza impacto diferido para el arma.
-- Duelo en tiempo real con pausa y relojes propios por combatiente. Una acción activa y hasta cuatro órdenes pendientes, cancelables; cada orden conserva su objetivo.
-- Selección con clic o Tab, aproximación física al objetivo, ataque básico automático con cola vacía, retirada y movimiento manual que interrumpe el enfrentamiento.
-- Empuje, descarga y defensa; energía cobrada al ejecutar, recargas, tiradas de acierto y crítico. Empuje interrumpe el golpe enemigo preparado y evita impactos posteriores invisibles.
-- Interfaz para objetivo, acción, recuperación, cola y resultados. Espacio congela movimiento, daño, energía y relojes, pero permite preparar órdenes. Escape conserva la pausa táctica al cerrar su menú.
-- Victoria, derrota, repetición del duelo y regreso al menú. Controles y reglas en [README.md](README.md) y [COMBATE.md](COMBATE.md).
+- A/D gira continuamente al personaje; W lo conduce según su frente y W+A/D describe curvas/círculos. S no invierte el frente. RMB conserva la órbita de cámara en reposo/pausa y el retorno durante desplazamiento. Durante combate el actor encara su destinatario y F libera el movimiento; pausa congela su giro.
+- Eliminadas las barras 3D de enemigos. Solo la selección viva/visible tiene nombre y vida, incluso si es neutral. Las acciones ofensivas siguen ocultas fuera del combate. Cambiar selección conserva las órdenes anteriores.
+- Abajo izquierda: curación propia primero, botiquines después, huecos futuros desactivados. Menú de aproximadamente **232×84 px**, antes 300×178.
+- Cola central de aproximadamente **244×90 px**, antes 608×172: cuatro iconos pendientes, acción actual a la derecha, recuperación y Cancelar debajo. Los destinos aparecen al pasar el ratón. Huecos vacíos quedan en blanco y la acción actual no duplica el primer icono pendiente. Se conserva cancelación individual, limpieza, pausa, capacidad y recursos.
+- Retrato y barras verticales de recursos compactos a la derecha. Tarjeta de acción del objetivo de unos 150×72 px y cabecera independiente de nombre/vida. La interfaz deja libre la escena.
+- El orbe se reclama con clic y mano: raycast del objeto o pequeño marcador sobre el altar. El marcador mantiene visible la interacción si el propio avatar tapa la esfera. Si está lejos, el personaje se aproxima físicamente; W/S cancela el acercamiento y pausa lo congela. Puerta, resolución del guardián y obstáculos siguen siendo obligatorios; E no reclama el núcleo.
 
-## Evidencia de verificación
+## Evidencia vigente
 
-| Comprobación | Resultado / evidencia local |
+| Comprobación | Resultado |
 |---|---|
-| Duelo, sin ventana | 56 comprobaciones, 0 fallos; `tests/tactical_logic_report.json`, `tools/logs/tactical-test.log` |
-| Duelo, con GPU | 60 comprobaciones, 0 fallos; `tests/tactical_capture_report.json`, `tools/logs/tactical-capture.log` |
-| Capturas del duelo | Cuatro PNG reales de 1280 × 720; pausa, ataque frontal, vista lateral y victoria en `screenshots/tactical_*.png`; inspeccionados visualmente |
-| Partida normal del duelo | Victoria en 36,62 s simulados, 13 acciones del jugador, 11 ataques enemigos y 276 de salud restante; incluido en ambos informes tácticos |
-| Regresión de la misión original | 34 comprobaciones sin ventana y 43 con GPU, 0 fallos; `tests/logic_report.json`, `tests/capture_report.json` |
-| Partida normal de la misión original | Victoria con 4 bajas, 111 ataques básicos, 34 habilidades y 166,27 s totales; `tests/playthrough_report.json` |
-| Controles reales dentro de Godot | Eventos de clic sobre enemigo y botones de habilidades, teclado, autorepetición, pausa y arrastre de cámara con botón derecho |
-| Reloj de rondas | Mismo orden e impactos con pasos simulados a 30, 60 y 144 Hz; no constituye una medición de rendimiento |
-| Motor y GPU | Godot 4.7.2 estándar portátil; Vulkan / Forward+ en Radeon RX 6600; procesos de prueba terminados con código 0 y sin errores de scripts o recursos |
+| Suite completa sin ventana | **213 comprobaciones, 0 fallos**; `tests/demo_logic_report.json`, `tools/logs/demo-test.log` |
+| Suite completa con GPU | **238 comprobaciones, 0 fallos**: los mismos 213 casos y 25 capturas reales de 1280×720; `tests/demo_capture_report.json`, `tools/logs/demo-capture.log` |
+| UI/interacción en ventana ancha | **72 comprobaciones, 0 fallos**, 6 capturas de 1920×1080; `tests/demo_hud_capture_report.json`, `tools/logs/demo-hud-wide.log`. Es una suite parcial, no otra partida completa |
+| Entradas | Clics reales de selección, voz, órdenes, rueda/flechas, curación/botiquín y orbe/marcador; teclado A/D, W/S, F, RMB, pausa/Escape |
+| Flujos | Colas A/B, recursos insuficientes con o sin otras órdenes, ambos contactos de ráfaga, curación con salud llena, persecución/colisiones, pausa, tres ramas del guardián, acceso/final y reinicio |
+| Bot normal | Victoria en **98.15 s simulados**, salud **203/340**, **33 acciones**, 4 bajas y 1 botiquín restante |
+| Integridad del bot | Estadísticas de producción, movimiento real y órdenes; 0 teletransportes y 0 llamadas de daño directo. Daño recibido 274.5, curación 137.5 |
+| Motor | Godot 4.7.2 estándar, Vulkan / Forward+ en RX 6600; suites finales sin errores de scripts o recursos |
+| Promoción final | Arranque headless de 0.3.0 con `--quit-after 5`: código 0, sin errores; `git diff --check` correcto. Solo versión, textos y documentación cambiados desde RC2 |
 
-Los tests de estados usan daño directo para comprobar señales y transiciones. Las partidas completas del bot son pruebas separadas: utilizan movimiento, órdenes, ataques y habilidades con salud, daño y recargas normales. No equivalen a una evaluación humana de dificultad.
+Capturas revisadas: `demo_hud_mixed_targets.png`, `demo_b4_neutral_voice.png`, `demo_b5_contextual_basic.png`, `demo_rc2_orb_hand.png`, cámara/gestos/diálogos y finales. Las copias anchas tienen prefijo `rc2_1920_`, para conservarlas al repetir capturas de 1280×720.
 
-## Correcciones encontradas durante la verificación
+La evidencia automática de la tabla corresponde a RC2 (`f8ada97`), cuyo comportamiento se conserva en 0.3.0. Las pruebas aíslan casos mediante fixtures que pueden colocar/congelar actores o aplicar daño directo a una transición. El bot de partida normal se ejecuta aparte y registra sus condiciones. Sus tiempos son simulados y no predicen duración ni dificultad humana; no son una medición de rendimiento. Las capturas son comprobaciones visuales; la aprobación humana se registra por separado al comienzo de este informe.
 
-Se corrigieron la colocación inicial de cuerpos antes de registrarse en física, la selección al comenzar pausado, los golpes enemigos a través de obstáculos y el impacto pendiente tras un empuje. Los controles de la interfaz ignoran la repetición de teclas y no capturan Espacio como una segunda pulsación de botón. Los tests comprueban estos casos.
+Lanzadores: `tools/DEMO_TEST.bat`, `tools/DEMO_CAPTURE.bat` o `tools/QA.ps1`. Suite ancha: Godot `--path . --resolution 1920x1080 --fixed-fps 60 -- --hud-capture`. En el sandbox se redirigió APPDATA a `tools/sandbox-appdata`; no se cambió la configuración global de Windows. Motor, logs, informes y capturas permanecen locales y están excluidos de Git.
 
-La entrada automatizada se transforma entre coordenadas de ventana y viewport para que el clic sea válido tanto con GPU a 1280 × 720 como en el modo sin ventana. Las capturas proceden del renderizado real de Godot.
+## Historial y cierre de versión
 
-## Alcance y siguiente iteración
+RC1 (`22ee5fd`) comprobó 187 casos lógicos, 211 con GPU y 24 capturas. La implementación anterior `b54514e` comprobó 157/179 y la primera integración `2a6cd6b` permanece en Git. Esas cifras y la órbita A/D retirada no aceptan D33–D36.
 
-El combate táctico se aplica por ahora a **un duelo contra el centinela**. Sus valores son ajustes propios de Kharuun inspirados en la estructura de KOTOR; no una reproducción completa de sus reglas. La misión original conserva su combate de acción, con las correcciones compartidas de arma y física.
+La aceptación humana global cierra DEMO-10/11 y B1–B8 para esta entrega. Se procede a integrar la PR, cerrar los 21 issues cubiertos y el milestone, y publicar `v0.3.0`. Después se detiene el trabajo hasta definir 0.4. Los costes/daños siguen siendo valores propios provisionales; mapa/universo, multijugador, modelos Blender, escudos, formas, granadas, compañeros, karma y progresión quedan fuera de esta versión.
 
-Tu primera partida de la misión original duró **4 min 18 s**, según tu prueba. El duelo nuevo aún necesita esa evaluación humana para ajustar ritmo, claridad y dificultad; sus 36,62 s corresponden al bot y a un solo enemigo.
-
-Los personajes siguen siendo modelos procedurales simples. Esta iteración mejora la orientación y la postura, pero no añade modelos Blender, compañero, nuevas zonas ni universo ampliado. El siguiente paso es afinar este duelo con la prueba humana y trasladar el sistema validado a los encuentros de la misión; después se avanzará con modelos, animaciones y contenido.
-
-No se necesita instalar Blender para ejecutar esta entrega. Se utiliza el Godot portátil de `tools/godot/`, sin conexión. Código y documentación se guardan en Git local; informes, capturas, logs y ejecutables permanecen disponibles en el ordenador y se excluyen del historial.
+Engram confirmó lectura exclusiva del proyecto `shadowsofkharuun`. El host no confirmó identidad de sesión para escrituras; la aprobación y el cierre quedan en MD/Git, sin crear otra sesión ni guardar por CLI. Próximo paso tras publicar: esperar la definición humana de 0.4.

@@ -1,65 +1,80 @@
 # Shadows of Kharuun
 
-Haz doble clic en **PLAY.bat**. Abre el juego directamente; no necesitas abrir el editor. **Duelo táctico · nueva iteración** prueba el combate con rondas y órdenes. **Nueva partida · misión original** conserva el asalto completo al templo.
+Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. Esta rama reúne exploración, combate táctico y decisiones narrativas en una sola misión. Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
 
-Versión jugable actual: **0.2.0**, identificada por la etiqueta Git `v0.2.0`. Historial de entregas en [CHANGELOG.md](CHANGELOG.md) y rutina de trabajo en [ORGANIZACION.md](ORGANIZACION.md).
+La **0.3.0 tiene QA humana aprobada el 14 de octubre de 2026**. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y comprobados. La candidata aceptada fue RC2 (`f8ada97`); el cierre solo actualiza versión, textos y documentación. El recorrido reproducible está en [QA_0_3_0.md](QA_0_3_0.md). La entrega anterior conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
 
-Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). La segunda vuelta tiene [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Engram está preparado como memoria local de Codex; configuración, pruebas y paso de recarga en `ORGANIZACION.md`.
+Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Seguimiento: [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los acuerdos están en [DISENO_DEMO.md](DISENO_DEMO.md), los estados en [PENDIENTES.md](PENDIENTES.md) y la evidencia de cada entrega en [RESULTADO.md](RESULTADO.md).
 
-La segunda vuelta, prevista como **0.3.0**, está en fase de diseño. Sus decisiones están guardadas en [DISENO_DEMO.md](DISENO_DEMO.md) y las tareas en [PENDIENTES.md](PENDIENTES.md); los controles de abajo corresponden a la entrega que puedes jugar ahora.
-
-## Duelo táctico
-
-El duelo comienza pausado. Haz clic en el centinela o pulsa Tab, prepara órdenes y pulsa Espacio para reanudar. Cada combatiente tiene su propio ritmo; el enemigo no espera a que des órdenes. Al vaciarse la cola, tu personaje continúa con ataques básicos automáticos contra su objetivo.
-
-| Control | Acción en el duelo |
-|---|---|
-| Clic izquierdo sobre enemigo / Tab | Seleccionar objetivo |
-| Botón derecho mantenido + ratón | Girar cámara |
-| Espacio | Pausa táctica; puedes preparar y cancelar órdenes |
-| 1 / 2 / 3 / 4 | Encolar empuje / descarga / ataque / defensa |
-| Clic sobre orden pendiente | Cancelar esa orden |
-| F / botón Retirarse | Detener ataque automático y cancelar órdenes |
-| WASD | Mover manualmente e interrumpir el enfrentamiento |
-| Escape | Menú de pausa |
-
-Hay una acción en ejecución y hasta cuatro pendientes. El personaje se acerca para alcanzar al objetivo; el impacto se resuelve durante la animación y puede fallar por precisión, defensa, obstáculos o distancia. Los poderes cobran energía al ejecutarse y conservan sus recargas. Una habilidad que espera recarga mantiene su lugar en la cola. Defensa protege durante dos rondas. Cambiar de objetivo conserva el destinatario de las órdenes ya pendientes.
-
-El duelo es una prueba corta del núcleo táctico de los pasos 1–3. Las reglas concretas están en [COMBATE.md](COMBATE.md). El equilibrio de tres acólitos y jefe con este sistema, los modelos Blender y el compañero corresponden a las siguientes iteraciones.
-
-## Misión original
-
-Asalta el templo, responde al guardián, derrota a sus tres acólitos y acaba con él. El diálogo se activa al llegar a las escaleras. Al caer los acólitos recuperas hasta 75 puntos de vitalidad y toda la energía. La victoria permite repetir o volver al menú; la derrota permite reiniciar.
+## Controles de la misión unificada
 
 | Control | Acción |
 |---|---|
-| WASD | Mover |
-| Ratón | Girar la cámara |
-| Shift | Correr |
-| Clic izquierdo | Ataque de arma luminosa, alcance 2,8 m |
-| 1 | Empuje: área de 5,5 m, coste 24, recarga 7 s |
-| 2 | Descarga: alcance 11 m, coste 32, recarga 10 s |
-| E | Hablar cerca del umbral / continuar diálogo |
-| 1, 2, 3 o ratón | Elegir respuesta durante el diálogo |
-| Escape | Pausar, liberar el ratón / continuar |
+| W / S | Avanzar / retroceder manteniendo el frente, durante exploración o tras cancelar combate |
+| A / D | Girar continuamente al personaje durante movimiento libre; W+A/D describe curvas o círculos |
+| Shift | Correr durante movimiento libre |
+| Botón derecho mantenido + ratón | Orbitar la cámara; al soltar conserva la vista estando quieto o pausado. Se recentra suave y rápido solo al desplazarte |
+| Clic izquierdo sobre personaje / Tab | Primer clic selecciona; sobre el hostil seleccionado, segundo clic encola básico. Tab recorre agresores |
+| Segundo clic sobre neutral seleccionado / icono de voz | Acercarse y hablar: frase de acólito o conversación del guardián |
+| Flechas o rueda sobre un selector | Recorrer ataques o poderes sin encolar nada |
+| Clic sobre el icono del selector | Añadir su acción contra la selección actual; curación siempre actúa sobre ti |
+| 1 / 2 | Encolar empuje / descarga |
+| 3 / 4 | Encolar básico / ráfaga |
+| 5 / 6 | Encolar curación propia / botiquín |
+| Clic sobre una orden pendiente | Cancelar esa orden |
+| Limpiar cola | Retirar todas las órdenes pendientes; continúa la acción actual |
+| F / Cancelar combate | Detener órdenes y ataque automático; recuperar WASD |
+| Espacio | Pausa táctica; seleccionar y preparar órdenes mientras el mundo está congelado |
+| E / Intro durante diálogo | Continuar una respuesta; también puedes pulsar el botón |
+| Clic sobre el orbe con cursor de mano | Acercarse y reclamar el núcleo; W/S cancela el acercamiento |
+| 1, 2, 3 o ratón durante diálogo | Elegir entre las respuestas disponibles |
+| Escape | Menú de pausa / continuar |
 
-El arma y la descarga eligen automáticamente el enemigo más cercano que esté a su alcance y visible. **Retrocede ante los círculos rojos**: anuncian ataques; el círculo grande del guardián anuncia una onda de área. La energía se regenera. No hay inventario ni puertas que abrir.
+Durante el combate automático, **WASD conserva las órdenes y el personaje encara a su destinatario**. Pulsa F primero para desplazarte libremente. Los enemigos siguen atacando y persiguen por toda la zona accesible. En exploración, W/S también cancela la aproximación iniciada para hablar con un NPC.
 
-## Dependencias
+Los tres selectores son una tarjeta compacta sobre el enemigo seleccionado y siguen su posición y la cámara. Se muestran durante el enfrentamiento, incluso en pausa táctica, y se ocultan al cancelar con F o fuera del combate. Si el enemigo no está visible, la tarjeta se oculta en lugar de quedarse en el centro.
 
-Godot **4.7.2 Stable estándar**, portátil, incluido localmente en `tools/godot/`. Forward+ / Vulkan, probado con RX 6600. No requiere .NET, Blender ni instalación global. Si copias el proyecto, copia también esa carpeta: los ejecutables están excluidos de Git.
+## Selección, cola y recursos
 
-La voz usa el TTS de Windows si Godot encuentra una voz española; siempre hay subtítulos. Audio y geometría se generan en Godot. El proyecto funciona sin conexión después de preparar el motor.
+Cada combatiente tiene su propia ronda. El primer encuentro con los acólitos y el encuentro con el guardián empiezan pausados una sola vez, con selección automática de un agresor visible y alcanzable. La ayuda inicial se puede omitir; Espacio permite reanudar o pausar de nuevo.
 
-## Verificación
+Hay una acción en curso y **cuatro órdenes pendientes**, representadas por iconos compactos; al pasar el ratón aparece acción y destinatario, y clicar una pendiente la cancela. Los tres selectores de arriba son categorías —arma, energía y arrojadizos—; no son las ranuras de la cola. La acción actual queda a la derecha de las pendientes y cada orden conserva el enemigo al que se dirigió cuando la añadiste. La vida aparece solo sobre el seleccionado, también neutral; no hay barras 3D sobre todos los enemigos. Cambiar la selección sirve para preparar la siguiente orden.
 
-- `tools/TEST.bat`: pruebas funcionales en modo headless.
-- `tools/CAPTURE.bat`: las mismas pruebas con GPU y capturas reales en `screenshots/`.
-- `tools/PLAYTEST.bat`: bot que juega usando las reglas normales de combate.
-- `tools/TACTICAL_TEST.bat`: pruebas de rondas, órdenes, controles y bot del duelo.
-- `tools/TACTICAL_CAPTURE.bat`: esas pruebas con GPU y cuatro capturas del duelo.
-- Los informes están en `tests/*_report.json`; los logs locales, en `tools/logs/`.
+Al terminar la cola, el básico automático sigue contra el último enemigo al que ejecutaste una acción ofensiva. Por ejemplo, `básico A → descarga B → ráfaga A` continúa con `básico A`, aunque después selecciones B. Curarte conserva ese destinatario. Si muere y no quedan órdenes válidas, se elige otro agresor vivo, visible y alcanzable, sin otra pausa inicial. **Con cola vacía, el protagonista espera quieto hasta que ese enemigo entra en alcance cuerpo a cuerpo**; una orden explícita sí permite aproximarse.
 
-Los lanzadores `.bat` no necesitan cambiar la política de ejecución de PowerShell. `tools/QA.ps1` ofrece la misma verificación para terminales de desarrollo que admitan scripts locales.
+La ráfaga tiene dos intentos de impacto independientes en una sola ronda. Los poderes disponibles son empuje, descarga y curación propia; cuestan energía y una acción, **sin recarga adicional**. El botiquín y la curación energética usan la misma cola. Empiezas con **tres botiquines**, con contador en el menú inferior izquierdo.
 
-El lanzador admite opciones adicionales: `PLAY.bat --fullscreen` o `PLAY.bat --rendering-method gl_compatibility` para otro ordenador que no disponga de Vulkan. El segundo modo reduce algunos efectos; no es la configuración verificada principal.
+El recurso se consume al comenzar a ejecutar la orden, no al añadirla. Cancelar una orden pendiente lo conserva; cancelar una acción que ya empezó no devuelve el recurso. Curarte con salud completa también consume acción y recurso. Curación propia y botiquín están en selectores separados abajo a la izquierda, en ese orden; al agotarse botiquines desaparece su icono y aparece «Agotado».
+
+Un poder sin energía suficiente se muestra gris y no se puede encolar. Si al ejecutarse una orden ya no tiene recursos, se elimina junto con las demás pendientes del mismo recurso. Si quedan otras órdenes válidas, la siguiente usa esa oportunidad sin perder ronda. Si no queda ninguna, se pierde una ronda y el básico automático vuelve en la siguiente. Los relojes de los combatientes siguen siendo independientes.
+
+Escudo, formas y arrojadizos aparecen como huecos vacíos desactivados. Ataque crítico, ataque fuerte, granadas, formas, bloqueos entre sables, inventario completo y progresión quedan para otra vuelta. Defensa se conserva como estadística pasiva de acierto; no es una orden seleccionable.
+
+## Diálogo y final
+
+En exploración, selecciona y habla con acólitos neutrales: rotan tres frases en orden. Acercarte al guardián inicia automáticamente la primera conversación, cuyo desenlace es el encuentro con los acólitos. Después de derrotarlos, vuelves a seleccionar al guardián y a usar la voz para abrir la segunda conversación; mientras tanto la puerta sigue cerrada. Rechazar inicia combate; escuchar permite aceptar paso pacífico o atacarlo. La ruta pacífica conserva al guardián vivo y no agresivo. La lección tiene efecto narrativo: no hay karma, afiliación persistente ni nuevos poderes aprendidos.
+
+La conversación congela tiempo, movimiento, daño y regeneración. Conservas salud, energía y botiquines entre encuentros, sin regalo automático. Resolver al guardián abre el acceso al templo; la victoria solo llega al reclamar el núcleo con clic y cursor de mano. Tras morir, reinicias toda la misión con recursos iniciales, tres botiquines y elecciones restablecidas.
+
+## Aceptación y cierre
+
+El usuario confirmó: «Apruebo el QA de la 0.3.0». Está autorizado integrar la PR #14, cerrar las 21 issues cubiertas y el milestone, y publicar `v0.3.0`. El trabajo se detiene en esa versión hasta que el usuario defina 0.4.
+
+## Dependencias y verificación
+
+Godot **4.7.2 Stable estándar**, portátil, está incluido localmente en `tools/godot/`. Forward+ / Vulkan, con RX 6600 como GPU de prueba. No requiere .NET ni Blender. Los ejecutables y archivos de caché están excluidos de Git: al copiar el proyecto a otro equipo, hay que preparar el motor.
+
+La voz usa el TTS de Windows si Godot encuentra una voz española; siempre hay subtítulos. Audio y geometría se generan en Godot. Después de preparar el motor, el juego funciona sin conexión.
+
+- `tools/DEMO_TEST.bat`: suite de la misión unificada en modo headless.
+- `tools/DEMO_CAPTURE.bat`: suite con GPU y capturas reales en `screenshots/`.
+- `tools/TEST.bat`, `CAPTURE.bat`, `TACTICAL_TEST.bat`, `TACTICAL_CAPTURE.bat` y `PLAYTEST.bat`: alias de esa misma suite, que también incluye un bot con reglas normales. Ya no prueban dos experiencias principales separadas.
+- `tools/QA.ps1`: verificación desde terminales que permitan scripts locales; los `.bat` no requieren cambiar la política de PowerShell.
+- Informes locales en `tests/*_report.json`; logs en `tools/logs/`. [RESULTADO.md](RESULTADO.md) distingue las pruebas automáticas de la aprobación humana.
+
+El duelo queda como prueba interna: `PLAY.bat --duel`. El lanzador también admite `PLAY.bat --fullscreen` y `PLAY.bat --rendering-method gl_compatibility` para equipos sin Vulkan; este último reduce algunos efectos y no es el renderizado principal de verificación.
+
+Reglas actuales en [COMBATE.md](COMBATE.md), historial en [CHANGELOG.md](CHANGELOG.md) y rutina Git/Engram en [ORGANIZACION.md](ORGANIZACION.md).
+
+
+La verificación adicional de HUD ancho puede ejecutarse con Godot: `--path . --resolution 1920x1080 --fixed-fps 60 -- --hud-capture`. Guarda `tests/demo_hud_capture_report.json` y capturas reales; es una suite parcial de UI/interacción, separada del recorrido completo.

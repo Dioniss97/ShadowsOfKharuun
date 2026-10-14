@@ -1,6 +1,6 @@
 # Organización mínima del trabajo
 
-Actualizado: 12 de octubre de 2026. Proyecto Godot para un jugador. La segunda vuelta está en diseño; esta organización no autoriza a iniciar su implementación.
+Actualizado: 14 de octubre de 2026. QA humana de 0.3.0 aprobada; cierre de integración y publicación autorizado. Después se espera la definición de 0.4.
 
 ## Qué registra cada lugar
 
@@ -24,12 +24,14 @@ Las nuevas instrucciones del usuario prevalecen. El diseño distingue intención
 | Versión | Commit de entrega | Situación |
 |---|---|---|
 | 0.1.0 | `138d459` | Misión original verificada. Etiqueta retrospectiva `v0.1.0`. |
-| 0.2.0 | `f516f41` | Misión original y duelo táctico verificados. Etiqueta retrospectiva `v0.2.0`; versión jugable actual. |
-| 0.3.0 | Aún no existe | Misión unificada y segunda vuelta; planificada, sin etiqueta. |
+| 0.2.0 | `f516f41` | Misión original y duelo táctico verificados. Etiqueta retrospectiva `v0.2.0`; entrega anterior. |
+| 0.3.0 | RC2 aceptada: `f8ada97`; entrega: `v0.3.0` | Misión unificada implementada, comprobada y aceptada por el usuario; integración/publicación autorizadas. |
 
 Convención para este prototipo: `0.MINOR.PATCH`. Incrementar MINOR cuando una entrega añade un conjunto importante de funciones; PATCH para correcciones o ajustes pequeños de una entrega. Los cambios solo de documentación conservan la versión jugable. No crear etiquetas definitivas para funciones meramente acordadas ni reutilizar/mover una etiqueta existente.
 
-La rama local actual es `feature/tactical-duel`; hay commits de diseño y entorno posteriores a `v0.2.0`, sin cambios de código del juego. El remoto tiene `main` como rama predeterminada con el estado vigente y conserva `feature/tactical-duel` y `master`; esta última identifica el estado de la primera entrega. Al iniciar la implementación nueva, usar una rama descriptiva desde `origin/main`; no cambiar ahora de rama ni alterar el árbol mientras se estudia o prueba la demo. No imponer GitFlow ni ramas de release adicionales en esta fase.
+La rama de implementación es `feature/temple-tactical-demo`, creada desde `origin/main` después de `c0aab67`. La PR #14 integra la misión unificada en `main` tras la aprobación humana del 14 de octubre. El remoto conserva `feature/tactical-duel` y `master`; esta última identifica la primera entrega. No imponer GitFlow ni ramas de release adicionales.
+
+Implementación inicial en `2a6cd6b`; RC2 aceptada en `f8ada97`; [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). La promoción final solo cambia versión/textos/documentación, sin nuevas mecánicas. Las 21 issues se cierran al integrar y conservan su historial y criterios.
 
 Remoto privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun), `origin = https://github.com/Dioniss97/ShadowsOfKharuun.git`. El usuario confirmó la cuenta autenticada con dos «s». Historial y etiquetas `v0.1.0`/`v0.2.0` están subidos. La prueba SSH devolvió `Permission denied (publickey)`; HTTPS con GitHub CLI autenticado funciona, sin modificar claves SSH ni el protocolo global de Git.
 
@@ -37,7 +39,7 @@ La carpeta del Godot portátil está excluida de Git y debe conservarse o descar
 
 ## Backlog en GitHub
 
-Milestone: [Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Los 13 issues DEMO tienen dependencias, resultado esperado y verificación basada en el diseño. Al crearlos, DEMO-01 lleva `pendiente-decision` y los demás `planificado`; todos están abiertos y sin implementar.
+Milestone: [Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). DEMO-01–13 y B1–B8 (#15–22) implementadas y aceptadas; la comprobación de RC2 incluye D33–D36 y HUD ancho. La aprobación global cierra DEMO-10/11. El cierre de las 21 issues y milestone está autorizado junto con la integración de PR #14.
 
 Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local y los enlaces. Al cambiar estado o cerrar una tarea, actualizar ambos, añadir evidencia/commit al issue y mantener el acuerdo detallado en `DISENO_DEMO.md`. Si GitHub no está disponible, registrar el avance local y señalar la sincronización pendiente. Las FUT pospuestas permanecen en los MD, sin crear tarjetas fuera del alcance actual.
 
@@ -48,12 +50,12 @@ Los issues siguen el avance operativo; `PENDIENTES.md` conserva el resumen local
 3. Consultar las preguntas de esa tarea. Una duda sobre energía no bloquea cámara, interfaz o redacción independientes. Marcar exactamente qué parte espera respuesta.
 4. Si Engram está disponible, confirmar el proyecto y recuperar contexto con `project = shadowsofkharuun`, `scope = project` y sin `all_projects`; verificarlo contra los documentos actuales. Ignorar memorias ajenas incluso si falta contexto del juego.
 
-Durante la fase de diseño actual, seguir con documentación y pruebas de la versión existente solicitadas por el usuario. Comenzar funciones de la segunda vuelta cuando el usuario pida implementarlas.
+El usuario aprobó expresamente la QA de 0.3.0 el 14 de octubre de 2026. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y aceptados. El cierre actual integra la PR, cierra los issues cubiertos y milestone, y publica `v0.3.0`. Después se detiene hasta que el usuario defina 0.4; no escoger una tarea FUT por iniciativa propia.
 
 ## Durante el trabajo y al terminar
 
 - Mantener D/Q/DEMO estables; registrar una decisión sustituida y su motivo, en lugar de reabrirla o conservar dos reglas incompatibles.
-- Una pregunta importante usa opciones clicables. Una observación pendiente, como Q01 en KOTOR, sigue siendo hipótesis y no pasa a confirmado por falta de respuesta.
+- Una pregunta importante usa opciones clicables. Una observación pendiente sigue siendo hipótesis hasta que el usuario la compruebe; Q01 y Q10 quedaron confirmadas por el usuario y se registraron en D31.
 - Distinguir componentes parcialmente terminados de los que todavía dependen de otra tarea. Evitar que un criterio de integración exija por adelantado las funciones que se integrarán después.
 - Actualizar estados y evidencia tras comprobar el trabajo. Para documentación, revisar coherencia, enlaces y diff; para juego, comprobar los flujos afectados y las reglas relevantes.
 - Crear un commit coherente con referencia al ID de tarea cuando corresponda; no mezclar cambios ajenos del usuario. No son obligatorios Conventional Commits ni un changeset por cada cambio.
@@ -117,9 +119,10 @@ Referencias: [Changesets](https://github.com/changesets/changesets), [guía Engr
 
 ## Punto de reanudación actual
 
-- Versión que se puede probar: **0.2.0**; el código no incorpora aún la segunda vuelta.
-- Acuerdos confirmados: D01–D24. Además del combate y cierre común, curar con salud llena gasta recurso/ronda; persecución por toda la zona accesible; reinicio completo; tiempo/recursos congelados durante el diálogo.
-- Regla principal pendiente: **Q01**, el usuario comprobará en KOTOR qué pasa con una orden sin energía al final o en medio de la cola. No volver a preguntarla mientras espera esa prueba.
-- Q02/Q03/Q07 están cerradas por las respuestas del usuario de esta revisión. No reabrirlas; solo Q01 sigue pendiente de comprobación.
-- Próximo paso de diseño: incorporar la observación de Q01 cuando llegue. Si el usuario solicita implementar antes, avanzar con las partes independientes y aislar la regla pendiente.
-- Entorno: repositorio privado y versiones remotas, 13 issues y milestone revisados, Engram con lectura MCP y filtrado de proyecto verificados. Falta recargar el cliente y confirmar su registro para escribir los acuerdos nuevos en Engram; están conservados en Git y las issues. No se ha iniciado la producción de 0.3.0.
+- Build local: **0.3.0**, `PLAY.bat`; RC2 `f8ada97` aceptada por el usuario el 14 de octubre de 2026.
+- D01–D36 y B1–B8 (D27 sustituida por D33) implementados. Evidencia vigente en RESULTADO, controles en README, guía humana en QA_0_3_0.md.
+- Próximo paso de cierre: integrar PR #14, cerrar las 21 issues/milestone y etiquetar v0.3.0. Después esperar instrucciones; no iniciar 0.4 sin definición del usuario.
+- Engram: lectura de proyecto verificada; escritura MCP pendiente del registro de sesión por el host. Este turno conserva el resumen en MD/Git y no intenta registrar otra sesión ni usar CLI como alternativa.
+
+
+Historial de QA RC1: D33 sustituye D27; B1 vuelve al giro del actor. B7 #21 cubre vida seleccionada/HUD compacto, B8 #22 orbe con mano/clic. La nueva captura de KOTOR II es la referencia; no confundir la imagen de Codex enviada antes con una captura del juego. RC2 recibió después la aceptación humana global.

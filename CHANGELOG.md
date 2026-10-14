@@ -1,23 +1,27 @@
 # Historial de entregas
 
-Las versiones identifican entregas jugables verificadas, mediante etiquetas Git locales. La numeración de las dos entregas existentes se asigna el 12 de octubre de 2026; las etiquetas apuntan a los commits originales y no reescriben su historial.
+Las versiones identifican entregas jugables verificadas mediante etiquetas Git inmutables. Las dos primeras etiquetas se asignaron el 12 de octubre de 2026 a sus commits originales, sin reescribir el historial. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
 
-Versión jugable actual: **0.2.0**. Próxima versión prevista: **0.3.0**, todavía en diseño y sin etiqueta de entrega. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
+## 0.3.0 — 2026-10-14
 
-## Sin publicar
+QA humana aprobada por el usuario: «Apruebo el QA de la 0.3.0». Candidata aceptada: RC2 (`f8ada97`). Integración de PR #14 y publicación de `v0.3.0` autorizadas; el cierre solo actualiza versión, textos y documentación.
 
-### Documentación y organización
+### Añadido y corregido
 
-- Decisiones confirmadas de la segunda vuelta guardadas en `DISENO_DEMO.md`, con IDs D/Q y distinción entre acuerdos, propuestas y reglas pendientes.
-- Tareas, dependencias y criterios de aceptación en `PENDIENTES.md`; instrucciones para retomar el proyecto en `AGENTS.md`.
-- Conversación ramificada del guardián y objetivo final común documentados. La falta de energía queda pendiente de la comprobación del usuario en KOTOR.
-- Convención de versiones, changelog y protocolo de inicio/cierre de trabajo; revisión de dependencias para que una duda local no bloquee toda la iteración.
-- Repositorio privado `Dioniss97/ShadowsOfKharuun` preparado, con historial, ramas y etiquetas subidos mediante HTTPS; milestone `Demo 0.3.0` y 13 issues enlazados al backlog.
-- Engram actualizado de 1.7.1 a 3.3.2 estable, con SHA256 verificado, respaldo de memoria/configuración y conservación de los registros anteriores. MCP y plugin oficial de Codex configurados, proyecto fijado y cinco resúmenes manuales de contexto guardados. Protocolo MCP probado; carga de herramientas/hooks en el agente requiere recargar Codex.
-- Revisión previa a producción: lectura de Engram desde el MCP de esta sesión verificada y política explícita de consultas exclusivas a `shadowsofkharuun`, conservando memorias ajenas. Instalado jq 1.8.2 oficial, dependencia ausente de los hooks; escritura de agente pendiente de recarga/registro confirmado del cliente.
-- Respuestas D21–D24 incorporadas al diseño y backlog: curación con salud llena consume ronda/recurso, persecución por toda la zona accesible, reinicio completo de misión y congelación de tiempo/recursos durante el diálogo. Q02/Q03/Q07 cerradas; Q01 sigue pendiente. Las 13 issues se revisan contra estos criterios sin iniciar implementación.
+- Una única misión del templo con combate táctico: rondas independientes, pausa inicial por encuentro, acción actual y cuatro órdenes pendientes. Cada orden conserva su destinatario; el básico posterior usa el último objetivo ofensivo ejecutado y espera quieto fuera del alcance cuerpo a cuerpo.
+- Básico y ráfaga con dos intentos de impacto; empuje, descarga, curación propia y tres botiquines. Gesto de la mano izquierda y efectos diferenciados; consumo al ejecutar incluso con salud llena, sin recargas adicionales ni orden Defensa.
+- Falta de recursos D31: retirar la orden impagable y las pendientes del mismo recurso; la siguiente válida ocupa esa oportunidad. Solo si no queda ninguna se pierde la ronda, con básico automático en la siguiente. Poderes inasequibles desactivados y botiquín agotado sin icono.
+- A/D gira continuamente al personaje; W+A/D conduce en curvas/círculos y S retrocede sin invertir el frente. RMB conserva la órbita al soltar quieto/pausado y retorna suave al desplazarse. F cancela combate y libera movimiento, con enemigos que siguen persiguiendo.
+- Cursor y retícula contextuales: seleccionar con primer clic; segundo clic en hostil encola básico, neutral permite voz. Acólitos neutrales rotan tres frases.
+- Vida/nombre solo del seleccionado, también neutral. Tarjeta ofensiva compacta sobre el enemigo solo en combate. Menú inferior izquierdo con poderes personales primero y consumibles después, huecos futuros desactivados; cola de iconos, acción actual y Cancelar compactos, con destinos en tooltip; retrato y recursos pequeños.
+- Primera conversación automática del guardián; segunda por clic tras los acólitos, con combate o paso pacífico. Diálogos congelan tiempo y recursos, sin regalos entre encuentros. Ambas rutas abren el templo y requieren reclamar el mismo núcleo con ratón/mano y aproximación física. Reinicio completo después de morir.
+- Ayuda breve omitible, avisos contextuales y lanzadores unificados; duelo conservado como prueba interna.
 
-Estos cambios son de documentación. La misión unificada, ráfaga, botiquines, curación y rutas nuevas están **planificadas**, no implementadas; su alcance está en el diseño y no se cuenta como funcionalidad entregada.
+### Verificación y organización
+
+213 comprobaciones lógicas y 238 con GPU, sin fallos; las 238 incluyen 25 capturas reales de 1280×720. Suite parcial adicional de UI/interacción: 72 comprobaciones sin fallos y seis capturas de 1920×1080. Bot normal: victoria en 98,15 s simulados, 203/340 salud y 33 acciones, sin teletransporte ni daño directo. Evidencia automática de RC2 y aprobación humana separadas en [RESULTADO.md](RESULTADO.md).
+
+Diseño D01–D36 (D27 sustituida por D33), criterios DEMO-01–13/B1–B8 y guía de QA conservados en Markdown/Git. Repo privado, PR #14 y milestone con 21 issues. Engram mantiene lectura exclusiva de `shadowsofkharuun`; sus memorias ajenas se conservan y las escrituras de agente esperan el registro del host. El proyecto se detiene después de esta entrega hasta que el usuario defina 0.4.
 
 ## 0.2.0 — 2026-10-12
 

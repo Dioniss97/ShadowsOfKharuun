@@ -2,6 +2,7 @@ class_name KhLevel
 extends Node3D
 
 signal reached_gate
+signal npc_interacted(enemy: KhEnemy)
 var player: KhPlayer
 var enemies: Array = []
 var guardian: KhEnemy
@@ -18,6 +19,39 @@ var bronze: StandardMaterial3D
 var red: StandardMaterial3D
 var rng = RandomNumberGenerator.new()
 var module_scene = preload("res://scenes/architecture.tscn")
+var temple_gate: StaticBody3D
+var portal_surface: MeshInstance3D
+var relic: MeshInstance3D
+var relic_interaction: Area3D
+var relic_label: Label3D
+var relic_position = Vector3(0,3.3,-34.5)
+var temple_open = false
+
+func can_talk(enemy: KhEnemy) -> bool:
+	if not combat.enabled or not combat.selection_valid(enemy) or enemy.active: return false
+	return mission.state in [KhMission.State.EXPLORATION, KhMission.State.GUARDIAN_WAIT, KhMission.State.TEMPLE]
+
+func request_talk(enemy: KhEnemy) -> bool:
+	if not can_talk(enemy): return false
+	player.interaction_target = enemy
+	combat.last_result = "Acercándose para hablar con %s" % enemy.display_name
+	return true
+
+func relic_at_screen(screen: Vector2) -> bool:
+	if not temple_open or mission.state != KhMission.State.TEMPLE: return false
+	var origin = player.camera.project_ray_origin(screen)
+	var query = PhysicsRayQueryParameters3D.create(origin,origin+player.camera.project_ray_normal(screen)*100,13)
+	query.collide_with_areas = true
+	var hit = get_world_3d().direct_space_state.intersect_ray(query)
+	return not hit.is_empty() and hit.collider == relic_interaction
+
+func request_relic() -> bool:
+	if not temple_open or mission.state != KhMission.State.TEMPLE: return false
+	combat.disengage()
+	combat.selected = null
+	player.interaction_target = relic_interaction
+	combat.last_result = "Acercándose para reclamar el núcleo"
+	return true
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -114,7 +148,8 @@ func build_courtyard() -> void:
 		for z in [-24,-16,-8,0,8,16,24]:
 			KhGeometry.box(self,Vector3(x,2.7,z),Vector3(1.35,0.9,1.35),stone)
 	KhGeometry.box(self,Vector3(0,0.8,27.1),Vector3(40,1.6,0.8),stone,true)
-	KhGeometry.box(self,Vector3(0,5,-27.6),Vector3(40,10,0.8),stone,true)
+	for side in [-1,1]:
+		KhGeometry.box(self,Vector3(side*12.5,5,-27.6),Vector3(15,10,0.8),stone,true)
 	for x in [-14.5,14.5]:
 		for z in [-4,6,17]:
 			module("column",Vector3(x,0,z))
@@ -193,7 +228,43 @@ func build_temple() -> void:
 	for tier in range(6):
 		KhGeometry.box(self,Vector3(0,16.8+tier*1.5,-30.5-tier*0.2),Vector3(28-tier*3.4,1.5,14-tier*1.25),stone)
 	KhGeometry.cylinder(self,Vector3(0,29,-31.5),3.6,10,stone,0.1,4).rotation.y = PI/4
-	KhGeometry.box(self,Vector3(0,8,-27.02),Vector3(9.6,11.1,0.18),KhGeometry.material(Color(0.014,0.008,0.016)))
+	portal_surface = KhGeometry.box(self,Vector3(0,8,-27.02),Vector3(9.6,11.1,0.18),KhGeometry.material(Color(0.014,0.008,0.016)))
+	temple_gate = StaticBody3D.new()
+	add_child(temple_gate)
+	var seal = CollisionShape3D.new()
+	var seal_shape = BoxShape3D.new()
+	seal_shape.size = Vector3(9.6,9.0,0.5)
+	seal.shape = seal_shape
+	seal.position = Vector3(0,6.5,-26.9)
+	temple_gate.add_child(seal)
+	# A small chamber completes the existing temple objective, without a new zone.
+	KhGeometry.box(self,Vector3(0,2.2,-32.5),Vector3(9.6,0.4,14),lighter,true)
+	for side in [-1,1]:
+		KhGeometry.box(self,Vector3(side*4.9,5.2,-32.5),Vector3(0.4,6,14),stone,true)
+	KhGeometry.box(self,Vector3(0,5.2,-39.5),Vector3(10,6,0.4),stone,true)
+	KhGeometry.cylinder(self,Vector3(0,2.75,-34.5),0.7,0.7,bronze)
+	relic = KhGeometry.sphere(self,relic_position,0.3,KhGeometry.material(Color(0.5,0.85,1),0.2,3))
+	relic_interaction = Area3D.new()
+	add_child(relic_interaction)
+	relic_interaction.position = relic_position
+	relic_interaction.collision_layer = 0
+	relic_interaction.collision_mask = 0
+	var relic_shape = CollisionShape3D.new()
+	var sphere = SphereShape3D.new()
+	sphere.radius = 0.48
+	relic_shape.shape = sphere
+	relic_interaction.add_child(relic_shape)
+	relic_label = Label3D.new()
+	add_child(relic_label)
+	relic_label.position = Vector3(0,4.8,-34.5)
+	relic_label.text = "NÚCLEO DE KHARUUN\nClic para reclamar"
+	relic_label.font_size = 32
+	relic_label.pixel_size = 0.005
+	relic_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	relic_label.modulate = Color(0.7,0.9,1)
+	relic_label.outline_size = 8
+	relic_label.hide()
+	KhGeometry.light(self,relic_position,Color(0.4,0.7,1),3,8)
 	# Portal carvings and an original geometric sigil.
 	var rune = KhGeometry.material(Color(1,0.24,0.045),0.4,2.2)
 	for side in [-1,1]:
@@ -250,7 +321,11 @@ func spawn_actors() -> void:
 	for i in range(1 if duel_mode else 4):
 		var e = preload("res://scenes/enemy.tscn").instantiate()
 		e.guardian = i == 3
-		e.tactical_mode = duel_mode
+		e.tactical_mode = true
+		if not duel_mode:
+			e.max_health = 160
+			e.health = e.max_health
+			e.display_name = "Acólito %s" % ["del Juramento", "de la Ceniza", "del Umbral"][mini(i,2)]
 		if duel_mode:
 			e.display_name = "Centinela del umbral"
 			e.max_health = 360
@@ -262,7 +337,7 @@ func spawn_actors() -> void:
 		e.rig.rotation.y = PI
 		enemies.append(e)
 		if i == 3 or duel_mode: guardian = e
-	combat = KhTacticalCombat.new() if duel_mode else KhCombat.new()
+	combat = KhTacticalCombat.new()
 	combat.player = player
 	combat.level = self
 	add_child(combat)
@@ -274,12 +349,29 @@ func begin_mission() -> void:
 	player.camera.make_current()
 	player.snap_camera()
 	gate_triggered = false
+	combat.enabled = true
 
 func _process(_delta: float) -> void:
 	if mission != null and mission.state == KhMission.State.EXPLORATION and not gate_triggered:
-		if player.global_position.z < -10.0 or (player.global_position.z < -6.5 and Input.is_action_just_pressed("interact")):
+		if player.global_position.z < -10.0:
 			gate_triggered = true
+			player.interaction_target = null
 			reached_gate.emit()
+	var npc = player.interaction_target
+	if npc == relic_interaction and is_instance_valid(npc):
+		if player.global_position.distance_to(relic_position) <= 2.3:
+			player.interaction_target = null
+			claim_relic()
+	elif npc is KhEnemy and not npc.active and player.global_position.distance_to(npc.global_position) <= 3.8:
+		var ray = PhysicsRayQueryParameters3D.create(player.global_position+Vector3.UP,npc.global_position+Vector3.UP,1)
+		if get_world_3d().direct_space_state.intersect_ray(ray).is_empty():
+			player.interaction_target = null
+			player.velocity.x = 0
+			player.velocity.z = 0
+			player.face_target(npc.global_position)
+			npc_interacted.emit(npc)
+	if temple_open:
+		relic_label.hide()
 
 func start_acolytes() -> void:
 	combat.enabled = true
@@ -287,18 +379,37 @@ func start_acolytes() -> void:
 		if not e.guardian: e.activate()
 
 func start_boss() -> void:
+	combat.enabled = true
 	guardian.activate()
-	player.health = minf(player.max_health,player.health+75)
-	player.energy = player.max_energy
 	fx.wave(guardian.global_position,4,Color(1,0.12,0.03))
-	audio.speak("Habéis profanado el umbral. Ahora conoceréis su precio.")
+
+func open_temple() -> void:
+	temple_open = true
+	temple_gate.collision_layer = 0
+	relic_interaction.collision_layer = 8
+	portal_surface.hide()
+	relic_label.hide()
+	if mission.guardian_resolution == "peaceful":
+		guardian.stop_tactical()
+		guardian.rig.combat_stance = false
+		guardian.position = Vector3(3.5,2.5,-22)
+	fx.wave(relic_position,1.7,Color(0.4,0.8,1))
+
+func claim_relic() -> bool:
+	if not temple_open or mission.state != KhMission.State.TEMPLE or player.global_position.distance_to(relic_position) > 2.3: return false
+	if not mission.claim_temple(): return false
+	relic.hide()
+	relic_interaction.collision_layer = 0
+	relic_label.hide()
+	return true
 
 func stop_combat() -> void:
 	combat.enabled = false
-	if duel_mode: combat.stop()
+	combat.stop()
 	player.control_enabled = false
+	player.interaction_target = null
 	player.automation_direction = Vector3.ZERO
 	for e in enemies:
 		e.active = false
 		e.telegraph.visible = false
-		if duel_mode: e.stop_tactical()
+		e.stop_tactical()

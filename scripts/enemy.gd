@@ -15,7 +15,6 @@ var timer = 0.0
 var stun = 0.0
 var knockback = Vector3.ZERO
 var telegraph: MeshInstance3D
-var bar: MeshInstance3D
 var slam = false
 var attacks = 0
 var level: Node3D
@@ -23,15 +22,22 @@ var tactical_mode = false
 var defence = 12
 var attack_bonus = 5
 var round_clock = KhRoundQueue.new()
+var phrase_index = 0
+const NEUTRAL_LINES = ["Escoge bien tus palabras. El umbral no admite imprudencias.", "Mi maestro no tendrá piedad de quien desafíe su voluntad.", "Ten cuidado con lo que buscas. El poder siempre exige un precio."]
+
+func next_phrase() -> String:
+	var phrase: String = NEUTRAL_LINES[phrase_index]
+	phrase_index = (phrase_index+1)%NEUTRAL_LINES.size()
+	return phrase
 
 func _ready() -> void:
 	if guardian:
-		max_health = 1800
+		max_health = 520 if tactical_mode else 1800
 		health = max_health
 		display_name = "Guardián de Kharuun"
 	floor_snap_length = 0.7
 	if tactical_mode:
-		round_clock.round_seconds = 3.0
+		round_clock.round_seconds = 3.0 if guardian else 3.8
 		round_clock.action_started.connect(_tactical_started)
 		round_clock.action_impact.connect(_tactical_impact)
 	var c = CollisionShape3D.new()
@@ -46,33 +52,12 @@ func _ready() -> void:
 	rig.build(Color(0.24,0.025,0.045) if guardian else Color(0.14,0.045,0.07),Color(1,0.065,0.08),guardian)
 	telegraph = KhGeometry.ring(self,Vector3(0,0.05,0),1.65,KhGeometry.material(Color(1,0.12,0.04),0.3,2),0.055)
 	telegraph.visible = false
-	var hp_node = Node3D.new()
-	add_child(hp_node)
-	hp_node.position.y = 2.5 if not guardian else 3.15
-	var quad = QuadMesh.new()
-	quad.size = Vector2(0.94,0.075)
-	var bg = KhGeometry.mesh(hp_node,quad,Vector3.ZERO,KhGeometry.material(Color(0.035,0.018,0.025)))
-	bg.material_override.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	bg.material_override.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	bg.material_override.no_depth_test = true
-	bg.material_override.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	var fill = QuadMesh.new()
-	fill.size = Vector2(0.90,0.042)
-	bar = KhGeometry.mesh(hp_node,fill,Vector3.ZERO,KhGeometry.material(Color(0.8,0.11,0.10),0.8,0.6))
-	bar.material_override.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	bar.material_override.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	bar.material_override.no_depth_test = true
-	bar.material_override.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	bar.material_override.render_priority = 1
-	hp_node.visible = false
-	bar.set_meta("holder",hp_node)
 
 func activate() -> void:
 	if mode == Mode.DEAD:
 		return
 	active = true
 	mode = Mode.CHASE
-	bar.get_meta("holder").visible = true
 	rig.combat_stance = true
 
 func _physics_process(delta: float) -> void:
@@ -165,13 +150,23 @@ func _tactical_physics(delta: float) -> void:
 				mode = Mode.RECOVER if round_clock.impact_done else Mode.WINDUP
 			else:
 				mode = Mode.CHASE
-				if direction.length() > 1.8 or not _tactical_visible():
+				if direction.length() > (2.0 if guardian else 1.8) or not _tactical_visible():
 					desired = direction.normalized()*2.4
+					for other in level.enemies:
+						if other != self and other.health > 0:
+							var separation = global_position-other.global_position
+							separation.y = 0
+							if separation.length() > 0.01 and separation.length() < 1.1: desired += separation.normalized()*1.3
 				else:
 					round_clock.start({"id":"attack","target":target,"target_name":"Intruso"})
 	knockback = knockback.move_toward(Vector3.ZERO,delta*12)
 	velocity.x = desired.x+knockback.x
 	velocity.z = desired.z+knockback.z
+	if desired.length() > 0.1 and test_move(global_transform,desired*delta):
+		var tangent = Vector3(-desired.z,0,desired.x)
+		if test_move(global_transform,tangent*delta): tangent = -tangent
+		velocity.x = tangent.x+knockback.x
+		velocity.z = tangent.z+knockback.z
 	move_and_slide()
 	rig.animate(delta,desired.length())
 
@@ -193,9 +188,9 @@ func _tactical_impact(_order: Dictionary) -> void:
 	if distance > 2.35 or not _tactical_visible():
 		combat.record({"source":"enemy","id":"attack","hit":false,"damage":0,"reason":"range"})
 		return
-	var effective_defence = target.defence+(6 if target.defending_left > 0 else 0)
+	var effective_defence = target.defence
 	var result = KhCombatRules.hit_result(combat.rng.randi_range(1,20),attack_bonus,effective_defence)
-	var damage = KhCombatRules.scaled_damage(16,result)
+	var damage = KhCombatRules.scaled_damage(18 if guardian else 11,result)
 	var before = target.health
 	if result.hit:
 		target.take_damage(damage)
@@ -203,7 +198,7 @@ func _tactical_impact(_order: Dictionary) -> void:
 		level.audio.play_effect("enemy")
 	else:
 		level.fx.status_text(target.global_position+Vector3(0,2,0),"FALLO",Color(0.75,0.72,0.67))
-	combat.record({"source":"enemy","id":"attack","hit":result.hit,"damage":before-target.health,"roll":result.roll,"defended":target.defending_left > 0})
+	combat.record({"source":"enemy","id":"attack","hit":result.hit,"damage":before-target.health,"roll":result.roll})
 
 func stop_tactical() -> void:
 	round_clock.reset()
@@ -214,7 +209,6 @@ func take_damage(amount: float, force: Vector3 = Vector3.ZERO) -> void:
 	if mode == Mode.DEAD or not active:
 		return
 	health = maxf(0,health-amount)
-	bar.scale.x = maxf(0.001,health/max_health)
 	rig.hit()
 	knockback = force
 	stun = (1.3 if force.length() > 0.1 else 0.0) if tactical_mode else (0.22 if guardian else 0.44)
@@ -232,7 +226,6 @@ func take_damage(amount: float, force: Vector3 = Vector3.ZERO) -> void:
 		mode = Mode.DEAD
 		active = false
 		telegraph.visible = false
-		bar.get_meta("holder").visible = false
 		rig.dying = true
 		collision_layer = 0
 		collision_mask = 1

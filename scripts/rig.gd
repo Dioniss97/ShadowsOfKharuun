@@ -7,9 +7,11 @@ var left_leg: Node3D
 var right_leg: Node3D
 var body: Node3D
 var sword: Node3D
+var left_palm: Marker3D
 var phase = 0.0
 var attack_duration: float = 0.9
 var attack_time = 0.0
+var action_kind: String = "basic"
 var hit_time = 0.0
 var dying = false
 var boss = false
@@ -40,7 +42,8 @@ func build(tint: Color, blade_color: Color, guardian: bool = false) -> void:
 		arm.position = Vector3(side*0.42,1.5,0)
 		KhGeometry.sphere(arm,Vector3.ZERO,0.20,armor)
 		KhGeometry.cylinder(arm,Vector3(0,-0.29,0),0.11,0.56,cloth,0.14,8)
-		KhGeometry.box(arm,Vector3(0,-0.60,-0.02),Vector3(0.18,0.17,0.2),armor)
+		# The free left hand stays visible, and provides the actual effect origin.
+		KhGeometry.box(arm,Vector3(0,-0.60,-0.02),Vector3(0.18,0.17,0.2),skin if side == -1 else armor)
 		var leg = Node3D.new()
 		add_child(leg)
 		leg.position = Vector3(side*0.16,0.78,0)
@@ -49,6 +52,10 @@ func build(tint: Color, blade_color: Color, guardian: bool = false) -> void:
 		if side == -1:
 			left_arm = arm
 			left_leg = leg
+			left_palm = Marker3D.new()
+			left_palm.name = "LeftPalm"
+			left_palm.position = Vector3(0,-0.68,-0.025)
+			arm.add_child(left_palm)
 		else:
 			right_arm = arm
 			right_leg = leg
@@ -101,6 +108,12 @@ func animate(delta: float, speed: float) -> void:
 	# Hit recoil is a small independent roll, never a replacement for the swing.
 	body.rotation.z = sin(hit_time*40.0)*hit_time*0.28
 	if attack_time > 0:
+		if action_kind in ["push","lightning","heal","medkit"]:
+			_animate_cast(ready_pose)
+			return
+		if action_kind == "flurry":
+			_animate_flurry(ready_pose)
+			return
 		var p = clampf(1.0-attack_time/attack_duration,0.0,1.0)
 		var raised_pose = Vector3(1.45,-0.12,0.20)
 		var contact_pose = Vector3(0.18,0.22,0.14)
@@ -123,8 +136,66 @@ func animate(delta: float, speed: float) -> void:
 		body.rotation.y = lerpf(body.rotation.y,0,delta*8.0)
 
 func swing(duration: float = 0.9) -> void:
+	action_kind = "basic"
 	attack_duration = maxf(duration,0.1)
 	attack_time = attack_duration
+
+func swing_flurry() -> void:
+	action_kind = "flurry"
+	attack_duration = 1.35
+	attack_time = attack_duration
+
+func cast(kind: String) -> void:
+	action_kind = kind if kind in ["push","lightning","heal","medkit"] else "push"
+	attack_duration = 0.9
+	attack_time = attack_duration
+
+func cancel_action() -> void:
+	attack_time = 0.0
+	action_kind = "basic"
+
+func palm_world_position() -> Vector3:
+	return left_palm.global_position
+
+func _animate_cast(ready_pose: Vector3) -> void:
+	var elapsed = attack_duration-attack_time
+	var rest_pose = Vector3(0.32,0.0,-0.12)
+	var casting_pose = Vector3(1.45,0.0,-0.14)
+	# At 0.42 s the bare left palm faces the target; the sword hand stays ready.
+	if elapsed <= 0.42:
+		left_arm.rotation = rest_pose.lerp(casting_pose,smoothstep(0.0,0.34,elapsed))
+	else:
+		left_arm.rotation = casting_pose.lerp(rest_pose,smoothstep(0.54,0.9,elapsed))
+	right_arm.rotation = ready_pose
+	body.rotation.y = lerpf(body.rotation.y,0.0,0.25)
+
+func _animate_flurry(ready_pose: Vector3) -> void:
+	var elapsed = attack_duration-attack_time
+	var raised_pose = Vector3(1.45,-0.12,0.20)
+	var first_contact = Vector3(0.18,0.22,0.14)
+	var second_raise = Vector3(1.32,0.16,0.06)
+	var second_contact = Vector3(0.23,-0.18,0.10)
+	# Two distinct preparations and strokes match the combat contacts exactly.
+	if elapsed < 0.25:
+		var t = smoothstep(0.0,0.25,elapsed)
+		right_arm.rotation = ready_pose.lerp(raised_pose,t)
+		body.rotation.y = lerpf(0.0,-0.08,t)
+	elif elapsed < 0.42:
+		var t = smoothstep(0.25,0.42,elapsed)
+		right_arm.rotation = raised_pose.lerp(first_contact,t)
+		body.rotation.y = lerpf(-0.08,0.08,t)
+	elif elapsed < 0.68:
+		var t = smoothstep(0.42,0.68,elapsed)
+		right_arm.rotation = first_contact.lerp(second_raise,t)
+		body.rotation.y = lerpf(0.08,0.10,t)
+	elif elapsed < 0.90:
+		var t = smoothstep(0.68,0.90,elapsed)
+		right_arm.rotation = second_raise.lerp(second_contact,t)
+		body.rotation.y = lerpf(0.10,-0.08,t)
+	else:
+		var t = smoothstep(0.90,1.35,elapsed)
+		right_arm.rotation = second_contact.lerp(ready_pose,t)
+		body.rotation.y = lerpf(-0.08,0.0,t)
 
 func hit() -> void:
 	hit_time = 0.25

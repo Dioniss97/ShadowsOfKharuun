@@ -108,24 +108,23 @@ Esos temas pueden estudiarse en sus conversaciones y documentos correspondientes
 
 No quedan decisiones de diseño que bloqueen la creación del milestone y las issues. Sigue prohibido iniciar la producción o implementación sin autorización posterior.
 
-## 7. Desglose de GitHub aprobado para creación
+## 7. Desglose de GitHub registrado
 
-El desglose está aprobado. Crear un milestone `0.4.0`, una issue padre y las tres sub-issues siguientes, sin issue adicional que duplique la versión:
+El desglose aprobado quedó registrado en GitHub el 15-10-2026. El milestone [0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2) agrupa los entregables; no tiene fecha de vencimiento inventada ni issue duplicada de versión.
 
-- **Milestone `0.4.0`**: agrupa los entregables; no necesita issue «hacer versión 0.4.0».
-- **Issue padre «Primera estatua artística integrada en la misión»**: representa el resultado verificable global, no una segunda copia del milestone.
-  - **Sub-issue A «Establecer pipeline mínimo Blender–Godot»**: scripts específicos de generación y exportación (T04-06/T04-07), Blender 5.2.2 LTS, rutas aprobadas, documentación del comando y comprobación de importación del GLB en Godot.
-  - **Sub-issue B «Modelar y revisar el Vigía del Umbral»**: fuente editable, lámina de referencias, iteraciones visuales y materiales/acabado aprobados (A04-01–A04-03).
-  - **Sub-issue C «Integrar estatua en el templo y verificar la misión»**: escena reutilizable con el mismo GLB en las dos estatuas (T04-04), sustitución visual, capturas reales, regresiones y aceptación humana.
+- **Issue padre [#25 Primera estatua artística integrada en la misión](https://github.com/Dioniss97/ShadowsOfKharuun/issues/25)**: resultado global verificable.
+  - **Sub-issue A [#26 Establecer pipeline mínimo Blender–Godot](https://github.com/Dioniss97/ShadowsOfKharuun/issues/26)**: scripts específicos de generación y exportación (T04-06/T04-07), Blender 5.2.2 LTS, rutas aprobadas, comandos documentados e importación del GLB en Godot.
+  - **Sub-issue B [#27 Modelar y revisar el Vigía del Umbral](https://github.com/Dioniss97/ShadowsOfKharuun/issues/27)**: fuente editable, lámina de referencias, iteraciones visuales y acabado aprobado (A04-01–A04-03).
+  - **Sub-issue C [#28 Integrar estatua en el templo y verificar la misión](https://github.com/Dioniss97/ShadowsOfKharuun/issues/28)**: mismo GLB en las dos estatuas (T04-04), integración, capturas, regresiones y aceptación humana.
 
-**Dependencias:** C queda bloqueada por las entregas de A y B; A y B pueden avanzar parcialmente en paralelo acordando escala y pose/emplazamiento. No registrar más bloqueos si no son reales.
+**Dependencias nativas:** C (#28) está bloqueada por A (#26) y B (#27); A y B pueden avanzar en paralelo coordinando escala y pose/emplazamiento.
 
-Cada issue debe usar la plantilla `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md`, enlazar los IDs pertinentes, indicar fuera de alcance y aceptación. Aplicar `planificado` exclusivamente después de aprobar el alcance. Registrar estados **solo en GitHub**; este documento no tendrá una tabla espejo de progreso.
+Las issues usan la plantilla `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md`, enlazan los IDs pertinentes, indican fuera de alcance y criterios de aceptación, y tienen la etiqueta `planificado`. La aceptación humana pendiente está marcada además con `prueba-humana` en las issues correspondientes. El estado operativo vive solo en GitHub; este documento no mantiene una tabla espejo.
 
 ## 8. Estado de planificación y límites de autorización
 
 1. El alcance y las decisiones necesarias para planificar quedaron aprobados el 15-10-2026.
-2. Crear el milestone `0.4.0`, la issue padre y las tres sub-issues nativas, con las dependencias reales y etiquetas indicadas en `GESTION_DESARROLLO.md`. No inventar fechas.
+2. El milestone [`0.4.0`](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2), la issue padre [#25](https://github.com/Dioniss97/ShadowsOfKharuun/issues/25) y las sub-issues nativas [#26](https://github.com/Dioniss97/ShadowsOfKharuun/issues/26), [#27](https://github.com/Dioniss97/ShadowsOfKharuun/issues/27) y [#28](https://github.com/Dioniss97/ShadowsOfKharuun/issues/28) están creados, con `planificado`, dependencias reales y sin fecha inventada.
 3. La aceptación visual humana de Q04-05 se resolverá cuando exista el modelo y se pruebe dentro de Godot.
 4. **No implementar el videojuego ni iniciar producción artística** hasta una autorización explícita posterior del usuario.
 

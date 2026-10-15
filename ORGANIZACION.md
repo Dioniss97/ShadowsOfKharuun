@@ -1,6 +1,6 @@
 # Organización técnica de Shadows of Kharuun
 
-**Actualizado: 14 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
+**Actualizado: 15 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
 
 ## Base y entregas
 

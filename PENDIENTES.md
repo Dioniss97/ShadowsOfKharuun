@@ -16,6 +16,8 @@ Los estados de las tablas de 0.3.0 son **fotografías históricas de su cierre**
 
 El diseño completo y las dudas de aceptación que solo se pueden resolver al ver el asset están en [DISENO_0_4_0.md](DISENO_0_4_0.md). Los estados, responsables y dependencias de tareas viven solo en GitHub Issues; la aprobación de planificación **no** autoriza iniciar producción o implementación.
 
+El backlog de 0.4.0 está creado en GitHub: [milestone 0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2), [issue padre #25](https://github.com/Dioniss97/ShadowsOfKharuun/issues/25) y sub-issues [#26 pipeline](https://github.com/Dioniss97/ShadowsOfKharuun/issues/26), [#27 Vigía](https://github.com/Dioniss97/ShadowsOfKharuun/issues/27) y [#28 integración/QA](https://github.com/Dioniss97/ShadowsOfKharuun/issues/28). La #28 queda bloqueada por #26 y #27 mediante dependencias nativas. El estado operativo sigue únicamente en GitHub; la planificación no autoriza iniciar producción.
+
 ## Primera entrega
 
 Duelo táctico y correcciones de arma/colisiones: **Verificados** en `f516f41`. Evidencia y límites en [RESULTADO.md](RESULTADO.md). Son la base existente, no el cierre de las tareas siguientes.

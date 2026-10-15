@@ -1,19 +1,19 @@
-# Diseño de la versión 0.4.0 — borrador para aprobación
+# Diseño de la versión 0.4.0 — alcance aprobado para planificación
 
 **Fecha:** 14 de octubre de 2026  
 **Revisión de dirección artística:** 15 de octubre de 2026  
-**Estado:** borrador de alcance; **no** autoriza implementar ni equivale a una versión aprobada.  
+**Estado:** alcance aprobado para planificación; crea issues planificadas, pero **no autoriza implementación ni producción artística**.  
 **Base estable:** `v0.3.0` integrada en `main`, PR #14 aceptada.  
 **Procedimiento obligatorio:** [AGENTS.md](AGENTS.md), [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md) y [ORGANIZACION.md](ORGANIZACION.md).  
 **Histórico, no backlog activo:** [PENDIENTES.md](PENDIENTES.md) y [DISENO_DEMO.md](DISENO_DEMO.md).
 
-Este documento recupera las conversaciones de planificación de arte, Godot y Blender. Separa acuerdos generales del proyecto de un **alcance de versión todavía pendiente de ratificación**. La existencia de este archivo no crea issues implementables.
+Este documento consolida las decisiones de diseño confirmadas para planificar 0.4.0. Distingue acuerdos aprobados de parámetros orientativos y de criterios que se aceptarán al revisar el asset real. La aprobación permite crear el milestone y las issues, pero no autoriza implementarlas.
 
 ## 1. Situación de partida y objetivo
 
 En `v0.3.0`, el nivel usa geometría procedural en Godot. `scripts/architecture.gd` genera las estatuas, columnas, obeliscos y braseros; `scripts/level.gd` los sitúa en la misión del templo. El cielo y los materiales del escenario ya tienen shaders propios. Los personajes todavía utilizan el rig procedural `KhRig`.
 
-**Propuesta de objetivo para 0.4.0:** demostrar un **primer pipeline artístico reproducible Blender → Godot** con **un modelo original de estatua monumental** que sustituya visualmente la estatua provisional de la misión, sin cambiar las reglas ni la estructura jugable de la 0.3.0.
+**Alcance aprobado para 0.4.0:** establecer un **primer flujo reproducible Blender → Godot** y crear una estatua original, el **Vigía del Umbral**, que sustituya visualmente las dos estatuas provisionales de la misión mediante el **mismo archivo GLB**. Se conservan las posiciones, colisiones y reglas jugables de `v0.3.0`.
 
 Este incremento aborda la incertidumbre principal: si el flujo de trabajo asistido por IA produce geometría 3D utilizable y visualmente convincente **dentro de Godot**, no solo renders de referencia.
 
@@ -29,45 +29,47 @@ Este incremento aborda la incertidumbre principal: si el flujo de trabajo asisti
 
 Los identificadores C04 registran acuerdos transversales recuperados de la conversación; no afirman que el pipeline Blender o los componentes 3D estén ya construidos.
 
-## 3. Propuesta prioritaria para 0.4.0 — **pendiente de aprobación**
+## 3. Alcance aprobado para 0.4.0
 
-- **P04-01 — Contrato mínimo Blender–Godot:** definir una ubicación para `.blend`, una ruta para el `.glb` exportado, escala/orientación, importación y procedencia/licencias. La elección del script de exportación Blender Python ya está aprobada como decisión técnica T04-06; el alcance global del pipeline sigue pendiente. No crear un sistema de builds artísticos general.
-- **P04-02 — Vigía del Umbral:** producir **una única malla o conjunto artístico reutilizable** de estatua monumental original para el templo. **Concepto B y orientación hacia el patio aprobados** (A04-01 y A04-02); faltan lámina de referencia coherente, detalles de acabado y revisión visual. Varias instancias de esa misma pieza no obligan a crear múltiples modelos.
-- **P04-03 — Integración en la misión:** reemplazar la **geometría visual** de las estatuas de `scripts/architecture.gd` por el recurso importado o escena reutilizable, conservando posiciones, colisiones y comportamiento. La reutilización de **un mismo GLB en las dos instancias existentes** ya está aprobada como decisión técnica T04-04; el frontal de la estatua debe mirar al patio (A04-02) sin alterar las transformaciones existentes. Implementar la integración aún requiere aprobar y autorizar el alcance.
-- **P04-04 — Revisión y QA:** validar tanto el resultado visual como la importación, materiales, rendimiento y regresiones del recorrido jugable de la 0.3.0. Mantener revisión humana explícita antes de aprobar una entrega artística.
+- **P04-01 — Flujo mínimo Blender–Godot (aprobado):** conservar la fuente editable `.blend` en `art/source/statues/vigia_umbral.blend`, la referencia visual en `art/references/vigia_umbral/`, el recurso de juego en `assets/models/environment/vigia_umbral.glb` y los automatismos en `tools/blender/`. Usar Blender 5.2.2 LTS cuando se autorice instalarlo. Un automatismo genera y guarda la fuente; otro exporta el GLB. Godot usará el GLB, no dependerá de abrir directamente la fuente Blender.
+- **P04-02 — Vigía del Umbral (aprobado):** producir una estatua monumental original reutilizable en las dos posiciones actuales. Concepto B, orientación hacia el patio y acabado/materiales acordados (A04-01–A04-03). La lámina de referencias y las iteraciones del modelo son entregables de la issue, no decisiones que bloqueen crearla.
+- **P04-03 — Integración en la misión (aprobada):** reemplazar solo la geometría visual provisional por el GLB o una escena reutilizable que lo contenga, conservando ubicaciones, rotaciones, colisiones y comportamiento. Aplicar T04-04 y A04-02.
+- **P04-04 — Revisión y QA (aprobada como criterio):** comprobar importación, aspecto en Godot, materiales, rendimiento y regresiones del recorrido de `v0.3.0`. La aceptación visual humana sigue siendo necesaria al revisar el modelo real.
 
-**Principio de alcance:** la 0.4.0 propuesta tiene como protagonista **una estatua**, no una remodelación completa del templo. No incorporar tareas adicionales por el mero hecho de que Blender esté configurado.
+**Límite de alcance:** el trabajo se centra en una estatua reutilizada dos veces, no en una remodelación completa del templo. Quedan fuera inventario, equipamiento, arte ambiental general, personajes animados, cambios narrativos o de combate y nuevos sistemas.
 
-### Decisiones técnicas aprobadas dentro del borrador (14-10-2026)
+### Decisiones técnicas aprobadas (actualizadas el 15-10-2026)
 
-Estas decisiones resuelven opciones concretas de arquitectura; **no aprueban todavía el alcance global de 0.4.0 ni autorizan implementar**. Se conservan los IDs T04-04 y T04-06 de la propuesta técnica debatida; otros puntos técnicos continúan como propuestas.
+El alcance global 0.4.0 está aprobado para planificación. Las decisiones siguientes no autorizan por sí solas empezar a producir; la implementación requerirá una autorización posterior.
 
 - **T04-04 — Un GLB, dos instancias (aprobada):** producir **un único recurso de estatua** y utilizarlo en **ambas posiciones actuales** de `scripts/level.gd`: `(-10.8, 0, -13.8)` y `(10.8, 0, -13.8)`, conservando sus rotaciones actuales (`0` y `-0.05` rad), colisiones y funcionalidad. No crear un modelo independiente por posición. **Criterio verificable, tras autorización:** las dos instancias utilizan el mismo GLB y el recorrido jugable conserva las colisiones/transformaciones previas. Esta decisión resuelve Q04-03.
-- **T04-06 — Script Blender Python sencillo (aprobada):** la exportación de la fuente `.blend` al modelo `.glb` se realizará mediante **un script pequeño ejecutable con Blender Python**, específico para la estatua y reproducible por Codex. Se documentarán su invocación, versión de Blender, entrada y salida. **No** introducir un gestor de assets, una automatización general, dependencias adicionales ni CI artístico por defecto. **Criterio verificable, tras autorización:** Codex puede ejecutar el script en Windows para regenerar e importar el GLB en Godot. La elección del script resuelve esa parte de Q04-04; siguen pendientes las rutas y la comprobación del entorno local.
+- **T04-06 — Exportación con Blender Python (aprobada):** un script pequeño, específico para la estatua, exportará la fuente `.blend` al modelo `.glb`; documentará versión, comando, entrada y salida. Sin gestor general de assets, dependencias adicionales ni CI artístico por defecto.
+- **T04-07 — Generación automatizada de la estatua (aprobada):** un script sencillo de Blender Python construirá el modelo y guardará el `.blend` editable en la ruta acordada. El usuario no necesita modelar manualmente: revisará imágenes y solicitará ajustes. Los scripts se mantendrán específicos para este experimento, no como generador universal.
 
-### Dirección artística: Vigía del Umbral (decisiones parciales aprobadas el 14-10-2026)
+### Dirección artística: Vigía del Umbral (decisiones actualizadas el 15-10-2026)
 
-**Estas aprobaciones describen el asset, no aprueban por sí mismas la versión 0.4.0 ni autorizan su producción.** Los parámetros que siguen como propuestas no pasan a aprobados por aparecer aquí.
+**El usuario aprobó el alcance 0.4.0 y las decisiones artísticas indicadas aquí.** La aprobación permite planificar; la aceptación del modelo final se realizará mediante revisión humana del asset en Godot.
 
 - **A04-01 — Concepto B, Vigía del Umbral (aprobada):** representar un antiguo guerrero ceremonial mediante **realismo estilizado oscuro**, mezcla cualitativa aproximada de 70 % humanoide y 30 % arquitectura monumental. Silueta dominante, erguida, predominantemente simétrica, con cabeza ceremonial de rostro oculto, capa/armadura pétrea y arma vertical con punta hacia el pedestal. «70/30» orienta el lenguaje visual, **no** es una proporción anatómica que deba medirse. La figura será original y no copiará iconografía, armaduras, personajes o modelos de Star Wars.
 - **A04-02 — Orientación al patio (aprobada):** el Vigía mira hacia el jugador que se acerca desde el patio, es decir, **aproximadamente hacia `+Z` del nivel**, frente a la orientación visual `-Z` de la estatua procedural. Esta orientación se resolverá en el **asset visual o su nodo contenedor**, sin cambiar las posiciones ni las rotaciones de T04-04 ni las colisiones. **Verificarla en una captura real de Godot:** la convención de ejes de Blender y el resultado glTF no se dan por correctos solo por los valores del script.
+- **A04-03 — Acabado del Vigía (aprobada el 15-10-2026):** basalto azul grisáceo mate como material dominante, planos de piedra clara y pequeños acentos de bronce envejecido; hasta tres materiales; sin emisión ni texturas complejas; pocas grietas grandes y hoja ceremonial invertida. El peto y los motivos secundarios siguen sujetos a iteración visual.
 
-#### Hoja de estilo propuesta (parámetros todavía ajustables)
+#### Hoja de estilo: decisiones confirmadas y parámetros orientativos
 
-- **Escala y postura:** altura total orientativa **7,5–8 m**, pedestal cercano al existente (**3,7 × 3,1 × 0,9 m**). Peso repartido y brazos cerca del tronco, manos ante el cuerpo sobre una **hoja ceremonial ancha e invertida**, no sable luminoso ni espada reconocible de otra franquicia. Comprobar la perspectiva normal de juego antes de congelar medidas.
+- **Escala y postura:** altura total orientativa **7,5–8 m**, pedestal cercano al existente (**3,7 × 3,1 × 0,9 m**). Son valores iniciales para ajustar al revisar capturas, no cifras aprobadas. Pose equilibrada, brazos cerca del tronco y manos ante el cuerpo sobre una **hoja ceremonial ancha e invertida** (A04-03), sin referencias a armas reconocibles de otra franquicia.
 - **Silueta:** grandes planos angulares en hombros y torso, piernas diferenciables, capa de piedra en paneles continuos, cabeza como marco profundo con cavidad oscura **sin rasgos faciales esculpidos**. La estatua debe leerse desde el patio incluso con material gris neutro.
 - **Identidad:** un peto de dos placas con hendidura geométrica discontinua, arma «anclada» al pedestal y cavidad facial como motivos originales. Son **propuestas de detalle**, no símbolos doctrinales ni canon narrativo confirmados.
-- **Materiales:** basalto gris azulado mate como dominante, planos de piedra algo más claros y bronce antiguo solo en uniones/arma. **Máximo inicial sugerido: tres materiales simples**, sin textura obligatoria, emisión propia ni efectos nuevos; la iluminación existente del templo debe revelar el relieve. No exigir reproducción exacta de shaders procedurales Blender en glTF.
-- **Nivel de detalle:** geometría facetada con biseles y articulaciones legibles; fracturas grandes y localizadas, no ruido de alta frecuencia. Referencia orientativa **5.000–12.000 triángulos por estatua** (dos instancias), **no** condición de aprobación ni objetivo de llenar polígonos. Sin esqueleto, animación, esculpido orgánico de alta densidad ni simulaciones.
+- **Materiales — A04-03 (aprobada):** basalto azul grisáceo mate como dominante, planos de piedra clara y pequeños acentos de bronce envejecido. **Hasta tres materiales**, sin emisión ni texturas complejas; aprovechar la iluminación existente del templo.
+- **Nivel de detalle — A04-03 (aprobada):** geometría facetada, biseles y articulaciones legibles; grietas grandes, escasas y localizadas; evitar ruido visual fino. El rango orientativo **5.000–12.000 triángulos por estatua** no es una condición de aceptación. Sin esqueleto, animación, esculpido orgánico de alta densidad ni simulaciones.
 
-#### Construcción y referencias para el primer experimento de IA (propuesta)
+#### Construcción y referencias para el primer experimento de IA (planificadas)
 
 - Descomponer la fuente Blender en **pedestal, piernas, torso/peto, brazos/manos, cabeza, capa, arma y detalles**; conservar objetos editables y nombres reconocibles. Emplear perfiles extruidos, mallas facetadas, biseles y materiales simples. No exigir una sola malla fusionada; **un GLB** puede contener varias mallas.
-- Revisar primero **blockout/silueta** con un material neutro: corregir anatomía básica, unión de piezas y lectura frontal **antes** de invertir en grietas o adornos. Después revisar materiales y finalmente importar a Godot. El script Python de exportación aprobado en T04-06 es sencillo y específico, no un sistema general de generación de assets.
+- Revisar primero la silueta con material neutro; después los materiales y detalles; finalmente importar a Godot. Los scripts aprobados T04-06/T04-07 son pequeños y específicos para este asset.
 - Preparar una **lámina del mismo diseño** con frontal, perfil, tres cuartos y posterior, pose/escala coherentes y sin iluminación dramática. Añadir una silueta negra y una versión con materiales como ayuda de revisión. Las imágenes generadas con IA pueden contradecirse entre vistas: **no son planos geométricos infalibles** ni certifican por sí solas el modelo final.
 - No seleccionar recursos externos para importarlos automáticamente a partir de fotografías de referencia. Registrar en `ASSETS.md` la autoría, materiales, fuentes y licencias de cualquier recurso real incorporado; una referencia visual no concede permiso para reutilizar su modelo.
 
-#### Verificación artística prevista en Godot (propuesta)
+#### Verificación artística prevista en Godot (criterios de revisión)
 
 Comparar **antes/después** de la estatua procedural y la nueva, bajo la misma resolución (referencia **1280 × 720**), cámara, iluminación y condiciones de juego. Guardar capturas auténticas del viewport, no renders de Blender rotulados como capturas de Godot:
 
@@ -78,9 +80,9 @@ Comparar **antes/después** de la estatua procedural y la nueva, bajo la misma r
 
 **Aceptación visual humana obligatoria:** debe apreciarse una mejora clara respecto a cajas y cilindros, con materiales consistentes con el templo y sin defectos evidentes. Revisar también coste de renderizado con ambas instancias, importación, sombreado y regresiones de 0.3.0. **No basta** una cifra de polígonos, una imagen conceptual bonita o una prueba automática superada.
 
-**Cuestiones artísticas todavía abiertas:** aprobación de la lámina original y los detalles del acabado (peto, grieta, hoja, tonos); parámetros exactos de dimensiones/triángulos si las capturas lo requieren. No reabrir el concepto ni la orientación ya aprobados por estas dudas.
+**Pendiente para producción, no para definir el alcance:** generar la lámina y el modelo, ajustar medidas según su lectura en Godot y obtener la aceptación visual humana. Los detalles no confirmados del peto y otros adornos se decidirán durante la iteración y no se tratarán como canon narrativo.
 
-## 4. Criterios de aceptación propuestos (si se aprueba P04)
+## 4. Criterios de aceptación para las issues planificadas
 
 1. **Fuente editable:** el recurso tiene fuente Blender versionada y trazabilidad de sus materiales/texturas; puede reconstruirse la exportación sin depender de una imagen generada ni de un archivo externo desconocido.
 2. **Exportación comprobada:** el modelo se entrega como `.glb` compatible con Godot, con escala, orientación, sombreado y materiales apropiados; un script Blender Python sencillo permite repetir y documentar la exportación conforme a T04-06.
@@ -90,26 +92,25 @@ Comparar **antes/después** de la estatua procedural y la nueva, bajo la misma r
 6. **Procedencia:** conservar registro de autoría/origen/licencia de los assets; no incorporar modelos, voces, música ni texturas extraídos de KOTOR.
 7. **Cierre:** solo después de implementación autorizada, QA, PR y aprobación humana se actualizarán los informes de entrega y se creará `v0.4.0`. No crear tag anticipado.
 
-## 5. Fuera del alcance **propuesto** de esta versión
+## 5. Fuera del alcance aprobado de esta versión
 
 No producir en 0.4.0: inventario o pantalla de equipamiento; ranuras Body/casco/brazaletes y catálogo de objetos; humanoide, botas, túnicas, rigging o animaciones; remodelado general de suelos, paredes o cielo; antorchas/efectos de fuego; nuevas misiones, compañeros, progresión o sistemas narrativos; cambios del combate obtenidos de KotOR.js/reone/PyKotor; motor de mundo abierto, Houdini, USD o una base vectorial para analizar repositorios.
 
 Esos temas pueden estudiarse en sus conversaciones y documentos correspondientes. No se asigna versión ni se crean issues por aparecer aquí.
 
-## 6. Cuestiones abiertas antes de fijar el milestone
+## 6. Cuestiones abiertas de producción y aceptación (no bloquean planificar)
 
-- **Q04-01 — Aprobación del recorte:** ¿se confirma expresamente **0.4.0 = pipeline Blender–Godot + una estatua Sith original integrada**, sin inventario ni más arte ambiental? La conversación mostró acuerdo favorable con la orientación, pero aún no se ha registrado una aprobación inequívoca de este recorte como milestone.
-- **Q04-02 — Dirección visual (parcialmente resuelta):** **aprobados** el concepto B «Vigía del Umbral» (A04-01) y orientación hacia el patio (A04-02). **Pendientes** lámina original coherente en varias vistas, aprobación de detalles de acabado, tonalidades y validación artística en Godot. No tratar estos parámetros propuestos como un diseño 3D definitivamente aceptado.
-- **Q04-04 — Pipeline mínimo (parcialmente resuelto):** **aprobada** la exportación con script Blender Python sencillo (T04-06). **Pendiente** concretar carpetas, parámetros/convenciones de exportación y verificar Blender disponible en el entorno local de Codex. No presuponer que esté instalado o accesible.
-- **Q04-05 — Calidad aceptable (criterios propuestos):** comparar capturas reales antes/después en cuatro situaciones con cámaras y luz equivalentes, buscando silueta, lectura de materiales, geometría íntegra y coherencia con el templo. **Pendiente** evaluación humana del asset real; no fijar aprobación por recuento de triángulos.
+- **Q04-01 — Recorte de 0.4.0: resuelta el 15-10-2026.** El usuario confirma pipeline Blender→Godot + un Vigía del Umbral original, usando el mismo GLB en las dos posiciones existentes; sin inventario ni remodelación general. La planificación del milestone queda aprobada.
+- **Q04-02 — Dirección visual: resuelta para iniciar la planificación el 15-10-2026.** Aprobados el concepto y orientación A04-01/A04-02 y el acabado A04-03: basalto azul grisáceo mate, piedra clara, pequeños acentos de bronce envejecido, hasta tres materiales, sin emisión ni texturas complejas, grietas grandes escasas y hoja ceremonial invertida. La lámina de referencia y la aceptación del modelo son tareas de producción/revisión, no bloqueos de diseño.
+- **Q04-03 — Mismo GLB, dos posiciones: resuelta el 14-10-2026 (T04-04).**
+- **Q04-04 — Pipeline y herramientas: resuelta el 15-10-2026.** Rutas aprobadas: `art/source/statues/vigia_umbral.blend`, `art/references/vigia_umbral/`, `assets/models/environment/vigia_umbral.glb` y `tools/blender/`. Flujo aprobado: script Blender Python genera y guarda `.blend`; otro script exporta `.glb`; el usuario revisa imágenes. Usar Blender 5.2.2 LTS cuando se autorice instalarlo. Blender no está localizado en el equipo; no instalarlo durante esta fase de planificación.
+- **Q04-05 — Aceptación visual del modelo real: pendiente hasta disponer del asset.** Las cuatro vistas de revisión en Godot y la aprobación humana siguen como gate de QA. No bloquea crear las issues; incluirlo como criterio de aceptación de integración/QA.
 
-**Q04-03 — Resuelta el 14-10-2026:** reutilizar el mismo GLB en ambas posiciones existentes (T04-04). No sigue abierta.
+No quedan decisiones de diseño que bloqueen la creación del milestone y las issues. Sigue prohibido iniciar la producción o implementación sin autorización posterior.
 
-Las preguntas restantes no impiden redactar el diseño; sí impiden tratar como aprobada una funcionalidad concreta cuando afecten a su alcance o aceptación.
+## 7. Desglose de GitHub aprobado para creación
 
-## 7. Desglose de GitHub **previsto, no creado**
-
-**Solo tras resolver Q04-01 y confirmar el alcance**:
+El desglose está aprobado. Crear un milestone `0.4.0`, una issue padre y las tres sub-issues siguientes, sin issue adicional que duplique la versión:
 
 - **Milestone `0.4.0`**: agrupa los entregables; no necesita issue «hacer versión 0.4.0».
 - **Issue padre «Primera estatua artística integrada en la misión»**: representa el resultado verificable global, no una segunda copia del milestone.
@@ -121,11 +122,11 @@ Las preguntas restantes no impiden redactar el diseño; sí impiden tratar como 
 
 Cada issue debe usar la plantilla `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md`, enlazar los IDs pertinentes, indicar fuera de alcance y aceptación. Aplicar `planificado` exclusivamente después de aprobar el alcance. Registrar estados **solo en GitHub**; este documento no tendrá una tabla espejo de progreso.
 
-## 8. Condiciones para pasar del borrador a la planificación aprobada
+## 8. Estado de planificación y límites de autorización
 
-1. Obtener confirmación del usuario para **Q04-01** y perfilar las cuestiones que sigan abiertas (detalles y referencias de Q04-02, parte pendiente de Q04-04 y aceptación visual de Q04-05). **Q04-03 ya está resuelta** por T04-04; el concepto/orientación también están aprobados por A04-01 y A04-02.
-2. Cambiar el estado de este documento a **alcance aprobado**, conservando qué ideas siguen abiertas o pospuestas.
-3. Crear el milestone `0.4.0`, la issue padre y sub-issues **nativas**, dependencias reales y etiquetas conforme a `GESTION_DESARROLLO.md`. Verificar enlaces, jerarquía y ausencia de duplicación.
+1. El alcance y las decisiones necesarias para planificar quedaron aprobados el 15-10-2026.
+2. Crear el milestone `0.4.0`, la issue padre y las tres sub-issues nativas, con las dependencias reales y etiquetas indicadas en `GESTION_DESARROLLO.md`. No inventar fechas.
+3. La aceptación visual humana de Q04-05 se resolverá cuando exista el modelo y se pruebe dentro de Godot.
 4. **No implementar el videojuego ni iniciar producción artística** hasta una autorización explícita posterior del usuario.
 
 La versión `v0.3.0` permanece como referencia estable e inmutable mientras solo se planifica.

@@ -1,10 +1,22 @@
-# Registro de tareas de la demo 0.3.0 (histórico)
+# Registro histórico de 0.3.0 y definición de 0.4.0
 
-Actualizado: 14 de octubre de 2026. Especificación: [DISENO_DEMO.md](DISENO_DEMO.md). **v0.3.0 estable con QA humana aprobada** mediante «Apruebo el QA de la 0.3.0». RC2 (`f8ada97`) cumple D01–D36/B1–B8 (D27 sustituida por D33), con pruebas completadas sin fallos; Q01/Q10 resueltas e implementadas. PR #14 integrada en `main`; DEMO-01–13 y B1–B8 cerradas: **21 issues cerradas, 0 abiertas** en el milestone, también cerrado. La etiqueta `v0.3.0` conserva la entrega. Se espera la definición de 0.4. Evidencia en [RESULTADO.md](RESULTADO.md); recorrido humano en [QA_0_3_0.md](QA_0_3_0.md); rutina en [ORGANIZACION.md](ORGANIZACION.md). Los IDs enlazan al [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1).
+Actualizado: 15 de octubre de 2026. Especificación: [DISENO_DEMO.md](DISENO_DEMO.md). **v0.3.0 estable con QA humana aprobada** mediante «Apruebo el QA de la 0.3.0». RC2 (`f8ada97`) cumple D01–D36/B1–B8 (D27 sustituida por D33), con pruebas completadas sin fallos; Q01/Q10 resueltas e implementadas. PR #14 integrada en `main`; DEMO-01–13 y B1–B8 cerradas: **21 issues cerradas, 0 abiertas** en el milestone, también cerrado. La etiqueta `v0.3.0` conserva la entrega. El alcance de `v0.4.0` quedó aprobado para planificación el 15 de octubre de 2026; el estado operativo se registrará en GitHub Issues. Evidencia en [RESULTADO.md](RESULTADO.md); recorrido humano en [QA_0_3_0.md](QA_0_3_0.md); rutina en [ORGANIZACION.md](ORGANIZACION.md). Los IDs enlazan al [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1).
 
 Este documento conserva el seguimiento y la aceptación de **v0.3.0** como histórico. El progreso de las nuevas versiones se registra **exclusivamente en GitHub Issues**; no se añadirán aquí columnas de estado que haya que sincronizar. Las propuestas FUT siguen siendo ideas sin versión aprobada. Procedimiento en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md).
 
 Los estados de las tablas de 0.3.0 son **fotografías históricas de su cierre**, no un segundo tablero operativo. Sus evidencias y enlaces se conservan; los cambios futuros de tareas pertenecen a GitHub Issues y los cambios de diseño a la especificación de su versión.
+
+## Definición aprobada de la 0.4.0
+
+- **Alcance:** flujo Blender→Godot y una estatua original, el Vigía del Umbral, reutilizada con el mismo GLB en las dos posiciones actuales de la misión.
+- **Acabado:** basalto azul grisáceo mate, planos de piedra clara, acentos pequeños de bronce envejecido; hasta tres materiales, sin emisión ni texturas complejas, grietas grandes escasas y hoja ceremonial invertida.
+- **Rutas y herramientas:** fuente editable en `art/source/statues/vigia_umbral.blend`, guías en `art/references/vigia_umbral/`, modelo del juego en `assets/models/environment/vigia_umbral.glb` y automatismos específicos en `tools/blender/`; Blender 5.2.2 LTS.
+- **Fuera de alcance:** inventario, remodelación general del entorno y nuevos sistemas o contenido.
+- **Criterio de aceptación:** importación y uso del mismo GLB en ambas posiciones, conservación de colisiones/comportamiento y aceptación visual humana tras revisar el asset en Godot.
+
+El diseño completo y las dudas de aceptación que solo se pueden resolver al ver el asset están en [DISENO_0_4_0.md](DISENO_0_4_0.md). Los estados, responsables y dependencias de tareas viven solo en GitHub Issues; la aprobación de planificación **no** autoriza iniciar producción o implementación.
+
+El backlog de 0.4.0 está creado en GitHub: [milestone 0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2), [issue padre #25](https://github.com/Dioniss97/ShadowsOfKharuun/issues/25) y sub-issues [#26 pipeline](https://github.com/Dioniss97/ShadowsOfKharuun/issues/26), [#27 Vigía](https://github.com/Dioniss97/ShadowsOfKharuun/issues/27) y [#28 integración/QA](https://github.com/Dioniss97/ShadowsOfKharuun/issues/28). La #28 queda bloqueada por #26 y #27 mediante dependencias nativas. El estado operativo sigue únicamente en GitHub; la planificación no autoriza iniciar producción.
 
 ## Primera entrega
 

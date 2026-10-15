@@ -1,6 +1,6 @@
 # Organización técnica de Shadows of Kharuun
 
-**Actualizado: 14 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
+**Actualizado: 15 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
 
 ## Base y entregas
 
@@ -34,7 +34,7 @@ La rama por defecto es `main`. Para trabajo autorizado, crear ramas descriptivas
 
 ## Entorno y recursos
 
-- Repositorio privado: https://github.com/Dioniss97/ShadowsOfKharuun, Git remoto HTTPS; no cambiar credenciales ni configuración de SSH.
+- Repositorio público por decisión del usuario: https://github.com/Dioniss97/ShadowsOfKharuun, Git remoto HTTPS; no cambiar credenciales ni configuración de SSH.
 - Godot portátil en `tools/godot/`, excluido de Git; conservarlo o prepararlo por separado en otra máquina. Herramientas de pruebas en `tools/` explicadas en [README.md](README.md).
 - Credenciales, binarios, bases de memoria, respaldos y directorios de usuario **no** se suben al repositorio.
 - Blender es herramienta artística prevista; no inferir que los modelos o pipelines futuros ya estén implementados.

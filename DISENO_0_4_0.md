@@ -114,8 +114,8 @@ El desglose está aprobado. Crear un milestone `0.4.0`, una issue padre y las tr
 
 - **Milestone `0.4.0`**: agrupa los entregables; no necesita issue «hacer versión 0.4.0».
 - **Issue padre «Primera estatua artística integrada en la misión»**: representa el resultado verificable global, no una segunda copia del milestone.
-  - **Sub-issue A «Establecer pipeline mínimo Blender–Godot»**: rutas, formatos, convenciones, script Blender Python pequeño (T04-06), comprobación de exportación/importación y documentación.
-  - **Sub-issue B «Modelar y revisar el Vigía del Umbral»**: fuente editable, lámina de referencias, materiales, iteraciones y revisión visual del modelo exportado (A04-01 y A04-02).
+  - **Sub-issue A «Establecer pipeline mínimo Blender–Godot»**: scripts específicos de generación y exportación (T04-06/T04-07), Blender 5.2.2 LTS, rutas aprobadas, documentación del comando y comprobación de importación del GLB en Godot.
+  - **Sub-issue B «Modelar y revisar el Vigía del Umbral»**: fuente editable, lámina de referencias, iteraciones visuales y materiales/acabado aprobados (A04-01–A04-03).
   - **Sub-issue C «Integrar estatua en el templo y verificar la misión»**: escena reutilizable con el mismo GLB en las dos estatuas (T04-04), sustitución visual, capturas reales, regresiones y aceptación humana.
 
 **Dependencias:** C queda bloqueada por las entregas de A y B; A y B pueden avanzar parcialmente en paralelo acordando escala y pose/emplazamiento. No registrar más bloqueos si no son reales.

@@ -35,7 +35,7 @@ Registro del 16-10-2026, basado en ocho iteraciones del Vigía y su integración
 - Diferenciar aprobar una dirección, autorizar su implementación y aceptar un resultado visible. Cada cambio de alcance quedó identificado en A04-04 a A04-12; una aprobación anterior no certificaba la siguiente iteración.
 - GitHub Issues conserva el estado operativo; Markdown conserva decisiones y evidencia. No mantener otra lista de tareas sincronizada en `PENDIENTES.md`.
 - Las imágenes del usuario son referencias y no autorización para redistribuir modelos/texturas. La tipografía Sith AF sí se incorporó con origen, licencia y atribución; la inscripción es una transliteración gráfica del inglés, no una traducción a la lengua Sith.
-- La licencia de herramientas, scripts y arte exportado son asuntos distintos. Q04-06 debe resolverse antes de publicar los dos scripts que usan `bpy`; no aplicar una licencia al juego por deducción.
+- La licencia de herramientas, scripts y arte exportado son asuntos distintos. Q04-06 se resolvió mediante aprobación informada de GPL-2.0-or-later exclusivamente para los dos scripts que usan `bpy`; no aplicar una licencia al juego por deducción.
 - La versión visible del menú y la ventana se obtiene de `application/config/version`, evitando tres números independientes.
 
 Estas observaciones describen este experimento. No convierten inventario, animaciones, remodelado general, generadores universales ni optimizaciones futuras en compromisos de otra versión.

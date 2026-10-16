@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# See GPL-2.0-or-later.txt and LICENSE-scripts.md in this directory.
 """Bake the three Vigía materials and export a self-contained Godot GLB.
 
 The editable source keeps separate named parts and procedural stone/bronze.

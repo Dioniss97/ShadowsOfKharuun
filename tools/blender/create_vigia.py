@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# See GPL-2.0-or-later.txt and LICENSE-scripts.md in this directory.
 """Build the editable, hooded Vigía and render review views in Blender 5.2.2.
 
 The sculpture faces Blender +Y. export_vigia.py bakes its three materials and

@@ -62,6 +62,6 @@ La fuente es Z-up y mira hacia Blender +Y. El exportador gira la copia 180° sob
 
 Los renders de Blender y las capturas del estudio Godot permiten iterar el asset. La [comparación dentro del nivel](../../art/references/vigia_umbral/integration/README.md) acredita ambas instancias con las mismas posiciones y colisiones. El asset VIII está aceptado para integración; la presentación final del nivel y la publicación esperan las decisiones registradas en QA. La candidata es 0.4.0-rc1; el tag estable publicado sigue siendo v0.3.0. Los campos de aceptación de los JSON artísticos reflejan el momento de su generación anterior a A04-12; no sustituyen el registro posterior del usuario.
 
-## Licencia pendiente
+## Licencia de scripts
 
-La publicación de los dos scripts que usan `bpy` espera la decisión informada de Q04-06. La [página oficial de Blender](https://www.blender.org/about/license/) describe sus condiciones; GPL permite uso comercial y sus condiciones sobre scripts no imponen GPL a los modelos exportados ni al juego. No se ha aplicado una licencia nueva al proyecto.
+Q04-06 está resuelta: el usuario autoriza **GPL-2.0-or-later para `create_vigia.py` y `export_vigia.py`**, con cabeceras SPDX, [aviso de alcance](LICENSE-scripts.md) y [texto completo](GPL-2.0-or-later.txt). Permite uso comercial, copia y modificación, sujeto a sus condiciones de redistribución. No asigna por sí sola GPL al modelo exportado ni al juego; Sith AF conserva su atribución y licencia propias.

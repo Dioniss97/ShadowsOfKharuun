@@ -51,4 +51,4 @@ Los detalles históricos de instalación, hashes, respaldos, incidencias, decisi
 git show v0.3.0:ORGANIZACION.md
 ```
 
-No instalar Changesets, Gentle AI/ODD, un nuevo gestor de releases ni GitHub Projects por defecto. Reevaluar solamente si existe una necesidad concreta.
+No instalar Changesets, un nuevo gestor de releases ni GitHub Projects por defecto. **Gentle AI/ODD ha sido seleccionado para la asistencia al desarrollo** (16-10-2026), pero su instalación Windows aún requiere verificación local. Procedimiento, alcance y prevención de conflictos de Codex: [GENTLE_AI.md](GENTLE_AI.md). Reevaluar solamente si existe una necesidad concreta.

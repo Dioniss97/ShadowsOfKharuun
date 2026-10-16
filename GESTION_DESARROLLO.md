@@ -103,7 +103,13 @@ Las búsquedas de issues muestran entregables, **no el listado exacto de decisio
 
 **Engram:** memoria local de Codex, útil para reanudar sesiones. Si el MCP falla, seguir con los archivos e issues. En `ORGANIZACION.md` consta la incidencia histórica de escritura, no una prueba de que siga fallando hoy. No copiar especificaciones completas a Engram ni recuperar recuerdos ajenos al proyecto.
 
-**Gentle AI / ODD:** aún no adoptado. Estudiarlo con un caso reducido y aceptar solo si reduce trabajo real; no instalarlo como requisito para 0.4.0.
+**Gentle AI / ODD:** adoptado como marco de agentes el 16-10-2026; integración y activación documentadas en [GENTLE_AI.md](GENTLE_AI.md).
+
+## Integración con Gentle AI / ODD (aprobada el 16-10-2026)
+
+Gentle AI se adopta como marco de agentes para futuras tareas, con instalación local pendiente de verificación. Véase [GENTLE_AI.md](GENTLE_AI.md). La anterior nota de sección 6 sobre no haberlo adoptado se considera sustituida por esta decisión.
+
+ODD describe **la ejecución**, no el estado del backlog: para trabajo sustancial autorizado podrá crear `odd/tasks/<feature>.md` con specs, tareas y pruebas, enlazado a la issue; su checklist no se sincroniza con las etiquetas de GitHub. Los cambios pequeños no lo necesitan. No hay permiso implícito para implementar por abrir una ficha ODD. En caso de conflicto prevalecen el alcance explícitamente autorizado, las decisiones del diseño y el registro de estado de Issues. RDD es opcional y nunca certifica arte Blender en Godot ni reemplaza aceptación humana.
 
 ## 7. Documentos históricos de la 0.3.0
 

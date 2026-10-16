@@ -1,4 +1,10 @@
-# Resultado: 0.3.0 con QA humana aprobada
+# Resultado: 0.4.0 integrada y aceptada
+
+16-10-2026. El Vigía VIII está integrado en las dos posiciones de la demo con el mismo GLB, conservando los módulos y sus colisiones. El usuario acepta el asset y autoriza integración/cierre mediante A04-12; A04-13 aprueba expresamente la presentación del nivel. La entrega `v0.4.0`, [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29), pasa **213 comprobaciones headless y 238 con GPU, cero fallos**; el comparador conserva las 49 formas físicas y las cámaras de cinco pares de capturas.
+
+Evidencia reproducible, límites, coste observado y aceptación en [QA_0_4_0.md](QA_0_4_0.md). [Comparación del nivel](art/references/vigia_umbral/integration/README.md) y [aprendizajes](APRENDIZAJES_0_4_0.md). Q04-06 autoriza GPL-2.0-or-later solo para los dos scripts Blender. Las reglas jugables de 0.3.0 se conservan; su etiqueta y evidencia siguen inmutables.
+
+## Historial: 0.3.0 con QA humana aprobada
 
 QA humana aprobada el **14 de octubre de 2026** mediante la respuesta del usuario: «Apruebo el QA de la 0.3.0». La candidata aceptada es RC2, commit `f8ada97`, que incorpora D33–D36: conducción del actor, vida solo de la selección, orbe por ratón y HUD compacto. D27 queda sustituida por D33. La [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) está fusionada en `main` (`1304678`), con D01–D36/B1–B8; entrega estable [v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0). No se ha recibido un informe humano desglosado por caso ni una nueva medición de duración; se registra la aceptación global expresa.
 

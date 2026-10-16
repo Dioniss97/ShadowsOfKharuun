@@ -1,4 +1,5 @@
 extends Node3D
+const VIGIA_SCENE = preload("res://assets/models/environment/vigia_umbral.glb")
 @export var kind = "column"
 var stone: Material
 var metal: Material
@@ -23,20 +24,19 @@ func column() -> void:
 	KhGeometry.cylinder(self,Vector3(0,6.6,0),0.76,0.65,stone,0.15,4).rotation.y = PI/4
 
 func statue() -> void:
-	KhGeometry.box(self,Vector3(0,0.45,0),Vector3(3.7,0.9,3.1),stone,true)
-	KhGeometry.box(self,Vector3(0,1.0,0),Vector3(3.1,0.25,2.65),metal)
-	KhGeometry.cylinder(self,Vector3(0,3.1,0),1.25,3.9,stone,0.70,5)
-	KhGeometry.box(self,Vector3(0,5.0,0),Vector3(2.05,2.4,1.35),stone)
-	KhGeometry.sphere(self,Vector3(0,6.8,0.09),0.77,stone).scale = Vector3(0.9,1.35,0.92)
-	KhGeometry.box(self,Vector3(0,6.8,-0.60),Vector3(0.74,0.78,0.1),KhGeometry.material(Color(0.025,0.015,0.022)))
-	var glow = KhGeometry.material(Color(0.95,0.20,0.06),0.3,3)
-	KhGeometry.box(self,Vector3(0,6.94,-0.67),Vector3(0.40,0.045,0.06),glow)
-	for side in [-1,1]:
-		KhGeometry.box(self,Vector3(side*1.30,4.8,-0.16),Vector3(0.75,2.3,0.75),stone).rotation.z = side*0.22
-		KhGeometry.sphere(self,Vector3(side*1.52,3.80,-0.4),0.37,stone)
-	KhGeometry.box(self,Vector3(0,3.45,-1.05),Vector3(0.23,4.65,0.28),metal)
-	KhGeometry.box(self,Vector3(0,5.1,-1.05),Vector3(1.3,0.2,0.25),metal)
-	KhGeometry.light(self,Vector3(0,5,-1.3),Color(1,0.22,0.06),1.6,6)
+	# Both placements share the imported meshes/materials; the GLB faces Godot +Z.
+	var visual = VIGIA_SCENE.instantiate()
+	visual.name = "Vigia_del_Umbral"
+	add_child(visual)
+	# Preserve the provisional pedestal's sole collider and the playable space.
+	var body = StaticBody3D.new()
+	body.position = Vector3(0,0.45,0)
+	add_child(body)
+	var collider = CollisionShape3D.new()
+	var shape = BoxShape3D.new()
+	shape.size = Vector3(3.7,0.9,3.1)
+	collider.shape = shape
+	body.add_child(collider)
 
 func obelisk() -> void:
 	KhGeometry.box(self,Vector3(0,0.35,0),Vector3(1.8,0.7,1.8),stone,true)

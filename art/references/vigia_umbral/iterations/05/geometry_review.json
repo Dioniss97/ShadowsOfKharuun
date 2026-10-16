@@ -1,0 +1,179 @@
+{
+  "iteration": 5,
+  "source_sha256": "f7526232c88f89a3e1e7d6888de0cdfcfb45ec6075320a17be40ae58f2bf36bf",
+  "baseline_sha256": "782d394373f188b2dbaf2b53e461d3b200f0a3348c359f7c503c07d7825604a8",
+  "source_meshes": 19,
+  "meshes": [
+    {
+      "name": "Escultura_Túnica_Capucha_Mangas",
+      "vertices": 44079,
+      "components": [
+        44079
+      ],
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    },
+    {
+      "name": "Mano_Puño_Esculpido_-1",
+      "vertices": 15433,
+      "components": [
+        15433
+      ],
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    },
+    {
+      "name": "Mano_Puño_Esculpido_1",
+      "vertices": 15403,
+      "components": [
+        15403
+      ],
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    }
+  ],
+  "preserved_parts": [
+    {
+      "name": "Pedestal_Piedra_Tallada",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Filete_de_Piedra",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Vibrohoja_Filo_Curvo",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Vibrohoja_Plano_Lomo",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Carcasa_Resonador_Alargada",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Guarda_Asimétrica_Ceremonial",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Filete_Mecanismo",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_0",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_1",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_2",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_3",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_4",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Empuñadura_Ceñida",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Virola_Empuñadura_4.57",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Virola_Empuñadura_5.43",
+      "vertices_unchanged": true
+    },
+    {
+      "name": "Pomo_Facetado",
+      "vertices_unchanged": true
+    }
+  ],
+  "hood_above_6_5": {
+    "samples": 2633,
+    "mean_distance_m": 1.7246861303860075e-05,
+    "max_distance_m": 0.003098107175901532
+  },
+  "robe_below_4_2": {
+    "samples": 22089,
+    "mean_distance_m": 0.0005485121697333446,
+    "max_distance_m": 0.04902441427111626
+  },
+  "blender_captures": [
+    {
+      "file": "front_materials.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "295c7e43628cd78b714b61853d946e005a941bedaec107b23b914aa9056cf6e9"
+    },
+    {
+      "file": "profile_right.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "c4f54ed62011dfd2af3bab53559b132ea8b807c7c80ea7de6b93c2a5646f9e45"
+    },
+    {
+      "file": "three_quarter.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "57779d351898ff7605f7bdeb83a0a61b1d5b0452e9259b2ca2b136ab3d11a3cd"
+    },
+    {
+      "file": "back.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "c155319e6143a1a48362d01c136d6f821d2b7b91658bb820be317b9fde11654c"
+    },
+    {
+      "file": "silhouette.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "2adcc2c3c8b5aa602449a3428c3913fcb0f7a8f95cc1cfe22d8a39a6f9196527"
+    },
+    {
+      "file": "detail_cowl.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "8936f384de50533689312cc6cd3924b61a45ec2a4ca7ceb72e5b48f20e6185d4"
+    },
+    {
+      "file": "detail_shoulders.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "3608ed09cfd4c0ea76f4f2d3683bf034d6cab9ed7a582dd64fc0e65bc660124c"
+    },
+    {
+      "file": "detail_hands.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "5b1dfcb61eccf6bce49102994f33871b3d5b152a6817fd27bcab6fd80f8fd719"
+    }
+  ],
+  "human_acceptance": "pending",
+  "scope": "Local shoulder surface reconstruction and continuous fist anatomy; not temple integration"
+}

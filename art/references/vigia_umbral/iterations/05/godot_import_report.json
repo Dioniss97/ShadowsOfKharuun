@@ -1,0 +1,42 @@
+{
+	"asset": "res://assets/models/environment/vigia_umbral.glb",
+	"cameras": {
+		"front": [
+			0,
+			4.9,
+			18
+		],
+		"three_quarter": [
+			-12,
+			6.4,
+			18
+		]
+	},
+	"captures": [
+		"godot_three_quarter.png",
+		"godot_front.png",
+		"godot_detail_cowl.png",
+		"godot_detail_shoulders.png",
+		"godot_detail_hands.png"
+	],
+	"engine": "4.7.2-stable (official)",
+	"external_dependencies": [],
+	"glb_sha256": "69c8d05e904f584f019d6033cac74853a91a6d7a2783cc2cecc3f0d160851190",
+	"human_acceptance": "pending",
+	"iteration": 5,
+	"materials": [
+		"Basalto_Gris_Desgastado_PBR",
+		"Bronce_Envejecido_PBR",
+		"Piedra_Clara_Mate_PBR"
+	],
+	"mesh_groups": 3,
+	"pbr_textures_present": true,
+	"resolution": [
+		960,
+		1200
+	],
+	"scope": "Actual Godot studio captures; not temple integration or mission QA",
+	"visual_findings": [
+		"Small dark triangular flecks remain in the textured GPU render; diagnosis pending in issue #26"
+	]
+}

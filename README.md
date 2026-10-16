@@ -1,10 +1,10 @@
 # Shadows of Kharuun
 
-Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. Esta rama reúne exploración, combate táctico y decisiones narrativas en una sola misión. Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
+Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. La demo incorpora el **Vigía del Umbral** en ambas posiciones del patio, con un pipeline reproducible Blender–Godot. Evidencia en [QA_0_4_0.md](QA_0_4_0.md) y [comparación dentro del nivel](art/references/vigia_umbral/integration/README.md). Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
 
-Versión estable: **[v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0)**, integrada en `main` con QA humana aprobada el 14 de octubre de 2026. D01–D36 y B1–B8 (D27 sustituida por D33) están implementados y comprobados. La candidata aceptada fue RC2 (`f8ada97`); el cierre solo actualiza versión, textos y documentación. El recorrido reproducible está en [QA_0_3_0.md](QA_0_3_0.md). La entrega anterior conserva su etiqueta inmutable [v0.2.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.2.0).
+Versión estable: **[v0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.4.0)**, [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29), con presentación integrada aprobada por el usuario el 16 de octubre de 2026. Conserva las reglas de misión/combate de 0.3.0 y añade el primer asset artístico y su pipeline. La entrega anterior y su [QA](QA_0_3_0.md) conservan la etiqueta inmutable [v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0).
 
-Repositorio privado: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Seguimiento: [issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues) y [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1). Las decisiones entregadas en 0.3.0 están en [DISENO_DEMO.md](DISENO_DEMO.md), su seguimiento histórico en [PENDIENTES.md](PENDIENTES.md) y las nuevas tareas se gestionan en [GitHub Issues](https://github.com/Dioniss97/ShadowsOfKharuun/issues). Procedimiento vigente en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md) y evidencia de la entrega en [RESULTADO.md](RESULTADO.md).
+Repositorio público intencionalmente: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Decisiones de esta entrega en [DISENO_0_4_0.md](DISENO_0_4_0.md) y seguimiento en [GitHub Issues y milestone 0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2). Las decisiones de 0.3.0 están en [DISENO_DEMO.md](DISENO_DEMO.md), su seguimiento histórico en [PENDIENTES.md](PENDIENTES.md). Procedimiento vigente en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md) y evidencia de la entrega estable en [RESULTADO.md](RESULTADO.md).
 
 ## Controles de la misión unificada
 
@@ -58,13 +58,15 @@ La conversación congela tiempo, movimiento, daño y regeneración. Conservas sa
 
 ## Aceptación y cierre
 
-El usuario confirmó: «Apruebo el QA de la 0.3.0». La [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) está fusionada; las 21 issues y el milestone están cerrados, con historial conservado. La entrega queda identificada por `v0.3.0`. El trabajo se detiene en esa versión hasta que el usuario defina 0.4.
+El usuario aprobó expresamente la presentación integrada de 0.4.0. La entrega pasa **213 comprobaciones headless y 238 con GPU, cero fallos**; [QA_0_4_0.md](QA_0_4_0.md) registra por separado pruebas y aceptación visual global. Los dos scripts Blender se publican bajo GPL-2.0-or-later conforme a Q04-06; el [aviso de alcance](tools/blender/LICENSE-scripts.md) identifica esos archivos. Los [aprendizajes artísticos y técnicos](APRENDIZAJES_0_4_0.md) quedan documentados.
 
 ## Dependencias y verificación
 
-Godot **4.7.2 Stable estándar**, portátil, está incluido localmente en `tools/godot/`. Forward+ / Vulkan, con RX 6600 como GPU de prueba. No requiere .NET ni Blender. Los ejecutables y archivos de caché están excluidos de Git: al copiar el proyecto a otro equipo, hay que preparar el motor.
+Godot **4.7.2 Stable estándar**, portátil, está incluido localmente en `tools/godot/`. Forward+ / Vulkan, con RX 6600 como GPU de prueba. Blender 5.2.2 LTS se usa solo para editar o regenerar el modelo del Vigía; no es necesario para ejecutar el juego. Los ejecutables y archivos de caché están excluidos de Git: al copiar el proyecto a otro equipo, hay que preparar el motor.
 
-La voz usa el TTS de Windows si Godot encuentra una voz española; siempre hay subtítulos. Audio y geometría se generan en Godot. Después de preparar el motor, el juego funciona sin conexión.
+La voz usa el TTS de Windows si Godot encuentra una voz española; siempre hay subtítulos. El audio y el resto de geometría se generan en Godot; las estatuas cargan el GLB incluido, sin necesitar Blender. Después de preparar el motor, el juego funciona sin conexión.
+
+`PLAY.bat` prepara los recursos con una importación local antes de abrir el juego. Esto permite arrancar tras clonar/copiar el repositorio sin una carpeta `.godot` previa y actualiza los modelos importados. Si falla, muestra la ruta del log.
 
 - `tools/DEMO_TEST.bat`: suite de la misión unificada en modo headless.
 - `tools/DEMO_CAPTURE.bat`: suite con GPU y capturas reales en `screenshots/`.

@@ -1,0 +1,29 @@
+{
+  "asset": "Vigía del Umbral",
+  "iteration": 7,
+  "blender": "5.2.2 LTS",
+  "source": "art/source/statues/vigia_umbral.blend",
+  "source_sha256": "c8d04e6217c5009a173d90e6818220ab38ac0efd1242f50d4912936d47e41302",
+  "glb": "assets/models/environment/vigia_umbral.glb",
+  "bytes": 18456084,
+  "sha256": "7f7d9de5e04c08254938ec473bbdb6ed27381ab41b89bae1dddf3b79ba22e87d",
+  "vertices": 86926,
+  "triangles": 173792,
+  "materials": [
+    "Basalto_Gris_Desgastado_PBR",
+    "Bronce_Envejecido_PBR",
+    "Piedra_Clara_Mate_PBR"
+  ],
+  "embedded_images": 9,
+  "normal_scales": [
+    0.25,
+    0.25,
+    0.25
+  ],
+  "emission": false,
+  "runtime_color_attributes": false,
+  "stole_uv": "Two continuous front projections reserved inside the existing stone atlas",
+  "pigment": "Worn red incisions and darker stole/hood lip baked into stone BaseColor; no runtime mask attribute",
+  "expected_godot_front": "+Z; confirm with an actual Godot capture",
+  "acceptance": "Pending human review; this report is not mission QA"
+}

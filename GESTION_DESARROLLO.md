@@ -64,7 +64,7 @@ Una tarea parcialmente completada no se marca `verificado-en-rama` mientras falt
 7. **Revisar.** Corregir fallos, verificar regresiones y obtener QA humana explícita cuando forme parte de la aceptación. Si cambia una regla, actualizar su decisión y pruebas, no tratar una validación antigua como vigente.
 8. **Entregar.** Tras aceptar el alcance, fusionar cambios, actualizar documentación de uso y resultados, etiquetar el commit de entrega y cerrar issues/milestone. Nunca crear ni mover tags por diseños o builds incompletas.
 
-Mientras se diseña 0.4.0, la base jugable publicada sigue siendo v0.3.0. No desarrollar componentes FUT por iniciativa propia.
+La base jugable publicada se identifica en README, ORGANIZACION y su tag inmutable. Un diseño nuevo no cambia esa base ni autoriza desarrollar componentes FUT por iniciativa propia.
 
 ## 5. Consultas útiles (GitHub Issues)
 

@@ -1,0 +1,24 @@
+{
+  "asset": "Vigía del Umbral",
+  "iteration": 3,
+  "blender": "5.2.2 LTS",
+  "source": "art/source/statues/vigia_umbral.blend",
+  "glb": "assets/models/environment/vigia_umbral.glb",
+  "bytes": 18221688,
+  "sha256": "97932744743a2692a02d83bf2a40f5216cce600f5512989e3774ca9055ceae90",
+  "vertices": 90792,
+  "triangles": 181528,
+  "materials": [
+    "Basalto_Gris_Desgastado_PBR",
+    "Bronce_Envejecido_PBR",
+    "Piedra_Clara_Mate_PBR"
+  ],
+  "embedded_images": 9,
+  "normal_scales": [
+    0.25,
+    0.25,
+    0.25
+  ],
+  "expected_godot_front": "+Z; confirm with an actual Godot capture",
+  "acceptance": "Pending human review; this report is not mission QA"
+}

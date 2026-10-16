@@ -20,5 +20,8 @@ tools/sandbox-appdata/
 *.tmp
 *.log
 *.bak
+*.blend1
+__pycache__/
+*.pyc
 .engram/*
 !.engram/config.json

@@ -1,0 +1,221 @@
+{
+  "language": "English",
+  "representation": "Sith AF / Legends Kittat; visual transliteration",
+  "font_sha256": "f8a5fccbdeb33e2ee8c2063d3848b259083fc800e56290706f21e1ce767db06a",
+  "font_license": "CC BY 3.0 US; Ender Smith / AurekFonts",
+  "font_source": "https://www.dafont.com/sith-af.font",
+  "reading_order": "Front left band verses 1-3, front right 4-6; top-to-bottom rows, left-to-right letters",
+  "glyph_height_m": 0.074,
+  "punctuation": "Latin commas and full stops omitted; all letters and word spaces retained",
+  "incision_depth_m": 0.014,
+  "bands": [
+    {
+      "front_band": "left",
+      "verses": [
+        "Peace is a lie, there is only passion.",
+        "Through passion, I gain strength.",
+        "Through strength, I gain power."
+      ],
+      "rows": [
+        {
+          "text": "PEAC",
+          "top_z": 3.78
+        },
+        {
+          "text": "E IS",
+          "top_z": 3.668333333333333
+        },
+        {
+          "text": " A L",
+          "top_z": 3.5566666666666666
+        },
+        {
+          "text": "IE T",
+          "top_z": 3.445
+        },
+        {
+          "text": "HERE",
+          "top_z": 3.333333333333333
+        },
+        {
+          "text": " IS ",
+          "top_z": 3.2216666666666667
+        },
+        {
+          "text": "ONLY",
+          "top_z": 3.11
+        },
+        {
+          "text": " PAS",
+          "top_z": 2.998333333333333
+        },
+        {
+          "text": "SION",
+          "top_z": 2.8866666666666667
+        },
+        {
+          "text": "THRO",
+          "top_z": 2.775
+        },
+        {
+          "text": "UGH ",
+          "top_z": 2.663333333333333
+        },
+        {
+          "text": "PASS",
+          "top_z": 2.5516666666666667
+        },
+        {
+          "text": "ION ",
+          "top_z": 2.44
+        },
+        {
+          "text": "I GA",
+          "top_z": 2.328333333333333
+        },
+        {
+          "text": "IN S",
+          "top_z": 2.216666666666667
+        },
+        {
+          "text": "TREN",
+          "top_z": 2.105
+        },
+        {
+          "text": "GTH",
+          "top_z": 1.9933333333333334
+        },
+        {
+          "text": "THRO",
+          "top_z": 1.8816666666666668
+        },
+        {
+          "text": "UGH ",
+          "top_z": 1.77
+        },
+        {
+          "text": "STRE",
+          "top_z": 1.6583333333333337
+        },
+        {
+          "text": "NGTH",
+          "top_z": 1.5466666666666669
+        },
+        {
+          "text": " I G",
+          "top_z": 1.435
+        },
+        {
+          "text": "AIN ",
+          "top_z": 1.3233333333333337
+        },
+        {
+          "text": "POWE",
+          "top_z": 1.211666666666667
+        },
+        {
+          "text": "R",
+          "top_z": 1.1
+        }
+      ]
+    },
+    {
+      "front_band": "right",
+      "verses": [
+        "Through power, I gain victory.",
+        "Through victory, my chains are broken.",
+        "The Force shall free me."
+      ],
+      "rows": [
+        {
+          "text": "THRO",
+          "top_z": 3.78
+        },
+        {
+          "text": "UGH ",
+          "top_z": 3.6523809523809523
+        },
+        {
+          "text": "POWE",
+          "top_z": 3.5247619047619048
+        },
+        {
+          "text": "R I ",
+          "top_z": 3.397142857142857
+        },
+        {
+          "text": "GAIN",
+          "top_z": 3.2695238095238093
+        },
+        {
+          "text": " VIC",
+          "top_z": 3.1419047619047618
+        },
+        {
+          "text": "TORY",
+          "top_z": 3.0142857142857142
+        },
+        {
+          "text": "THRO",
+          "top_z": 2.8866666666666667
+        },
+        {
+          "text": "UGH ",
+          "top_z": 2.759047619047619
+        },
+        {
+          "text": "VICT",
+          "top_z": 2.6314285714285717
+        },
+        {
+          "text": "ORY ",
+          "top_z": 2.5038095238095237
+        },
+        {
+          "text": "MY C",
+          "top_z": 2.376190476190476
+        },
+        {
+          "text": "HAIN",
+          "top_z": 2.2485714285714287
+        },
+        {
+          "text": "S AR",
+          "top_z": 2.1209523809523807
+        },
+        {
+          "text": "E BR",
+          "top_z": 1.9933333333333334
+        },
+        {
+          "text": "OKEN",
+          "top_z": 1.8657142857142857
+        },
+        {
+          "text": "THE ",
+          "top_z": 1.7380952380952381
+        },
+        {
+          "text": "FORC",
+          "top_z": 1.6104761904761906
+        },
+        {
+          "text": "E SH",
+          "top_z": 1.482857142857143
+        },
+        {
+          "text": "ALL ",
+          "top_z": 1.3552380952380951
+        },
+        {
+          "text": "FREE",
+          "top_z": 1.2276190476190476
+        },
+        {
+          "text": " ME",
+          "top_z": 1.1
+        }
+      ]
+    }
+  ]
+}

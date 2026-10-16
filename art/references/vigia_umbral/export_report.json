@@ -1,0 +1,46 @@
+{
+  "asset": "Vigía del Umbral",
+  "iteration": 8,
+  "blender": "5.2.2 LTS",
+  "source": "art/source/statues/vigia_umbral.blend",
+  "source_sha256": "0a51277b706a62154cf82af036694d286300a7a4a1b278f99bcbf8ca4e87dad2",
+  "glb": "assets/models/environment/vigia_umbral.glb",
+  "bytes": 18214180,
+  "sha256": "192a22bc4f519bbdaa0cb594756344b0b75f055211ae4d128bec1841824b248e",
+  "vertices": 84706,
+  "triangles": 169352,
+  "materials": [
+    "Basalto_Gris_Desgastado_PBR",
+    "Bronce_Envejecido_PBR",
+    "Piedra_Clara_Mate_PBR"
+  ],
+  "embedded_images": 9,
+  "normal_scales": [
+    0.25,
+    0.25,
+    0.25
+  ],
+  "emission": false,
+  "runtime_color_attributes": false,
+  "stole_uv": "Two continuous front projections reserved inside the existing stone atlas",
+  "atlas_repairs": {
+    "Basalto_Gris_Desgastado": {
+      "thin_faces": 14269,
+      "texels": 44494,
+      "method": "Adjacent surface colour, preserving pigment masks"
+    },
+    "Piedra_Clara_Mate": {
+      "thin_faces": 9,
+      "texels": 110,
+      "method": "Adjacent surface colour, preserving pigment masks"
+    },
+    "Bronce_Envejecido": {
+      "thin_faces": 0,
+      "texels": 0,
+      "method": "Adjacent surface colour, preserving pigment masks"
+    }
+  },
+  "pigment": "Worn red incisions and darker stole/hood lip baked into stone BaseColor; no runtime mask attribute",
+  "expected_godot_front": "+Z; confirm with an actual Godot capture",
+  "acceptance": "Pending human review; this report is not mission QA"
+}

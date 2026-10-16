@@ -1,0 +1,269 @@
+{
+  "iteration": 6,
+  "source_sha256": "c7cd81c98a3e9573bb0a524ec6feedfc944614b99e9e25dec7e4c353019c1bb3",
+  "baseline_sha256": "f7526232c88f89a3e1e7d6888de0cdfcfb45ec6075320a17be40ae58f2bf36bf",
+  "source_meshes": 19,
+  "meshes": [
+    {
+      "name": "Escultura_Túnica_Capucha_Mangas",
+      "vertices": 49524,
+      "components": [
+        49524
+      ],
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    },
+    {
+      "name": "Mano_Puño_Esculpido_-1",
+      "vertices": 17896,
+      "components": [
+        17896
+      ],
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    },
+    {
+      "name": "Mano_Puño_Esculpido_1",
+      "vertices": 17892,
+      "components": [
+        17892
+      ],
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    }
+  ],
+  "preserved_parts": [
+    {
+      "name": "Pedestal_Piedra_Tallada",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Filete_de_Piedra",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Vibrohoja_Filo_Curvo",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Vibrohoja_Plano_Lomo",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Carcasa_Resonador_Alargada",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Guarda_Asimétrica_Ceremonial",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Filete_Mecanismo",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_0",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_1",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_2",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_3",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Puerto_Resonador_4",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Empuñadura_Ceñida",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Virola_Empuñadura_4.57",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Virola_Empuñadura_5.43",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    },
+    {
+      "name": "Pomo_Facetado",
+      "vertices_unchanged": true,
+      "transform_unchanged": true
+    }
+  ],
+  "blender_captures": [
+    {
+      "file": "front_materials.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "af1552c7f1b85fd545f6d726fff74f8d435af6c44b9bcf799494ecd4b93378c5"
+    },
+    {
+      "file": "profile_right.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "3b3b946bae74582e6117e4477b45cd231d9a1d73d6fa5c5b6165496292194255"
+    },
+    {
+      "file": "three_quarter.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "0abf49b6598709689844247dc42f9f7a24c6aee204e5a48f0db8186aff3401a4"
+    },
+    {
+      "file": "back.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "ffe186c52f31b93fe42eafb358acb3891e96521c4cca8e1543eddd92e2efd651"
+    },
+    {
+      "file": "silhouette.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "7e260721568d3211c0a1fda4099abb902d01685c9050337bfa756815129a1dae"
+    },
+    {
+      "file": "detail_cowl.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "983f9f50e9ea5e965932ff54e1d9a57e3a672922f88c30b9b3d2affa618b0db7"
+    },
+    {
+      "file": "detail_shoulders.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "c88eb595ba3183ba9469b4de88aa669855119482c5be76ce277ac7d24523933b"
+    },
+    {
+      "file": "detail_stole.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "80210660129503a15c504969e1a6bd00296073308c8ea234c0fbaf5aa7b030fe"
+    },
+    {
+      "file": "detail_inscription.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "0aed58e568857b83c3a6c4fa2e9504a752ba05026799781f8b0072d1686d90a5"
+    },
+    {
+      "file": "detail_hands.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "94e094b726f2a24bc5053c53b9590b6a094492549f164b587bad13fea90e9446"
+    }
+  ],
+  "inscription": {
+    "full_english_letters_and_spaces_verified": true,
+    "font_sha256": "f8a5fccbdeb33e2ee8c2063d3848b259083fc800e56290706f21e1ce767db06a",
+    "rows_by_band": [
+      25,
+      22
+    ],
+    "reading_order": "Front left band verses 1-3, front right 4-6; top-to-bottom rows, left-to-right letters"
+  },
+  "human_acceptance": "pending",
+  "scope": "VI wrists/hands, hood-to-hem stole and English Sith Code engraving; not temple integration or mission QA",
+  "godot_captures": [
+    {
+      "file": "godot_three_quarter.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "ed837e4261ce33c396a45182e7fc2fe8a5dfbaa6b762b14add362ff09994ed34"
+    },
+    {
+      "file": "godot_front.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "8cb1bb80bf19184b3081b0cb040bff8545e7ccf284c5f484e8842ec2ea89d46c"
+    },
+    {
+      "file": "godot_detail_cowl.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "281949701e64ead331b79a766f40fa74f0562de33f540444507c07e2d1943191"
+    },
+    {
+      "file": "godot_detail_shoulders.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "2316592404506d81faaadbfb8aa9779a72ae8bbf1ea8100132b6a387083079db"
+    },
+    {
+      "file": "godot_detail_stole.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "2fa01b5be2e2b5a808d6558920108bb40cdd8d449bc74e721bf5c3e286ebab18"
+    },
+    {
+      "file": "godot_detail_inscription.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "0748b17b690907c9fac4fad43a2f5aa139f51848618ee15d917536bbe57012bf"
+    },
+    {
+      "file": "godot_detail_hands.png",
+      "resolution": [
+        960,
+        1200
+      ],
+      "sha256": "03f71597815b6620f7384482f48642296e7797bf3bbcfda53656a192286cdf66"
+    }
+  ],
+  "glb_sha256": "d0a5b70144f9446780b8c375ef2b5adc8e674cc2f4b621a39d45005ca60f6999"
+}

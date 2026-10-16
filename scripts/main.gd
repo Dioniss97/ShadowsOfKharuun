@@ -14,7 +14,7 @@ var context_cursor: KhContextCursor
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	DisplayServer.window_set_title("Shadows of Kharuun · 0.3.0")
+	DisplayServer.window_set_title("Shadows of Kharuun · "+ProjectSettings.get_setting("application/config/version"))
 	setup_input()
 	mission = KhMission.new()
 	mission.process_mode = Node.PROCESS_MODE_PAUSABLE

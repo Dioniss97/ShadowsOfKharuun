@@ -1,6 +1,6 @@
 # Organización técnica de Shadows of Kharuun
 
-**Actualizado: 15 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
+**Actualizado: 16 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
 
 ## Base y entregas
 
@@ -9,6 +9,7 @@
 | `v0.1.0` | Primera misión verificada; commit `138d459`. |
 | `v0.2.0` | Duelo táctico verificado; commit `f516f41`. |
 | `v0.3.0` | **Estable**: misión táctica unificada, QA humana aprobada el 14-10-2026; PR [#14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) integrada en `main`. |
+| `0.4.0-rc1` | Candidata local con Vigía VIII integrado, regresiones verificadas y revisión/publicación pendiente; [QA_0_4_0.md](QA_0_4_0.md). No tiene tag de entrega. |
 
 El [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1) está cerrado (21 issues cerradas, ninguna abierta). La documentación y evidencia de esta entrega están en [DISENO_DEMO.md](DISENO_DEMO.md), [COMBATE.md](COMBATE.md), [RESULTADO.md](RESULTADO.md), [QA_0_3_0.md](QA_0_3_0.md) y [CHANGELOG.md](CHANGELOG.md).
 
@@ -37,7 +38,7 @@ La rama por defecto es `main`. Para trabajo autorizado, crear ramas descriptivas
 - Repositorio público por decisión del usuario: https://github.com/Dioniss97/ShadowsOfKharuun, Git remoto HTTPS; no cambiar credenciales ni configuración de SSH.
 - Godot portátil en `tools/godot/`, excluido de Git; conservarlo o prepararlo por separado en otra máquina. Herramientas de pruebas en `tools/` explicadas en [README.md](README.md).
 - Credenciales, binarios, bases de memoria, respaldos y directorios de usuario **no** se suben al repositorio.
-- Blender es herramienta artística prevista; no inferir que los modelos o pipelines futuros ya estén implementados.
+- Blender 5.2.2 LTS produce el Vigía con el pipeline documentado en `tools/blender/README.md`; Godot consume el GLB incrustado. No inferir que existen otros modelos o pipelines futuros.
 
 ## Engram (auxiliar, no dependencia)
 

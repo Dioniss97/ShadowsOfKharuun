@@ -2,15 +2,16 @@
 
 Las versiones identifican entregas jugables verificadas mediante etiquetas Git inmutables. Las dos primeras etiquetas se asignaron el 12 de octubre de 2026 a sus commits originales, sin reescribir el historial. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
 
-## 0.4.0-rc1 — 2026-10-16, candidata local
+## 0.4.0 — 2026-10-16
 
-Pendiente de aceptación humana de presentación dentro del nivel, decisión Q04-06 y entrega por PR/tag. La versión estable publicada sigue siendo `v0.3.0`.
+Etiqueta: [v0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.4.0). [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29). El usuario aprueba la presentación integrada y autoriza GPL-2.0-or-later exclusivamente para los dos scripts Blender (Q04-06). La promoción desde la candidata aceptada conserva la geometría y reglas verificadas.
 
 - Vigía del Umbral original tras ocho iteraciones artísticas: escultura encapuchada vertical, mangas continuas, puños de piedra con dedos juntos, vibrohoja ceremonial y estola plana oscura con Código Sith inglés en runas rojo mate.
 - Fuente Blender editable, generador/exportador específicos, materiales propios horneados en nueve mapas PBR e incrustados en un GLB de tres materiales. Sith AF incorporada con atribución/licencia.
 - Dos instancias del mismo GLB en la demo, mirando al patio y conservando posiciones, rotaciones y colisiones. Retirados los ojos emisivos y la luz propia de la figura provisional.
 - Corregidos la repisa interior de capucha, el pellizco palmar superior, la pérdida de pigmento de glifos y las motas triangulares de color horneado.
 - Comparación real antes/después en cinco vistas de Godot a 1280×720; 49 formas físicas conservadas, regresiones de 213 casos headless y 238 GPU sin fallos. Reglas de misión/combate conservadas.
+- Lanzador con importación local previa para abrir una copia sin caché de Godot; menú y ventana obtienen la versión desde ProjectSettings.
 - Evidencia y aceptación en [QA_0_4_0.md](QA_0_4_0.md); límites, causas y decisiones reutilizables en [APRENDIZAJES_0_4_0.md](APRENDIZAJES_0_4_0.md).
 
 ## 0.3.0 — 2026-10-14

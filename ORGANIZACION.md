@@ -8,8 +8,8 @@
 |---|---|
 | `v0.1.0` | Primera misión verificada; commit `138d459`. |
 | `v0.2.0` | Duelo táctico verificado; commit `f516f41`. |
-| `v0.3.0` | **Estable**: misión táctica unificada, QA humana aprobada el 14-10-2026; PR [#14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) integrada en `main`. |
-| `0.4.0-rc1` | Candidata local con Vigía VIII integrado, regresiones verificadas y revisión/publicación pendiente; [QA_0_4_0.md](QA_0_4_0.md). No tiene tag de entrega. |
+| `v0.3.0` | Misión táctica unificada, QA humana aprobada el 14-10-2026; PR [#14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14). Etiqueta histórica inmutable. |
+| `v0.4.0` | **Estable**: Vigía VIII y pipeline Blender–Godot, presentación integrada aprobada el 16-10-2026, PR [#29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29); [QA_0_4_0.md](QA_0_4_0.md) y [aprendizajes](APRENDIZAJES_0_4_0.md). |
 
 El [milestone Demo 0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/1) está cerrado (21 issues cerradas, ninguna abierta). La documentación y evidencia de esta entrega están en [DISENO_DEMO.md](DISENO_DEMO.md), [COMBATE.md](COMBATE.md), [RESULTADO.md](RESULTADO.md), [QA_0_3_0.md](QA_0_3_0.md) y [CHANGELOG.md](CHANGELOG.md).
 

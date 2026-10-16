@@ -10,5 +10,16 @@ if not exist "%GODOT%" (
   exit /b 1
 )
 if not exist "%~dp0tools\logs" mkdir "%~dp0tools\logs"
+"%GODOT%" --headless --editor --import --path "%~dp0." --log-file "%~dp0tools\logs\import.log"
+if errorlevel 1 goto import_failed
+findstr /c:"SCRIPT ERROR:" /c:"ERROR:" "%~dp0tools\logs\import.log" >nul
+if not errorlevel 1 goto import_failed
 start "Shadows of Kharuun" "%GODOT%" --path "%~dp0." --log-file "%~dp0tools\logs\game.log" %*
 endlocal
+exit /b 0
+
+:import_failed
+echo No se han podido preparar los recursos de la demo.
+echo Revisa tools\logs\import.log.
+pause
+exit /b 1

@@ -28,6 +28,7 @@ Registro del 16-10-2026, basado en ocho iteraciones del Vigía y su integración
 - Separar visual y colisión. Sustituir la figura y conservar el collider del pedestal permite mejorar el arte sin cambiar el espacio de juego. La comparación de las 49 formas del nivel y las regresiones de misión aportan evidencia complementaria.
 - Blender mira a +Y y Godot a +Z en este asset. Corregir la copia al exportar y comprobar la orientación en el nivel; no girar los módulos del templo para compensar a ciegas.
 - El estudio y el templo tienen luces distintas: la piedra y las runas cambian de lectura. La validación final debe incluir ambas instancias dentro del nivel, con comparaciones de cámara/resolución equivalentes.
+- Comprobar también una copia sin caché. El juego directo no importaba el GLB ni registraba las clases globales en un proyecto recién copiado. `PLAY.bat` prepara los recursos mediante `--headless --editor --import` antes de lanzar; no se distribuye `.godot` ni se presupone que la caché local del desarrollador existe en otro equipo.
 - El GLB final tiene 169.352 triángulos y ocupa 18.214.180 bytes. Los mapas sin pérdida aumentan la memoria de texturas del escenario aproximadamente de 78 a 141 MiB en esta medición. Compartir el recurso evita duplicarlo por instancia; queda documentado el coste, sin confundir intervalos de presentación con tiempos exclusivos de GPU.
 
 ## Gestión y procedencia

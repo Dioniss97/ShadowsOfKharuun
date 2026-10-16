@@ -1,8 +1,8 @@
-# Resultado actual: candidata 0.4.0 integrada
+# Resultado: 0.4.0 integrada y aceptada
 
-16-10-2026. El Vigía VIII está integrado en las dos posiciones de la demo con el mismo GLB, conservando los módulos y sus colisiones. El usuario acepta el asset y autoriza integración/cierre mediante A04-12. La candidata `0.4.0-rc1` pasa **213 comprobaciones headless y 238 con GPU, cero fallos**; el comparador conserva las 49 formas físicas y las cámaras de cinco pares de capturas.
+16-10-2026. El Vigía VIII está integrado en las dos posiciones de la demo con el mismo GLB, conservando los módulos y sus colisiones. El usuario acepta el asset y autoriza integración/cierre mediante A04-12; A04-13 aprueba expresamente la presentación del nivel. La entrega `v0.4.0`, [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29), pasa **213 comprobaciones headless y 238 con GPU, cero fallos**; el comparador conserva las 49 formas físicas y las cámaras de cinco pares de capturas.
 
-Evidencia reproducible, límites, coste observado y respuestas humanas pendientes en [QA_0_4_0.md](QA_0_4_0.md). [Comparación del nivel](art/references/vigia_umbral/integration/README.md) y [aprendizajes](APRENDIZAJES_0_4_0.md). Falta la aceptación de presentación dentro del nivel y Q04-06 antes de publicar scripts/entregar. No se ha creado `v0.4.0`; la entrega estable publicada sigue siendo `v0.3.0`.
+Evidencia reproducible, límites, coste observado y aceptación en [QA_0_4_0.md](QA_0_4_0.md). [Comparación del nivel](art/references/vigia_umbral/integration/README.md) y [aprendizajes](APRENDIZAJES_0_4_0.md). Q04-06 autoriza GPL-2.0-or-later solo para los dos scripts Blender. Las reglas jugables de 0.3.0 se conservan; su etiqueta y evidencia siguen inmutables.
 
 ## Historial: 0.3.0 con QA humana aprobada
 

@@ -3,9 +3,9 @@
 **Fecha:** 14 de octubre de 2026  
 **Revisión de dirección artística:** 16 de octubre de 2026
 
-**Estado:** producción autorizada el 15-10-2026; modelo VIII aceptado para integración y cierre autorizado el 16-10-2026 (A04-12). Candidata local integrada `0.4.0-rc1`, con evidencia en [QA_0_4_0.md](QA_0_4_0.md); aceptación de presentación/publicación todavía pendiente.
+**Estado:** entrega `v0.4.0`, [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29). Producción autorizada el 15-10-2026; modelo VIII e integración/cierre aceptados el 16-10-2026 (A04-12/A04-13). Evidencia y alcance de aceptación en [QA_0_4_0.md](QA_0_4_0.md).
 
-**Base estable:** `v0.3.0` integrada en `main`, PR #14 aceptada.  
+**Base de partida:** `v0.3.0` integrada en `main`, PR #14 aceptada.
 **Procedimiento obligatorio:** [AGENTS.md](AGENTS.md), [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md) y [ORGANIZACION.md](ORGANIZACION.md).  
 **Histórico, no backlog activo:** [PENDIENTES.md](PENDIENTES.md) y [DISENO_DEMO.md](DISENO_DEMO.md).
 
@@ -124,7 +124,7 @@ Esos temas pueden estudiarse en sus conversaciones y documentos correspondientes
 ## 6. Cuestiones abiertas de producción y aceptación
 
 - **Q04-01 — Recorte de 0.4.0: resuelta el 15-10-2026.** El usuario confirma pipeline Blender→Godot + un Vigía del Umbral original, usando el mismo GLB en las dos posiciones existentes; sin inventario ni remodelación general. La planificación del milestone queda aprobada.
-- **Q04-02 — Dirección visual: revisada el 15-10-2026 (A04-04).** El usuario aporta una estatua encapuchada como referencia y pide iterar ampliamente sobre la base técnica. El primer resultado no tiene aceptación artística. Aplicar la forma monolítica, pliegues y lectura real de materiales descritos en A04-03/A04-04; la aceptación final sigue pendiente.
+- **Q04-02 — Dirección visual: revisada el 15-10-2026 (A04-04), aceptada en VIII mediante A04-12/A04-13.** La primera figura fue rechazada y dio paso a la escultura monolítica encapuchada, con pliegues y materiales pétreos. Se conserva su historial de iteraciones y feedback; la presentación integrada de VIII queda aprobada el 16-10-2026.
 - **Q04-03 — Mismo GLB, dos posiciones: resuelta el 14-10-2026 (T04-04).**
 - **Q04-04 — Pipeline y herramientas: resuelta el 15-10-2026.** Rutas aprobadas: `art/source/statues/vigia_umbral.blend`, `art/references/vigia_umbral/`, `assets/models/environment/vigia_umbral.glb` y `tools/blender/`. Flujo aprobado: un script Blender Python genera y guarda `.blend`; otro exporta `.glb`; el usuario revisa imágenes. Blender 5.2.2 LTS se instaló en modo portátil; los scripts generan la fuente y el GLB. La importación y las capturas de estudio Godot se han ejecutado; VIII corrige localmente el defecto de color horneado de #26. Falta la QA dentro del templo.
 - **Q04-05 — Resuelta el 16-10-2026.** A04-12 acepta el asset VIII para integración y A04-13 aprueba expresamente su presentación dentro del nivel. Se conservan cinco pares antes/después que cubren las cuatro categorías previstas, 49 formas físicas idénticas y regresiones completas headless/GPU. La evidencia y el alcance real de aceptación visual global están en [QA_0_4_0.md](QA_0_4_0.md); no se inventa una partida humana de la candidata.
@@ -151,6 +151,6 @@ Las issues usan la plantilla `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md`,
 1. El usuario autorizó explícitamente iniciar la producción de 0.4.0 el 15-10-2026, tras confirmar alcance, acabado, rutas y flujo.
 2. El milestone [`0.4.0`](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2), la issue padre [#25](https://github.com/Dioniss97/ShadowsOfKharuun/issues/25) y las sub-issues nativas [#26](https://github.com/Dioniss97/ShadowsOfKharuun/issues/26), [#27](https://github.com/Dioniss97/ShadowsOfKharuun/issues/27) y [#28](https://github.com/Dioniss97/ShadowsOfKharuun/issues/28) están creados. GitHub conserva su estado operativo y sus dependencias.
 3. La octava iteración aplica A04-11 sobre VII y el usuario acepta su integración en A04-12. Se conservan la fuente, diez renders Cycles, nueve mapas PBR, GLB y nueve capturas de estudio; [galería e informes](art/references/vigia_umbral/README.md) identifican esa evidencia. El mismo GLB ya está en ambas posiciones del templo, con cinco pares de capturas reales y regresiones completas sin fallos, recogidas en [QA_0_4_0.md](QA_0_4_0.md). Las revisiones anteriores son historial.
-4. La candidata local es `0.4.0-rc1`. Para entregar faltan la aceptación humana de presentación en el nivel, Q04-06 y el cierre por PR/tag. Los [aprendizajes](APRENDIZAJES_0_4_0.md) describen la experiencia sin crear backlog futuro.
+4. La candidata aceptada se promueve a `v0.4.0` por PR #29, con Q04-05/Q04-06 resueltas y regresiones verificadas. Los [aprendizajes](APRENDIZAJES_0_4_0.md) describen la experiencia sin crear backlog futuro. GitHub registra el cierre operativo de issues/milestone.
 
-La versión `v0.3.0` permanece como referencia estable e inmutable mientras se produce y revisa 0.4.0.
+La versión `v0.3.0` permanece como referencia histórica inmutable. La nueva entrega es `v0.4.0`; no se aprueba por ello un alcance posterior.

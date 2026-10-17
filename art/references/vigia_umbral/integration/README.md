@@ -1,6 +1,6 @@
 # Vigía VIII dentro de la demo
 
-16-10-2026. Mismo GLB en las dos posiciones del nivel real, con iluminación y HUD de producción. El usuario acepta VIII para integrarlo mediante A04-12. La aceptación humana de estas vistas del nivel y el cierre de versión quedan registrados en [QA_0_4_0.md](../../../../QA_0_4_0.md).
+16-10-2026. Mismo GLB en las dos posiciones del nivel real, con iluminación y HUD de producción. El usuario acepta VIII para integrarlo mediante A04-12. La aceptación humana de estas vistas del nivel y el cierre de versión quedan registrados en [QA_0_4_0.md](../../../../docs/versions/0.4.0/QA_0_4_0.md).
 
 ## Comparación antes/después
 
@@ -40,4 +40,4 @@ La memoria de texturas del escenario pasa de aproximadamente **78 a 141 MiB**, c
 
 Las figuras se distinguen en el patio, conservan el acceso central y muestran volumen desde ambos laterales. El arma clara se separa de la túnica y las runas son un detalle de cercanía. Las luces cálidas/frías del templo cambian su apariencia respecto al estudio; la cavidad facial mantiene sombra pero su relieve interior puede verse desde ciertos ángulos. La valoración artística corresponde al usuario.
 
-Regresiones jugables, límites y aceptación: [QA_0_4_0.md](../../../../QA_0_4_0.md). Aprendizajes: [APRENDIZAJES_0_4_0.md](../../../../APRENDIZAJES_0_4_0.md).
+Regresiones jugables, límites y aceptación: [QA_0_4_0.md](../../../../docs/versions/0.4.0/QA_0_4_0.md). Aprendizajes: [APRENDIZAJES_0_4_0.md](../../../../docs/versions/0.4.0/APRENDIZAJES_0_4_0.md).

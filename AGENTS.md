@@ -4,11 +4,11 @@ RPG narrativo 3D para un jugador, desarrollado en Godot con Blender previsto par
 
 ## Documentos y fuente de verdad
 
-1. **Leer `GESTION_DESARROLLO.md` antes de organizar tareas**: es la guía vigente y prevalece sobre instrucciones antiguas de gestión.
-2. **Leer `ORGANIZACION.md`** para convenciones del entorno, versión estable y rutina de trabajo.
-3. **Consultar el diseño correspondiente al trabajo activo**. `DISENO_DEMO.md` especifica lo aceptado en **v0.3.0**, no el backlog ni las decisiones de la siguiente versión. Para 0.4.0 consultar su documento propio cuando exista (p. ej. `DISENO_0_4_0.md`).
-4. `README.md` explica cómo ejecutar la versión estable, `COMBATE.md` detalla el combate actual, `RESULTADO.md` y `QA_0_3_0.md` conservan evidencia, y `CHANGELOG.md` registra entregas.
-5. **GitHub Issues es la única fuente de estado operativo de tareas.** No copiar ni mantener en paralelo sus estados en `PENDIENTES.md`: ese documento es registro histórico de 0.3.0 y propuestas FUT sin aprobación automática.
+1. **Leer `docs/project/GESTION_DESARROLLO.md` antes de organizar tareas**: es la guía vigente y prevalece sobre instrucciones antiguas de gestión.
+2. **Leer `docs/project/ORGANIZACION.md`** para convenciones del entorno, versión estable y rutina de trabajo.
+3. **Consultar el diseño correspondiente al trabajo activo**. `docs/versions/0.3.0/DISENO_DEMO.md` especifica lo aceptado en **v0.3.0**, no el backlog ni las decisiones de la siguiente versión. Para 0.4.0 consultar su documento propio cuando exista (p. ej. `docs/versions/0.4.0/DISENO_0_4_0.md`).
+4. `README.md` explica cómo ejecutar la versión estable, `docs/versions/0.3.0/COMBATE.md` detalla el combate actual, `docs/versions/0.4.0/RESULTADO.md` y `docs/versions/0.3.0/QA_0_3_0.md` conservan evidencia, y `docs/project/CHANGELOG.md` registra entregas.
+5. **GitHub Issues es la única fuente de estado operativo de tareas.** No copiar ni mantener en paralelo sus estados en `docs/versions/0.3.0/PENDIENTES.md`: ese documento es registro histórico de 0.3.0 y propuestas FUT sin aprobación automática.
 
 ## Decisiones, planificación e implementación
 
@@ -24,8 +24,8 @@ RPG narrativo 3D para un jugador, desarrollado en Godot con Blender previsto par
 
 Memoria MCP **auxiliar**, subordinada a Git y GitHub. Proyecto exclusivo `shadowsofkharuun`: usar `project = shadowsofkharuun` y `scope = project`; no usar `all_projects` ni recuperar recuerdos ajenos. Recuperar por ID solo registros obtenidos con búsqueda filtrada. Si no carga o no puede escribir por fallo de identificación de sesión, continuar con Git/Issues y registrar la limitación; no usar CLI/SQL/HTTP para eludir hooks. No borrar ni reasignar memorias de otros proyectos.
 
-**Base estable comprobada:** `v0.4.0` en `main`, PR #29, Vigía y pipeline Blender–Godot con presentación integrada aprobada. QA y aprendizajes en `QA_0_4_0.md` y `APRENDIZAJES_0_4_0.md`; `v0.3.0` conserva su tag inmutable. Planificar versiones siguientes está permitido; implementarlas requiere autorización. No introducir multijugador ni ampliar sistemas/universo fuera del alcance aprobado.
+**Base estable comprobada:** `v0.4.0` en `main`, PR #29, Vigía y pipeline Blender–Godot con presentación integrada aprobada. QA y aprendizajes en `docs/versions/0.4.0/QA_0_4_0.md` y `docs/versions/0.4.0/APRENDIZAJES_0_4_0.md`; `v0.3.0` conserva su tag inmutable. Planificar versiones siguientes está permitido; implementarlas requiere autorización. No introducir multijugador ni ampliar sistemas/universo fuera del alcance aprobado.
 
 ## Gentle AI / ODD (adopción 2026-10-16)
 
-Gentle AI será el flujo principal de los agentes una vez activado localmente. **Leer `GENTLE_AI.md`** para instalación y compatibilidad; la activación local sigue pendiente de prueba. Aplicar el principio ODD de **autorizar → explorar → implementar → verificar**: preguntas de investigación no autorizan escrituras, tareas pequeñas no requieren artefacto de planificación y tareas grandes pueden usar `odd/tasks/<feature>.md` como registro de ejecución, **no como segundo backlog**. No sobrescribir este `AGENTS.md` con prompts generados ni dar por activa una instrucción depositada únicamente en `.codex/AGENTS.md`. GitHub Issues y el diseño siguen siendo autoridades; Engram solo es auxiliar. Las revisiones RDD jamás sustituyen QA en Godot ni aceptación humana.
+Gentle AI será el flujo principal de los agentes una vez activado localmente. **Leer `docs/project/GENTLE_AI.md`** para instalación y compatibilidad; la activación local sigue pendiente de prueba. Aplicar el principio ODD de **autorizar → explorar → implementar → verificar**: preguntas de investigación no autorizan escrituras, tareas pequeñas no requieren artefacto de planificación y tareas grandes pueden usar `odd/tasks/<feature>.md` como registro de ejecución, **no como segundo backlog**. No sobrescribir este `AGENTS.md` con prompts generados ni dar por activa una instrucción depositada únicamente en `.codex/AGENTS.md`. GitHub Issues y el diseño siguen siendo autoridades; Engram solo es auxiliar. Las revisiones RDD jamás sustituyen QA en Godot ni aceptación humana.

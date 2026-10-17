@@ -1,10 +1,10 @@
 # Shadows of Kharuun
 
-Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. La demo incorpora el **Vigía del Umbral** en ambas posiciones del patio, con un pipeline reproducible Blender–Godot. Evidencia en [QA_0_4_0.md](QA_0_4_0.md) y [comparación dentro del nivel](art/references/vigia_umbral/integration/README.md). Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
+Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. La demo incorpora el **Vigía del Umbral** en ambas posiciones del patio, con un pipeline reproducible Blender–Godot. Evidencia en [QA_0_4_0.md](docs/versions/0.4.0/QA_0_4_0.md) y [comparación dentro del nivel](art/references/vigia_umbral/integration/README.md). Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
 
-Versión estable: **[v0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.4.0)**, [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29), con presentación integrada aprobada por el usuario el 16 de octubre de 2026. Conserva las reglas de misión/combate de 0.3.0 y añade el primer asset artístico y su pipeline. La entrega anterior y su [QA](QA_0_3_0.md) conservan la etiqueta inmutable [v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0).
+Versión estable: **[v0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.4.0)**, [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29), con presentación integrada aprobada por el usuario el 16 de octubre de 2026. Conserva las reglas de misión/combate de 0.3.0 y añade el primer asset artístico y su pipeline. La entrega anterior y su [QA](docs/versions/0.3.0/QA_0_3_0.md) conservan la etiqueta inmutable [v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0).
 
-Repositorio público intencionalmente: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Decisiones de esta entrega en [DISENO_0_4_0.md](DISENO_0_4_0.md) y seguimiento en [GitHub Issues y milestone 0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2). Las decisiones de 0.3.0 están en [DISENO_DEMO.md](DISENO_DEMO.md), su seguimiento histórico en [PENDIENTES.md](PENDIENTES.md). Procedimiento vigente en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md) y evidencia de la entrega estable en [RESULTADO.md](RESULTADO.md).
+Repositorio público intencionalmente: [Dioniss97/ShadowsOfKharuun](https://github.com/Dioniss97/ShadowsOfKharuun). Decisiones de esta entrega en [DISENO_0_4_0.md](docs/versions/0.4.0/DISENO_0_4_0.md) y seguimiento en [GitHub Issues y milestone 0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/2). Las decisiones de 0.3.0 están en [DISENO_DEMO.md](docs/versions/0.3.0/DISENO_DEMO.md), su seguimiento histórico en [PENDIENTES.md](docs/versions/0.3.0/PENDIENTES.md). Procedimiento vigente en [GESTION_DESARROLLO.md](docs/project/GESTION_DESARROLLO.md) y evidencia de la entrega estable en [RESULTADO.md](docs/versions/0.4.0/RESULTADO.md).
 
 ## Controles de la misión unificada
 
@@ -58,7 +58,7 @@ La conversación congela tiempo, movimiento, daño y regeneración. Conservas sa
 
 ## Aceptación y cierre
 
-El usuario aprobó expresamente la presentación integrada de 0.4.0. La entrega pasa **213 comprobaciones headless y 238 con GPU, cero fallos**; [QA_0_4_0.md](QA_0_4_0.md) registra por separado pruebas y aceptación visual global. Los dos scripts Blender se publican bajo GPL-2.0-or-later conforme a Q04-06; el [aviso de alcance](tools/blender/LICENSE-scripts.md) identifica esos archivos. Los [aprendizajes artísticos y técnicos](APRENDIZAJES_0_4_0.md) quedan documentados.
+El usuario aprobó expresamente la presentación integrada de 0.4.0. La entrega pasa **213 comprobaciones headless y 238 con GPU, cero fallos**; [QA_0_4_0.md](docs/versions/0.4.0/QA_0_4_0.md) registra por separado pruebas y aceptación visual global. Los dos scripts Blender se publican bajo GPL-2.0-or-later conforme a Q04-06; el [aviso de alcance](tools/blender/LICENSE-scripts.md) identifica esos archivos. Los [aprendizajes artísticos y técnicos](docs/versions/0.4.0/APRENDIZAJES_0_4_0.md) quedan documentados.
 
 ## Dependencias y verificación
 
@@ -72,11 +72,11 @@ La voz usa el TTS de Windows si Godot encuentra una voz española; siempre hay s
 - `tools/DEMO_CAPTURE.bat`: suite con GPU y capturas reales en `screenshots/`.
 - `tools/TEST.bat`, `CAPTURE.bat`, `TACTICAL_TEST.bat`, `TACTICAL_CAPTURE.bat` y `PLAYTEST.bat`: alias de esa misma suite, que también incluye un bot con reglas normales. Ya no prueban dos experiencias principales separadas.
 - `tools/QA.ps1`: verificación desde terminales que permitan scripts locales; los `.bat` no requieren cambiar la política de PowerShell.
-- Informes locales en `tests/*_report.json`; logs en `tools/logs/`. [RESULTADO.md](RESULTADO.md) distingue las pruebas automáticas de la aprobación humana.
+- Informes locales en `tests/*_report.json`; logs en `tools/logs/`. [RESULTADO.md](docs/versions/0.4.0/RESULTADO.md) distingue las pruebas automáticas de la aprobación humana.
 
 El duelo queda como prueba interna: `PLAY.bat --duel`. El lanzador también admite `PLAY.bat --fullscreen` y `PLAY.bat --rendering-method gl_compatibility` para equipos sin Vulkan; este último reduce algunos efectos y no es el renderizado principal de verificación.
 
-Reglas actuales en [COMBATE.md](COMBATE.md), historial en [CHANGELOG.md](CHANGELOG.md) y rutina Git/Engram en [ORGANIZACION.md](ORGANIZACION.md).
+Reglas actuales en [COMBATE.md](docs/versions/0.3.0/COMBATE.md), historial en [CHANGELOG.md](docs/project/CHANGELOG.md) y rutina Git/Engram en [ORGANIZACION.md](docs/project/ORGANIZACION.md).
 
 
 La verificación adicional de HUD ancho puede ejecutarse con Godot: `--path . --resolution 1920x1080 --fixed-fps 60 -- --hud-capture`. Guarda `tests/demo_hud_capture_report.json` y capturas reales; es una suite parcial de UI/interacción, separada del recorrido completo.

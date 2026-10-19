@@ -1,1992 +1,1992 @@
 {
-  "capture": false,
-  "checks": [
-    {
-      "details": "",
-      "name": "API de demo unificada disponible",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cola: cuatro pendientes, quinta rechazada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cola: retirar una orden preserva las demás",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga: ningún impacto antes de preparar el arma",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga: primer contacto a 0,42 segundos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga: segundo contacto a 0,90 dentro de la misma acción",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga: dos impactos y una ronda, sin duplicados",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga: interrupción cancela segundo contacto y conserva recuperación",
-      "passed": true
-    },
-    {
-      "details": "[[2, 1, 0.0], [2, 1, 0.0], [2, 1, 0.0]]",
-      "name": "Rondas: resultados iguales a 30, 60 y 144 Hz",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Tiradas: fallo natural y crítico conservados",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Rig: mano izquierda libre, sable en mano derecha",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Gesto izquierdo y palma real: push",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Gesto izquierdo y palma real: lightning",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Gesto izquierdo y palma real: heal",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Gesto izquierdo y palma real: medkit",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Rig: ráfaga prepara y conecta dos golpes visibles",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Rig: espada apunta delante en el contacto",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Rig: cancelar corta la animación actual",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Misión principal utiliza combate táctico",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Tres acólitos tácticos y guardián neutral",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Encuentro: selecciona agresor y pausa inicial una vez",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Tres botiquines y Defensa retirada del catálogo",
-      "passed": true
-    },
-    {
-      "details": "[(0.0, 0.1, 1.6), 340.0, 100.0, 0.06666666666667, 0.0, (-0.5, 0.1, 0.0)] -> [(0.0, 0.1, 1.6), 340.0, 100.0, 0.06666666666667, 0.0, (-0.5, 0.1, 0.0)]",
-      "name": "Pausa congela física, salud, energía, cronómetro y rondas",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cambiar de objetivo no repite la pausa del encuentro",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Espacio pausa manualmente",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Escape conserva la pausa táctica previa",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D36: poderes personales a la izquierda de consumibles",
-      "passed": true
-    },
-    {
-      "details": "[(244.0, 90.0), (232.0, 84.0)]",
-      "name": "D36: cola y menú personal compactos dejan libre la escena",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D34: sin barras 3D colectivas; vida solo sobre selección",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "HUD: tres categorías separadas de cuatro órdenes, arrojadizo desactivado",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Rueda sobre físico recorre a Ráfaga sin encolar ni girar cámara",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Clic en físico encola acción mostrada contra A",
-      "passed": true
-    },
-    {
-      "details": "[[1, 1, 0], [{ \"id\": \"flurry\", \"target\": Enemy:<CharacterBody3D#162839662302>, \"target_name\": \"Acólito del Juramento\", \"impact_times\": [0.42, 0.9] }], [P: (674.3029, 251.4815), S: (42.0, 14.0)]]",
-      "name": "Flecha de poder recorre a Descarga sin encolar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Clic en poder encola descarga B y conserva ráfaga A",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Botiquín personal añade orden propia y no gasta al encolar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D36: ranura actual vacía no duplica una pendiente; huecos de cola quedan en blanco",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Clic en pendiente cancela solo esa orden",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Limpiar cola funciona con evento real en pausa",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B6: poderes ofensivos recorren empuje/descarga sin curación",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B6: rueda personal no añade órdenes",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B6: selector curativo propio conserva enemigo B seleccionado",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D31: poder personal y ofensivo aparecen desactivados; físico sigue utilizable",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cancelar combate responde a clic real",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: Cancelar combate oculta selectores aunque el encuentro hostil siga activo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: clic real sobre A muestra el menú flotante durante pausa del encuentro",
-      "passed": true
-    },
-    {
-      "details": "[[P: (509.6971, 196.4815), S: (150.0, 74.0)], (584.6971, 282.4815)]",
-      "name": "B2: menú compacto centrado sobre la cabeza sin tapar la cara",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: nombre y salud acompañan al enemigo seleccionado en la tarjeta flotante",
-      "passed": true
-    },
-    {
-      "details": "[[P: (509.6971, 196.4815), S: (150.0, 74.0)], [P: (472.8285, 196.4815), S: (150.0, 74.0)], (547.8285, 282.4815)]",
-      "name": "B2: mover el destinatario actualiza el anclaje de la tarjeta",
-      "passed": true
-    },
-    {
-      "details": "[[P: (472.8285, 196.4815), S: (150.0, 74.0)], [P: (410.843, 197.9506), S: (149.9999, 74.0)], (485.843, 283.9506)]",
-      "name": "B2: arrastrar cámara reproyecta el menú sobre el mismo enemigo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: cambiar objetivo con clic mueve el menú a B",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: un obstáculo entre cámara y enemigo oculta la tarjeta",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: quitar el obstáculo restaura la tarjeta del objetivo visible",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: F oculta menú del enemigo y conserva equipo personal y órdenes",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: clic en agresor reengancha y recupera tarjeta sin nueva pausa inicial",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: un destinatario neutral no muestra selectores",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: objetivo detrás de cámara oculta su menú",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: objetivo fuera del encuadre no deja tarjeta flotando en pantalla",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: selección inválida oculta los tres selectores",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: exploración muestra equipo personal sin menú ofensivo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: diálogo inicial mantiene oculto el menú ofensivo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: transición a espera conserva recursos sin regalos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: combate del guardián también usa tarjeta de objetivo durante pausa",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: duelo interno conserva el menú sobre su enemigo seleccionado",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga real: dos tiradas independientes y dos contactos visuales",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Poder real extiende brazo izquierdo sin intercambiar sable: push",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Efecto visible: onda, descarga desde palma real o curación verde: push",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Pausa también congela el efecto del poder: push",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Poder real extiende brazo izquierdo sin intercambiar sable: lightning",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Efecto visible: onda, descarga desde palma real o curación verde: lightning",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Pausa también congela el efecto del poder: lightning",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Poder real extiende brazo izquierdo sin intercambiar sable: heal",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Efecto visible: onda, descarga desde palma real o curación verde: heal",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Pausa también congela el efecto del poder: heal",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cada orden conserva destinatario y curación es propia",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cambiar selección no redirige la acción en ejecución",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "1A, 2B, 2A y curación continúan con básico A",
-      "passed": true
-    },
-    {
-      "details": "[{ \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 513718359645, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 515127642359, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 8 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 515127642359, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 11 }, { \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 513718359645, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 13 }, { \"id\": \"heal\", \"source\": \"player\", \"target\": \"Sobre ti\", \"hit\": true, \"damage\": 0, \"healing\": 0.0, \"resource_consumed\": true }]",
-      "name": "Registro prueba dos tiradas de ráfaga y destinatarios A/B",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Caída de último destinatario continúa automáticamente con otro agresor sin nueva pausa",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Guardián neutral excluido de selección y órdenes",
-      "passed": true
-    },
-    {
-      "details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 607637212964, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 607637212964, \"hit\": false, \"damage\": 0, \"reason\": \"invalid_target\" }]",
-      "name": "Ráfaga segundo contacto sin transferencia: dead",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga conserva una acción: dead",
-      "passed": true
-    },
-    {
-      "details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 648305186393, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 648305186393, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
-      "name": "Ráfaga segundo contacto sin transferencia: range",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga conserva una acción: range",
-      "passed": true
-    },
-    {
-      "details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 689090596700, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 689090596700, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
-      "name": "Ráfaga segundo contacto sin transferencia: wall",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Ráfaga conserva una acción: wall",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Encolar botiquín y curación no consume recursos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cancelar órdenes pendientes conserva recursos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Botiquín con salud llena consume unidad y ronda al ejecutar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Botiquín con salud llena no duplica consumo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Poder curativo con salud llena consume energía y ronda",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Poder curativo muestra cero curación con salud llena",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Botiquín cura parcialmente hasta el máximo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Agotamiento descarta excedentes y nunca deja contador negativo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Dos descargas consecutivas separadas solo por ronda, sin recarga extra",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D31: falta de energía limpia poderes y pierde una ronda si no quedan órdenes",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D31: energía insuficiente impide encolar poderes nuevos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D31: no ejecuta básico en la ronda perdida",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D31: siguiente ronda recupera básico automático",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D31: descarga, descarga sin energía, curación, ráfaga ejecuta ráfaga sin perder ronda",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D31: botiquín agotado limpia sus órdenes y usa siguiente ataque sin perder ronda",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B6: al agotarse botiquines desaparece su icono, distinto de hueco futuro",
-      "passed": true
-    },
-    {
-      "details": "[true, { \"id\": \"attack\", \"target\": Enemy:<CharacterBody3D#990744942486>, \"target_name\": \"Acólito del Juramento\" }, 1, (0.0, 0.063333, 1.6), (0.0, -0.010075, 1.6)]",
-      "name": "WASD mantiene combate, acción y cola hasta cancelar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B1: A tampoco gira al actor ni interrumpe órdenes mientras combate automáticamente",
-      "passed": true
-    },
-    {
-      "details": "[0.61488483705521, -0.31199996032715, -0.31199996032715]",
-      "name": "B1: soltar botón derecho conserva la órbita durante combate sin desplazamiento",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Girar cámara no aparta al combatiente de su destinatario",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "F libera movimiento y elimina órdenes y autoataque",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Tras F, WASD mueve libremente sin reenganche",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Agresor sigue persiguiendo lejos por la zona accesible tras cancelar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Colisiones sólidas impiden atravesar a un acólito",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: parado conserva cámara libre sin girar al personaje",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: arrastrar cámara parado no desplaza al personaje",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: pausa permite arrastrar y mantiene orientación al soltar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: W+A durante pausa no mueve, gira ni recentra el personaje o la cámara",
-      "passed": true
-    },
-    {
-      "details": "[0.59799996032715, 0.30702341681277]",
-      "name": "D33: desplazarse inicia retorno rápido y gradual hacia el frente",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: avanzar centra cámara detrás sin depender de la órbita anterior",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: mantener botón derecho permite órbita libre también avanzando",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: soltar el arrastre durante desplazamiento vuelve al frente",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: detenerse vuelve a conservar la orientación de cámara",
-      "passed": true
-    },
-    {
-      "details": "[(0.0, 0.0, 2.008881), (0.0, 0.0, -1.0)]",
-      "name": "D33: S retrocede conservando el frente del personaje",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D33: retroceder centra cámara al frente y evita giro de 180 grados",
-      "passed": true
-    },
-    {
-      "details": "[0.77000015974045, 1.50333321094513]",
-      "name": "D33: mantener A gira continuamente en sitio, sin desplazamiento diagonal",
-      "passed": true
-    },
-    {
-      "details": "[-0.77000015974045, -1.50333321094513]",
-      "name": "D33: mantener D gira continuamente en sitio, sin desplazamiento diagonal",
-      "passed": true
-    },
-    {
-      "details": "[(-0.482433, 0.0, -0.991164), (-1.073381, 0.0, -0.47394), 0.77000015974045, 1.50333321094513]",
-      "name": "D33: W+A curva trayectoria mientras continúa girando",
-      "passed": true
-    },
-    {
-      "details": "[0.28388443589211, 10.5672899335623, 6.30667686462402]",
-      "name": "D33: mantener W+A completa una vuelta, sin repetir pulsaciones",
-      "passed": true
-    },
-    {
-      "details": "[(0.482433, 0.0, -0.991164), (1.073381, 0.0, -0.47394), -0.77000015974045, -1.50333321094513]",
-      "name": "D33: W+D curva trayectoria mientras continúa girando",
-      "passed": true
-    },
-    {
-      "details": "[0.283890157938, 10.567278765142, -6.30667686462402]",
-      "name": "D33: mantener W+D completa una vuelta, sin repetir pulsaciones",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Tras cancelar, agresor sigue atacando por sus propias rondas",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Daño enemigo coincide con tiradas registradas mientras jugador no da órdenes",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Interrumpir preparación enemiga cancela daño y animación sin golpe invisible",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "No se puede reclamar objetivo antes de resolver guardián",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: transición a espera conserva recursos sin regalos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Acólitos llevan a conversación segura: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: conversación con guardián oculta los selectores ofensivos: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Diálogo congela tiempo y recursos sin regalos: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Escape abre menú durante diálogo sin reanudar mundo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cerrar menú restaura diálogo y conserva congelación de recursos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Transición conserva salud, energía y botiquines: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Decisión inicia guardián con pausa propia: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Combate registra resolución y cuatro muertes: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Resolver guardián habilita entrada sin terminar demo: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: entrada al templo oculta selectores tras resolver el encuentro: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Objetivo requiere entrar y aproximarse: reject",
-      "passed": true
-    },
-    {
-      "details": "hand",
-      "name": "D35: orbe accesible muestra mano: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Reclamar con ratón produce final común: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Final permite volver al menú sin pausa: reject",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: transición a espera conserva recursos sin regalos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Acólitos llevan a conversación segura: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: conversación con guardián oculta los selectores ofensivos: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Diálogo congela tiempo y recursos sin regalos: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Escuchar permite decidir después: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Transición conserva salud, energía y botiquines: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Decisión inicia guardián con pausa propia: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Combate registra resolución y cuatro muertes: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Resolver guardián habilita entrada sin terminar demo: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: entrada al templo oculta selectores tras resolver el encuentro: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Objetivo requiere entrar y aproximarse: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "hand",
-      "name": "D35: orbe accesible muestra mano: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Reclamar con ratón produce final común: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Final permite volver al menú sin pausa: lesson_attack",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: transición a espera conserva recursos sin regalos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Acólitos llevan a conversación segura: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: conversación con guardián oculta los selectores ofensivos: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Diálogo congela tiempo y recursos sin regalos: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Escuchar permite decidir después: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Transición conserva salud, energía y botiquines: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Acuerdo mantiene guardián vivo, neutral y tres muertes",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Resolver guardián habilita entrada sin terminar demo: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B2: entrada al templo oculta selectores tras resolver el encuentro: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Objetivo requiere entrar y aproximarse: peaceful",
-      "passed": true
-    },
-    {
-      "details": "hand",
-      "name": "D35: orbe accesible muestra mano: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Reclamar con ratón produce final común: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Final permite volver al menú sin pausa: peaceful",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Muerte detiene misión y órdenes",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Reiniciar vuelve al inicio con enemigos, recursos, cola y elecciones restablecidos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B3: cola vacía espera quieto fuera de alcance, sin acercarse",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B3: enemigo entra en alcance y comienza básico automático",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B3: orden explícita sí permite aproximarse a destinatario lejano",
-      "passed": true
-    },
-    {
-      "details": "pointer",
-      "name": "B5: hover sobre enemigo no seleccionado conserva cursor normal",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B5: primer clic cambia selección y retícula sin añadir ataque",
-      "passed": true
-    },
-    {
-      "details": "attack",
-      "name": "B5: hover sobre enemigo seleccionado muestra cursor espada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B5: segundo clic encola básico B detrás de ráfaga A con destinatarios intactos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: guardián neutral no ofrece conversación durante encuentro de acólitos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: primer clic neutral ofrece voz sin iniciar diálogo ni combate",
-      "passed": true
-    },
-    {
-      "details": "talk",
-      "name": "B4: neutral seleccionado muestra cursor de voz",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: frases neutrales rotan en orden sin opciones ni combate: 0",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: frases neutrales rotan en orden sin opciones ni combate: 1",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: frases neutrales rotan en orden sin opciones ni combate: 2",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: frases neutrales rotan en orden sin opciones ni combate: 3",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: E no inicia conversaciones manuales",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Cursor propio visible; ocultación nativa comprobable con GPU",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: orbe cerrado no admite interacción antes de resolver guardián",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: transición a espera conserva recursos sin regalos",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: E ya no reclama el núcleo",
-      "passed": true
-    },
-    {
-      "details": "hand",
-      "name": "D35: mano identifica núcleo visible antes de acercarse",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: obstáculo oculta mano e impide clicar núcleo a través de paredes",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: mano clickable sobre altar mantiene visible interacción aunque cuerpo tape orbe",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: clic distante inicia aproximación física, sin victoria anticipada",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: pausa congela acercamiento al núcleo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: movimiento manual cancela aproximación al núcleo",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: clic y movimiento real reclaman núcleo únicamente al entrar en alcance",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "D35: reinicio vuelve a bloquear orbe y mano",
-      "passed": true
-    },
-    {
-      "details": "",
-      "name": "Bot normal recorre exploración hasta diálogo mediante movimiento real",
-      "passed": true
-    },
-    {
-      "details": "{\"actions\":33,\"damage_taken\":274.5,\"energy\":79.1999999999848,\"healing_received\":137.5,\"hero_health\":203.0,\"kills\":4,\"medkits\":1,\"position\":\"(0.0, 2.390781, -32.99237)\",\"seconds\":98.1499999999957}",
-      "name": "Bot normal completa acólitos, guardián, entrada y clic final sin alterar estadísticas",
-      "passed": true
-    }
-  ],
-  "engine": {
-    "build": "official",
-    "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
-    "hex": 263938,
-    "major": 4,
-    "minor": 7,
-    "patch": 2,
-    "status": "stable",
-    "string": "4.7.2-stable (official)",
-    "timestamp": 0
-  },
-  "failures": 0,
-  "hud_only": false,
-  "normal_playthrough": {
-    "combat_frames": 5328,
-    "damage_taken": 274.5,
-    "direct_damage_calls": 0,
-    "distance_walked": 54.9923667907715,
-    "enemies": [
-      {
-        "attacks": 4,
-        "health": 0.0,
-        "max_health": 160,
-        "name": "Acólito del Juramento"
-      },
-      {
-        "attacks": 6,
-        "health": 0.0,
-        "max_health": 160,
-        "name": "Acólito de la Ceniza"
-      },
-      {
-        "attacks": 11,
-        "health": 0.0,
-        "max_health": 160,
-        "name": "Acólito del Umbral"
-      },
-      {
-        "attacks": 13,
-        "health": 0.0,
-        "max_health": 520,
-        "name": "Guardián de Kharuun"
-      }
-    ],
-    "energy_guard_triggered": false,
-    "events": [
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 14,
-        "source": "player",
-        "target": "Acólito de la Ceniza",
-        "target_instance_id": 1919179296831
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 8,
-        "source": "enemy"
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 11,
-        "source": "enemy"
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 13,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 12,
-        "source": "player",
-        "target": "Acólito de la Ceniza",
-        "target_instance_id": 1919179296831
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 10,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 12,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 7,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 6,
-        "source": "enemy"
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 5,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 3,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 2,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 9,
-        "source": "enemy"
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 19,
-        "source": "enemy"
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 14,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 16,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 10,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 8,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 5,
-        "source": "enemy"
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 2,
-        "source": "enemy"
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 5,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 7,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 12,
-        "source": "player",
-        "target": "Acólito del Juramento",
-        "target_instance_id": 1917770008818
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 9,
-        "source": "enemy"
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 15,
-        "source": "enemy"
-      },
-      {
-        "automatic": true,
-        "critical": false,
-        "damage": 26.0,
-        "hit": true,
-        "id": "attack",
-        "impact_index": 0,
-        "roll": 4,
-        "source": "player",
-        "target": "Acólito de la Ceniza",
-        "target_instance_id": 1919179296831
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 17,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 11,
-        "source": "player",
-        "target": "Acólito de la Ceniza",
-        "target_instance_id": 1919179296831
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 2,
-        "source": "player",
-        "target": "Acólito de la Ceniza",
-        "target_instance_id": 1919179296831
-      },
-      {
-        "damage": 16.5,
-        "hit": true,
-        "id": "attack",
-        "roll": 20,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 13,
-        "source": "player",
-        "target": "Acólito de la Ceniza",
-        "target_instance_id": 1919179296831
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 18,
-        "source": "enemy"
-      },
-      {
-        "automatic": true,
-        "critical": false,
-        "damage": 26.0,
-        "hit": true,
-        "id": "attack",
-        "impact_index": 0,
-        "roll": 4,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "damage": 0,
-        "healing": 95.0,
-        "hit": true,
-        "id": "medkit",
-        "resource_consumed": true,
-        "source": "player",
-        "target": "Sobre ti"
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 16,
-        "source": "enemy"
-      },
-      {
-        "damage": 0,
-        "healing": 42.5,
-        "hit": true,
-        "id": "medkit",
-        "resource_consumed": true,
-        "source": "player",
-        "target": "Sobre ti"
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 7,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 4,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 16,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 4,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 2,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 6,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 14,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "damage": 11.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 17,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 16,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 2,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 11,
-        "source": "player",
-        "target": "Acólito del Umbral",
-        "target_instance_id": 1920588582871
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 1,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 6,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 11,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 5,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 4,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 18,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 7,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 8,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 6,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 18,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 18.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 15,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": true,
-        "damage": 25.5,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 20,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 4,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 18.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 18,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 10,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 14,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 18.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 16,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 7,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 19,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 6,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 15,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 5,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 18.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 17,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 2,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 6,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 17,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 18.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 9,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 5,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 14,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 6,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 58.0,
-        "hit": true,
-        "id": "lightning",
-        "impact_index": 0,
-        "roll": 18,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 0.0,
-        "hit": false,
-        "id": "attack",
-        "roll": 7,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 0.0,
-        "hit": false,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 2,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 17,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 18.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 9,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 19,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 1,
-        "roll": 9,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      },
-      {
-        "damage": 18.0,
-        "hit": true,
-        "id": "attack",
-        "roll": 16,
-        "source": "enemy"
-      },
-      {
-        "automatic": false,
-        "critical": false,
-        "damage": 17.0,
-        "hit": true,
-        "id": "flurry",
-        "impact_index": 0,
-        "roll": 15,
-        "source": "player",
-        "target": "Guardián de Kharuun",
-        "target_instance_id": 1921997870915
-      }
-    ],
-    "exploration_frames": 538,
-    "healing_received": 137.5,
-    "hero_energy": 79.1999999999848,
-    "hero_health": 203.0,
-    "hero_max_health": 340.0,
-    "isolated_fixture": false,
-    "kills": 4,
-    "medkits_remaining": 1,
-    "passed": true,
-    "position": "(0.0, 2.390781, -32.99237)",
-    "production_stats": true,
-    "resolved_actions": 33,
-    "route": "combat",
-    "seconds": 98.1499999999957,
-    "state": 5,
-    "teleports": 0
-  },
-  "q01": "D31 implemented: prune resource category; next valid order uses same opportunity, otherwise lose round.",
-  "renderer": "forward_plus"
+	"capture": false,
+	"checks": [
+		{
+			"details": "",
+			"name": "API de demo unificada disponible",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cola: cuatro pendientes, quinta rechazada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cola: retirar una orden preserva las demás",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga: ningún impacto antes de preparar el arma",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga: primer contacto a 0,42 segundos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga: segundo contacto a 0,90 dentro de la misma acción",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga: dos impactos y una ronda, sin duplicados",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga: interrupción cancela segundo contacto y conserva recuperación",
+			"passed": true
+		},
+		{
+			"details": "[[2, 1, 0.0], [2, 1, 0.0], [2, 1, 0.0]]",
+			"name": "Rondas: resultados iguales a 30, 60 y 144 Hz",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Tiradas: fallo natural y crítico conservados",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Rig: mano izquierda libre, sable en mano derecha",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Gesto izquierdo y palma real: push",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Gesto izquierdo y palma real: lightning",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Gesto izquierdo y palma real: heal",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Gesto izquierdo y palma real: medkit",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Rig: ráfaga prepara y conecta dos golpes visibles",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Rig: espada apunta delante en el contacto",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Rig: cancelar corta la animación actual",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Misión principal utiliza combate táctico",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Tres acólitos tácticos y guardián neutral",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Encuentro: selecciona agresor y pausa inicial una vez",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Tres botiquines y Defensa retirada del catálogo",
+			"passed": true
+		},
+		{
+			"details": "[(0.0, 0.1, 1.6), 340.0, 100.0, 0.06666666666667, 0.0, (-0.5, 0.1, 0.0)] -> [(0.0, 0.1, 1.6), 340.0, 100.0, 0.06666666666667, 0.0, (-0.5, 0.1, 0.0)]",
+			"name": "Pausa congela física, salud, energía, cronómetro y rondas",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cambiar de objetivo no repite la pausa del encuentro",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Espacio pausa manualmente",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Escape conserva la pausa táctica previa",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D36: poderes personales a la izquierda de consumibles",
+			"passed": true
+		},
+		{
+			"details": "[(244.0, 90.0), (232.0, 84.0)]",
+			"name": "D36: cola y menú personal compactos dejan libre la escena",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D34: sin barras 3D colectivas; vida solo sobre selección",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "HUD: tres categorías separadas de cuatro órdenes, arrojadizo desactivado",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Rueda sobre físico recorre a Ráfaga sin encolar ni girar cámara",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Clic en físico encola acción mostrada contra A",
+			"passed": true
+		},
+		{
+			"details": "[[1, 1, 0], [{ \"id\": \"flurry\", \"target\": Enemy:<CharacterBody3D#163108097752>, \"target_name\": \"Acólito del Juramento\", \"impact_times\": [0.42, 0.9] }], [P: (674.3029, 251.4815), S: (42.0, 14.0)]]",
+			"name": "Flecha de poder recorre a Descarga sin encolar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Clic en poder encola descarga B y conserva ráfaga A",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Botiquín personal añade orden propia y no gasta al encolar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D36: ranura actual vacía no duplica una pendiente; huecos de cola quedan en blanco",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Clic en pendiente cancela solo esa orden",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Limpiar cola funciona con evento real en pausa",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B6: poderes ofensivos recorren empuje/descarga sin curación",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B6: rueda personal no añade órdenes",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B6: selector curativo propio conserva enemigo B seleccionado",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D31: poder personal y ofensivo aparecen desactivados; físico sigue utilizable",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cancelar combate responde a clic real",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: Cancelar combate oculta selectores aunque el encuentro hostil siga activo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: clic real sobre A muestra el menú flotante durante pausa del encuentro",
+			"passed": true
+		},
+		{
+			"details": "[[P: (509.6971, 196.4815), S: (150.0, 74.0)], (584.6971, 282.4815)]",
+			"name": "B2: menú compacto centrado sobre la cabeza sin tapar la cara",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: nombre y salud acompañan al enemigo seleccionado en la tarjeta flotante",
+			"passed": true
+		},
+		{
+			"details": "[[P: (509.6971, 196.4815), S: (150.0, 74.0)], [P: (472.8285, 196.4815), S: (150.0, 74.0)], (547.8285, 282.4815)]",
+			"name": "B2: mover el destinatario actualiza el anclaje de la tarjeta",
+			"passed": true
+		},
+		{
+			"details": "[[P: (472.8285, 196.4815), S: (150.0, 74.0)], [P: (410.843, 197.9506), S: (149.9999, 74.0)], (485.843, 283.9506)]",
+			"name": "B2: arrastrar cámara reproyecta el menú sobre el mismo enemigo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: cambiar objetivo con clic mueve el menú a B",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: un obstáculo entre cámara y enemigo oculta la tarjeta",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: quitar el obstáculo restaura la tarjeta del objetivo visible",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: F oculta menú del enemigo y conserva equipo personal y órdenes",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: clic en agresor reengancha y recupera tarjeta sin nueva pausa inicial",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: un destinatario neutral no muestra selectores",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: objetivo detrás de cámara oculta su menú",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: objetivo fuera del encuadre no deja tarjeta flotando en pantalla",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: selección inválida oculta los tres selectores",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: exploración muestra equipo personal sin menú ofensivo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: diálogo inicial mantiene oculto el menú ofensivo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: transición a espera conserva recursos sin regalos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: combate del guardián también usa tarjeta de objetivo durante pausa",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: duelo interno conserva el menú sobre su enemigo seleccionado",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga real: dos tiradas independientes y dos contactos visuales",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Poder real extiende brazo izquierdo sin intercambiar sable: push",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Efecto visible: onda, descarga desde palma real o curación verde: push",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Pausa también congela el efecto del poder: push",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Poder real extiende brazo izquierdo sin intercambiar sable: lightning",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Efecto visible: onda, descarga desde palma real o curación verde: lightning",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Pausa también congela el efecto del poder: lightning",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Poder real extiende brazo izquierdo sin intercambiar sable: heal",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Efecto visible: onda, descarga desde palma real o curación verde: heal",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Pausa también congela el efecto del poder: heal",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cada orden conserva destinatario y curación es propia",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cambiar selección no redirige la acción en ejecución",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "1A, 2B, 2A y curación continúan con básico A",
+			"passed": true
+		},
+		{
+			"details": "[{ \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 514590774859, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 516000057610, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 8 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 516000057610, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 11 }, { \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 514590774859, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 13 }, { \"id\": \"heal\", \"source\": \"player\", \"target\": \"Sobre ti\", \"hit\": true, \"damage\": 0, \"healing\": 0.0, \"resource_consumed\": true }]",
+			"name": "Registro prueba dos tiradas de ráfaga y destinatarios A/B",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Caída de último destinatario continúa automáticamente con otro agresor sin nueva pausa",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Guardián neutral excluido de selección y órdenes",
+			"passed": true
+		},
+		{
+			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 608576737079, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 608576737079, \"hit\": false, \"damage\": 0, \"reason\": \"invalid_target\" }]",
+			"name": "Ráfaga segundo contacto sin transferencia: dead",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga conserva una acción: dead",
+			"passed": true
+		},
+		{
+			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 649311819347, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 649311819347, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
+			"name": "Ráfaga segundo contacto sin transferencia: range",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga conserva una acción: range",
+			"passed": true
+		},
+		{
+			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 690164338641, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 690164338641, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
+			"name": "Ráfaga segundo contacto sin transferencia: wall",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Ráfaga conserva una acción: wall",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Encolar botiquín y curación no consume recursos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cancelar órdenes pendientes conserva recursos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Botiquín con salud llena consume unidad y ronda al ejecutar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Botiquín con salud llena no duplica consumo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Poder curativo con salud llena consume energía y ronda",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Poder curativo muestra cero curación con salud llena",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Botiquín cura parcialmente hasta el máximo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Agotamiento descarta excedentes y nunca deja contador negativo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Dos descargas consecutivas separadas solo por ronda, sin recarga extra",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D31: falta de energía limpia poderes y pierde una ronda si no quedan órdenes",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D31: energía insuficiente impide encolar poderes nuevos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D31: no ejecuta básico en la ronda perdida",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D31: siguiente ronda recupera básico automático",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D31: descarga, descarga sin energía, curación, ráfaga ejecuta ráfaga sin perder ronda",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D31: botiquín agotado limpia sus órdenes y usa siguiente ataque sin perder ronda",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B6: al agotarse botiquines desaparece su icono, distinto de hueco futuro",
+			"passed": true
+		},
+		{
+			"details": "[true, { \"id\": \"attack\", \"target\": Enemy:<CharacterBody3D#992221335456>, \"target_name\": \"Acólito del Juramento\" }, 1, (0.0, 0.063333, 1.6), (0.0, -0.010075, 1.6)]",
+			"name": "WASD mantiene combate, acción y cola hasta cancelar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B1: A tampoco gira al actor ni interrumpe órdenes mientras combate automáticamente",
+			"passed": true
+		},
+		{
+			"details": "[0.61488483705521, -0.31199996032715, -0.31199996032715]",
+			"name": "B1: soltar botón derecho conserva la órbita durante combate sin desplazamiento",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Girar cámara no aparta al combatiente de su destinatario",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "F libera movimiento y elimina órdenes y autoataque",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Tras F, WASD mueve libremente sin reenganche",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Agresor sigue persiguiendo lejos por la zona accesible tras cancelar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Colisiones sólidas impiden atravesar a un acólito",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: parado conserva cámara libre sin girar al personaje",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: arrastrar cámara parado no desplaza al personaje",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: pausa permite arrastrar y mantiene orientación al soltar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: W+A durante pausa no mueve, gira ni recentra el personaje o la cámara",
+			"passed": true
+		},
+		{
+			"details": "[0.59799996032715, 0.30702341681277]",
+			"name": "D33: desplazarse inicia retorno rápido y gradual hacia el frente",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: avanzar centra cámara detrás sin depender de la órbita anterior",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: mantener botón derecho permite órbita libre también avanzando",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: soltar el arrastre durante desplazamiento vuelve al frente",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: detenerse vuelve a conservar la orientación de cámara",
+			"passed": true
+		},
+		{
+			"details": "[(0.0, 0.0, 2.008881), (0.0, 0.0, -1.0)]",
+			"name": "D33: S retrocede conservando el frente del personaje",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: retroceder centra cámara al frente y evita giro de 180 grados",
+			"passed": true
+		},
+		{
+			"details": "[0.77000015974045, 1.50333321094513]",
+			"name": "D33: mantener A gira continuamente en sitio, sin desplazamiento diagonal",
+			"passed": true
+		},
+		{
+			"details": "[-0.77000015974045, -1.50333321094513]",
+			"name": "D33: mantener D gira continuamente en sitio, sin desplazamiento diagonal",
+			"passed": true
+		},
+		{
+			"details": "[(-0.482433, 0.0, -0.991164), (-1.073381, 0.0, -0.47394), 0.77000015974045, 1.50333321094513]",
+			"name": "D33: W+A curva trayectoria mientras continúa girando",
+			"passed": true
+		},
+		{
+			"details": "[0.28388443589211, 10.5672899335623, 6.30667686462402]",
+			"name": "D33: mantener W+A completa una vuelta, sin repetir pulsaciones",
+			"passed": true
+		},
+		{
+			"details": "[(0.482433, 0.0, -0.991164), (1.073381, 0.0, -0.47394), -0.77000015974045, -1.50333321094513]",
+			"name": "D33: W+D curva trayectoria mientras continúa girando",
+			"passed": true
+		},
+		{
+			"details": "[0.283890157938, 10.567278765142, -6.30667686462402]",
+			"name": "D33: mantener W+D completa una vuelta, sin repetir pulsaciones",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Tras cancelar, agresor sigue atacando por sus propias rondas",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Daño enemigo coincide con tiradas registradas mientras jugador no da órdenes",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Interrumpir preparación enemiga cancela daño y animación sin golpe invisible",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "No se puede reclamar objetivo antes de resolver guardián",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: transición a espera conserva recursos sin regalos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Acólitos llevan a conversación segura: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: conversación con guardián oculta los selectores ofensivos: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Diálogo congela tiempo y recursos sin regalos: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Escape abre menú durante diálogo sin reanudar mundo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cerrar menú restaura diálogo y conserva congelación de recursos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Transición conserva salud, energía y botiquines: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Decisión inicia guardián con pausa propia: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Combate registra resolución y cuatro muertes: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Resolver guardián habilita entrada sin terminar demo: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: entrada al templo oculta selectores tras resolver el encuentro: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Objetivo requiere entrar y aproximarse: reject",
+			"passed": true
+		},
+		{
+			"details": "hand",
+			"name": "D35: orbe accesible muestra mano: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Reclamar con ratón produce final común: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Final permite volver al menú sin pausa: reject",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: transición a espera conserva recursos sin regalos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Acólitos llevan a conversación segura: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: conversación con guardián oculta los selectores ofensivos: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Diálogo congela tiempo y recursos sin regalos: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Escuchar permite decidir después: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Transición conserva salud, energía y botiquines: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Decisión inicia guardián con pausa propia: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Combate registra resolución y cuatro muertes: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Resolver guardián habilita entrada sin terminar demo: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: entrada al templo oculta selectores tras resolver el encuentro: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Objetivo requiere entrar y aproximarse: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "hand",
+			"name": "D35: orbe accesible muestra mano: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Reclamar con ratón produce final común: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Final permite volver al menú sin pausa: lesson_attack",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: transición a espera conserva recursos sin regalos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Acólitos llevan a conversación segura: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: conversación con guardián oculta los selectores ofensivos: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Diálogo congela tiempo y recursos sin regalos: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Escuchar permite decidir después: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Transición conserva salud, energía y botiquines: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Acuerdo mantiene guardián vivo, neutral y tres muertes",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Resolver guardián habilita entrada sin terminar demo: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B2: entrada al templo oculta selectores tras resolver el encuentro: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Objetivo requiere entrar y aproximarse: peaceful",
+			"passed": true
+		},
+		{
+			"details": "hand",
+			"name": "D35: orbe accesible muestra mano: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Reclamar con ratón produce final común: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Final permite volver al menú sin pausa: peaceful",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Muerte detiene misión y órdenes",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Reiniciar vuelve al inicio con enemigos, recursos, cola y elecciones restablecidos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B3: cola vacía espera quieto fuera de alcance, sin acercarse",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B3: enemigo entra en alcance y comienza básico automático",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B3: orden explícita sí permite aproximarse a destinatario lejano",
+			"passed": true
+		},
+		{
+			"details": "pointer",
+			"name": "B5: hover sobre enemigo no seleccionado conserva cursor normal",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B5: primer clic cambia selección y retícula sin añadir ataque",
+			"passed": true
+		},
+		{
+			"details": "attack",
+			"name": "B5: hover sobre enemigo seleccionado muestra cursor espada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B5: segundo clic encola básico B detrás de ráfaga A con destinatarios intactos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: guardián neutral no ofrece conversación durante encuentro de acólitos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: primer clic neutral ofrece voz sin iniciar diálogo ni combate",
+			"passed": true
+		},
+		{
+			"details": "talk",
+			"name": "B4: neutral seleccionado muestra cursor de voz",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: frases neutrales rotan en orden sin opciones ni combate: 0",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: frases neutrales rotan en orden sin opciones ni combate: 1",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: frases neutrales rotan en orden sin opciones ni combate: 2",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: frases neutrales rotan en orden sin opciones ni combate: 3",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: E no inicia conversaciones manuales",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Cursor propio visible; ocultación nativa comprobable con GPU",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: orbe cerrado no admite interacción antes de resolver guardián",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: fin de acólitos espera segundo diálogo y mantiene puerta cerrada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: transición a espera conserva recursos sin regalos",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "B4: primer clic selecciona guardián y muestra voz sin conversar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: E ya no reclama el núcleo",
+			"passed": true
+		},
+		{
+			"details": "hand",
+			"name": "D35: mano identifica núcleo visible antes de acercarse",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: obstáculo oculta mano e impide clicar núcleo a través de paredes",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: mano clickable sobre altar mantiene visible interacción aunque cuerpo tape orbe",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: clic distante inicia aproximación física, sin victoria anticipada",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: pausa congela acercamiento al núcleo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: movimiento manual cancela aproximación al núcleo",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: clic y movimiento real reclaman núcleo únicamente al entrar en alcance",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D35: reinicio vuelve a bloquear orbe y mano",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "Bot normal recorre exploración hasta diálogo mediante movimiento real",
+			"passed": true
+		},
+		{
+			"details": "{\"actions\":33,\"damage_taken\":274.5,\"energy\":79.1999999999848,\"healing_received\":137.5,\"hero_health\":203.0,\"kills\":4,\"medkits\":1,\"position\":\"(0.0, 2.390781, -32.99237)\",\"seconds\":98.1499999999957}",
+			"name": "Bot normal completa acólitos, guardián, entrada y clic final sin alterar estadísticas",
+			"passed": true
+		}
+	],
+	"engine": {
+		"build": "official",
+		"hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+		"hex": 263938,
+		"major": 4,
+		"minor": 7,
+		"patch": 2,
+		"status": "stable",
+		"string": "4.7.2-stable (official)",
+		"timestamp": 0
+	},
+	"failures": 0,
+	"hud_only": false,
+	"normal_playthrough": {
+		"combat_frames": 5328,
+		"damage_taken": 274.5,
+		"direct_damage_calls": 0,
+		"distance_walked": 54.9923667907715,
+		"enemies": [
+			{
+				"attacks": 4,
+				"health": 0.0,
+				"max_health": 160,
+				"name": "Acólito del Juramento"
+			},
+			{
+				"attacks": 6,
+				"health": 0.0,
+				"max_health": 160,
+				"name": "Acólito de la Ceniza"
+			},
+			{
+				"attacks": 11,
+				"health": 0.0,
+				"max_health": 160,
+				"name": "Acólito del Umbral"
+			},
+			{
+				"attacks": 13,
+				"health": 0.0,
+				"max_health": 520,
+				"name": "Guardián de Kharuun"
+			}
+		],
+		"energy_guard_triggered": false,
+		"events": [
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 14,
+				"source": "player",
+				"target": "Acólito de la Ceniza",
+				"target_instance_id": 1922132086855
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 8,
+				"source": "enemy"
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 11,
+				"source": "enemy"
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 13,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 12,
+				"source": "player",
+				"target": "Acólito de la Ceniza",
+				"target_instance_id": 1922132086855
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 10,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 12,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 7,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 6,
+				"source": "enemy"
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 5,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 3,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 2,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 9,
+				"source": "enemy"
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 19,
+				"source": "enemy"
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 14,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 16,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 10,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 8,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 5,
+				"source": "enemy"
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 2,
+				"source": "enemy"
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 5,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 7,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 12,
+				"source": "player",
+				"target": "Acólito del Juramento",
+				"target_instance_id": 1920722800740
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 9,
+				"source": "enemy"
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 15,
+				"source": "enemy"
+			},
+			{
+				"automatic": true,
+				"critical": false,
+				"damage": 26.0,
+				"hit": true,
+				"id": "attack",
+				"impact_index": 0,
+				"roll": 4,
+				"source": "player",
+				"target": "Acólito de la Ceniza",
+				"target_instance_id": 1922132086855
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 17,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 11,
+				"source": "player",
+				"target": "Acólito de la Ceniza",
+				"target_instance_id": 1922132086855
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 2,
+				"source": "player",
+				"target": "Acólito de la Ceniza",
+				"target_instance_id": 1922132086855
+			},
+			{
+				"damage": 16.5,
+				"hit": true,
+				"id": "attack",
+				"roll": 20,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 13,
+				"source": "player",
+				"target": "Acólito de la Ceniza",
+				"target_instance_id": 1922132086855
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 18,
+				"source": "enemy"
+			},
+			{
+				"automatic": true,
+				"critical": false,
+				"damage": 26.0,
+				"hit": true,
+				"id": "attack",
+				"impact_index": 0,
+				"roll": 4,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"damage": 0,
+				"healing": 95.0,
+				"hit": true,
+				"id": "medkit",
+				"resource_consumed": true,
+				"source": "player",
+				"target": "Sobre ti"
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 16,
+				"source": "enemy"
+			},
+			{
+				"damage": 0,
+				"healing": 42.5,
+				"hit": true,
+				"id": "medkit",
+				"resource_consumed": true,
+				"source": "player",
+				"target": "Sobre ti"
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 7,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 4,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 16,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 4,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 2,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 6,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 14,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"damage": 11.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 17,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 16,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 2,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 11,
+				"source": "player",
+				"target": "Acólito del Umbral",
+				"target_instance_id": 1923541372895
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 1,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 6,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 11,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 5,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 4,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 18,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 7,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 8,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 6,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 18,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 18.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 15,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": true,
+				"damage": 25.5,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 20,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 4,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 18.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 18,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 10,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 14,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 18.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 16,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 7,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 19,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 6,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 15,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 5,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 18.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 17,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 2,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 6,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 17,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 18.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 9,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 5,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 14,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 6,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 58.0,
+				"hit": true,
+				"id": "lightning",
+				"impact_index": 0,
+				"roll": 18,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 0.0,
+				"hit": false,
+				"id": "attack",
+				"roll": 7,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 0.0,
+				"hit": false,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 2,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 17,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 18.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 9,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 19,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 1,
+				"roll": 9,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			},
+			{
+				"damage": 18.0,
+				"hit": true,
+				"id": "attack",
+				"roll": 16,
+				"source": "enemy"
+			},
+			{
+				"automatic": false,
+				"critical": false,
+				"damage": 17.0,
+				"hit": true,
+				"id": "flurry",
+				"impact_index": 0,
+				"roll": 15,
+				"source": "player",
+				"target": "Guardián de Kharuun",
+				"target_instance_id": 1924950660943
+			}
+		],
+		"exploration_frames": 538,
+		"healing_received": 137.5,
+		"hero_energy": 79.1999999999848,
+		"hero_health": 203.0,
+		"hero_max_health": 340.0,
+		"isolated_fixture": false,
+		"kills": 4,
+		"medkits_remaining": 1,
+		"passed": true,
+		"position": "(0.0, 2.390781, -32.99237)",
+		"production_stats": true,
+		"resolved_actions": 33,
+		"route": "combat",
+		"seconds": 98.1499999999957,
+		"state": 5,
+		"teleports": 0
+	},
+	"q01": "D31 implemented: prune resource category; next valid order uses same opportunity, otherwise lose round.",
+	"renderer": "forward_plus"
 }

@@ -58,6 +58,12 @@ func capture() -> void:
 			rig.animate(1.0/60.0,3.6)
 			await physics_frame
 		await save_view(outfit+"_walk")
+		camera.position = Vector3(0,1.18,5)
+		camera.look_at(Vector3(0,1.02,0))
+		for i in range(20): await physics_frame
+		await save_view(outfit+"_back_walk")
+		camera.position = Vector3(-3,1.45,-5)
+		camera.look_at(Vector3(0,1.02,0))
 		rig.cast("push")
 		for i in range(25):
 			rig.animate(1.0/60.0,0)

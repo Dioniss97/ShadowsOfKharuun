@@ -1,6 +1,6 @@
 # Personaje y vestuario — primera candidata integrada
 
-19-10-2026. Capturas auténticas de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. Se presenta la primera implementación para revisión de [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35), [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36), [#37](https://github.com/Dioniss97/ShadowsOfKharuun/issues/37) y [#38](https://github.com/Dioniss97/ShadowsOfKharuun/issues/38). El alcance aprobado está en [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34).
+19-10-2026. Capturas auténticas de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. Esta segunda iteración está en revisión para [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35), [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36), [#37](https://github.com/Dioniss97/ShadowsOfKharuun/issues/37) y [#38](https://github.com/Dioniss97/ShadowsOfKharuun/issues/38). El alcance aprobado está en [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34).
 
 ## Apariencias
 
@@ -9,6 +9,12 @@
 | ![Ropa base](studio/base_three_quarter.png) | ![Uniforme](studio/tunic_three_quarter.png) |
 
 La fuente editable adapta anatomía CC0 de MakeHuman y contiene ropa, materiales y rig producidos con Blender. El conjunto cambia túnica, prendas inferiores, cinturón y botas. Cabeza y manos se conservan. Al retirarlo reaparece el conjunto base completo, incluido su calzado.
+
+La túnica ahora incluye una capa posterior integrada, sin ranura independiente. Reduce el volumen de los hombros, define pliegues más amplios y conserva un borde interior visible. La captura de caminata desde atrás permite revisar su oscilación dentro de Godot:
+
+| Reposo | En movimiento |
+|---|---|
+| ![Capa posterior en reposo](studio/tunic_back.png) | ![Capa posterior durante la caminata](studio/tunic_back_walk.png) |
 
 | Vista integrada base | Vista integrada uniforme |
 |---|---|
@@ -24,20 +30,20 @@ Se abre con I durante la partida; Equipar/Retirar cambia a la vez el personaje r
 
 ## Evidencia técnica
 
-- [Exportación](export_report.json): hash del GLB, 4 grupos de apariencia, 40 piezas editables, 28 huesos y geometría total de ambas apariencias. Este total no equivale a todos los triángulos visibles simultáneamente.
-- [Prueba de entradas sin render](integration/logic_report.json): 20 comprobaciones, 0 fallos.
-- [Prueba con GPU](integration/gpu_report.json): 24 comprobaciones, 0 fallos, capturas y mediciones por vista.
-- [Importación limpia](integration/clean_import_report.json): copia de scripts/escenas/assets/tests sin caché `.godot`, importación del editor y las mismas 20 comprobaciones, 0 fallos.
+- [Exportación](export_report.json): hash del GLB, 4 grupos de apariencia, 43 piezas editables, 46 huesos y geometría total de ambas apariencias. Este total no equivale a todos los triángulos visibles simultáneamente.
+- [Prueba de entradas sin render](integration/logic_report.json): 22 comprobaciones, 0 fallos.
+- [Prueba con GPU](integration/gpu_report.json): 26 comprobaciones, 0 fallos, capturas y mediciones por vista.
+- [Importación limpia](integration/clean_import_report.json): copia del proyecto sin caché previa `.godot`; importación limpia y 22 comprobaciones, 0 fallos.
 - [Estudio](studio/report.json): motor y hash del GLB representado.
-- [Regresión](integration/regression_report.json): misión, combate, pausas, diálogo, cámara, derrota/reinicio y recorrido automático hasta victoria. Los informes distinguen ejecución automática de QA humana.
+- [Regresión](integration/regression_report.json): 213 comprobaciones headless y 238 con GPU; misión, combate, pausas, diálogo, cámara, derrota/reinicio y recorrido automático hasta victoria. Los informes distinguen ejecución automática de QA humana.
 
 Reproducir con [las instrucciones del pipeline](../../../tools/blender/CHARACTER.md). La suite de vestuario usa `--wardrobe-capture`; el argumento `--demo-capture` pertenece a la regresión histórica y debe ejecutarse en otro proceso.
 
 ## Coste observado y límites
 
-El GLB ocupa aproximadamente 4,55 MB; su hash y cifras exactas están en el informe de exportación. El informe GPU incluye 30 intervalos de presentación por vista, mediana/p95, llamadas de dibujo, primitivas y memoria de texturas. Son muestras cortas de esta máquina y configuración; incluyen CPU, renderizado y presentación. Las mediciones con inventario incluyen su vista 3D y la escena subyacente; no aíslan el coste exclusivo del personaje ni certifican FPS de otras máquinas.
+El GLB ocupa aproximadamente 4,67 MB; su hash y cifras exactas están en el informe de exportación. El informe GPU incluye 30 intervalos de presentación por vista, mediana/p95, llamadas de dibujo, primitivas y memoria de texturas. Son muestras cortas de esta máquina y configuración; incluyen CPU, renderizado y presentación. Las mediciones con inventario incluyen su vista 3D y la escena subyacente; no aíslan el coste exclusivo del personaje ni certifican FPS de otras máquinas.
 
-El faldón utiliza seis cadenas de huesos secundarios y cuatro cápsulas de colisión. La prueba confirma movimiento y poses finitas; no certifica autocolisión de toda la tela ni ausencia de penetraciones en cada transición. Las regiones interiores cubiertas se ocultan para evitar que el cuerpo sobresalga del uniforme.
+El faldón y la capa utilizan quince cadenas de huesos secundarios en total y ocho cápsulas SpringBone en torso, cintura, brazos superiores y piernas. La prueba separa 45 pasos en reposo del desplazamiento real; ambas prendas reaccionan y sus poses siguen finitas. Es dinámica secundaria por huesos: no hay solver de tela por vértices, autocolisión completa ni colisión de `PhysicsServer3D`. Las regiones interiores cubiertas se ocultan; los colisionadores reducen penetraciones localmente, pero la cobertura debe seguir revisándose visualmente en acciones y transiciones.
 
 ## Revisión artística y jugable
 

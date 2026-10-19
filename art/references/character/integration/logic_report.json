@@ -10,7 +10,7 @@
 			"passed": true
 		},
 		{
-			"name": "Imported deforming skeleton has 28 bones",
+			"name": "Imported deforming skeleton has 46 bones including cape dynamics",
 			"passed": true
 		},
 		{
@@ -34,7 +34,7 @@
 			"passed": true
 		},
 		{
-			"name": "Cloth chains and four body collision guards enabled",
+			"name": "Fifteen cloth chains and eight torso, waist, arm and leg collision guards enabled",
 			"passed": true
 		},
 		{
@@ -70,6 +70,14 @@
 			"passed": true
 		},
 		{
+			"name": "Separate cape reacts during real movement",
+			"passed": true
+		},
+		{
+			"name": "Cape remains finite after movement",
+			"passed": true
+		},
+		{
 			"name": "Inventory blocked during dialogue",
 			"passed": true
 		},
@@ -82,9 +90,10 @@
 			"passed": true
 		}
 	],
+	"clean_import": false,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
-	"glb_sha256": "bcb5277ebb7362067db36de9f3a1aa6d4e79a3c39506af7f0cb4a8452bbc6359",
+	"glb_sha256": "70f00c3d6931fea0a3b40d5249d9ad0921b30e4452f40c3380a33f297e85c90d",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",

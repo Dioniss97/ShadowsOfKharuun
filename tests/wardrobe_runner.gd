@@ -6,6 +6,7 @@ var failures := 0
 var capture := false
 var output := "res://art/references/character/integration"
 var cloth_samples: Array[Quaternion] = []
+var cape_samples: Array[Quaternion] = []
 var view_metrics: Array = []
 
 func _initialize() -> void:
@@ -80,7 +81,7 @@ func run() -> void:
 	await frames(8)
 	var player: KhPlayer = main.level.player
 	check(player.wardrobe.uniform_id == "" and roles(player.rig,false),"New game starts with base body/underwear/shoes")
-	check(player.rig.skeleton.get_bone_count() == 28,"Imported deforming skeleton has 28 bones")
+	check(player.rig.skeleton.get_bone_count() == 46,"Imported deforming skeleton has 46 bones including cape dynamics")
 	check(not player.wardrobe.equip_uniform("missing"),"Unknown item cannot be equipped")
 	var original_stats := [player.max_health,player.defence,player.attack_bonus]
 	await key(KEY_I)
@@ -92,7 +93,7 @@ func run() -> void:
 	await click(main.inventory_ui.equip_button)
 	check(player.wardrobe.uniform_id == KhWardrobe.TUNIC and roles(player.rig,true),"Mouse equip changes complete outfit including body coverage")
 	check(main.inventory_ui.preview_rig.uniform_id == KhWardrobe.TUNIC and main.inventory_ui.equip_button.disabled,"3D preview and buttons synchronized")
-	check(player.rig.cloth.active and player.rig.cloth.get_child_count() == 4,"Cloth chains and four body collision guards enabled")
+	check(player.rig.cloth.active and player.rig.cloth.setting_count == 15 and player.rig.cloth.get_child_count() == 8,"Fifteen cloth chains and eight torso, waist, arm and leg collision guards enabled")
 	check(original_stats == [player.max_health,player.defence,player.attack_bonus],"Appearance does not change combat statistics")
 	await snap("inventory_uniform")
 	await click(main.inventory_ui.remove_button)
@@ -108,13 +109,23 @@ func run() -> void:
 	main.toggle_tactical_pause()
 	await frames(4)
 	player.automation_mode = true
-	player.automation_direction = Vector3.FORWARD
+	player.automation_direction = Vector3.ZERO
 	var start: Vector3 = player.global_position
 	var cloth_bone := player.rig.skeleton.find_bone("cloth_0_b")
+	var cape_bone := player.rig.skeleton.find_bone("cape_4_b")
+	player.rig.cloth.modification_processed.connect(func():
+		cloth_samples.append(player.rig.skeleton.get_bone_global_pose(cloth_bone).basis.get_rotation_quaternion())
+		cape_samples.append(player.rig.skeleton.get_bone_global_pose(cape_bone).basis.get_rotation_quaternion())
+	)
+	for _i in range(45): await physics_frame
 	var pose_before := player.rig.skeleton.get_bone_global_pose(cloth_bone).basis.get_rotation_quaternion()
-	player.rig.cloth.modification_processed.connect(func(): cloth_samples.append(player.rig.skeleton.get_bone_global_pose(cloth_bone).basis.get_rotation_quaternion()))
+	var cape_before := player.rig.skeleton.get_bone_global_pose(cape_bone).basis.get_rotation_quaternion()
+	cloth_samples.clear()
+	cape_samples.clear()
+	player.automation_direction = Vector3.FORWARD
 	for _i in range(60): await physics_frame
 	player.automation_direction = Vector3.ZERO
+	for _i in range(8): await physics_frame
 	var pose_after := player.rig.skeleton.get_bone_global_pose(cloth_bone).basis.get_rotation_quaternion()
 	check(start.distance_to(player.global_position)>1.0,"Skinned character moves with production controller")
 	var max_motion := pose_before.angle_to(pose_after)
@@ -122,6 +133,11 @@ func run() -> void:
 	print("CLOTH_MAX_ANGLE ",max_motion," samples ",cloth_samples.size())
 	check(max_motion>0.001,"Tunic reacts during real movement")
 	check(player.rig.skeleton.get_bone_global_pose(cloth_bone).origin.is_finite(),"Cloth remains finite after movement")
+	var max_cape_motion := cape_before.angle_to(player.rig.skeleton.get_bone_global_pose(cape_bone).basis.get_rotation_quaternion())
+	for sample in cape_samples: max_cape_motion = maxf(max_cape_motion,cape_before.angle_to(sample))
+	print("CAPE_MAX_ANGLE ",max_cape_motion," samples ",cape_samples.size())
+	check(max_cape_motion>0.001,"Separate cape reacts during real movement")
+	check(player.rig.skeleton.get_bone_global_pose(cape_bone).origin.is_finite(),"Cape remains finite after movement")
 	# Frozen-placement capture is visual evidence, not a human playthrough.
 	if capture:
 		player.set_physics_process(false)
@@ -143,7 +159,8 @@ func run() -> void:
 	check(not main.open_inventory(),"Inventory blocked after defeat")
 	var report := {"checks":checks,"failures":failures,"engine":Engine.get_version_info().string,
 		"glb_sha256":FileAccess.get_sha256("res://assets/models/characters/adventurer.glb"),
-		"renderer":RenderingServer.get_current_rendering_method(),"capture":capture,"views":view_metrics,
+		"renderer":RenderingServer.get_current_rendering_method(),"capture":capture,
+		"clean_import":"--clean-import" in OS.get_cmdline_user_args(),"views":view_metrics,
 		"human_acceptance":"pending","scope":"Real input and production scene; visual captures use frozen placement. Not human QA."}
 	var file := FileAccess.open(output+("/gpu_report.json" if capture else "/logic_report.json"),FileAccess.WRITE)
 	file.store_string(JSON.stringify(report,"\t")+"\n")

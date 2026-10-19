@@ -4,6 +4,8 @@ extends KhRig
 ## to use KhRig. Its public action pivots retain the combat timing contract.
 
 const MODEL = preload("res://assets/models/characters/adventurer.glb")
+const PANEL_CHAINS := 6
+const CAPE_CHAINS := 9
 var model: Node3D
 var skeleton: Skeleton3D
 var uniform_id := ""
@@ -63,26 +65,39 @@ func _pose(name: String, angles: Vector3) -> void:
 
 func _setup_cloth() -> void:
 	cloth = SpringBoneSimulator3D.new()
-	cloth.name = "TunicMotion"
+	cloth.name = "WardrobeSecondaryMotion"
 	skeleton.add_child(cloth)
-	cloth.setting_count = 6
+	cloth.setting_count = PANEL_CHAINS + CAPE_CHAINS
+	_add_collision_guard("spine", 0.52, 0.165, Vector3(0, 0.26, 0))
+	_add_collision_guard("hips", 0.30, 0.13, Vector3(0, 0.07, 0))
+	for side in ["L", "R"]:
+		_add_collision_guard("upper_arm_"+side, 0.33, 0.09, Vector3(0, 0.15, 0))
 	for limb in ["thigh_L", "thigh_R", "shin_L", "shin_R"]:
-		var collider := SpringBoneCollisionCapsule3D.new()
-		collider.name = "ClothGuard_"+limb
-		cloth.add_child(collider)
-		collider.bone_name = limb
-		collider.height = 0.48
-		collider.radius = 0.105 if limb.begins_with("thigh") else 0.085
-		collider.position_offset = Vector3(0, 0.19, 0)
-	for i in range(6):
-		cloth.set_root_bone_name(i, "cloth_%d_a" % i)
-		cloth.set_end_bone_name(i, "cloth_%d_b" % i)
+		var radius := 0.105 if limb.begins_with("thigh") else 0.085
+		_add_collision_guard(limb, 0.48, radius, Vector3(0, 0.19, 0))
+	for i in range(PANEL_CHAINS + CAPE_CHAINS):
+		var is_cape := i >= PANEL_CHAINS
+		var chain_index := i-PANEL_CHAINS if is_cape else i
+		var prefix := "cape_" if is_cape else "cloth_"
+		var root_name := prefix+"%d_a" % chain_index
+		var end_name := prefix+"%d_b" % chain_index
+		cloth.set_root_bone_name(i, root_name)
+		cloth.set_end_bone_name(i, end_name)
 		cloth.set_extend_end_bone(i, true)
-		cloth.set_end_bone_length(i, 0.38)
+		cloth.set_end_bone_length(i, 0.27 if is_cape else 0.38)
 		cloth.set_center_from(i, SpringBoneSimulator3D.CENTER_FROM_WORLD_ORIGIN)
-		cloth.set_stiffness(i, 3.2)
-		cloth.set_drag(i, 0.8)
-		cloth.set_gravity(i, 0.25)
-		cloth.set_radius(i, 0.025)
+		cloth.set_stiffness(i, 4.1 if is_cape else 3.2)
+		cloth.set_drag(i, 0.84 if is_cape else 0.8)
+		cloth.set_gravity(i, 0.16 if is_cape else 0.25)
+		cloth.set_radius(i, 0.022 if is_cape else 0.025)
 		cloth.set_enable_all_child_collisions(i, true)
 	cloth.active = uniform_id != ""
+
+func _add_collision_guard(bone_name: String, height: float, radius: float, offset: Vector3) -> void:
+	var collider := SpringBoneCollisionCapsule3D.new()
+	collider.name = "ClothGuard_"+bone_name
+	cloth.add_child(collider)
+	collider.bone_name = bone_name
+	collider.height = height
+	collider.radius = radius
+	collider.position_offset = offset

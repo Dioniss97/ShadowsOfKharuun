@@ -1,13 +1,13 @@
 {
   "source": "art/source/characters/adventurer.blend",
   "glb": "assets/models/characters/adventurer.glb",
-  "glb_sha256": "bcb5277ebb7362067db36de9f3a1aa6d4e79a3c39506af7f0cb4a8452bbc6359",
-  "bytes": 4545312,
+  "glb_sha256": "70f00c3d6931fea0a3b40d5249d9ad0921b30e4452f40c3380a33f297e85c90d",
+  "bytes": 4647372,
   "mesh_count": 4,
-  "source_mesh_pieces": 40,
-  "bones": 28,
-  "vertices": 47291,
-  "triangles": 93248,
+  "source_mesh_pieces": 43,
+  "bones": 46,
+  "vertices": 47919,
+  "triangles": 94492,
   "human_acceptance": "pending",
   "textures": "original procedural weave; body anatomy adapted from MakeHuman CC0",
   "anatomy_source_sha256": "bea00279464133e86b634220cd2774ebf3b470de280d11222a6b2269e4a8d950",
@@ -59,7 +59,10 @@
       "UniformPanel_2",
       "UniformPanel_3",
       "UniformPanel_4",
-      "UniformPanel_5"
+      "UniformPanel_5",
+      "UniformCape",
+      "UniformCapeHem",
+      "UniformCapeClasp"
     ]
   }
 }

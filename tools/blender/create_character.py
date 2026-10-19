@@ -64,7 +64,7 @@ IRIS = material('Iris_dark_hazel', (.055, .036, .016), .35)
 BASE = material('Base_woven_charcoal', (.065, .07, .073), .9, True)
 BASE_TRIM = material('Base_seams', (.13, .125, .112), .85)
 ROBE = material('Robe_graphite', (.055, .061, .067), .88, True)
-PANEL = material('Robe_slate', (.105, .116, .124), .87, True)
+PANEL = material('Robe_slate', (.15, .165, .18), .87, True)
 LINEN = material('Linen_warm_grey', (.26, .235, .19), .94, True)
 LEATHER = material('Leather_dark', (.045, .027, .019), .66, True)
 BRONZE = material('Buckle_old_bronze', (.25, .16, .065), .56, False, .65)
@@ -183,7 +183,7 @@ loft('UniformTorso',[(0,0,.92,.255,.174),(0,0,1.06,.244,.163),
  (0,0,1.52,.26,.14),(0,0,1.585,.106,.102)],ROBE,'uniform')
 loft('UniformCollar',[(0,0,1.55,.16,.14),(0,0,1.56,.16,.14),(0,0,1.65,.125,.125),(0,0,1.66,.125,.125)],LINEN,'uniform','spine',cap=False)
 for side,label in ((-1,'L'),(1,'R')):
-    ellipsoid('UniformShoulder_'+label,(side*.265,0,1.475),(.195,.148,.125),ROBE,'uniform')
+    ellipsoid('UniformShoulder_'+label,(side*.265,0,1.475),(.13,.108,.087),ROBE,'uniform')
     loft('UniformSleeve_'+label,[(side*.32,0,1.5,.145,.137),(side*.405,0,1.43,.143,.132),
       (side*.42,.005,1.27,.127,.119),(side*.42,.012,1.19,.116,.106),
       (side*.42,.018,1.07,.114,.104),(side*.42,.02,.90,.11,.102)],ROBE,'uniform')
@@ -215,9 +215,10 @@ for panel_index in range(6):
         radius=.25+.13*t
         for i in range(cols):
             u=i/(cols-1)
-            a=center+(u-.5)*.99
-            fold=.012*math.cos(u*math.pi*4)*(.3+.7*t)
-            verts.append(((radius+fold)*math.cos(a),(radius*.76+fold)*math.sin(a),z+.018*math.cos(u*math.pi*2)*t))
+            a=center+(u-.5)*1.08
+            fold=.009*math.cos(u*math.pi*4)*(.3+.7*t)
+            hem_scallop=.006*math.sin(math.pi*u)**2*t**3
+            verts.append(((radius+fold)*math.cos(a),(radius*.76+fold)*math.sin(a),z-hem_scallop))
     for j in range(rows-1):
         for i in range(cols-1):
             a=j*cols+i;faces.append((a,a+1,a+1+cols,a+cols))
@@ -227,6 +228,50 @@ for panel_index in range(6):
     mod=obj.modifiers.new('Cloth edge thickness','SOLIDIFY');mod.thickness=.004
     bpy.context.view_layer.objects.active=obj
     bpy.ops.object.modifier_apply(modifier=mod.name)
+
+# A separate back mantle extends the silhouette from shoulders to calves.
+# Its five broad pleats remain legible at game distance. Nine vertical bone
+# chains provide live secondary motion; the shoulders stay attached to spine.
+cape_rows=27;cape_cols=17;cape_chains=9
+def cape_surface(t,u):
+    half_width=.155+.125*t
+    x=u*half_width*2
+    pleat=.012*math.cos(u*math.pi*10)*(.35+.65*t)
+    y=-.18-.07*math.sin(math.pi*t)-.015*t-pleat
+    z=1.535-1.23*t-.012*(.5+.5*math.cos(u*math.pi*10))*t**4
+    return (x,y,z)
+
+cape_verts=[];cape_faces=[]
+for j in range(cape_rows):
+    t=j/(cape_rows-1)
+    for i in range(cape_cols):
+        u=i/(cape_cols-1)-.5
+        cape_verts.append(cape_surface(t,u))
+for j in range(cape_rows-1):
+    for i in range(cape_cols-1):
+        a=j*cape_cols+i
+        cape_faces.append((a,a+cape_cols,a+cape_cols+1,a+1))
+cape=mesh('UniformCape',cape_verts,cape_faces,PANEL,'uniform')
+cape['cape_cloth']=True
+cape.data.materials.append(LINEN)
+cape_solid=cape.modifiers.new('Woven edge thickness','SOLIDIFY')
+cape_solid.thickness=.008;cape_solid.material_offset=1
+bpy.context.view_layer.objects.active=cape
+bpy.ops.object.modifier_apply(modifier=cape_solid.name)
+
+hem_verts=[];hem_faces=[]
+for t in [.978,1.0]:
+    for i in range(cape_cols):
+        u=i/(cape_cols-1)-.5
+        x,y,z=cape_surface(t,u)
+        hem_verts.append((x,y-.002,z+.001))
+for i in range(cape_cols-1):hem_faces.append((i,i+1,i+1+cape_cols,i+cape_cols))
+hem=mesh('UniformCapeHem',hem_verts,hem_faces,LINEN,'uniform')
+hem['cape_cloth']=True
+hem_solid=hem.modifiers.new('Hem binding thickness','SOLIDIFY');hem_solid.thickness=.005
+bpy.context.view_layer.objects.active=hem
+bpy.ops.object.modifier_apply(modifier=hem_solid.name)
+ellipsoid('UniformCapeClasp',(0,-.155,1.515),(.041,.012,.032),BRONZE,'uniform','spine')
 
 # One shared armature. No animation changes gameplay impact times.
 arm_data=bpy.data.armatures.new('AdventurerRig')
@@ -257,6 +302,10 @@ for k in range(6):
     a=2*math.pi*k/6+math.pi/6
     bone('cloth_%d_a'%k,(.25*math.cos(a),.19*math.sin(a),1.04),(.32*math.cos(a),.24*math.sin(a),.68),'hips')
     bone('cloth_%d_b'%k,(.32*math.cos(a),.24*math.sin(a),.68),(.38*math.cos(a),.29*math.sin(a),.30),'cloth_%d_a'%k)
+for k in range(cape_chains):
+    x=((k/(cape_chains-1))-.5)*.33
+    bone('cape_%d_a'%k,(x,-.145,1.53),(x,-.17,1.06),'spine')
+    bone('cape_%d_b'%k,(x,-.17,1.06),(x,-.205,.57),'cape_%d_a'%k)
 bpy.ops.object.mode_set(mode='OBJECT')
 
 
@@ -297,6 +346,22 @@ for obj in PARTS:
             top=max(0,1-t*5)
             bottom=max(0,min(1,(t-.32)/.45))
             weights=[('hips',top),('cloth_%d_a'%k,(1-top)*(1-bottom)),('cloth_%d_b'%k,(1-top)*bottom)]
+        elif obj.get('cape_cloth',False):
+            columns=cape_cols
+            row_width=columns
+            base_vertex_count=cape_rows*cape_cols if obj.name=='UniformCape' else cape_cols*2
+            # Solidify duplicates the original surface in the same vertex order.
+            # Map both faces back to their source row so the shell stays skinned.
+            index=v.index % base_vertex_count
+            row=index//row_width
+            col=index%row_width
+            u=col/(columns-1)-.5
+            t=row/(cape_rows-1) if obj.name=='UniformCape' else .978+.022*(row/(2-1))
+            across=(u+.5)*(cape_chains-1)
+            k0=int(math.floor(across));k1=min(cape_chains-1,k0+1);blend_x=across-k0
+            blend_z=max(0,min(1,(t-.20)/.68))
+            weights=[('cape_%d_a'%k0,(1-blend_x)*(1-blend_z)),('cape_%d_a'%k1,blend_x*(1-blend_z)),
+                     ('cape_%d_b'%k0,(1-blend_x)*blend_z),('cape_%d_b'%k1,blend_x*blend_z)]
         else:
             # Region limits stop torso and opposite limbs from stealing weights.
             label='R' if p.x>=0 else 'L'

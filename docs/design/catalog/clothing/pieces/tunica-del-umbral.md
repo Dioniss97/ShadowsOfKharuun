@@ -6,7 +6,7 @@
 
 ## Diseño
 
-Túnica grafito de mangas largas, cuello sin capucha y paneles de faldón con pliegues. Se requiere respuesta de tela al movimiento y coherencia visual con el Vigía.
+Túnica grafito de mangas largas, cuello sin capucha, paneles de faldón y capa posterior integrada. La tela debe mostrar respuesta al movimiento y conservar una silueta legible, pocos pliegues amplios y materiales sobrios, coherentes con el Vigía.
 
 ## Criterios observables
 
@@ -14,4 +14,4 @@ Se muestra con su conjunto, deforma de forma coherente con el esqueleto y no dej
 
 ## Rutas de producción
 
-Piezas UniformJacket, UniformPanel y UniformLapel de art/source/characters/adventurer.blend; exportadas en assets/models/characters/adventurer.glb. El estado operativo está en [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35) y [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36).
+Piezas UniformJacket, UniformPanel, UniformLapel y UniformCape de art/source/characters/adventurer.blend; exportadas en assets/models/characters/adventurer.glb. La capa se mueve mediante nueve cadenas de huesos secundarios configuradas en Godot. El estado operativo está en [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35) y [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36).

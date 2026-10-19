@@ -1,6 +1,6 @@
 # Organización técnica de Shadows of Kharuun
 
-**Actualizado: 16 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
+**Actualizado: 19 de octubre de 2026.** La política operativa vigente está en [GESTION_DESARROLLO.md](GESTION_DESARROLLO.md). Este archivo contiene convenciones del entorno y referencias de recuperación, no otro backlog de estados.
 
 ## Base y entregas
 
@@ -19,7 +19,7 @@ La rama por defecto es `main`. Para trabajo autorizado, crear ramas descriptivas
 
 ## Fuentes de trabajo
 
-- **Diseño:** cada versión nueva tiene su especificación en Markdown, con decisiones aprobadas, propuestas, dudas y sustituciones expresas. D01–D36 describen lo entregado en 0.3.0.
+- **Diseño persistente:** las fichas vigentes por mundo, elemento, sistema, narrativa, audio e interfaz viven en `docs/design/`. Las Issues de versión y trabajo enlazan las fichas pertinentes; el diseño no se copia por release.
 - **Backlog y estados:** GitHub Issues, etiquetas, milestone y relaciones nativas cuando aporten claridad. No actualizar una segunda tabla de progreso en `docs/versions/0.3.0/PENDIENTES.md`.
 - **Código/evidencia:** Git/PRs, tests automatizados y pruebas de juego/QA; los resultados se documentan en el PR y en los informes de entrega cuando corresponda.
 - **Ideas FUT:** sección histórica de `docs/versions/0.3.0/PENDIENTES.md`, propuestas sin versión ni autorización de implementación.
@@ -28,9 +28,9 @@ La rama por defecto es `main`. Para trabajo autorizado, crear ramas descriptivas
 ## Rutina mínima para Codex
 
 1. Confirmar rama, `git status`, HEAD, tag estable y issues/PRs que afecten al objetivo. No alterar cambios locales ajenos.
-2. Leer las decisiones relevantes del diseño activo y los criterios de aceptación de la issue. Una duda concreta bloquea solo la parte dependiente.
+2. Leer la Issue y las fichas de `docs/design/` pertinentes al objetivo. La ficha es la referencia canónica del diseño; una duda concreta bloquea solo la parte dependiente.
 3. En exploración, limitarse a investigar/documentar; no iniciar implementaciones por defecto. En ejecución autorizada, actualizar código, pruebas y PR, y dejar evidencia verificable.
-4. Actualizar **issue** cuando cambia el estado de producción; actualizar **documento de diseño** cuando se toma o cambia una decisión; no sincronizar textos repetidos.
+4. Actualizar la **Issue** cuando cambia el estado del trabajo; actualizar la **ficha de diseño** cuando se toma o cambia una decisión persistente; enlazar sin duplicar la especificación.
 5. Para entrega: aceptar el alcance, revisar regresiones, validar humanamente cuando se requiera, integrar PR, actualizar README/RESULTADO/CHANGELOG, etiquetar el commit final y cerrar issues/milestone. Registrar qué queda pendiente.
 
 ## Entorno y recursos
@@ -51,4 +51,4 @@ Los detalles históricos de instalación, hashes, respaldos, incidencias, decisi
 git show v0.3.0:ORGANIZACION.md
 ```
 
-No instalar Changesets, gestores adicionales de releases, GitHub Projects ni frameworks externos de agentes por defecto; reevaluarlos solo si existe una necesidad concreta. Planificar el alcance y el trabajo en GitHub Issues; mantener en `docs/project/` las referencias comunes vigentes y registrar en su changelog solo las entregas publicadas. Las carpetas de `docs/versions/0.3.0/` y `docs/versions/0.4.0/` se conservan como archivo histórico; no crear una por versión por defecto.
+No instalar Changesets, gestores adicionales de releases, GitHub Projects ni frameworks externos de agentes por defecto; reevaluarlos solo si existe una necesidad concreta. Planificar alcance y trabajo en GitHub Issues; mantener especificaciones de diseño en `docs/design/`, convenciones técnicas en `docs/project/` y registrar en el changelog solo las entregas publicadas. Las carpetas de `docs/versions/0.3.0/` y `docs/versions/0.4.0/` se conservan como archivo histórico; no crear una por versión por defecto.

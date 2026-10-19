@@ -21,9 +21,15 @@ La documentación del repositorio separa referencias comunes vigentes, propuesta
 
 Estas carpetas conservan su evidencia histórica. Las versiones nuevas se planifican y detallan en Issues; solo se añadirá una carpeta de archivo si una entrega requiere conservar evidencia extensa fuera de sus Issues/PRs.
 
+## Biblioteca de diseño
+
+- [Biblioteca de diseño](design/README.md): fichas vigentes de mundos, gameplay, narrativa, assets, audio e interfaz.
+
+La biblioteca conserva una ficha canónica por elemento diseñado. Los hubs de mundo enlazan fichas del catálogo, incluso para elementos exclusivos de ese mundo.
+
 ## Documentación común y reutilizable
 
-Mantener una sola referencia en `docs/project/` para cada convención o comportamiento vigente compartido. Cuando cambie una mecánica, actualizar su explicación común; las Issues conservan el alcance, las decisiones de trabajo y su discusión, y el changelog enlaza el resultado publicado.
+Mantener en `docs/project/` las convenciones y referencias técnicas comunes. Mantener en `docs/design/` las fichas vigentes de diseño. Las Issues conservan el alcance de versión y el estado del trabajo y enlazan las fichas pertinentes; el changelog registra las entregas publicadas.
 
 ## Documentos que permanecen junto a su contexto
 

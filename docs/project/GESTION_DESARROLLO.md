@@ -1,12 +1,13 @@
 # Gestión del desarrollo — Shadows of Kharuun
 
-**Procedimiento vigente desde el 14 de octubre de 2026.** Proyecto de un desarrollador asistido por Codex. La última entrega estable al adoptar este flujo es **v0.3.0**. Esta guía organiza el trabajo; por sí sola no aprueba la 0.4.0 ni autoriza implementar.
+**Procedimiento vigente desde el 14 de octubre de 2026; actualizado el 19 de octubre de 2026.** Proyecto de un desarrollador asistido por Codex. La última entrega estable al adoptar este flujo es **v0.4.0**. Esta guía organiza el trabajo; por sí sola no aprueba la 0.5.0 ni autoriza implementar.
 
 ## 1. Una fuente de verdad por responsabilidad
 
 | Qué quiero saber | Fuente de verdad |
 |---|---|
-| Alcance, requisito, decisión o cuestión abierta | Issue de propuesta de alcance o issue de trabajo correspondiente. El cuerpo vigente de la issue conserva decisión, estado, criterios y enlaces; comentarios mantienen el historial de discusión. |
+| Diseño vigente de mundos, sistemas, narrativa, assets, audio o interfaz | Ficha canónica de `docs/design/`, con estado de diseño, criterios, referencias y rutas. |
+| Alcance de versión y estado del trabajo | GitHub Issues y sus milestones. Las Issues enlazan las fichas pertinentes y conservan el alcance de la tarea, sus criterios y su avance. |
 | Qué tarea está pendiente, en marcha, bloqueada o probada | **GitHub Issues**. Su estado operativo, milestone y criterios de aceptación viven aquí, no en una segunda tabla Markdown. |
 | Qué código se ha escrito y revisado | Commits y pull requests, con pruebas y evidencias. |
 | Qué versión está entregada | Tag inmutable `vX.Y.Z`, `README.md` y `docs/project/CHANGELOG.md`; cada entrada identifica el tag/commit y referencia las PRs e issues pertinentes cuando estén disponibles. |
@@ -14,11 +15,11 @@
 | Convenciones técnicas y configuración local | `docs/project/ORGANIZACION.md`. |
 | Memoria de conversaciones de Codex | Engram, **auxiliar**; jamás prevalece sobre Git y GitHub. |
 
-**Regla antisincronización:** no actualizar `docs/versions/0.3.0/PENDIENTES.md` después de cambiar cada issue. Ese archivo y `docs/versions/0.3.0/`, `docs/versions/0.4.0/` son archivo histórico. Para versiones nuevas, mantener el alcance y las decisiones en Issues; si una tarea avanza, actualizar su issue; si cambia el comportamiento vigente, actualizar la documentación común afectada y aportar código/evidencia al PR. Enlazar, no duplicar el estado.
+**Regla antisincronización:** no actualizar `docs/versions/0.3.0/PENDIENTES.md` después de cambiar cada Issue. Ese archivo y `docs/versions/0.3.0/`, `docs/versions/0.4.0/` son archivo histórico. Para versiones nuevas, mantener alcance y avance en Issues; mantener en `docs/design/` el diseño persistente vigente. Si cambia el diseño, actualizar su ficha; si avanza el trabajo, actualizar la Issue. Enlazar, no duplicar estados ni copiar la especificación completa.
 
 ## 2. Estado de decisión y estado de entrega son independientes
 
-**Estado de decisión (en el cuerpo de la issue):**
+**Estado de diseño y decisión de alcance:**
 
 | Estado | Qué significa |
 |---|---|
@@ -27,7 +28,7 @@
 | Aprobada | Se ha aceptado explícitamente una regla o un alcance concreto; **no** significa que exista en el juego. |
 | Descartada / sustituida | Conservar razón y referencia a la decisión que la reemplaza. |
 
-Cada issue de alcance o trabajo debe mantener en su cuerpo la decisión vigente, el comportamiento comprobable, criterios y enlaces pertinentes; comentarios son discusión, no una copia paralela de la especificación. Las decisiones históricas D01–D36 pertenecen a 0.3.0 y conservan su identidad en el archivo histórico; no es necesario asignar un ID a cada idea futura.
+El mismo vocabulario se aplica a dos objetos distintos: la ficha de `docs/design/` expresa el estado del diseño y la Issue de propuesta expresa el estado de aprobación del alcance. Una Issue de trabajo enlaza la ficha y mantiene sus propios criterios y estado operativo. El contenido canónico y vigente del diseño reside en la ficha; la Issue evita duplicarlo. Las decisiones históricas D01–D36 pertenecen a 0.3.0 y conservan su identidad en el archivo histórico; no es necesario asignar un ID a cada asset o idea.
 
 **Entregas (en GitHub):**
 
@@ -47,7 +48,7 @@ Una tarea parcialmente completada no se marca `verificado-en-rama` mientras falt
 
 - **Una issue de propuesta de alcance** antes de aprobar una versión: usar `.github/ISSUE_TEMPLATE/propuesta-alcance-version.md`, registrar que su estado es `propuesta` y no asignarle milestone. Esta issue no autoriza implementación.
 - **Después de aprobar el alcance**, crear un milestone para la versión y issues por resultado verificable; agruparlas en ese milestone. No crear carpetas o Markdown por versión por defecto.
-- **Una issue por resultado verificable**, con alcance, decisiones, criterios y fuera de alcance. Usar `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md` para tareas de diseño o implementación aprobadas; la propia issue conserva su especificación.
+- **Una Issue por resultado verificable**, con alcance, criterios y fuera de alcance. Usar `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md`; si el trabajo afecta a un diseño persistente, enlazar y actualizar su ficha canónica en `docs/design/`.
 - **No duplicar la tarjeta release:** la issue de propuesta guarda la decisión de alcance y se cierra tras registrarla; el milestone agrupa el trabajo aprobado. Una issue padre adicional solo corresponde a una funcionalidad amplia y divisible en resultados independientes.
 - **Sub-issues nativas** cuando realmente haya entregables separables; no dividir por archivos o clases. Una issue padre no está entregada por completar solo una de sus hijas.
 - **Dependencias nativas** «blocked by / blocking» solo para impedimentos reales; las demás relaciones se resuelven enlazando la issue de alcance, las issues de trabajo o la documentación común pertinente.
@@ -59,9 +60,9 @@ Una tarea parcialmente completada no se marca `verificado-en-rama` mientras falt
 1. **Explorar.** Debatir opciones en la conversación especializada. Marcar qué es hipótesis, propuesta, duda o acuerdo; no tocar código por el mero hecho de explorar.
 2. **Proponer el alcance.** Crear una issue con `.github/ISSUE_TEMPLATE/propuesta-alcance-version.md`. Registrar objetivo, candidatos a incluir, exclusiones, criterios observables y dudas. Mantener el estado como `propuesta`; esta issue no autoriza código ni tareas de implementación.
 3. **Aprobar el alcance.** Acordar expresamente qué entra **y qué no**. Las propuestas FUT de `docs/versions/0.3.0/PENDIENTES.md` no se aprueban por estar listadas. Una vez aprobado el alcance, actualizar el cuerpo de la issue con la decisión, crear el milestone y cerrar la issue de propuesta como registro.
-4. **Desglosar.** Crear issues de diseño, implementación y QA por resultados verificables, usando `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md`; enlazarlas a la issue de alcance y al milestone. Las issues de diseño registran su especificación y decisiones en el cuerpo. Crear subtareas o bloqueos solo donde aporten claridad.
-5. **Autorizar.** Codex implementa únicamente issues/objetivos autorizados por el usuario. Antes lee `AGENTS.md`, esta guía, la issue de alcance, la issue de trabajo y los documentos comunes pertinentes; revisa su rama y cambios locales.
-6. **Construir.** Commits y PRs con pruebas automáticas y visuales cuando proceda; registrar evidencia, limitaciones y efectos en otras mecánicas. Actualizar las issues y, si cambia una referencia compartida vigente, su documento común.
+4. **Desglosar.** Crear Issues de diseño, implementación y QA por resultados verificables, usando `.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md`; enlazarlas a la Issue de alcance y al milestone. Las Issues de diseño enlazan la ficha canónica de `docs/design/`; conservan alcance y criterios de trabajo sin duplicar la especificación. Crear subtareas o bloqueos solo donde aporten claridad.
+5. **Autorizar.** Codex implementa únicamente Issues/objetivos autorizados por el usuario. Antes lee `AGENTS.md`, esta guía, las Issues pertinentes, las fichas de diseño y los documentos comunes relacionados; revisa su rama y cambios locales.
+6. **Construir.** Commits y PRs con pruebas automáticas y visuales cuando proceda; registrar evidencia, limitaciones y efectos en otras mecánicas. Actualizar las Issues cuando avance el trabajo y las fichas de `docs/design/` cuando cambie el diseño vigente.
 7. **Revisar.** Corregir fallos, verificar regresiones y obtener QA humana explícita cuando forme parte de la aceptación. Si cambia una regla, actualizar su decisión y pruebas, no tratar una validación antigua como vigente.
 8. **Entregar.** Tras verificar y aceptar la entrega, fusionar cambios, actualizar los documentos comunes afectados y añadir al `CHANGELOG.md` el resumen efectivamente publicado con enlaces a tag, PRs e issues. Etiquetar el commit de entrega y cerrar issues/milestone. No crear documentación Markdown por versión salvo una necesidad excepcional de evidencia extensa; nunca crear o mover tags por diseños o builds incompletas.
 
@@ -96,7 +97,7 @@ is:issue is:open milestone:"0.4.0"
 ```
 Ejemplo **solo si se crea un milestone con ese nombre exacto**. Si el título es «Demo 0.4.0», adaptar el filtro.
 
-El alcance y las decisiones aprobadas se consultan en el cuerpo de la issue de propuesta y en las issues de trabajo enlazadas; las etiquetas describen el estado operativo, no el estado de decisión. `docs/project/` conserva referencias comunes vigentes y `CHANGELOG.md` solo resume lo realmente publicado.
+El alcance de versión se consulta en la Issue de propuesta; el diseño vigente, en su ficha de `docs/design/`; las etiquetas de Issues describen el avance operativo. `docs/project/` conserva referencias técnicas comunes y `CHANGELOG.md` resume solo lo publicado.
 
 ## 6. Herramientas opcionales
 

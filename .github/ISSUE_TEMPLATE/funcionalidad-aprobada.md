@@ -12,8 +12,11 @@ Explica el entregable observable de esta tarea: una decisión/especificación ap
 ## Issue de alcance aprobada
 - Enlace: #...
 
-## Especificación y decisiones de esta tarea
-Registra aquí la especificación vigente y actualízala cuando se resuelva una duda. Los comentarios guardan la discusión; el cuerpo de la issue es la referencia actual. Si cambia una convención o comportamiento compartido, actualiza el documento común pertinente.
+## Ficha de diseño relacionada
+- Enlace a docs/design/, si aplica:
+
+## Alcance y decisiones propias de esta tarea
+Describe el resultado y los criterios de esta Issue. Si el trabajo crea o cambia un diseño persistente, enlaza y actualiza su ficha canónica en docs/design/. El cuerpo de la Issue conserva su alcance, criterios, discusión y estado de trabajo; evita duplicar el contenido completo de la ficha.
 
 ## Criterios de aceptación
 - [ ] ...

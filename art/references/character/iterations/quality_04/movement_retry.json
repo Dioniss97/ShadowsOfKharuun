@@ -1,0 +1,92 @@
+{
+	"checks": [
+		{
+			"details": "",
+			"name": "D33: parado conserva cámara libre sin girar al personaje",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: arrastrar cámara parado no desplaza al personaje",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: pausa permite arrastrar y mantiene orientación al soltar",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: W+A durante pausa no mueve, gira ni recentra el personaje o la cámara",
+			"passed": true
+		},
+		{
+			"details": "[0.598, 0.30702343718149]",
+			"name": "D33: desplazarse inicia retorno rápido y gradual hacia el frente",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: avanzar centra cámara detrás sin depender de la órbita anterior",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: mantener botón derecho permite órbita libre también avanzando",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: soltar el arrastre durante desplazamiento vuelve al frente",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: detenerse vuelve a conservar la orientación de cámara",
+			"passed": true
+		},
+		{
+			"details": "[(0.0, 0.0, 2.008881), (0.0, 0.0, -1.0)]",
+			"name": "D33: S retrocede conservando el frente del personaje",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "D33: retroceder centra cámara al frente y evita giro de 180 grados",
+			"passed": true
+		},
+		{
+			"details": "[0.77000015974045, 1.50333321094513]",
+			"name": "D33: mantener A gira continuamente en sitio, sin desplazamiento diagonal",
+			"passed": true
+		},
+		{
+			"details": "[-0.77000015974045, -1.50333321094513]",
+			"name": "D33: mantener D gira continuamente en sitio, sin desplazamiento diagonal",
+			"passed": true
+		},
+		{
+			"details": "[(-0.482433, 0.0, -0.991164), (-1.073381, 0.0, -0.47394), 0.77000015974045, 1.50333321094513]",
+			"name": "D33: W+A curva trayectoria mientras continúa girando",
+			"passed": true
+		},
+		{
+			"details": "[0.28388443589211, 10.5672899335623, 6.30667686462402]",
+			"name": "D33: mantener W+A completa una vuelta, sin repetir pulsaciones",
+			"passed": true
+		},
+		{
+			"details": "[(0.482433, 0.0, -0.991164), (1.073381, 0.0, -0.47394), -0.77000015974045, -1.50333321094513]",
+			"name": "D33: W+D curva trayectoria mientras continúa girando",
+			"passed": true
+		},
+		{
+			"details": "[0.283890157938, 10.567278765142, -6.30667686462402]",
+			"name": "D33: mantener W+D completa una vuelta, sin repetir pulsaciones",
+			"passed": true
+		}
+	],
+	"failures": 0,
+	"glb_sha256": "6e016ac872f5398e4fd532b65f17705d94d54e1fe03cc93ed49c82aef6739623",
+	"scope": "Isolated GPU retry of free movement after W+D input failure in full suite; no code changes to controller or test"
+}

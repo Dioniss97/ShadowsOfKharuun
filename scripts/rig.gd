@@ -64,7 +64,7 @@ func build(tint: Color, blade_color: Color, guardian: bool = false) -> void:
 	sword.position = Vector3(0,-0.59,-0.10)
 	# The blade grows along local +Y; -PI/2 maps it to the character's front (-Z).
 	sword.rotation.x = -PI/2.0
-	KhGeometry.cylinder(sword,Vector3(0,0.04,0),0.05,0.28,trim,0.05,10)
+	KhGeometry.cylinder(sword,Vector3(0,0.04,0),0.05,0.28,trim,0.05,10).name = "SwordGrip"
 	KhGeometry.cylinder(sword,Vector3(0,0.81,0),0.035,1.35,KhGeometry.material(blade_color,0.2,4.5),0.025,10)
 	KhGeometry.cylinder(sword,Vector3(0,0.81,0),0.013,1.37,KhGeometry.material(Color(1,0.92,0.82),0.2,6),0.01,8)
 	KhGeometry.light(sword,Vector3(0,0.55,0),blade_color,0.8,2.4)

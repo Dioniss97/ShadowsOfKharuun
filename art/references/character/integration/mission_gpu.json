@@ -162,7 +162,7 @@
 			"passed": true
 		},
 		{
-			"details": "[[1, 1, 0], [{ \"id\": \"flurry\", \"target\": Enemy:<CharacterBody3D#193441304307>, \"target_name\": \"Acólito del Juramento\", \"impact_times\": [0.42, 0.9] }], [P: (674.3029, 251.4815), S: (42.0, 14.0)]]",
+			"details": "[[1, 1, 0], [{ \"id\": \"flurry\", \"target\": Enemy:<CharacterBody3D#193508413171>, \"target_name\": \"Acólito del Juramento\", \"impact_times\": [0.42, 0.9] }], [P: (674.3029, 251.4815), S: (42.0, 14.0)]]",
 			"name": "Flecha de poder recorre a Descarga sin encolar",
 			"passed": true
 		},
@@ -432,7 +432,7 @@
 			"passed": true
 		},
 		{
-			"details": "[{ \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 626897458754, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 628306741491, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 8 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 628306741491, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 11 }, { \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 626897458754, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 13 }, { \"id\": \"heal\", \"source\": \"player\", \"target\": \"Sobre ti\", \"hit\": true, \"damage\": 0, \"healing\": 0.0, \"resource_consumed\": true }]",
+			"details": "[{ \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 627115562562, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 628524845299, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 8 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito de la Ceniza\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 628524845299, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 11 }, { \"id\": \"attack\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 627115562562, \"hit\": true, \"critical\": false, \"damage\": 26.0, \"roll\": 13 }, { \"id\": \"heal\", \"source\": \"player\", \"target\": \"Sobre ti\", \"hit\": true, \"damage\": 0, \"healing\": 0.0, \"resource_consumed\": true }]",
 			"name": "Registro prueba dos tiradas de ráfaga y destinatarios A/B",
 			"passed": true
 		},
@@ -447,7 +447,7 @@
 			"passed": true
 		},
 		{
-			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 829633335166, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 829633335166, \"hit\": false, \"damage\": 0, \"reason\": \"invalid_target\" }]",
+			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 829868216190, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 829868216190, \"hit\": false, \"damage\": 0, \"reason\": \"invalid_target\" }]",
 			"name": "Ráfaga segundo contacto sin transferencia: dead",
 			"passed": true
 		},
@@ -457,7 +457,7 @@
 			"passed": true
 		},
 		{
-			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 881693038161, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 881693038161, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
+			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 881944696407, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 881944696407, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
 			"name": "Ráfaga segundo contacto sin transferencia: range",
 			"passed": true
 		},
@@ -467,7 +467,7 @@
 			"passed": true
 		},
 		{
-			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 933836625819, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 933836625819, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
+			"details": "[{ \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 0, \"automatic\": false, \"target_instance_id\": 934105061275, \"hit\": true, \"critical\": false, \"damage\": 17.0, \"roll\": 14 }, { \"id\": \"flurry\", \"source\": \"player\", \"target\": \"Acólito del Juramento\", \"impact_index\": 1, \"automatic\": false, \"target_instance_id\": 934105061275, \"hit\": false, \"damage\": 0, \"reason\": \"range\" }]",
 			"name": "Ráfaga segundo contacto sin transferencia: wall",
 			"passed": true
 		},
@@ -557,7 +557,7 @@
 			"passed": true
 		},
 		{
-			"details": "[true, { \"id\": \"attack\", \"target\": Enemy:<CharacterBody3D#1410141784347>, \"target_name\": \"Acólito del Juramento\" }, 1, (0.0, 0.063333, 1.6), (0.0, -0.010075, 1.6)]",
+			"details": "[true, { \"id\": \"attack\", \"target\": Enemy:<CharacterBody3D#1410510883099>, \"target_name\": \"Acólito del Juramento\" }, 1, (0.0, 0.063333, 1.6), (0.0, -0.010075, 1.6)]",
 			"name": "WASD mantiene combate, acción y cola hasta cancelar",
 			"passed": true
 		},
@@ -1248,7 +1248,7 @@
 				"roll": 14,
 				"source": "player",
 				"target": "Acólito de la Ceniza",
-				"target_instance_id": 2723428700144
+				"target_instance_id": 2724166897648
 			},
 			{
 				"damage": 0.0,
@@ -1281,7 +1281,7 @@
 				"roll": 12,
 				"source": "player",
 				"target": "Acólito de la Ceniza",
-				"target_instance_id": 2723428700144
+				"target_instance_id": 2724166897648
 			},
 			{
 				"automatic": false,
@@ -1293,7 +1293,7 @@
 				"roll": 10,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"damage": 11.0,
@@ -1312,7 +1312,7 @@
 				"roll": 7,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"damage": 0.0,
@@ -1338,7 +1338,7 @@
 				"roll": 3,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"automatic": false,
@@ -1350,7 +1350,7 @@
 				"roll": 2,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"damage": 11.0,
@@ -1383,7 +1383,7 @@
 				"roll": 16,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"automatic": false,
@@ -1395,7 +1395,7 @@
 				"roll": 10,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"automatic": false,
@@ -1407,7 +1407,7 @@
 				"roll": 8,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"damage": 0.0,
@@ -1440,7 +1440,7 @@
 				"roll": 7,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"automatic": false,
@@ -1452,7 +1452,7 @@
 				"roll": 12,
 				"source": "player",
 				"target": "Acólito del Juramento",
-				"target_instance_id": 2722019416065
+				"target_instance_id": 2722757611431
 			},
 			{
 				"damage": 11.0,
@@ -1478,7 +1478,7 @@
 				"roll": 4,
 				"source": "player",
 				"target": "Acólito de la Ceniza",
-				"target_instance_id": 2723428700144
+				"target_instance_id": 2724166897648
 			},
 			{
 				"damage": 11.0,
@@ -1497,7 +1497,7 @@
 				"roll": 11,
 				"source": "player",
 				"target": "Acólito de la Ceniza",
-				"target_instance_id": 2723428700144
+				"target_instance_id": 2724166897648
 			},
 			{
 				"automatic": false,
@@ -1509,7 +1509,7 @@
 				"roll": 2,
 				"source": "player",
 				"target": "Acólito de la Ceniza",
-				"target_instance_id": 2723428700144
+				"target_instance_id": 2724166897648
 			},
 			{
 				"damage": 16.5,
@@ -1528,7 +1528,7 @@
 				"roll": 13,
 				"source": "player",
 				"target": "Acólito de la Ceniza",
-				"target_instance_id": 2723428700144
+				"target_instance_id": 2724166897648
 			},
 			{
 				"damage": 11.0,
@@ -1547,7 +1547,7 @@
 				"roll": 4,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"damage": 0,
@@ -1591,7 +1591,7 @@
 				"roll": 4,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"automatic": false,
@@ -1603,7 +1603,7 @@
 				"roll": 16,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"damage": 0.0,
@@ -1622,7 +1622,7 @@
 				"roll": 2,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"automatic": false,
@@ -1634,7 +1634,7 @@
 				"roll": 6,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"automatic": false,
@@ -1646,7 +1646,7 @@
 				"roll": 14,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"damage": 11.0,
@@ -1665,7 +1665,7 @@
 				"roll": 16,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"automatic": false,
@@ -1677,7 +1677,7 @@
 				"roll": 2,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"automatic": false,
@@ -1689,7 +1689,7 @@
 				"roll": 11,
 				"source": "player",
 				"target": "Acólito del Umbral",
-				"target_instance_id": 2724837986431
+				"target_instance_id": 2725576183935
 			},
 			{
 				"automatic": false,
@@ -1701,7 +1701,7 @@
 				"roll": 1,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 0.0,
@@ -1720,7 +1720,7 @@
 				"roll": 11,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1732,7 +1732,7 @@
 				"roll": 5,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 0.0,
@@ -1751,7 +1751,7 @@
 				"roll": 18,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1763,7 +1763,7 @@
 				"roll": 7,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1775,7 +1775,7 @@
 				"roll": 8,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 0.0,
@@ -1794,7 +1794,7 @@
 				"roll": 18,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 18.0,
@@ -1813,7 +1813,7 @@
 				"roll": 20,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1825,7 +1825,7 @@
 				"roll": 4,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 18.0,
@@ -1844,7 +1844,7 @@
 				"roll": 10,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1856,7 +1856,7 @@
 				"roll": 14,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 18.0,
@@ -1875,7 +1875,7 @@
 				"roll": 7,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1887,7 +1887,7 @@
 				"roll": 19,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 0.0,
@@ -1906,7 +1906,7 @@
 				"roll": 15,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1918,7 +1918,7 @@
 				"roll": 5,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 18.0,
@@ -1937,7 +1937,7 @@
 				"roll": 2,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1949,7 +1949,7 @@
 				"roll": 6,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1961,7 +1961,7 @@
 				"roll": 17,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 18.0,
@@ -1980,7 +1980,7 @@
 				"roll": 5,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -1992,7 +1992,7 @@
 				"roll": 14,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 0.0,
@@ -2011,7 +2011,7 @@
 				"roll": 18,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 0.0,
@@ -2030,7 +2030,7 @@
 				"roll": 2,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -2042,7 +2042,7 @@
 				"roll": 17,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 18.0,
@@ -2061,7 +2061,7 @@
 				"roll": 19,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"automatic": false,
@@ -2073,7 +2073,7 @@
 				"roll": 9,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			},
 			{
 				"damage": 18.0,
@@ -2092,7 +2092,7 @@
 				"roll": 15,
 				"source": "player",
 				"target": "Guardián de Kharuun",
-				"target_instance_id": 2726247270657
+				"target_instance_id": 2726985468161
 			}
 		],
 		"exploration_frames": 538,

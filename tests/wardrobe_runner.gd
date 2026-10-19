@@ -71,6 +71,59 @@ func roles(rig: KhCharacterRig, uniform: bool) -> bool:
 		if mesh.visible != expected: return false
 	return rig.mesh_roles.size() == 4
 
+func hand_skin_valid(rig: KhCharacterRig) -> bool:
+	var finger_vertices := 0
+	for instance in rig.mesh_roles:
+		if rig.mesh_roles[instance] != "always": continue
+		var mesh_instance := instance as MeshInstance3D
+		for surface in range(mesh_instance.mesh.get_surface_count()):
+			var arrays := mesh_instance.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+			var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+			if weights.size() != vertices.size()*4: return false
+			for vertex in range(vertices.size()):
+				var total := 0.0
+				var has_finger := false
+				for influence in range(4):
+					var index := vertex*4+influence
+					var weight := weights[index]
+					total += weight
+					if weight <= 0.00001: continue
+					var bind := bones[index]
+					if bind < 0 or bind >= mesh_instance.skin.get_bind_count(): return false
+					var bone_name := String(mesh_instance.skin.get_bind_name(bind))
+					if bone_name.is_empty(): bone_name = rig.skeleton.get_bone_name(mesh_instance.skin.get_bind_bone(bind))
+					if bone_name.begins_with("finger_"): has_finger = true
+				if absf(total-1.0)>0.002: return false
+				if has_finger: finger_vertices += 1
+	return finger_vertices > 200
+
+func check_hands(rig: KhCharacterRig) -> void:
+	var all_fingers := true
+	for side in ["L","R"]:
+		for finger in range(1,6):
+			for segment in range(3):
+				all_fingers = all_fingers and rig.skeleton.find_bone("finger_%s_%d_%d" % [side,finger,segment])>=0
+	check(all_fingers,"Thirty articulated finger joints imported")
+	check(hand_skin_valid(rig),"Finger joints deform exported skin with four normalized influences")
+	rig.cancel_action()
+	rig.animate(0.0,0.0)
+	var wrist := rig.skeleton.find_bone("hand_L")
+	var left_finger := rig.skeleton.find_bone("finger_L_3_1")
+	var rest_wrist := rig.skeleton.get_bone_pose_rotation(wrist)
+	var rest_finger := rig.skeleton.get_bone_pose_rotation(left_finger)
+	var right_hand := rig.skeleton.global_transform*rig.skeleton.get_bone_global_pose(rig.skeleton.find_bone("hand_R"))
+	var grip := rig.sword.get_node("SwordGrip") as MeshInstance3D
+	var grip_mesh := grip.mesh as CylinderMesh
+	check(rig.sword.to_global(Vector3(0,0.04,0)).distance_to(right_hand*Vector3(0,.085,.025))<0.001 and is_equal_approx(grip_mesh.top_radius,.02),"Sword grip follows the posed palm with a four centimetre diameter")
+	rig.cast("push")
+	rig.animate(0.4,0.0)
+	var opens := rest_wrist.angle_to(rig.skeleton.get_bone_pose_rotation(wrist))>1.0 and rest_finger.angle_to(rig.skeleton.get_bone_pose_rotation(left_finger))>0.10
+	rig.cancel_action()
+	rig.animate(0.0,0.0)
+	check(opens and rest_wrist.angle_to(rig.skeleton.get_bone_pose_rotation(wrist))<0.001,"Free hand opens for powers and returns to its relaxed pose")
+
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	main = load("res://scenes/main.tscn").instantiate()
@@ -81,7 +134,8 @@ func run() -> void:
 	await frames(8)
 	var player: KhPlayer = main.level.player
 	check(player.wardrobe.uniform_id == "" and roles(player.rig,false),"New game starts with base body/underwear/shoes")
-	check(player.rig.skeleton.get_bone_count() == 46,"Imported deforming skeleton has 46 bones including cape dynamics")
+	check(player.rig.skeleton.get_bone_count() == 76,"Imported deforming skeleton has 76 bones including fingers and cape dynamics")
+	check_hands(player.rig)
 	check(not player.wardrobe.equip_uniform("missing"),"Unknown item cannot be equipped")
 	var original_stats := [player.max_health,player.defence,player.attack_bonus]
 	await key(KEY_I)

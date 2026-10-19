@@ -342,7 +342,7 @@ bone('head',(0,0,1.64),(0,0,1.95),'spine')
 for side,label in ((-1,'L'),(1,'R')):
     bone('upper_arm_'+label,(side*.42,0,1.5),(side*.42,.01,1.2),'spine')
     bone('forearm_'+label,(side*.42,.01,1.2),(side*.42,.02,.91),'upper_arm_'+label)
-    bone('hand_'+label,(side*.42,.02,.91),(side*.42,.04,.78),'forearm_'+label)
+    bone('hand_'+label,(side*.42,.02,.91),(side*.42,.04,.74),'forearm_'+label)
     bone('thigh_'+label,(side*.16,0,.9),(side*.16,.018,.51),'hips')
     bone('shin_'+label,(side*.16,.018,.51),(side*.16,0,.14),'thigh_'+label)
     bone('foot_'+label,(side*.16,0,.14),(side*.16,.22,.07),'shin_'+label)
@@ -425,6 +425,29 @@ for obj in PARTS:
             weights=[(n,w/total) for n,w in vals]
         for n,w in weights:
             if w>.0001: groups[n].add([v.index],w,'REPLACE')
+    if obj.name=='HumanHands':
+        # The authored topology carries the silhouette; one subdivision softens
+        # palm/finger facets and interpolates the joint weights before skinning.
+        bm=bmesh.new();bm.from_mesh(obj.data)
+        boundary={tuple(sorted((e.verts[0].index,e.verts[1].index))) for e in bm.edges if e.is_boundary}
+        bm.free()
+        crease=obj.data.attributes.new('crease_edge','FLOAT','EDGE')
+        corner=obj.data.attributes.new('crease_vert','FLOAT','POINT')
+        for edge in obj.data.edges:
+            if tuple(sorted(edge.vertices)) in boundary:
+                crease.data[edge.index].value=1.0
+                for index in edge.vertices:corner.data[index].value=1.0
+        surface=obj.modifiers.new('Hand surface continuity','SUBSURF');surface.levels=1
+        bpy.context.view_layer.objects.active=obj
+        bpy.ops.object.modifier_apply(modifier=surface.name)
+    # glTF's four skin influences are chosen explicitly, including interpolated
+    # subdivision weights; no exporter-dependent pruning at finger webbing.
+    for vertex in obj.data.vertices:
+        influences=sorted([(g.group,g.weight) for g in vertex.groups],key=lambda item:item[1],reverse=True)
+        if not influences:continue
+        keep=influences[:4];total=sum(weight for _,weight in keep)
+        for group,_ in influences[4:]:obj.vertex_groups[group].remove([vertex.index])
+        for group,weight in keep:obj.vertex_groups[group].add([vertex.index],weight/total,'REPLACE')
     mod=obj.modifiers.new('Shared skeleton','ARMATURE');mod.object=rig
     obj.parent=rig
     # Unwrap to provide repeatable exported woven texture sampling.
@@ -442,20 +465,31 @@ def body_x(x,z=None):
         outer_scale-=.08*shoulder
     return math.copysign(v*.85 if v<=.24 else .204+(v-.24)*outer_scale,x)
 
+
+def hand_x(x,z):
+    # Shift the hand to the gameplay wrist without flattening its cross-section
+    # by the torso's 0.57 width factor. Blend only through the wrist, so this
+    # pass does not alter the pending arm/torso work.
+    t=max(0,min(1,(.98-z)/.10))
+    t=t*t*(3-2*t)
+    centered=math.copysign(.3066,x)+(x-math.copysign(.42,x))*.94
+    return body_x(x,z)*(1-t)+centered*t
+
 # Slim the old procedural actor proportions while preserving room for its rig.
 for obj in PARTS:
-    if obj['fixed_bone']=='head' or obj.name in ['HumanHeadHands','HairCrop']:
-        # Keep head width while compressing the hands to the arm positions.
-        if obj.name=='HumanHeadHands':
+    if obj['fixed_bone']=='head' or obj.name in ['HumanHead','HumanHands','HairCrop']:
+        # Keep head width and translate hands without flattening their section.
+        if obj.name=='HumanHands':
             for v in obj.data.vertices:
-                if abs(v.co.x)>.25:v.co.x=body_x(v.co.x,v.co.z)
+                if abs(v.co.x)>.25:v.co.x=hand_x(v.co.x,v.co.z)
         continue
     for v in obj.data.vertices:
         v.co.x=body_x(v.co.x,v.co.z)
 bpy.context.view_layer.objects.active=rig
 bpy.ops.object.mode_set(mode='EDIT')
 for b in arm_data.edit_bones:
-    b.head.x=body_x(b.head.x,b.head.z);b.tail.x=body_x(b.tail.x,b.tail.z)
+    warp=hand_x if b.name.startswith(('hand_','finger_')) else body_x
+    b.head.x=warp(b.head.x,b.head.z);b.tail.x=warp(b.tail.x,b.tail.z)
 bpy.ops.object.mode_set(mode='OBJECT')
 
 bpy.context.scene['asset']='Adventurer: adapted CC0 anatomy and original wardrobe'

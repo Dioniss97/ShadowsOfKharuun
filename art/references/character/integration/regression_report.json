@@ -1,5 +1,5 @@
 {
-  "glb_sha256": "e57bad1ffba8b9113f6bea5b5204191a06db86ef8b90c14fe595359356eae352",
+  "glb_sha256": "6e016ac872f5398e4fd532b65f17705d94d54e1fe03cc93ed49c82aef6739623",
   "engine": "Godot 4.7.2-stable",
   "gpu": "AMD Radeon RX 6600 / Vulkan Forward+",
   "suites": {
@@ -15,5 +15,16 @@
     }
   },
   "human_acceptance": "pending",
-  "scope": "Automated scene/input regression and normal bot playthrough; not human QA"
+  "scope": "Automated scene/input regression and normal bot playthrough; not human QA",
+  "prior_gpu_attempt": {
+    "checks": 238,
+    "failures": 1,
+    "report": "../iterations/quality_04/mission_gpu_attempt_1.json",
+    "isolated_movement_retry": "../iterations/quality_04/movement_retry.json",
+    "full_retry": {
+      "checks": 238,
+      "failures": 0
+    },
+    "cause": "undetermined; no controller or test change"
+  }
 }

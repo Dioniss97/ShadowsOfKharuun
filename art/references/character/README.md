@@ -1,6 +1,6 @@
 # Personaje y vestuario — primera candidata integrada
 
-19-10-2026. Capturas auténticas de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. La tercera iteración de calidad está en revisión para [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35), [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36), [#37](https://github.com/Dioniss97/ShadowsOfKharuun/issues/37) y [#38](https://github.com/Dioniss97/ShadowsOfKharuun/issues/38). El alcance aprobado está en [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34).
+20-10-2026. Capturas auténticas de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. La cuarta iteración de calidad corresponde al pase regional de manos [#40](https://github.com/Dioniss97/ShadowsOfKharuun/issues/40), dentro de [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35). El conjunto sigue en revisión para #35–38; el alcance aprobado está en [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34).
 
 ## Apariencias
 
@@ -38,7 +38,13 @@ La anatomía reduce la anchura exterior del hombro de forma gradual; la túnica 
 |---|---|
 | ![Uniforme en el templo antes](iterations/quality_02/before/temple_uniform.png) | ![Uniforme en el templo después](iterations/quality_02/after/temple_uniform.png) |
 
-GLB actual: `e57bad1ffba8b9113f6bea5b5204191a06db86ef8b90c14fe595359356eae352` (5.96 MB, 46 huesos, 45.981 vértices, 90.616 triángulos). Reimportación Godot completada; vestuario 22 headless/26 GPU y regresión de misión 213 headless/238 GPU, todo sin fallos con este hash. La aceptación artística y la revisión humana de clipping continúan pendientes.
+Esta revisión 03 usó el GLB `e57bad1ffba8b9113f6bea5b5204191a06db86ef8b90c14fe595359356eae352` (5.958.144 bytes, 46 huesos, 45.981 vértices, 90.616 triángulos). Sus comparativas se conservan como historial.
+
+## Iteración de calidad 04 — manos y muñecas
+
+La [comparativa regional](iterations/quality_04/README.md) contiene 42 vistas antes y 42 después con las mismas cámaras e iluminación: reposo, guardia, ataque y poder, ambas apariencias. Las manos conservan mejor su volumen, incorporan 30 articulaciones de dedos y tienen poses de agarre y poder. Se corrigieron el corte del pulgar entre regiones de apariencia y la recesión accidental del antebrazo. La empuñadura del jugador mide 4 cm de diámetro y sigue la palma posada.
+
+GLB actual: `6e016ac872f5398e4fd532b65f17705d94d54e1fe03cc93ed49c82aef6739623` (6.701.868 bytes, 76 huesos, 56.329 vértices, 111.472 triángulos). Vestuario: 26 comprobaciones headless y 30 GPU, cero fallos. Importación con caché vacía: 26/0. La aceptación artística y la revisión humana de clipping continúan pendientes.
 
 ## Inventario
 
@@ -48,10 +54,10 @@ Se abre con I durante la partida; Equipar/Retirar cambia a la vez el personaje r
 
 ## Evidencia técnica
 
-- [Exportación](export_report.json): hash del GLB, 4 grupos de apariencia, 43 piezas editables, 46 huesos y geometría total de ambas apariencias. Este total no equivale a todos los triángulos visibles simultáneamente.
-- [Prueba de entradas sin render](integration/logic_report.json): 22 comprobaciones, 0 fallos.
-- [Prueba con GPU](integration/gpu_report.json): 26 comprobaciones, 0 fallos, capturas y mediciones por vista.
-- [Importación limpia](integration/clean_import_report.json): valida el GLB previo (`70f00c3d6931fea0a3b40d5249d9ad0921b30e4452f40c3380a33f297e85c90d`) con caché `.godot` vacía: 22 comprobaciones, 0 fallos. No se repitió para el hash actual; la reimportación corriente y sus pruebas se detallan arriba.
+- [Exportación](export_report.json): hash del GLB, 4 grupos de apariencia, 44 piezas editables, 76 huesos y geometría total de ambas apariencias. Este total no equivale a todos los triángulos visibles simultáneamente.
+- [Prueba de entradas sin render](integration/logic_report.json): 26 comprobaciones, 0 fallos.
+- [Prueba con GPU](integration/gpu_report.json): 30 comprobaciones, 0 fallos, capturas y mediciones por vista.
+- [Importación limpia](integration/clean_import_report.json): GLB actual con caché `.godot` vacía, 26 comprobaciones, 0 fallos.
 - [Estudio](studio/report.json): motor y hash del GLB representado.
 - [Regresión](integration/regression_report.json): 213 comprobaciones headless y 238 con GPU; misión, combate, pausas, diálogo, cámara, derrota/reinicio y recorrido automático hasta victoria. Los informes distinguen ejecución automática de QA humana.
 
@@ -59,7 +65,7 @@ Reproducir con [las instrucciones del pipeline](../../../tools/blender/CHARACTER
 
 ## Coste observado y límites
 
-El GLB ocupa aproximadamente 4,67 MB; su hash y cifras exactas están en el informe de exportación. El informe GPU incluye 30 intervalos de presentación por vista, mediana/p95, llamadas de dibujo, primitivas y memoria de texturas. Son muestras cortas de esta máquina y configuración; incluyen CPU, renderizado y presentación. Las mediciones con inventario incluyen su vista 3D y la escena subyacente; no aíslan el coste exclusivo del personaje ni certifican FPS de otras máquinas.
+El GLB ocupa 6,70 MB decimales; su hash y cifras exactas están en el informe de exportación. El informe GPU incluye 30 intervalos de presentación por vista, mediana/p95, llamadas de dibujo, primitivas y memoria de texturas. Son muestras cortas de esta máquina y configuración; incluyen CPU, renderizado y presentación. Las mediciones con inventario incluyen su vista 3D y la escena subyacente; no aíslan el coste exclusivo del personaje ni certifican FPS de otras máquinas.
 
 El faldón y la capa utilizan quince cadenas de huesos secundarios en total y ocho cápsulas SpringBone en torso, cintura, brazos superiores y piernas. La prueba separa 45 pasos en reposo del desplazamiento real; ambas prendas reaccionan y sus poses siguen finitas. Es dinámica secundaria por huesos: no hay solver de tela por vértices, autocolisión completa ni colisión de `PhysicsServer3D`. Las regiones interiores cubiertas se ocultan; los colisionadores reducen penetraciones localmente, pero la cobertura debe seguir revisándose visualmente en acciones y transiciones.
 

@@ -32,8 +32,15 @@ func build(tint: Color, blade_color: Color, guardian: bool = false) -> void:
 		elif String(mesh.name).begins_with("BodyCovered"): role = "body"
 		mesh_roles[mesh] = role
 	set_uniform("")
-	sword.position = Vector3(0, -0.655, -0.06)
+	var grip := sword.get_node("SwordGrip") as MeshInstance3D
+	var grip_mesh := grip.mesh.duplicate() as CylinderMesh
+	grip_mesh.top_radius = 0.02
+	grip_mesh.bottom_radius = 0.02
+	grip_mesh.height = 0.22
+	grip.mesh = grip_mesh
 	_setup_cloth()
+	_pose_fingers()
+	_fit_grip()
 
 func set_uniform(value: String) -> void:
 	uniform_id = value
@@ -53,8 +60,39 @@ func animate(delta: float, speed: float) -> void:
 	# Flex the trailing knee without changing the root movement or action clock.
 	_pose("shin_L", Vector3(-maxf(0.0, -sin(phase))*minf(speed/4.0, 1.0)*0.6, 0, 0))
 	_pose("shin_R", Vector3(-maxf(0.0, sin(phase))*minf(speed/4.0, 1.0)*0.6, 0, 0))
+	_pose_fingers()
+	_fit_grip()
 	if is_instance_valid(cloth):
 		cloth.external_force = global_basis.z*speed*0.018
+
+func _pose_fingers() -> void:
+	for side in ["L", "R"]:
+		var casting: bool = side == "L" and attack_time > 0.0 and action_kind in ["push", "lightning", "heal", "medkit"]
+		var extension := 0.0
+		if casting:
+			var elapsed: float = attack_duration-attack_time
+			extension = smoothstep(0.0,0.32,elapsed)*(1.0-smoothstep(0.54,0.9,elapsed))
+		var wrist := skeleton.find_bone("hand_"+side)
+		if wrist >= 0:
+			var twist := -PI/2.0 if side == "R" else lerpf(PI/2.0,0.0,extension)
+			skeleton.set_bone_pose_rotation(wrist,Quaternion(Vector3.UP,twist))
+		for finger in range(1,6):
+			for segment in range(3):
+				var index := skeleton.find_bone("finger_%s_%d_%d" % [side,finger,segment])
+				if index < 0: continue
+				var flex: float
+				if side == "R":
+					flex = [0.55,0.70,0.40][segment] if finger == 1 else [0.95,1.25,0.85][segment]
+				else:
+					flex = lerpf([0.10,0.16,0.12][segment],0.02,extension)
+				skeleton.set_bone_pose_rotation(index,Quaternion(Vector3.RIGHT,flex))
+
+func _fit_grip() -> void:
+	var hand := skeleton.find_bone("hand_R")
+	if hand < 0: return
+	var hand_pose := skeleton.global_transform*skeleton.get_bone_global_pose(hand)
+	var centre := hand_pose*Vector3(0,0.085,0.025)
+	sword.global_position = centre-sword.global_basis*Vector3(0,0.04,0)
 
 func _pose(name: String, angles: Vector3) -> void:
 	var index := skeleton.find_bone(name)

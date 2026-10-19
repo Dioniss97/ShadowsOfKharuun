@@ -4,7 +4,7 @@
 **Estado de diseño:** aprobado  
 **Mundo o contexto:** misión jugable, reglas aceptadas en v0.3.0 y conservadas en la versión estable v0.4.0  
 **Fichas relacionadas:** [Interfaz de combate](../ui/interfaz-de-combate.md)  
-**Issues relacionadas:** decisiones y seguimiento histórico de v0.3.0 en [PENDIENTES.md](../../../versions/0.3.0/PENDIENTES.md)  
+**Issues relacionadas:** decisiones y seguimiento histórico de v0.3.0 en [PENDIENTES.md](../../versions/0.3.0/PENDIENTES.md)  
 **Ficha que sustituye, si aplica:** —
 
 ## Identidad y propósito
@@ -46,9 +46,9 @@ F o «Cancelar combate» interrumpe la acción, vacía la cola y devuelve el mov
 
 ## Referencias y procedencia
 
-- [Referencia técnica histórica de combate](../../../versions/0.3.0/COMBATE.md).
-- [Diseño aprobado de v0.3.0](../../../versions/0.3.0/DISENO_DEMO.md).
-- [QA y resultado de v0.4.0](../../../versions/0.4.0/QA_0_4_0.md).
+- [Referencia técnica histórica de combate](../../versions/0.3.0/COMBATE.md).
+- [Diseño aprobado de v0.3.0](../../versions/0.3.0/DISENO_DEMO.md).
+- [QA y resultado de v0.4.0](../../versions/0.4.0/QA_0_4_0.md).
 - Entregas: [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) y [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29).
 - [Evidencia de gameplay y controles](../../../README.md).
 

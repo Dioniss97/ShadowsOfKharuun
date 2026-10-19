@@ -4,7 +4,7 @@
 **Estado de diseño:** aprobada  
 **Mundo o contexto:** misión jugable, interfaz aceptada en v0.3.0 y conservada en v0.4.0  
 **Fichas relacionadas:** [Combate de la misión unificada](../gameplay/combate-mision-unificada.md)  
-**Issues relacionadas:** decisiones y seguimiento histórico de v0.3.0 en [PENDIENTES.md](../../../versions/0.3.0/PENDIENTES.md)  
+**Issues relacionadas:** decisiones y seguimiento histórico de v0.3.0 en [PENDIENTES.md](../../versions/0.3.0/PENDIENTES.md)  
 **Ficha que sustituye, si aplica:** —
 
 ## Identidad y propósito
@@ -30,8 +30,8 @@ Abajo a la izquierda se muestran primero los poderes personales y después los c
 
 ## Referencias y procedencia
 
-- [COMBATE.md](../../../versions/0.3.0/COMBATE.md): controles, objetivos y presentación aprobados.
-- [Resultado y evidencia de v0.4.0](../../../versions/0.4.0/RESULTADO.md).
+- [COMBATE.md](../../versions/0.3.0/COMBATE.md): controles, objetivos y presentación aprobados.
+- [Resultado y evidencia de v0.4.0](../../versions/0.4.0/RESULTADO.md).
 - [README de la demo](../../../README.md): controles vigentes para el jugador.
 - Entregas: [PR #14](https://github.com/Dioniss97/ShadowsOfKharuun/pull/14) y [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29).
 

@@ -22,11 +22,15 @@
 			"passed": true
 		},
 		{
+			"name": "Forearm visibility seam preserves common normals and skin texture coordinates",
+			"passed": true
+		},
+		{
 			"name": "Sword grip follows the posed palm with a four centimetre diameter",
 			"passed": true
 		},
 		{
-			"name": "Free hand opens for powers and returns to its relaxed pose",
+			"name": "Free hand opens for powers, effect origin follows palm and relaxed pose returns",
 			"passed": true
 		},
 		{
@@ -109,7 +113,7 @@
 	"clean_import": false,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
-	"glb_sha256": "6e016ac872f5398e4fd532b65f17705d94d54e1fe03cc93ed49c82aef6739623",
+	"glb_sha256": "5c11fe876735adc6b628ddd8a2304d9ad3f3eca6583dbc32d049f4f378d5864a",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",

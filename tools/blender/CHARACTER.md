@@ -29,3 +29,9 @@ El rig tiene 76 huesos: los 46 anteriores y 30 articulaciones de dedos. `human_b
 `KhCharacterRig` posa los dedos y gira las muñecas para agarre derecho y poder izquierdo. La empuñadura del jugador mide 4 cm de diámetro y sigue la palma del esqueleto; no se añaden acciones ni se modifican sus tiempos. Los guantes completos siguen siendo trabajo de #45: actualmente las manos visibles son las del cuerpo.
 
 Capturas regionales: `--script res://tools/blender/preview_detail.gd -- --out=res://art/references/character/iterations/quality_04/after`. La [comparativa 04](../../art/references/character/iterations/quality_04/README.md) documenta fuentes, límites y aceptación pendiente.
+
+## Brazos y codos — pase regional 05
+
+`arm_x` compensa la sección del brazo alrededor de su eje existente, usando pesos anatómicos para proteger el torso y transiciones en muñeca/deltoides. El esqueleto sigue teniendo 76 huesos; los antebrazos existentes ahora flexionan de forma moderada. Espada y marcador de poderes siguen las manos posadas.
+
+La unión de `BodyCovered` y `HumanHands` comparte normales ponderadas por área y muestreo UV XZ para los mapas tenues de piel. Esto corrige el salto de sombreado/tono que producía separar las piezas y desenvolverlas por separado. La proyección no sirve como layout anatómico pintado; si se incorpora uno, debe mantener continuidad en esta frontera. La suite comprueba normales y UV del GLB importado. Capturas con `--region=arm`; [comparativa 05](../../art/references/character/iterations/quality_05/README.md).

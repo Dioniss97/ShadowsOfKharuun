@@ -99,6 +99,27 @@ func hand_skin_valid(rig: KhCharacterRig) -> bool:
 				if has_finger: finger_vertices += 1
 	return finger_vertices > 200
 
+func forearm_seam_valid(rig: KhCharacterRig) -> bool:
+	var sides := {"always":{},"body":{}}
+	for instance in rig.mesh_roles:
+		var role: String = rig.mesh_roles[instance]
+		if role not in sides: continue
+		for surface in range(instance.mesh.get_surface_count()):
+			var arrays: Array = instance.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
+			var uv: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
+			for i in range(vertices.size()):
+				if vertices[i].y<1.01 or vertices[i].y>1.12: continue
+				sides[role][vertices[i].snapped(Vector3.ONE*0.00001)] = [normals[i],uv[i]]
+	var shared := 0
+	for position in sides.always:
+		if not sides.body.has(position): continue
+		shared += 1
+		if sides.always[position][0].distance_to(sides.body[position][0])>0.002: return false
+		if sides.always[position][1].distance_to(sides.body[position][1])>0.0001: return false
+	return shared>20
+
 func check_hands(rig: KhCharacterRig) -> void:
 	var all_fingers := true
 	for side in ["L","R"]:
@@ -107,6 +128,7 @@ func check_hands(rig: KhCharacterRig) -> void:
 				all_fingers = all_fingers and rig.skeleton.find_bone("finger_%s_%d_%d" % [side,finger,segment])>=0
 	check(all_fingers,"Thirty articulated finger joints imported")
 	check(hand_skin_valid(rig),"Finger joints deform exported skin with four normalized influences")
+	check(forearm_seam_valid(rig),"Forearm visibility seam preserves common normals and skin texture coordinates")
 	rig.cancel_action()
 	rig.animate(0.0,0.0)
 	var wrist := rig.skeleton.find_bone("hand_L")
@@ -119,10 +141,12 @@ func check_hands(rig: KhCharacterRig) -> void:
 	check(rig.sword.to_global(Vector3(0,0.04,0)).distance_to(right_hand*Vector3(0,.085,.025))<0.001 and is_equal_approx(grip_mesh.top_radius,.02),"Sword grip follows the posed palm with a four centimetre diameter")
 	rig.cast("push")
 	rig.animate(0.4,0.0)
-	var opens := rest_wrist.angle_to(rig.skeleton.get_bone_pose_rotation(wrist))>1.0 and rest_finger.angle_to(rig.skeleton.get_bone_pose_rotation(left_finger))>0.10
+	var left_hand := rig.skeleton.global_transform*rig.skeleton.get_bone_global_pose(wrist)
+	var palm_tracks := rig.left_palm.global_position.distance_to(left_hand*Vector3(0,.085,.015))<0.001
+	var opens := rest_wrist.angle_to(rig.skeleton.get_bone_pose_rotation(wrist))>1.0 and rest_finger.angle_to(rig.skeleton.get_bone_pose_rotation(left_finger))>0.10 and palm_tracks
 	rig.cancel_action()
 	rig.animate(0.0,0.0)
-	check(opens and rest_wrist.angle_to(rig.skeleton.get_bone_pose_rotation(wrist))<0.001,"Free hand opens for powers and returns to its relaxed pose")
+	check(opens and rest_wrist.angle_to(rig.skeleton.get_bone_pose_rotation(wrist))<0.001,"Free hand opens for powers, effect origin follows palm and relaxed pose returns")
 
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))

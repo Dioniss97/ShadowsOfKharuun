@@ -1,0 +1,174 @@
+{
+	"capture": true,
+	"checks": [
+		{
+			"name": "Inventory blocked in menu",
+			"passed": true
+		},
+		{
+			"name": "New game starts with base body/underwear/shoes",
+			"passed": true
+		},
+		{
+			"name": "Imported deforming skeleton has 76 bones including fingers and cape dynamics",
+			"passed": true
+		},
+		{
+			"name": "Thirty articulated finger joints imported",
+			"passed": true
+		},
+		{
+			"name": "Finger joints deform exported skin with four normalized influences",
+			"passed": true
+		},
+		{
+			"name": "Forearm visibility seam preserves common normals and skin texture coordinates",
+			"passed": true
+		},
+		{
+			"name": "Sword grip follows the posed palm with a four centimetre diameter",
+			"passed": true
+		},
+		{
+			"name": "Free hand opens for powers, effect origin follows palm and relaxed pose returns",
+			"passed": true
+		},
+		{
+			"name": "Unknown item cannot be equipped",
+			"passed": true
+		},
+		{
+			"name": "I opens inventory and pauses gameplay",
+			"passed": true
+		},
+		{
+			"name": "Mission clock frozen in inventory",
+			"passed": true
+		},
+		{
+			"name": "Capture inventory_base",
+			"passed": true
+		},
+		{
+			"name": "Mouse equip changes complete outfit including body coverage",
+			"passed": true
+		},
+		{
+			"name": "3D preview and buttons synchronized",
+			"passed": true
+		},
+		{
+			"name": "Fifteen cloth chains and eight torso, waist, arm and leg collision guards enabled",
+			"passed": true
+		},
+		{
+			"name": "Appearance does not change combat statistics",
+			"passed": true
+		},
+		{
+			"name": "Capture inventory_uniform",
+			"passed": true
+		},
+		{
+			"name": "Mouse remove restores all base parts and footwear",
+			"passed": true
+		},
+		{
+			"name": "ESC returns to previous running state",
+			"passed": true
+		},
+		{
+			"name": "Inventory opens over tactical pause",
+			"passed": true
+		},
+		{
+			"name": "I closes and preserves previous tactical pause",
+			"passed": true
+		},
+		{
+			"name": "Skinned character moves with production controller",
+			"passed": true
+		},
+		{
+			"name": "Tunic reacts during real movement",
+			"passed": true
+		},
+		{
+			"name": "Cloth remains finite after movement",
+			"passed": true
+		},
+		{
+			"name": "Separate cape reacts during real movement",
+			"passed": true
+		},
+		{
+			"name": "Cape remains finite after movement",
+			"passed": true
+		},
+		{
+			"name": "Capture temple_uniform",
+			"passed": true
+		},
+		{
+			"name": "Capture temple_base",
+			"passed": true
+		},
+		{
+			"name": "Inventory blocked during dialogue",
+			"passed": true
+		},
+		{
+			"name": "Restart clears wardrobe and inventory pause",
+			"passed": true
+		},
+		{
+			"name": "Inventory blocked after defeat",
+			"passed": true
+		}
+	],
+	"clean_import": false,
+	"engine": "4.7.2-stable (official)",
+	"failures": 0,
+	"glb_sha256": "5c11fe876735adc6b628ddd8a2304d9ad3f3eca6583dbc32d049f4f378d5864a",
+	"human_acceptance": "pending",
+	"renderer": "forward_plus",
+	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",
+	"views": [
+		{
+			"draw_calls": 2293.0,
+			"frame_interval_median_ms": 7.712,
+			"frame_interval_p95_ms": 8.681,
+			"primitives": 5374469.0,
+			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
+			"texture_memory_bytes": 175192720.0,
+			"view": "inventory_base"
+		},
+		{
+			"draw_calls": 2308.0,
+			"frame_interval_median_ms": 8.178,
+			"frame_interval_p95_ms": 8.398,
+			"primitives": 5652294.0,
+			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
+			"texture_memory_bytes": 175192720.0,
+			"view": "inventory_uniform"
+		},
+		{
+			"draw_calls": 249.0,
+			"frame_interval_median_ms": 6.142,
+			"frame_interval_p95_ms": 6.41,
+			"primitives": 1742565.0,
+			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
+			"texture_memory_bytes": 175192720.0,
+			"view": "temple_uniform"
+		},
+		{
+			"draw_calls": 245.0,
+			"frame_interval_median_ms": 6.09,
+			"frame_interval_p95_ms": 6.457,
+			"primitives": 1649877.0,
+			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
+			"texture_memory_bytes": 175192720.0,
+			"view": "temple_base"
+		}
+	]
+}

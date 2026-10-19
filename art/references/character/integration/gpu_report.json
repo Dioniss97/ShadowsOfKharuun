@@ -22,11 +22,15 @@
 			"passed": true
 		},
 		{
+			"name": "Forearm visibility seam preserves common normals and skin texture coordinates",
+			"passed": true
+		},
+		{
 			"name": "Sword grip follows the posed palm with a four centimetre diameter",
 			"passed": true
 		},
 		{
-			"name": "Free hand opens for powers and returns to its relaxed pose",
+			"name": "Free hand opens for powers, effect origin follows palm and relaxed pose returns",
 			"passed": true
 		},
 		{
@@ -125,15 +129,15 @@
 	"clean_import": false,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
-	"glb_sha256": "6e016ac872f5398e4fd532b65f17705d94d54e1fe03cc93ed49c82aef6739623",
+	"glb_sha256": "5c11fe876735adc6b628ddd8a2304d9ad3f3eca6583dbc32d049f4f378d5864a",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",
 	"views": [
 		{
 			"draw_calls": 2293.0,
-			"frame_interval_median_ms": 6.042,
-			"frame_interval_p95_ms": 6.31,
+			"frame_interval_median_ms": 7.712,
+			"frame_interval_p95_ms": 8.681,
 			"primitives": 5374469.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 175192720.0,
@@ -141,8 +145,8 @@
 		},
 		{
 			"draw_calls": 2308.0,
-			"frame_interval_median_ms": 6.02,
-			"frame_interval_p95_ms": 12.188,
+			"frame_interval_median_ms": 8.178,
+			"frame_interval_p95_ms": 8.398,
 			"primitives": 5652294.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 175192720.0,
@@ -150,8 +154,8 @@
 		},
 		{
 			"draw_calls": 249.0,
-			"frame_interval_median_ms": 6.074,
-			"frame_interval_p95_ms": 6.466,
+			"frame_interval_median_ms": 6.142,
+			"frame_interval_p95_ms": 6.41,
 			"primitives": 1742565.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 175192720.0,
@@ -159,8 +163,8 @@
 		},
 		{
 			"draw_calls": 245.0,
-			"frame_interval_median_ms": 6.081,
-			"frame_interval_p95_ms": 6.456,
+			"frame_interval_median_ms": 6.09,
+			"frame_interval_p95_ms": 6.457,
 			"primitives": 1649877.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 175192720.0,

@@ -4,11 +4,13 @@ var rig: KhCharacterRig
 var viewport: SubViewport
 var camera: Camera3D
 var output := "res://art/references/character/iterations/quality_04/after"
+var region := "hand"
 var captures: Array[String] = []
 
 func _initialize() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--out="): output = arg.trim_prefix("--out=")
+		if arg.begins_with("--region="): region = arg.trim_prefix("--region=")
 	call_deferred("capture")
 
 func capture() -> void:
@@ -48,6 +50,7 @@ func capture() -> void:
 		rig.set_uniform("" if outfit == "base" else "umbral")
 		rig.sword.hide()
 		for pose in ["rest", "guard", "attack", "cast"]:
+			rig.sword.visible = region == "arm" and pose in ["guard","attack"]
 			rig.cancel_action()
 			rig.guarding = pose == "guard"
 			rig.phase = 0.0
@@ -62,13 +65,13 @@ func capture() -> void:
 				frame(Vector3(0,1.02,0),offset,2.4)
 				await save_view(outfit+"_"+pose+"_"+angle)
 			for side in ["L", "R"]:
-				var bone_index := rig.skeleton.find_bone("hand_"+side)
-				var focus := rig.skeleton.to_global(rig.skeleton.get_bone_global_pose(bone_index)*Vector3(0,.065,0))
+				var bone_index := rig.skeleton.find_bone(("forearm_" if region == "arm" else "hand_")+side)
+				var focus := rig.skeleton.to_global(rig.skeleton.get_bone_global_pose(bone_index)*Vector3(0,0 if region == "arm" else .065,0))
 				for angle in ["front","side","three_quarter"] if pose == "rest" else ["three_quarter"]:
 					var offset: Vector3 = {"front":Vector3(0,.02,-2),"side":Vector3(2 if side == "R" else -2,.02,0),"three_quarter":Vector3(-1,.12,-2)}[angle]
-					frame(focus,offset,.29)
-					await save_view(outfit+"_hand_"+side+"_"+pose+"_"+angle)
-				if side == "R" and pose in ["guard","attack"]:
+					frame(focus,offset,.90 if region == "arm" else .29)
+					await save_view(outfit+"_"+region+"_"+side+"_"+pose+"_"+angle)
+				if region == "hand" and side == "R" and pose in ["guard","attack"]:
 					rig.sword.show()
 					await save_view(outfit+"_hand_R_"+pose+"_grip")
 					rig.sword.hide()

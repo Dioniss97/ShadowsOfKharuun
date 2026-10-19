@@ -466,6 +466,16 @@ def body_x(x,z=None):
     return math.copysign(v*.85 if v<=.24 else .204+(v-.24)*outer_scale,x)
 
 
+def arm_x(x,z):
+    # Restore the anatomical cross-section around the existing arm centreline.
+    # Fade at the wrist and deltoid; the torso keeps its approved proportions.
+    lower=max(0,min(1,(z-.96)/.14));lower=lower*lower*(3-2*lower)
+    upper=max(0,min(1,(1.57-z)/.15));upper=upper*upper*(3-2*upper)
+    centre=math.copysign(.42,x)
+    corrected=body_x(centre,z)+(x-centre)*.95
+    return body_x(x,z)*(1-lower*upper)+corrected*lower*upper
+
+
 def hand_x(x,z):
     # Shift the hand to the gameplay wrist without flattening its cross-section
     # by the torso's 0.57 width factor. Blend only through the wrist, so this
@@ -473,7 +483,7 @@ def hand_x(x,z):
     t=max(0,min(1,(.98-z)/.10))
     t=t*t*(3-2*t)
     centered=math.copysign(.3066,x)+(x-math.copysign(.42,x))*.94
-    return body_x(x,z)*(1-t)+centered*t
+    return arm_x(x,z)*(1-t)+centered*t
 
 # Slim the old procedural actor proportions while preserving room for its rig.
 for obj in PARTS:
@@ -484,13 +494,49 @@ for obj in PARTS:
                 if abs(v.co.x)>.25:v.co.x=hand_x(v.co.x,v.co.z)
         continue
     for v in obj.data.vertices:
-        v.co.x=body_x(v.co.x,v.co.z)
+        original=v.co.copy()
+        v.co.x=body_x(original.x,original.z)
+        if obj.name=='BodyCovered':
+            amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('upper_arm_','forearm_')))
+            amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
+            v.co.x=v.co.x*(1-amount)+arm_x(original.x,original.z)*amount
 bpy.context.view_layer.objects.active=rig
 bpy.ops.object.mode_set(mode='EDIT')
 for b in arm_data.edit_bones:
     warp=hand_x if b.name.startswith(('hand_','finger_')) else body_x
     b.head.x=warp(b.head.x,b.head.z);b.tail.x=warp(b.tail.x,b.tail.z)
 bpy.ops.object.mode_set(mode='OBJECT')
+
+# Both appearance roles meet on the same forearm loop. Give coincident seam
+# vertices a common area-weighted normal, while keeping body visibility separate.
+skin_parts=[o for o in PARTS if o.name in ['BodyCovered','HumanHands']]
+seam={}
+for obj in skin_parts:
+    obj.data.update()
+    bm=bmesh.new();bm.from_mesh(obj.data)
+    boundary={v.index for e in bm.edges if e.is_boundary for v in e.verts}
+    bm.free()
+    for vertex in obj.data.vertices:
+        if vertex.index in boundary:
+            key=tuple(round(value,5) for value in vertex.co)
+            seam.setdefault(key,[]).append((obj,vertex.index))
+normals={obj.name:[v.normal.copy() for v in obj.data.vertices] for obj in skin_parts}
+for members in seam.values():
+    if len(members)<2 or len({obj.name for obj,_ in members})<2:continue
+    normal=Vector()
+    for obj,index in members:
+        for polygon in obj.data.polygons:
+            if index in polygon.vertices:normal+=polygon.normal*polygon.area
+    normal.normalize()
+    for obj,index in members:normals[obj.name][index]=normal
+for obj in skin_parts:
+    obj.data.normals_split_custom_set_from_vertices(normals[obj.name])
+    # These skin maps contain low-frequency tonal/roughness variation, not
+    # painted anatomical landmarks. A common XZ projection keeps that sampling
+    # continuous across the two visibility roles instead of per-piece islands.
+    for loop in obj.data.loops:
+        p=obj.data.vertices[loop.vertex_index].co
+        obj.data.uv_layers.active.data[loop.index].uv=(p.x*.8+.5,p.z*.5)
 
 bpy.context.scene['asset']='Adventurer: adapted CC0 anatomy and original wardrobe'
 bpy.context.scene['human_acceptance']='pending'

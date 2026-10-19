@@ -19,7 +19,7 @@ Las fichas registran el estado de diseño: propuesta, pendiente de decisión, ap
 El README de cada categoría funciona como índice de sus fichas. No se mantiene una lista única con todos los elementos. Crear una carpeta de categoría y su índice al incorporar la primera ficha de ese tipo; esta taxonomía orienta la ubicación y puede ampliarse cuando aparezca contenido nuevo.
 
 - **foundations/**: principios compartidos de lenguaje visual, narrativa, gameplay, audio e interfaz.
-- **worlds/<world-id>/**: planeta y contexto, clima, biomas, regiones, geografía y ecología. El README del mundo es un hub que enlaza los elementos que lo componen.
+- `worlds/<world-id>/`: planeta y contexto, clima, biomas, regiones, geografía y ecología. El README del mundo es un hub que enlaza los elementos que lo componen.
 - **gameplay/**: sistemas y contenido como combate, exploración, progresión, inventario, habilidades e interactuables.
 - **narrative/**: personajes, facciones, misiones, escenas, diálogos, culturas y otros elementos narrativos.
 - **catalog/**: fichas de objetos concretos de producción, incluso si solo se usan en un mundo: arquitectura, entorno, criaturas, vestuario, props, armas, equipo, vehículos, materiales, animaciones y efectos visuales.
@@ -30,7 +30,7 @@ Las rutas son orientativas: crear solo las carpetas necesarias. Un concepto de a
 
 Cada elemento con identidad y criterios propios tiene su ficha. Una ficha de conjunto puede enlazar fichas de sus piezas: por ejemplo, un uniforme y sus prendas individuales. Las variantes de color se describen dentro de la ficha de la prenda; una variante con identidad de diseño propia puede tener ficha independiente.
 
-Usar nombres de archivo cortos, estables y descriptivos. Por ejemplo: catalog/clothing/pieces/tunica-del-vigia.md. Si una ficha pierde vigencia, conservar la razón y enlazar la ficha o decisión que la sustituye.
+Usar nombres de archivo cortos, estables y descriptivos. Por ejemplo: `catalog/clothing/pieces/tunica-del-vigia.md`. Si una ficha pierde vigencia, conservar la razón y enlazar la ficha o decisión que la sustituye.
 
 ## Versiones e Issues
 

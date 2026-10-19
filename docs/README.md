@@ -1,31 +1,33 @@
 # Documentación
 
-La documentación del proyecto vive aquí, agrupada por su propósito y por entrega. GitHub Issues conserva el estado operativo; estos documentos registran decisiones, guías y evidencia.
+La documentación del repositorio separa referencias comunes vigentes, propuestas/trabajo en GitHub Issues e historial publicado en el changelog. No se crea una carpeta Markdown por cada versión.
 
-## Proyecto
+## Documentación vigente
 
-- [Gestión del desarrollo](project/GESTION_DESARROLLO.md): fuentes de verdad, autorización, issues y rutina de trabajo.
+- [Gestión del desarrollo](project/GESTION_DESARROLLO.md): alcance, Issues, autorización y rutina de trabajo.
 - [Organización técnica](project/ORGANIZACION.md): convenciones del entorno y base estable.
-- [Adopción de Gentle AI/ODD](project/GENTLE_AI.md): instalación, compatibilidad y recuperación del flujo de agentes.
 - [Recursos y procedencia](project/ASSETS.md): inventario, créditos y licencias.
-- [Historial de entregas](project/CHANGELOG.md): resumen de versiones publicadas.
+- [Historial de entregas](project/CHANGELOG.md): resumen cronológico de las entregas efectivamente publicadas.
 
-## Versiones
+## Plantillas de Issues
 
-Cada carpeta contiene solo los documentos que correspondan al alcance real de esa entrega. Una versión puede incluir diseño, gameplay, arte, verificación o una combinación de ellos.
+- [Propuesta de alcance de versión](../.github/ISSUE_TEMPLATE/propuesta-alcance-version.md): propuesta no ejecutable antes de aprobar el alcance.
+- [Trabajo aprobado](../.github/ISSUE_TEMPLATE/funcionalidad-aprobada.md): issue para diseño, implementación o QA aprobados.
+
+## Archivo histórico
 
 - [v0.3.0](versions/0.3.0/): diseño aceptado, referencia técnica de combate, registro histórico y QA.
 - [v0.4.0](versions/0.4.0/): diseño, aprendizajes, QA y resultado de la entrega.
 
-Las propuestas futuras no se convierten aquí en backlog operativo; ese estado vive en GitHub Issues.
+Estas carpetas conservan su evidencia histórica. Las versiones nuevas se planifican y detallan en Issues; solo se añadirá una carpeta de archivo si una entrega requiere conservar evidencia extensa fuera de sus Issues/PRs.
 
-## Diseños reutilizables entre versiones
+## Documentación común y reutilizable
 
-Cuando un diseño canónico se use en varias entregas —por ejemplo, un planeta, edificio o nave— se documentará una sola vez bajo docs/domains/ y las carpetas de versión enlazarán esa fuente. Se creará esa sección cuando haya un documento reutilizable que alojar.
+Mantener una sola referencia en `docs/project/` para cada convención o comportamiento vigente compartido. Cuando cambie una mecánica, actualizar su explicación común; las Issues conservan el alcance, las decisiones de trabajo y su discusión, y el changelog enlaza el resultado publicado.
 
 ## Documentos que permanecen junto a su contexto
 
-- README.md permanece en la raíz como entrada del proyecto.
-- AGENTS.md permanece en la raíz para que Codex y otros agentes carguen sus instrucciones al entrar al repositorio.
-- Las plantillas de issues/PR permanecen en .github/.
+- `README.md` permanece en la raíz como entrada del proyecto.
+- `AGENTS.md` permanece en la raíz para que Codex y otros agentes carguen sus instrucciones al entrar al repositorio.
+- Las plantillas de Issues/PR permanecen en `.github/`.
 - Los README y avisos de licencia de Blender, arte y referencias Sith permanecen junto a sus herramientas o recursos para conservar procedencia y contexto local.

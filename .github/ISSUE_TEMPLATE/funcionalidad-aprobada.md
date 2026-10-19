@@ -1,20 +1,23 @@
 ---
-name: Funcionalidad aprobada
-about: Implementación de un resultado de diseño aprobado, con criterios comprobables
+name: Trabajo aprobado
+about: Diseño, implementación o QA de un resultado aprobado y verificable
 title: ""
 labels: "planificado"
 assignees: ""
 ---
 
 ## Resultado esperado
-Explica el comportamiento observable. Una issue debe corresponder a un resultado verificable.
+Explica el entregable observable de esta tarea: una decisión/especificación aprobada, un cambio de comportamiento, QA u otro resultado verificable.
 
-## Decisiones aprobadas de referencia
-- Dxx: enlace al apartado de diseño vigente
+## Issue de alcance aprobada
+- Enlace: #...
+
+## Especificación y decisiones de esta tarea
+Registra aquí la especificación vigente y actualízala cuando se resuelva una duda. Los comentarios guardan la discusión; el cuerpo de la issue es la referencia actual. Si cambia una convención o comportamiento compartido, actualiza el documento común pertinente.
 
 ## Criterios de aceptación
 - [ ] ...
-- [ ] ...
+- [ ] La decisión o implementación queda comprobada según el alcance de esta issue
 - [ ] Regresiones relevantes verificadas y evidencia enlazada
 
 ## Fuera de alcance

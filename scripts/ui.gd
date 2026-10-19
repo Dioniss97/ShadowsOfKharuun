@@ -274,7 +274,7 @@ func show_game() -> void:
 	legacy_actions.hide()
 	message.hide()
 	hint.show()
-	controls_label.text = "W/S · avanzar/retroceder · A/D · girar\nCLIC · seleccionar / actuar\nESPACIO · táctica  /  ESC · menú"
+	controls_label.text = "W/S · avanzar/retroceder · A/D · girar\nCLIC · seleccionar / actuar · I · inventario\nESPACIO · táctica  /  ESC · menú"
 	speech_time = 0
 	controls_label.add_theme_font_size_override("font_size",11)
 	announce("EL UMBRAL DE CENIZA")
@@ -391,7 +391,7 @@ func _process(delta: float) -> void:
 	var combat = main.level.combat
 	var mission = main.mission
 	var movement_text = "F · liberar movimiento" if combat.engaged or not combat.current_action.is_empty() else "W/S · avanzar/retroceder · A/D · girar"
-	controls_label.text = movement_text + "\nBOTÓN DERECHO · cámara  /  CLIC · seleccionar\nESPACIO · táctica  /  ESC · menú"
+	controls_label.text = movement_text + "\nBOTÓN DERECHO · cámara  /  I · inventario\nESPACIO · táctica  /  ESC · menú"
 	if p.health < last_health: flash.color.a = 0.17
 	last_health = p.health
 	health_bar.value = p.health/p.max_health*100

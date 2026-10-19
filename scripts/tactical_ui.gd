@@ -571,7 +571,7 @@ func _position_target_selectors(combat: Node) -> void:
 
 func _process(delta: float) -> void:
 	var combat = _combat()
-	root.visible = combat != null and main.ui.hud.visible and not main.paused
+	root.visible = combat != null and main.ui.hud.visible and not main.paused and not main.inventory_open
 	if not root.visible:
 		target_selectors.hide()
 		selection_reticle.hide()

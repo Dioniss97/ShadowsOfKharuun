@@ -1,6 +1,6 @@
 # Personaje y vestuario — primera candidata integrada
 
-19-10-2026. Capturas auténticas de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. Esta segunda iteración está en revisión para [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35), [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36), [#37](https://github.com/Dioniss97/ShadowsOfKharuun/issues/37) y [#38](https://github.com/Dioniss97/ShadowsOfKharuun/issues/38). El alcance aprobado está en [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34).
+19-10-2026. Capturas auténticas de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. La tercera iteración de calidad está en revisión para [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35), [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36), [#37](https://github.com/Dioniss97/ShadowsOfKharuun/issues/37) y [#38](https://github.com/Dioniss97/ShadowsOfKharuun/issues/38). El alcance aprobado está en [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34).
 
 ## Apariencias
 
@@ -21,6 +21,24 @@ La túnica ahora incluye una capa posterior integrada, sin ranura independiente.
 | ![Base en templo](integration/temple_base.png) | ![Uniforme en templo](integration/temple_uniform.png) |
 
 Estas vistas del templo congelan la posición y usan una cámara de inspección dentro del nivel real. Las vistas de `studio/` son del GLB en un estudio de Godot, a 960×1200. Hay frontal, posterior, tres cuartos, andar y gesto de poder para ambas apariencias. No son renders Blender ni imágenes generadas.
+
+## Iteración de calidad 03
+
+La anatomía reduce la anchura exterior del hombro de forma gradual; la túnica integra hombreras menos abultadas, mangas con transición de volumen hasta el puño y un cuello algo más bajo. Los materiales generados ahora llevan mapas empaquetados de color y rugosidad de 512²: variación moderada para la tela y el cuero, más tenue para la piel. La paleta de la túnica se aclaró para hacer legibles sus paneles bajo la iluminación del nivel. El objetivo fue mejorar la lectura de silueta, articulación y materiales antes de sumar microdetalle, siguiendo recomendaciones de profesionales sobre forma, proporción y rugosidad.
+
+| Cuerpo base, antes | Cuerpo base, después |
+|---|---|
+| ![Cuerpo base antes de la revisión 03](iterations/quality_02/before/base_three_quarter.png) | ![Cuerpo base después de la revisión 03](iterations/quality_02/after/base_three_quarter.png) |
+
+| Uniforme, antes | Uniforme, después |
+|---|---|
+| ![Uniforme antes de la revisión 03](iterations/quality_02/before/tunic_three_quarter.png) | ![Uniforme después de la revisión 03](iterations/quality_02/after/tunic_three_quarter.png) |
+
+| En el templo, antes | En el templo, después |
+|---|---|
+| ![Uniforme en el templo antes](iterations/quality_02/before/temple_uniform.png) | ![Uniforme en el templo después](iterations/quality_02/after/temple_uniform.png) |
+
+GLB actual: `e57bad1ffba8b9113f6bea5b5204191a06db86ef8b90c14fe595359356eae352` (5.96 MB, 46 huesos, 45.981 vértices, 90.616 triángulos). Reimportación Godot completada; vestuario 22 headless/26 GPU y regresión de misión 213 headless/238 GPU, todo sin fallos con este hash. La aceptación artística y la revisión humana de clipping continúan pendientes.
 
 ## Inventario
 

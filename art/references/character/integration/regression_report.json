@@ -1,5 +1,5 @@
 {
-  "glb_sha256": "70f00c3d6931fea0a3b40d5249d9ad0921b30e4452f40c3380a33f297e85c90d",
+  "glb_sha256": "e57bad1ffba8b9113f6bea5b5204191a06db86ef8b90c14fe595359356eae352",
   "engine": "Godot 4.7.2-stable",
   "gpu": "AMD Radeon RX 6600 / Vulkan Forward+",
   "suites": {

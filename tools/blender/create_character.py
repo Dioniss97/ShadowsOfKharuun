@@ -29,7 +29,27 @@ PARTS = []
 BONES = {}
 
 
-def material(name, color, roughness, weave=False, metal=0):
+def smooth_noise(size, grid, rng):
+    """Small deterministic, smoothly interpolated noise field for packed maps."""
+    samples = rng.normal(0, 1, (grid + 1, grid + 1)).astype(np.float32)
+    axis = np.linspace(0, grid, size, endpoint=False, dtype=np.float32)
+    ix = np.floor(axis).astype(np.int32)
+    iy = ix.copy()
+    fx = axis - ix
+    fy = fx.copy()
+    fx = fx * fx * (3 - 2 * fx)
+    fy = fy * fy * (3 - 2 * fy)
+    x0, x1 = ix, ix + 1
+    y0, y1 = iy, iy + 1
+    a = samples[y0[:, None], x0[None, :]]
+    b = samples[y0[:, None], x1[None, :]]
+    c = samples[y1[:, None], x0[None, :]]
+    d = samples[y1[:, None], x1[None, :]]
+    return ((a * (1 - fx)[None, :] + b * fx[None, :]) * (1 - fy)[:, None]
+            + (c * (1 - fx)[None, :] + d * fx[None, :]) * fy[:, None])
+
+
+def material(name, color, roughness, weave=False, metal=0, skin=False, leather=False):
     mat = bpy.data.materials.new(name)
     mat.diffuse_color = (*color, 1)
     mat.use_nodes = True
@@ -38,35 +58,62 @@ def material(name, color, roughness, weave=False, metal=0):
     bsdf.inputs['Roughness'].default_value = roughness
     bsdf.inputs['Metallic'].default_value = metal
     bsdf.inputs['Specular IOR Level'].default_value = .18 if weave else .28
-    if weave:
+    if weave or skin or leather:
         n = 512
         yy, xx = np.mgrid[:n, :n]
-        rng = np.random.default_rng(42)
-        grain = rng.normal(0, .014, (n, n))
-        grain += .018 * np.sin(xx * math.pi / 2) + .018 * np.sin(yy * math.pi / 2)
+        seed = sum((i + 1) * ord(c) for i, c in enumerate(name))
+        rng = np.random.default_rng(seed)
+        broad = smooth_noise(n, 5, rng)
+        medium = smooth_noise(n, 25, rng)
+        grain = rng.normal(0, 1, (n, n)).astype(np.float32)
+        if skin:
+            value = broad * .020 + medium * .008 + grain * .0035
+            warmth = smooth_noise(n, 11, rng) * .007
+        elif leather:
+            value = broad * .018 + medium * .010 + grain * .006
+            warmth = smooth_noise(n, 18, rng) * .003
+        else:
+            threads = .006 * (np.sin(xx * 2 * math.pi / 11) + np.sin(yy * 2 * math.pi / 11))
+            value = broad * .026 + medium * .012 + grain * .007 + threads
+            warmth = smooth_noise(n, 18, rng) * .004
         # Linear pixels; Blender encodes the exported image with its color space.
         pixels = np.ones((n, n, 4), dtype=np.float32)
-        for c in range(3):
-            pixels[:, :, c] = np.clip(color[c] * (1 + grain), 0, 1)
-        image = bpy.data.images.new(name + '_weave', width=n, height=n)
+        pixels[:, :, 0] = np.clip(color[0] * (1 + value + warmth), 0, 1)
+        pixels[:, :, 1] = np.clip(color[1] * (1 + value), 0, 1)
+        pixels[:, :, 2] = np.clip(color[2] * (1 + value - warmth), 0, 1)
+        image = bpy.data.images.new(name + '_surface', width=n, height=n)
         image.pixels.foreach_set(pixels.ravel())
         image.pack()
         tex = mat.node_tree.nodes.new('ShaderNodeTexImage')
         tex.image = image
         mat.node_tree.links.new(tex.outputs['Color'], bsdf.inputs['Base Color'])
+        rough = np.clip(roughness + broad * (.045 if skin else .035)
+                        + medium * (.018 if weave else .012)
+                        + grain * (.010 if weave else .007), .35, .98)
+        rough_pixels = np.empty((n, n, 4), dtype=np.float32)
+        rough_pixels[:, :, :3] = rough[:, :, None]
+        rough_pixels[:, :, 3] = 1
+        rough_image = bpy.data.images.new(name + '_roughness', width=n, height=n)
+        rough_image.colorspace_settings.name = 'Non-Color'
+        rough_image.pixels.foreach_set(rough_pixels.ravel())
+        rough_image.pack()
+        rough_tex = mat.node_tree.nodes.new('ShaderNodeTexImage')
+        rough_tex.image = rough_image
+        rough_tex.label = 'Subtle surface roughness variation'
+        mat.node_tree.links.new(rough_tex.outputs['Color'], bsdf.inputs['Roughness'])
     return mat
 
 
-SKIN = material('Skin_warm_sand', (.44, .285, .205), .68)
+SKIN = material('Skin_warm_sand', (.44, .285, .205), .66, skin=True)
 HAIR = material('Hair_umber', (.035, .022, .017), .9)
 EYE = material('Eyes_ivory', (.55, .48, .39), .3)
 IRIS = material('Iris_dark_hazel', (.055, .036, .016), .35)
 BASE = material('Base_woven_charcoal', (.065, .07, .073), .9, True)
 BASE_TRIM = material('Base_seams', (.13, .125, .112), .85)
-ROBE = material('Robe_graphite', (.055, .061, .067), .88, True)
-PANEL = material('Robe_slate', (.15, .165, .18), .87, True)
-LINEN = material('Linen_warm_grey', (.26, .235, .19), .94, True)
-LEATHER = material('Leather_dark', (.045, .027, .019), .66, True)
+ROBE = material('Robe_graphite', (.16, .145, .128), .88, True)
+PANEL = material('Robe_slate', (.28, .26, .225), .86, True)
+LINEN = material('Linen_warm_grey', (.36, .335, .285), .92, True)
+LEATHER = material('Leather_dark', (.061, .039, .024), .66, leather=True)
 BRONZE = material('Buckle_old_bronze', (.25, .16, .065), .56, False, .65)
 
 
@@ -181,13 +228,14 @@ for side in [-1,1]: shoe('BaseShoes',side,'base')
 loft('UniformTorso',[(0,0,.92,.255,.174),(0,0,1.06,.244,.163),
  (0,0,1.18,.23,.155),(0,0,1.33,.281,.179),(0,0,1.45,.32,.171),
  (0,0,1.52,.26,.14),(0,0,1.585,.106,.102)],ROBE,'uniform')
-loft('UniformCollar',[(0,0,1.55,.16,.14),(0,0,1.56,.16,.14),(0,0,1.65,.125,.125),(0,0,1.66,.125,.125)],LINEN,'uniform','spine',cap=False)
+loft('UniformCollar',[(0,0,1.545,.15,.135),(0,0,1.56,.15,.135),(0,0,1.615,.132,.126),(0,0,1.625,.13,.125)],LINEN,'uniform','spine',cap=False)
 for side,label in ((-1,'L'),(1,'R')):
-    ellipsoid('UniformShoulder_'+label,(side*.265,0,1.475),(.13,.108,.087),ROBE,'uniform')
-    loft('UniformSleeve_'+label,[(side*.32,0,1.5,.145,.137),(side*.405,0,1.43,.143,.132),
-      (side*.42,.005,1.27,.127,.119),(side*.42,.012,1.19,.116,.106),
-      (side*.42,.018,1.07,.114,.104),(side*.42,.02,.90,.11,.102)],ROBE,'uniform')
-    loft('UniformCuff_'+label,[(side*.42,.02,.895,.112,.104),(side*.42,.02,.944,.115,.105)],PANEL,'uniform',cap=False,subdiv=0)
+    ellipsoid('UniformShoulder_'+label,(side*.278,0,1.474),(.103,.092,.074),ROBE,'uniform')
+    loft('UniformSleeve_'+label,[(side*.30,0,1.49,.103,.106),(side*.355,0,1.445,.116,.112),
+      (side*.402,.002,1.365,.105,.104),(side*.418,.005,1.27,.096,.097),
+      (side*.415,.01,1.205,.092,.094),(side*.405,.014,1.12,.086,.09),
+      (side*.398,.018,1.01,.081,.086),(side*.397,.02,.93,.078,.084)],ROBE,'uniform')
+    loft('UniformCuff_'+label,[(side*.397,.02,.922,.079,.085),(side*.397,.02,.963,.082,.087)],PANEL,'uniform',cap=False,subdiv=0)
     loft('UniformTrousers_'+label,[(side*.16,0,.29,.084,.083),(side*.16,0,.55,.1,.1),
       (side*.16,0,.79,.143,.146),(side*.145,0,.98,.145,.151)],BASE,'uniform')
     shoe('UniformBoots',side,'uniform',True)
@@ -386,9 +434,13 @@ for obj in PARTS:
     bpy.ops.uv.smart_project(angle_limit=1.15,island_margin=.015)
     bpy.ops.object.mode_set(mode='OBJECT')
 
-def body_x(x):
+def body_x(x,z=None):
     v=abs(x)
-    return math.copysign(v*.85 if v<=.24 else .204+(v-.24)*.57,x)
+    outer_scale=.57
+    if z is not None:
+        shoulder=max(0,min(1,(z-1.28)/.12,(1.58-z)/.12))
+        outer_scale-=.08*shoulder
+    return math.copysign(v*.85 if v<=.24 else .204+(v-.24)*outer_scale,x)
 
 # Slim the old procedural actor proportions while preserving room for its rig.
 for obj in PARTS:
@@ -396,14 +448,14 @@ for obj in PARTS:
         # Keep head width while compressing the hands to the arm positions.
         if obj.name=='HumanHeadHands':
             for v in obj.data.vertices:
-                if abs(v.co.x)>.25:v.co.x=body_x(v.co.x)
+                if abs(v.co.x)>.25:v.co.x=body_x(v.co.x,v.co.z)
         continue
     for v in obj.data.vertices:
-        v.co.x=body_x(v.co.x)
+        v.co.x=body_x(v.co.x,v.co.z)
 bpy.context.view_layer.objects.active=rig
 bpy.ops.object.mode_set(mode='EDIT')
 for b in arm_data.edit_bones:
-    b.head.x=body_x(b.head.x);b.tail.x=body_x(b.tail.x)
+    b.head.x=body_x(b.head.x,b.head.z);b.tail.x=body_x(b.tail.x,b.tail.z)
 bpy.ops.object.mode_set(mode='OBJECT')
 
 bpy.context.scene['asset']='Adventurer: adapted CC0 anatomy and original wardrobe'
@@ -440,7 +492,7 @@ report={'source':'art/source/characters/adventurer.blend','glb':'assets/models/c
  'glb_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'bytes':path.stat().st_size,
  'mesh_count':len(copies),'source_mesh_pieces':len(PARTS),'bones':len(BONES),'vertices':sum(len(o.data.vertices) for o in PARTS),
  'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in PARTS),
- 'human_acceptance':'pending','textures':'original procedural weave; body anatomy adapted from MakeHuman CC0',
+  'human_acceptance':'pending','textures':'original packed 512x512 color and roughness maps for skin, woven cloth and leather; anatomy adapted from MakeHuman CC0',
  'anatomy_source_sha256':hashlib.sha256((SOURCE/'vendor/makehuman/base.obj').read_bytes()).hexdigest(),
  'anatomy_source_commit':(SOURCE/'vendor/makehuman/COMMIT.txt').read_text(encoding='utf-8-sig').strip(),
  'roles':{r:[o.name for o in PARTS if o['wardrobe_role']==r] for r in ['always','body','base','uniform']}}

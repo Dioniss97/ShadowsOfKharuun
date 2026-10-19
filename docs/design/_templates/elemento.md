@@ -11,9 +11,9 @@
 
 ¿Qué es este elemento, qué función cumple y qué debe distinguirlo?
 
-## Diseño vigente
+## Diseño actual
 
-Describe el diseño aceptado con el nivel de detalle necesario. Elimina los apartados opcionales que no correspondan.
+Describe el diseño propuesto o aceptado con el nivel de detalle necesario. Distingue con claridad lo aprobado de las alternativas o decisiones aún pendientes. Elimina los apartados opcionales que no correspondan.
 
 ### Forma, escala y materiales
 

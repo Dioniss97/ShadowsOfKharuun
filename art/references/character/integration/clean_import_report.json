@@ -1,0 +1,92 @@
+{
+	"capture": false,
+	"checks": [
+		{
+			"name": "Inventory blocked in menu",
+			"passed": true
+		},
+		{
+			"name": "New game starts with base body/underwear/shoes",
+			"passed": true
+		},
+		{
+			"name": "Imported deforming skeleton has 28 bones",
+			"passed": true
+		},
+		{
+			"name": "Unknown item cannot be equipped",
+			"passed": true
+		},
+		{
+			"name": "I opens inventory and pauses gameplay",
+			"passed": true
+		},
+		{
+			"name": "Mission clock frozen in inventory",
+			"passed": true
+		},
+		{
+			"name": "Mouse equip changes complete outfit including body coverage",
+			"passed": true
+		},
+		{
+			"name": "3D preview and buttons synchronized",
+			"passed": true
+		},
+		{
+			"name": "Cloth chains and four body collision guards enabled",
+			"passed": true
+		},
+		{
+			"name": "Appearance does not change combat statistics",
+			"passed": true
+		},
+		{
+			"name": "Mouse remove restores all base parts and footwear",
+			"passed": true
+		},
+		{
+			"name": "ESC returns to previous running state",
+			"passed": true
+		},
+		{
+			"name": "Inventory opens over tactical pause",
+			"passed": true
+		},
+		{
+			"name": "I closes and preserves previous tactical pause",
+			"passed": true
+		},
+		{
+			"name": "Skinned character moves with production controller",
+			"passed": true
+		},
+		{
+			"name": "Tunic reacts during real movement",
+			"passed": true
+		},
+		{
+			"name": "Cloth remains finite after movement",
+			"passed": true
+		},
+		{
+			"name": "Inventory blocked during dialogue",
+			"passed": true
+		},
+		{
+			"name": "Restart clears wardrobe and inventory pause",
+			"passed": true
+		},
+		{
+			"name": "Inventory blocked after defeat",
+			"passed": true
+		}
+	],
+	"engine": "4.7.2-stable (official)",
+	"failures": 0,
+	"glb_sha256": "bcb5277ebb7362067db36de9f3a1aa6d4e79a3c39506af7f0cb4a8452bbc6359",
+	"human_acceptance": "pending",
+	"renderer": "forward_plus",
+	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",
+	"views": []
+}

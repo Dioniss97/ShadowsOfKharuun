@@ -1,0 +1,19 @@
+{
+  "glb_sha256": "bcb5277ebb7362067db36de9f3a1aa6d4e79a3c39506af7f0cb4a8452bbc6359",
+  "engine": "Godot4.7.2",
+  "gpu": "AMD Radeon RX6600 / Vulkan Forward+",
+  "suites": {
+    "headless": {
+      "checks": 213,
+      "failures": 0,
+      "report": "mission_headless.json"
+    },
+    "gpu": {
+      "checks": 238,
+      "failures": 0,
+      "report": "mission_gpu.json"
+    }
+  },
+  "human_acceptance": "pending",
+  "scope": "Automated scene/input regression and normal bot playthrough; not human QA"
+}

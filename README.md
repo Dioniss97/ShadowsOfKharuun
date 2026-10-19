@@ -1,5 +1,7 @@
 # Shadows of Kharuun
 
+En esta rama se puede probar la candidata **0.5.0-dev**: personaje Blender, ropa base, uniforme completo y pantalla de inventario con **I**. Ejecutar PLAY.bat, iniciar partida y usar Equipar/Retirar. La [galería de producción](art/references/character/README.md) contiene capturas y evidencia; la aceptación artística/jugable se registra en [#35–#38](https://github.com/Dioniss97/ShadowsOfKharuun/milestone/3). La versión estable publicada sigue siendo v0.4.0.
+
 Haz doble clic en **PLAY.bat** y elige **Nueva partida · asalto al templo**. La demo incorpora el **Vigía del Umbral** en ambas posiciones del patio, con un pipeline reproducible Blender–Godot. Evidencia en [QA_0_4_0.md](docs/versions/0.4.0/QA_0_4_0.md) y [comparación dentro del nivel](art/references/vigia_umbral/integration/README.md). Tras derrotar a los tres acólitos, puedes combatir al guardián o escuchar su doctrina y obtener paso pacífico; en ambas rutas debes entrar y reclamar el núcleo del templo para completar la demo.
 
 Versión estable: **[v0.4.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.4.0)**, [PR #29](https://github.com/Dioniss97/ShadowsOfKharuun/pull/29), con presentación integrada aprobada por el usuario el 16 de octubre de 2026. Conserva las reglas de misión/combate de 0.3.0 y añade el primer asset artístico y su pipeline. La entrega anterior y su [QA](docs/versions/0.3.0/QA_0_3_0.md) conservan la etiqueta inmutable [v0.3.0](https://github.com/Dioniss97/ShadowsOfKharuun/tree/v0.3.0).

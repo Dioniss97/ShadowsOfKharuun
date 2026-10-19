@@ -1,0 +1,11 @@
+{
+	"engine": "4.7.2-stable (official)",
+	"glb_sha256": "bcb5277ebb7362067db36de9f3a1aa6d4e79a3c39506af7f0cb4a8452bbc6359",
+	"human_acceptance": "pending",
+	"renderer": "forward_plus",
+	"resolution": [
+		960,
+		1200
+	],
+	"scope": "Real Godot studio captures, not human gameplay QA"
+}

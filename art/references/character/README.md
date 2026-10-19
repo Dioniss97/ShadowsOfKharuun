@@ -51,7 +51,7 @@ Se abre con I durante la partida; Equipar/Retirar cambia a la vez el personaje r
 - [Exportación](export_report.json): hash del GLB, 4 grupos de apariencia, 43 piezas editables, 46 huesos y geometría total de ambas apariencias. Este total no equivale a todos los triángulos visibles simultáneamente.
 - [Prueba de entradas sin render](integration/logic_report.json): 22 comprobaciones, 0 fallos.
 - [Prueba con GPU](integration/gpu_report.json): 26 comprobaciones, 0 fallos, capturas y mediciones por vista.
-- [Importación limpia](integration/clean_import_report.json): copia del proyecto sin caché previa `.godot`; importación limpia y 22 comprobaciones, 0 fallos.
+- [Importación limpia](integration/clean_import_report.json): valida el GLB previo (`70f00c3d6931fea0a3b40d5249d9ad0921b30e4452f40c3380a33f297e85c90d`) con caché `.godot` vacía: 22 comprobaciones, 0 fallos. No se repitió para el hash actual; la reimportación corriente y sus pruebas se detallan arriba.
 - [Estudio](studio/report.json): motor y hash del GLB representado.
 - [Regresión](integration/regression_report.json): 213 comprobaciones headless y 238 con GPU; misión, combate, pausas, diálogo, cámara, derrota/reinicio y recorrido automático hasta victoria. Los informes distinguen ejecución automática de QA humana.
 

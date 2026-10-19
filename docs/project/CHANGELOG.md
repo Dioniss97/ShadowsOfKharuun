@@ -1,6 +1,6 @@
 # Historial de entregas
 
-Las versiones identifican entregas jugables verificadas mediante etiquetas Git inmutables. Las dos primeras etiquetas se asignaron el 12 de octubre de 2026 a sus commits originales, sin reescribir el historial. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
+Cada sección resume una entrega jugable publicada e identifica su tag Git inmutable o commit de entrega; enlaza las PRs e issues pertinentes cuando están disponibles. Las propuestas de alcance, las decisiones y el trabajo en curso se conservan en GitHub Issues; este archivo registra solo lo que efectivamente llegó a una release. Política y rutina en [ORGANIZACION.md](ORGANIZACION.md).
 
 ## 0.4.0 — 2026-10-16
 

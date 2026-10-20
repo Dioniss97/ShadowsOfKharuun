@@ -1,61 +1,70 @@
 # Personaje y vestuario — candidata de producción
 
-20-10-2026. Evidencia real de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. El alcance aprobado está en [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34); trabajo y aceptación en [#35–38](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35) y sus sub-issues. Esta galería conserva evidencia; el estado operativo se mantiene en GitHub.
+20-10-2026. Evidencia de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. Alcance aprobado [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34); producción en [PR #39](https://github.com/Dioniss97/ShadowsOfKharuun/pull/39). El estado operativo y la aceptación viven en GitHub. La candidata no es una entrega estable.
 
-## Apariencias del último pase regional
+## Apariencias actuales
 
 | Sin uniforme | Uniforme completo |
 |---|---|
-| ![Base actual](iterations/quality_09/after/torso/base_rest_three_quarter.png) | ![Uniforme actual](iterations/quality_09/after/torso/tunic_rest_three_quarter.png) |
+| ![Base](studio/base_three_quarter.png) | ![Uniforme](studio/tunic_three_quarter.png) |
 
-La fuente editable adapta anatomía MakeHuman CC0 fijada en el repositorio. Ropa, materiales y rig se producen en Blender. Equipar cambia el conjunto corporal y el calzado; retirar restaura toda la apariencia base. El uniforme incluye mangas y guantes; las manos descubiertas se restauran con la apariencia base.
+Anatomía MakeHuman CC0 fijada y adaptada en Blender; ropa, rig y materiales propios. Equipar cambia túnica, mangas, guantes, pantalón, cinturón, botas y capa en un solo conjunto. Retirar restaura camiseta/shorts/calzado y manos base. Cabeza y sus accesorios quedan aparte.
 
-El GLB y sus cifras actuales están en el [informe de exportación](export_report.json). El pase 11 usa SHA-256 `03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2`: 8.630.804 bytes, 76 huesos, 41 piezas editables, 63.854 vértices y 126.584 triángulos sumando ambas apariencias; no todos se dibujan simultáneamente.
+GLB `03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2`: 8,630,804 bytes, 76 huesos, 41 piezas editables, 63,854 vértices y 126,584 triángulos sumando ambas apariencias. Cuatro roles exportados; las dos apariencias no se dibujan a la vez. [Exportación](export_report.json).
 
-## Comparativas por región
+## Comparaciones por región
 
-Todas usan el mismo encuadre, iluminación y tiempo de acción dentro de cada pareja. Son capturas del GLB ejecutado en Godot, no renders Blender ni imágenes generadas.
+Parejas con cámara, iluminación y protocolo comunes; GLB/render Godot reales. Cada carpeta conserva su hash histórico.
 
-| Pase | Cambio y evidencia |
+| Pase | Evidencia |
 |---|---|
-| [03](iterations/quality_02/) | Hombros, mangas y mapas propios de color/rugosidad 512² para piel, tejido y cuero. |
-| [04 — manos](iterations/quality_04/README.md) | 30 articulaciones de dedos, volumen de mano, continuidad del pulgar y empuñadura; 42 vistas por versión. |
-| [05 — brazos](iterations/quality_05/README.md) | Sección menos aplanada, flexión de codos y continuidad de normales/UV del antebrazo; 38 vistas por versión. |
-| [06 — torso](iterations/quality_06/README.md) | Cobertura anatómica, camiseta con contornos interpolados, cuello y plano pectoral; 28 vistas por versión. |
-| [07 — piernas](iterations/quality_07/README.md) | Sección de piernas, calzado/solape y orientación de suelas; 62 vistas por versión, incluyendo andar, correr, giro y derrota. |
-| [08 — ropa base](iterations/quality_08/README.md) | Shorts continuos, cintura y dobladillos ajustados; 62 vistas por versión. |
-| [09 — uniforme](iterations/quality_09/README.md) | Uniforme anatómico completo y guantes articulados. |
-| [10 — dinámica](iterations/quality_10/README.md) | Movimiento, cobertura y transiciones del faldón y la capa. |
-| [11 — inventario](iterations/quality_11/README.md) | Vista 3D, encuadre, iluminación y sincronización del conjunto. |
+| [03](iterations/quality_02/) | Primer ajuste de hombros y mapas de color/rugosidad. |
+| [04 — manos](iterations/quality_04/README.md) | Dedos articulados, palma/pulgar y empuñadura; 42 vistas por versión. |
+| [05 — brazos](iterations/quality_05/README.md) | Sección, flexión de codos y costura de normales/UV; 38 vistas por versión. |
+| [06 — torso](iterations/quality_06/README.md) | Camiseta anatómica, hombros/cuello/cobertura; 28 vistas por versión. |
+| [07 — piernas](iterations/quality_07/README.md) | Sección, calzado y contrapose de suelas; 62 vistas por versión. |
+| [08 — ropa base](iterations/quality_08/README.md) | Shorts, cintura y dobladillos continuos; 62 vistas por versión. |
+| [09 — uniforme](iterations/quality_09/README.md) | Prendas anatómicas, guantes y normales textiles/cuero; 70 vistas por versión. |
+| [10 — movimiento](iterations/quality_10/README.md) | Anclaje de capa, separación de faldón y amortiguación; 40 vistas por versión. |
+| [11 — inventario](iterations/quality_11/README.md) | Encuadre, relleno, giro y retorno a pausa previa. |
 
-## Inventario y templo
+## Inventario
 
-![Inventario equipado](integration/inventory_uniform.png)
+![Uniforme equipado](integration/inventory_uniform.png)
 
-I abre el inventario durante la partida. Equipar/Retirar sincroniza personaje y vista 3D; I, ESC o Volver cierran. El juego conserva la pausa táctica previa. La UI se captura a 1280×720.
+I abre el inventario en juego; equipar/retirar sincroniza las prendas completas del jugador y su vista 3D. Los giros solo afectan a la vista. I/ESC/Volver conservan la pausa táctica previa. Capturas a 1280×720; [base](integration/inventory_base.png) y [giro](integration/inventory_rotated.png).
 
-| Base en el templo | Uniforme en el templo |
+## Templo y Vigía
+
+| Cámara jugable, posición fijada | Inspección cercana, luz del templo |
 |---|---|
-| ![Base](integration/temple_base.png) | ![Uniforme](integration/temple_uniform.png) |
+| ![Juego](integration/final/uniform_game_camera.png) | ![Cerca](integration/final/uniform_near.png) |
 
-Estas vistas fijan la posición y usan una cámara de inspección dentro del nivel. No sustituyen la revisión jugable a distancia normal. Las imágenes de integración corresponden al pase 11. `studio/` todavía conserva la galería general del pase 04, identificada por su [informe](studio/report.json).
+![Personaje y Vigía](integration/final/uniform_vigia.png)
 
-## Evidencia técnica y sus hashes
+El visor final usa la escena y luz reales sin cambiar materiales ni la escala del Vigía. Las posiciones se fijan para comparar; no es una partida humana. Se conserva también la [apariencia base en cámara jugable](integration/final/base_game_camera.png). Las vistas de estudio, inventario, templo y dinámica final comparten el GLB actual; sus informes explican las cámaras y el alcance.
 
-- [Vestuario sin render](integration/logic_report.json): 33 comprobaciones, 0 fallos, pase 11.
-- [Vestuario GPU](integration/gpu_report.json): 38 comprobaciones, 0 fallos, pase 11; entradas reales y cobertura del conjunto.
-- [Misión del pase 11](iterations/quality_11/mission_headless.json): 213 comprobaciones headless, 0 fallos.
-- [Importación limpia anterior](integration/clean_import_report.json): pase 04, 26/0. No certifica automáticamente los GLB posteriores.
-- [Misión completa anterior](integration/regression_report.json): pase 04, 213 headless/238 GPU sin fallos en ejecuciones finales, recorrido automático hasta victoria. Se conserva también su primer intento GPU con un fallo W+D y posteriores repeticiones satisfactorias; causa indeterminada.
+## Comprobaciones finales
 
-Cada informe registra su alcance; las comparativas regionales conservan informes de sus propios hashes. La importación limpia y la regresión GPU completa se repetirán al fijar el conjunto final. Automatización y capturas no son QA humana.
+| Suite | Comprobaciones | Fallos | Informe |
+|---|---:|---:|---|
+| Vestuario headless | 33 | 0 | [Lógica](integration/logic_report.json) |
+| Vestuario GPU | 38 | 0 | [GPU y métricas](integration/gpu_report.json) |
+| Reimportación vacía + vestuario headless | 33 | 0 | [Importación limpia](integration/clean_import_report.json) |
+| Misma copia limpia + vestuario GPU | 38 | 0 | [GPU limpia](integration/clean_import_gpu_report.json) |
+| Misión headless | 213 | 0 | [Misión](integration/mission_headless.json) |
+| Misión GPU, recorrido automático hasta victoria | 238 | 0 | [Misión GPU](integration/mission_gpu.json) |
+
+[Procedencia y hashes de fuentes](integration/final_provenance.json), [regresión resumida](integration/regression_report.json), [cámaras del templo](integration/final/report.json), [estudio](studio/report.json). La copia limpia se creó sin `.godot`, se importó con editor y se probaron ambas rutas. Se conserva el primer fallo GPU de movimiento del pase 04 y sus repeticiones en aquella carpeta; no se atribuye una causa que no se demostró. El resultado final actual corresponde a estas fuentes.
 
 ## Movimiento, coste y límites
 
-Faldón y capa usan quince cadenas secundarias y ocho cápsulas SpringBone en torso, cintura, brazos superiores y piernas. Es dinámica ósea en tiempo real, sin solver de tela por vértices ni autocolisión completa. La cobertura combina ocultación de regiones interiores, ajuste de prendas y colisionadores locales; no prueba ausencia de clipping en todas las poses.
+Faldón y capa usan quince cadenas SpringBone y ocho cápsulas corporales. Primera fila de capa anclada a espalda, transición gradual y holgura posterior para evitar el faldón observado a través de ella. El vuelo al andar se redujo con rigidez, gravedad y arrastre; la [comparación 10](iterations/quality_10/README.md) registra parámetros, trayectoria y métricas. Es dinámica secundaria por huesos, sin solver textil por vértices ni autocolisión.
 
-El informe GPU recoge 30 intervalos de presentación por vista, mediana/p95, llamadas de dibujo, primitivas y memoria de texturas. Son muestras cortas de esta máquina; incluyen CPU/render/presentación y, en inventario, su vista 3D y la escena subyacente. No aíslan el coste del personaje ni garantizan FPS en otras máquinas.
+El informe GPU registra medianas/p95 de treinta intervalos por vista, draw calls, primitivas y memoria. Incluye CPU, render y presentación; inventario mantiene su vista 3D y la escena subyacente. No aísla el coste del personaje ni garantiza FPS en otros equipos. El visor de dinámica usa además reloj fijo y capturas; sus intervalos no son un benchmark de juego.
 
-La apariencia del cuerpo y del uniforme, su cobertura y su movimiento necesitan aceptación humana. Los informes describen la evidencia técnica disponible; no se declara una entrega estable.
+## Aceptación humana pendiente
 
-Reproducción y referencias técnicas: [pipeline Blender–Godot](../../../tools/blender/CHARACTER.md).
+Las comparaciones permiten revisar proporciones, materiales, cobertura, caída de tela y lectura respecto al Vigía. Se mantiene pendiente valorar esos puntos en movimiento y en una partida real, incluyendo posibles intersecciones entre paneles. No se certifica ausencia de clipping en cualquier pose ni acabado artístico definitivo. Las issues permanecen abiertas y PR #39 en borrador hasta registrar esa aceptación.
+
+[Pipeline y reproducción](../../../tools/blender/CHARACTER.md).

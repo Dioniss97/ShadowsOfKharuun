@@ -86,7 +86,7 @@ func run() -> void:
 		intervals.sort()
 		samples.append({"action":action,"frames":intervals.size(),"max_chain_angle_from_action_start_rad":max_angle,"median_frame_ms":intervals[intervals.size()/2],"p95_frame_ms":intervals[int(intervals.size()*.95)],"invalid_poses":invalid})
 	var report := FileAccess.open(output+"/report.json",FileAccess.WRITE)
-	report.store_string(JSON.stringify({"glb_sha256":FileAccess.get_sha256("res://assets/models/characters/adventurer.glb"),"engine":Engine.get_version_info().string,"renderer":RenderingServer.get_current_rendering_method(),"resolution":[960,1200],"scope":"Controlled root translation/180-degree turn and production actions; presentation intervals include capture stalls, not GPU timings or a benchmark. Actual controller covered separately by wardrobe_runner.","samples":samples,"captures":captures,"invalid_poses":invalid,"human_acceptance":"pending"},"\t")+"\n")
+	report.store_string(JSON.stringify({"glb_sha256":FileAccess.get_sha256("res://assets/models/characters/adventurer.glb"),"character_rig_source_sha256":FileAccess.get_sha256("res://scripts/character_rig.gd"),"engine":Engine.get_version_info().string,"renderer":RenderingServer.get_current_rendering_method(),"resolution":[960,1200],"scope":"Controlled root translation/180-degree turn and production actions; presentation intervals include capture stalls, not GPU timings or a benchmark. Actual controller covered separately by wardrobe_runner.","samples":samples,"captures":captures,"invalid_poses":invalid,"human_acceptance":"pending"},"\t")+"\n")
 	print("CHARACTER_MOTION_OK captures=",captures.size()," invalid=",invalid)
 	quit(0 if invalid == 0 else 1)
 

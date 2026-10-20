@@ -69,3 +69,11 @@ Tejido y cuero incorporan normales tangentes originales de 512², con intensidad
 La capa fija su primera fila a `spine`, compartiendo anclaje con el cierre; un fade suave de unos 22 cm conecta con las nueve cadenas. Los pesos importados se inspeccionan en Godot. El bajo tiene holgura posterior y las cadenas siguen su caída: corrige el faldón visible a través de la capa al detenerse. Se mantienen las quince cadenas totales y ocho cápsulas, sin añadir un solver ni colisión entre prendas.
 
 `preview_motion.gd` registra cuarenta vistas por versión en una trayectoria controlada: reposo, andar, carrera, giro de 180°, guardia, ataque, poder y asentamiento. Usa las acciones de producción y traslada la raíz; no simula entradas del jugador. `wardrobe_runner.gd` cubre por separado el controlador real. Las poses finales de SpringBone deben muestrearse en `modification_processed`, ya que `animate` vuelve a escribir la pose anterior al modificador. [Comparativa 10](../../art/references/character/iterations/quality_10/README.md).
+
+## Capturas integradas y reproducción final
+
+`--script res://tools/blender/preview_temple.gd` captura ambas apariencias con la cámara del jugador, una cámara cercana y una vista junto al Vigía existente. Solo fija posiciones y cámaras en la escena real; no altera iluminación, materiales ni escala de la estatua. Su informe identifica la colocación y el alcance, que no equivale a una partida humana.
+
+Para repetir comprobaciones: `--headless --script res://tests/wardrobe_runner.gd --fixed-fps 60`, y con GPU `--script res://tests/wardrobe_runner.gd --fixed-fps 60 -- --wardrobe-capture`. La misión completa usa `--headless --fixed-fps 60 -- --demo-test` o GPU `--fixed-fps 60 -- --demo-capture`. Ejecutar las suites GPU de una en una. La importación limpia copia proyecto, scripts, escenas, assets y tests a un directorio nuevo sin `.godot`, ejecuta `--headless --editor --import --quit` allí y repite ambas suites de vestuario. Se conserva el GLB de esa revisión; regenerar antes cambia la revisión examinada.
+
+La [galería](../../art/references/character/README.md) enlaza hashes, resultados y límites. La aceptación humana de proporciones, materiales, caída de tela y clipping debe registrarse en las issues antes de una entrega estable.

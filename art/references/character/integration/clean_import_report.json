@@ -18,7 +18,11 @@
 			"passed": true
 		},
 		{
-			"name": "Finger joints deform exported skin with four normalized influences",
+			"name": "Finger joints deform both bare hands and uniform gloves with four normalized influences",
+			"passed": true
+		},
+		{
+			"name": "Forearm visibility seam preserves common normals and skin texture coordinates",
 			"passed": true
 		},
 		{
@@ -26,7 +30,15 @@
 			"passed": true
 		},
 		{
-			"name": "Free hand opens for powers and returns to its relaxed pose",
+			"name": "Free hand opens for powers, effect origin follows palm and relaxed pose returns",
+			"passed": true
+		},
+		{
+			"name": "Cloth and leather import real normal maps with tangent data",
+			"passed": true
+		},
+		{
+			"name": "Imported cape top shares the rigid spine anchor of its clasp",
 			"passed": true
 		},
 		{
@@ -58,11 +70,23 @@
 			"passed": true
 		},
 		{
+			"name": "Preview rotation button turns only the inventory character",
+			"passed": true
+		},
+		{
+			"name": "Reverse rotation restores the preview angle",
+			"passed": true
+		},
+		{
 			"name": "Mouse remove restores all base parts and footwear",
 			"passed": true
 		},
 		{
 			"name": "ESC returns to previous running state",
+			"passed": true
+		},
+		{
+			"name": "Return button closes inventory and resumes the previous running state",
 			"passed": true
 		},
 		{
@@ -75,6 +99,10 @@
 		},
 		{
 			"name": "Skinned character moves with production controller",
+			"passed": true
+		},
+		{
+			"name": "Ankle compensation preserves sole orientation during the existing stride",
 			"passed": true
 		},
 		{
@@ -109,7 +137,7 @@
 	"clean_import": true,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
-	"glb_sha256": "6e016ac872f5398e4fd532b65f17705d94d54e1fe03cc93ed49c82aef6739623",
+	"glb_sha256": "03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",

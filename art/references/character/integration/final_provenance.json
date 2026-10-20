@@ -1,0 +1,27 @@
+{
+  "glb_sha256": "03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2",
+  "character_inventory_source_commit": "5b5b439",
+  "human_acceptance": "pending",
+  "source_hashes_lf_sha256": {
+    "scripts/character_rig.gd": "fda32d6313697da84e9bc8d3e500844e12d8cbef5cf130929ad216d73cf67ae2",
+    "scripts/inventory_ui.gd": "044737aaf6650f9c97ce1ee7594f76758325521d89ca10a6e970ff632033c70a",
+    "tests/wardrobe_runner.gd": "8ce8c8750b17eb75d634d042707b17a297abbdd212cd5664620ccf0cfd6aec78",
+    "tools/blender/create_character.py": "e873c81012d4461aaf78d150033e338b46ab5d1b96d16d8917142ba53ea78150",
+    "tools/blender/human_base.py": "22f0713338bcbbce931ea7fbc05bcc5b03cdf1c3e6748840f22c235a8d7feac1",
+    "tools/blender/preview_temple.gd": "b7fdc4e0cf5b2dda768613ada656431259a7227a18b34060ab4478e08b050376"
+  },
+  "suites": {
+    "logic_report": 33,
+    "gpu_report": 38,
+    "clean_import_report": 33,
+    "clean_import_gpu_report": 38,
+    "mission_headless": 213,
+    "mission_gpu": 238
+  },
+  "fresh_import": {
+    "initial_godot_cache_present": false,
+    "copy": "tools/logs/clean-final-050-refined",
+    "method": "New directory, copy tracked project/scripts/scenes/assets/tests from working tree, editor import then headless and GPU wardrobe; no cache copied."
+  },
+  "scope": "Final automated evidence. Human art/play acceptance required before delivery."
+}

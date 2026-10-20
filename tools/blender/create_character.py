@@ -215,8 +215,14 @@ def shoe(name, side, role, high=False):
       (side*.16,.005,.21 if high else .18,.067,.07)]
     if high:
         rings += [(side*.16,0,.34,.095,.086),(side*.16,0,.44,.095,.082)]
-    loft(name+'_'+label,rings,LEATHER,role)
-    loft(name+'Sole_'+label,[(side*.16,.067,.018,.087,.18),(side*.16,.067,.045,.088,.183)],BASE,role,bone='foot_'+label,subdiv=0)
+    if not high:
+        rings=[(x,y*.85,z,rx*.80,ry*.85) for x,y,z,rx,ry in rings]
+        rings[-2]=(side*.16,-.005,.15,.0528,.085)
+        rings[-1]=(side*.16,-.012,.19,.050,.072)
+        rings.append((side*.16,-.005,.245,.050,.074))
+    loft(name+'_'+label,rings,LEATHER,role,cap=False)
+    loft(name+'Sole_'+label,[(side*.16,.067*(1 if high else .85),.018,.087*(1 if high else .80),.18*(1 if high else .85)),
+                           (side*.16,.067*(1 if high else .85),.045,.088*(1 if high else .80),.183*(1 if high else .85))],BASE,role,bone='foot_'+label,subdiv=0)
     if high:
         loft(name+'Cuff_'+label,[(side*.16,0,.422,.097,.084),(side*.16,0,.447,.097,.084)],LEATHER,role)
 
@@ -387,7 +393,7 @@ for obj in PARTS:
             weights=[('hips',hip),('thigh_'+label,1-hip)]
         elif obj.name.startswith(('BaseShoes','UniformBoots')):
             label='R' if p.x>=0 else 'L'
-            shin=max(0,min(1,(p.z-.13)/.12))
+            shin=max(0,min(1,(p.z-.10)/.08))
             weights=[('shin_'+label,shin),('foot_'+label,1-shin)]
         elif 'panel_index' in obj:
             k=obj['panel_index'];t=max(0,min(1,(1.04-p.z)/.74))
@@ -480,6 +486,14 @@ def arm_x(x,z):
     return body_x(x,z)*(1-lower*upper)+corrected*lower*upper
 
 
+def leg_x(x,z):
+    if abs(x)<.015:return body_x(x,z)
+    upper=max(0,min(1,(.88-z)/.12));upper=upper*upper*(3-2*upper)
+    lower=max(0,min(1,(z-.08)/.08));lower=lower*lower*(3-2*lower)
+    corrected=math.copysign(max(.012,.136+(abs(x)-.16)*.98),x)
+    return body_x(x,z)*(1-upper*lower)+corrected*upper*lower
+
+
 def hand_x(x,z):
     # Shift the hand to the gameplay wrist without flattening its cross-section
     # by the torso's 0.57 width factor. Blend only through the wrist, so this
@@ -507,6 +521,10 @@ for obj in PARTS:
             amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('upper_arm_','forearm_')))
             amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
             v.co.x=v.co.x*(1-amount)+arm_x(original.x,original.z)*amount
+        if obj.name=='BodyCovered' or obj.name.startswith(('BaseShorts_','BaseShortHem_')):
+            amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('thigh_','shin_','foot_')))
+            amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
+            v.co.x=v.co.x*(1-amount)+leg_x(original.x,original.z)*amount
 bpy.context.view_layer.objects.active=rig
 bpy.ops.object.mode_set(mode='EDIT')
 for b in arm_data.edit_bones:

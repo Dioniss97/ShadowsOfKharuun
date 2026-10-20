@@ -193,7 +193,7 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth):
         is_hand=abs(p.x)>.30 and p.z<1.06
         if is_head:head_faces.append(face)
         elif is_hand:hand_faces.append(face)
-        elif p.z>.17 and not ((.80<p.z<1.03 and abs(p.x)<.30) or (.71<p.z<=.80 and abs(p.x)<.09)):exposed.append(face)
+        elif p.z>.20 and not ((.80<p.z<1.03 and abs(p.x)<.30) or (.71<p.z<=.80 and abs(p.x)<.09)):exposed.append(face)
         if original.z>1.92 or (original.y<-.014 and original.z>1.83):scalp.append(face)
     make('HumanHead',head_faces,skin,'always')
     make('HumanHands',hand_faces,skin,'always')
@@ -325,6 +325,14 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth):
         amount=min(max(0,min(1,value/scale)) for value,scale in zip(values,[.015,.015,.25,.12]))
         amount=amount*amount*(3-2*amount)
         vertex.co-=source_normals[original]*(.012*amount)
+        if vertex.co.z<.27:
+            # The boot opening covers this interval. Keep the full foot in the
+            # hidden fitting reference, recess only the rendered ankle inside it.
+            amount=max(0,min(1,(.27-vertex.co.z)/.03))
+            amount=amount*amount*(3-2*amount)
+            centre=.16 if vertex.co.x>=0 else -.16
+            vertex.co.x=centre+(vertex.co.x-centre)*(1-.20*amount)
+            vertex.co.y=-.005+(vertex.co.y+.005)*(1-.20*amount)
     for mh in ['l','r']:
         center=head_deform @ joint(mh+'-eye')
         for suffix,mat,shape,forward in [('Sclera',eye,(.018,.016,.012),0),('Iris',iris,(.006,.002,.006),.015)]:

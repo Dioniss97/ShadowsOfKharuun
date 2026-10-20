@@ -49,30 +49,36 @@ func capture() -> void:
 	for outfit in ["base", "tunic"]:
 		rig.set_uniform("" if outfit == "base" else "umbral")
 		rig.sword.hide()
-		for pose in ["rest", "guard", "attack", "cast"]:
+		for pose in ["rest", "guard", "attack", "cast", "walk", "run", "turn", "defeat"] if region == "leg" else ["rest", "guard", "attack", "cast"]:
+			rig.dying = false
+			rig.position = Vector3.ZERO
+			rig.rotation = Vector3.ZERO
 			rig.sword.visible = region == "arm" and pose in ["guard","attack"]
 			rig.cancel_action()
 			rig.guarding = pose == "guard"
 			rig.phase = 0.0
+			rig.animate(0,0)
 			if pose == "attack": rig.swing()
 			if pose == "cast": rig.cast("push")
-			for i in range(24):
-				rig.animate(1.0/60.0 if pose in ["attack","cast"] else 0.0, 0.0)
+			if pose == "turn": rig.rotation.y = PI/3.0
+			if pose == "defeat": rig.dying = true
+			for i in range(60 if pose == "defeat" else 24):
+				rig.animate(1.0/60.0 if pose in ["attack","cast","walk","run","defeat"] else 0.0, 6.6 if pose == "run" else (3.6 if pose == "walk" else 0.0))
 				await physics_frame
 			camera.size = 2.4
 			for angle in ["front", "three_quarter", "side", "back"] if pose == "rest" else ["three_quarter"]:
 				var offset: Vector3 = {"front":Vector3(0,.16,-5),"three_quarter":Vector3(-3,.43,-5),"side":Vector3(5,.16,0),"back":Vector3(0,.16,5)}[angle]
-				frame(Vector3(0,1.02,0),offset,2.4)
+				frame(rig.global_transform*Vector3(0,1.02,0),offset,2.8 if pose == "defeat" else 2.4)
 				await save_view(outfit+"_"+pose+"_"+angle)
 			for side in [""] if region == "torso" else ["L", "R"]:
-				var bone_name: String = "spine" if region == "torso" else ("forearm_" if region == "arm" else "hand_")+side
+				var bone_name: String = "spine" if region == "torso" else (("thigh_" if region == "leg" else "forearm_") if region in ["leg","arm"] else "hand_")+side
 				var bone_index := rig.skeleton.find_bone(bone_name)
-				var local_focus := Vector3(0,.27,0) if region == "torso" else Vector3(0,0 if region == "arm" else .065,0)
+				var local_focus := Vector3(0,.27,0) if region == "torso" else Vector3(0,.32 if region == "leg" else (0 if region == "arm" else .065),0)
 				var focus := rig.skeleton.to_global(rig.skeleton.get_bone_global_pose(bone_index)*local_focus)
 				var angles := ["front","side","three_quarter","back"] if region == "torso" else ["front","side","three_quarter"]
 				for angle in angles if pose == "rest" else ["three_quarter"]:
 					var offset: Vector3 = {"front":Vector3(0,.02,-2),"side":Vector3(-2 if side == "L" else 2,.02,0),"three_quarter":Vector3(-1,.12,-2),"back":Vector3(0,.02,2)}[angle]
-					frame(focus,offset,1.25 if region == "torso" else (.90 if region == "arm" else .29))
+					frame(focus,offset,1.50 if region == "leg" else (1.25 if region == "torso" else (.90 if region == "arm" else .29)))
 					await save_view(outfit+"_"+region+("_"+side if side != "" else "")+"_"+pose+"_"+angle)
 				if region == "hand" and side == "R" and pose in ["guard","attack"]:
 					rig.sword.show()

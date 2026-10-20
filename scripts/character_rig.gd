@@ -59,8 +59,14 @@ func animate(delta: float, speed: float) -> void:
 	_pose("thigh_L", left_leg.rotation)
 	_pose("thigh_R", right_leg.rotation)
 	# Flex the trailing knee without changing the root movement or action clock.
-	_pose("shin_L", Vector3(-maxf(0.0, -sin(phase))*minf(speed/4.0, 1.0)*0.6, 0, 0))
-	_pose("shin_R", Vector3(-maxf(0.0, sin(phase))*minf(speed/4.0, 1.0)*0.6, 0, 0))
+	var knee_l := -maxf(0.0,-sin(phase))*minf(speed/4.0,1.0)*0.6
+	var knee_r := -maxf(0.0,sin(phase))*minf(speed/4.0,1.0)*0.6
+	_pose("shin_L",Vector3(knee_l,0,0))
+	_pose("shin_R",Vector3(knee_r,0,0))
+	# Counter-rotate the ankle during the existing stride so the sole does not
+	# inherit the whole hip/knee rotation. This is not foot placement IK.
+	_pose("foot_L",Vector3(-left_leg.rotation.x-knee_l,0,0))
+	_pose("foot_R",Vector3(-right_leg.rotation.x-knee_r,0,0))
 	_pose_elbows()
 	_pose_fingers()
 	_fit_grip()

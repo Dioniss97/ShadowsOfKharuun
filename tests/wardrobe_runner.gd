@@ -206,6 +206,12 @@ func run() -> void:
 	for _i in range(8): await physics_frame
 	var pose_after := player.rig.skeleton.get_bone_global_pose(cloth_bone).basis.get_rotation_quaternion()
 	check(start.distance_to(player.global_position)>1.0,"Skinned character moves with production controller")
+	var soles_level := true
+	for side in ["L","R"]:
+		var foot := player.rig.skeleton.find_bone("foot_"+side)
+		var delta := player.rig.skeleton.get_bone_global_pose(foot).basis*player.rig.skeleton.get_bone_global_rest(foot).basis.inverse()
+		soles_level = soles_level and delta.get_rotation_quaternion().angle_to(Quaternion.IDENTITY)<0.003
+	check(soles_level,"Ankle compensation preserves sole orientation during the existing stride")
 	var max_motion := pose_before.angle_to(pose_after)
 	for sample in cloth_samples: max_motion = maxf(max_motion,pose_before.angle_to(sample))
 	print("CLOTH_MAX_ANGLE ",max_motion," samples ",cloth_samples.size())

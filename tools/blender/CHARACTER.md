@@ -41,3 +41,9 @@ La unión de `BodyCovered` y `HumanHands` comparte normales ponderadas por área
 `human_base.py` genera la camiseta base desde la anatomía con cortes interpolados para escote y sisas, conserva el componente torácico, suaviza el contorno sobre una BVH y transfiere pesos baricéntricos antes de dar espesor. La recesión de piel cubierta usa esos mismos campos con transición gradual; sustituye la compresión rectangular anterior. La fuente anatómica completa permanece como referencia oculta.
 
 La unión del cuello conserva anchura y comparte normales/UV entre roles. La cabeza baja 2,5 cm sin cambiar su forma; su clasificación usa pesos de hueso para conservar mandíbula y cuello al ocultar el cuerpo bajo el uniforme. Para revisar frontal, espalda y acciones: `--region=torso`; [comparativa 06](../../art/references/character/iterations/quality_06/README.md).
+
+## Piernas y apoyo — pase regional 07
+
+`leg_x` conserva el eje y recupera sección de piernas, con transición hacia cadera/pie. El calzado base usa menor huella y un solape de tobillo; el pie interior queda oculto y la piel cubierta se retrae. El borde superior sigue la espinilla y la suela el hueso del pie. La contrapose de tobillo mantiene la orientación de la suela durante la zancada existente; no es un sistema de colocación IK ni garantiza contacto con el suelo.
+
+`--region=leg` añade poses de andar, correr, giro y derrota. La [comparativa 07](../../art/references/character/iterations/quality_07/README.md) conserva 62 vistas por versión. La suite de vestuario comprueba la compensación durante movimiento real.

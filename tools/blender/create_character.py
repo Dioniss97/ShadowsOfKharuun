@@ -309,7 +309,9 @@ def cape_surface(t,u):
     half_width=.155+.125*t
     x=u*half_width*2
     pleat=.012*math.cos(u*math.pi*10)*(.35+.65*t)
-    y=-.18-.07*math.sin(math.pi*t)-.015*t-pleat
+    # Keep the lower mantle behind the skirt's .29m rear envelope. Body
+    # capsules do not provide cape-to-skirt self collision.
+    y=-.18-.07*math.sin(math.pi*t)-.015*t-.16*t*t-pleat
     z=1.535-1.23*t-.012*(.5+.5*math.cos(u*math.pi*10))*t**4
     return (x,y,z)
 
@@ -376,8 +378,8 @@ for k in range(6):
     bone('cloth_%d_b'%k,(.32*math.cos(a),.24*math.sin(a),.68),(.38*math.cos(a),.29*math.sin(a),.30),'cloth_%d_a'%k)
 for k in range(cape_chains):
     x=((k/(cape_chains-1))-.5)*.33
-    bone('cape_%d_a'%k,(x,-.145,1.53),(x,-.17,1.06),'spine')
-    bone('cape_%d_b'%k,(x,-.17,1.06),(x,-.205,.57),'cape_%d_a'%k)
+    bone('cape_%d_a'%k,(x,-.145,1.53),(x,-.27,1.06),'spine')
+    bone('cape_%d_b'%k,(x,-.27,1.06),(x,-.34,.57),'cape_%d_a'%k)
 bpy.ops.object.mode_set(mode='OBJECT')
 
 
@@ -512,6 +514,10 @@ for obj in PARTS:
             blend_z=max(0,min(1,(t-.20)/.68))
             weights=[('cape_%d_a'%k0,(1-blend_x)*(1-blend_z)),('cape_%d_a'%k1,blend_x*(1-blend_z)),
                      ('cape_%d_b'%k0,(1-blend_x)*blend_z),('cape_%d_b'%k1,blend_x*blend_z)]
+            # The clasp and first row share a rigid spine anchor. Fade into
+            # secondary motion over the next 22cm, before lower-chain blending.
+            fade=max(0,min(1,(t-.02)/.16));fade=fade*fade*(3-2*fade)
+            weights=[(name,weight*fade) for name,weight in weights]+[('spine',1-fade)]
         else:
             # Region limits stop torso and opposite limbs from stealing weights.
             label='R' if p.x>=0 else 'L'

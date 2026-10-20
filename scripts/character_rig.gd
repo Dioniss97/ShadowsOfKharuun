@@ -71,7 +71,7 @@ func animate(delta: float, speed: float) -> void:
 	_pose_fingers()
 	_fit_grip()
 	if is_instance_valid(cloth):
-		cloth.external_force = global_basis.z*speed*0.018
+		cloth.external_force = global_basis.z*speed*0.006
 
 func _cast_extension() -> float:
 	if attack_time <= 0.0 or action_kind not in ["push", "lightning", "heal", "medkit"]: return 0.0
@@ -145,9 +145,9 @@ func _setup_cloth() -> void:
 		cloth.set_extend_end_bone(i, true)
 		cloth.set_end_bone_length(i, 0.27 if is_cape else 0.38)
 		cloth.set_center_from(i, SpringBoneSimulator3D.CENTER_FROM_WORLD_ORIGIN)
-		cloth.set_stiffness(i, 4.1 if is_cape else 3.2)
-		cloth.set_drag(i, 0.84 if is_cape else 0.8)
-		cloth.set_gravity(i, 0.16 if is_cape else 0.25)
+		cloth.set_stiffness(i, 7.0 if is_cape else 10.5)
+		cloth.set_drag(i, 0.88)
+		cloth.set_gravity(i, 0.65 if is_cape else 1.2)
 		cloth.set_radius(i, 0.022 if is_cape else 0.025)
 		cloth.set_enable_all_child_collisions(i, true)
 	cloth.active = uniform_id != ""

@@ -1,0 +1,66 @@
+{
+  "source": "art/source/characters/adventurer.blend",
+  "glb": "assets/models/characters/adventurer.glb",
+  "glb_sha256": "03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2",
+  "bytes": 8630804,
+  "mesh_count": 4,
+  "source_mesh_pieces": 41,
+  "bones": 76,
+  "vertices": 63854,
+  "triangles": 126584,
+  "human_acceptance": "pending",
+  "textures": "original packed 512x512 color/roughness maps for skin, cloth and leather; subtle tangent normal maps for cloth/leather; anatomy adapted from MakeHuman CC0",
+  "anatomy_source_sha256": "bea00279464133e86b634220cd2774ebf3b470de280d11222a6b2269e4a8d950",
+  "anatomy_source_commit": "a8bc2d54ff0ac92e78ff71431b1023eda42bf482",
+  "roles": {
+    "always": [
+      "HumanHead",
+      "HairCrop",
+      "Eye_l_Sclera",
+      "Eye_l_Iris",
+      "Eye_r_Sclera",
+      "Eye_r_Iris"
+    ],
+    "body": [
+      "BodyCovered"
+    ],
+    "base": [
+      "BaseShoes_L",
+      "BaseShoesSole_L",
+      "BaseShoes_R",
+      "BaseShoesSole_R",
+      "HumanHands",
+      "BaseTop",
+      "BaseShorts",
+      "BaseWaistband",
+      "BaseShortHem"
+    ],
+    "uniform": [
+      "UniformCuff_L",
+      "UniformBoots_L",
+      "UniformBootsSole_L",
+      "UniformBootsCuff_L",
+      "UniformLapel_L",
+      "UniformCuff_R",
+      "UniformBoots_R",
+      "UniformBootsSole_R",
+      "UniformBootsCuff_R",
+      "UniformLapel_R",
+      "UniformBuckle",
+      "UniformPanel_0",
+      "UniformPanel_1",
+      "UniformPanel_2",
+      "UniformPanel_3",
+      "UniformPanel_4",
+      "UniformPanel_5",
+      "UniformCape",
+      "UniformCapeHem",
+      "UniformCapeClasp",
+      "UniformGloves",
+      "UniformJacket",
+      "UniformCollar",
+      "UniformTrousers",
+      "UniformBelt"
+    ]
+  }
+}

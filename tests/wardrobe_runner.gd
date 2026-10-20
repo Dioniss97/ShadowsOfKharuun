@@ -165,6 +165,29 @@ func fabric_normals_valid(rig: KhCharacterRig) -> bool:
 			leather = leather or mat.resource_name.begins_with("Leather_dark")
 	return cloth and leather
 
+func cape_anchor_valid(rig: KhCharacterRig) -> bool:
+	var anchored := 0
+	for instance in rig.mesh_roles:
+		if rig.mesh_roles[instance] != "uniform": continue
+		for surface in range(instance.mesh.get_surface_count()):
+			var mat := instance.get_active_material(surface) as StandardMaterial3D
+			if mat == null or not mat.resource_name.begins_with("Robe_slate"): continue
+			var arrays: Array = instance.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+			var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+			for i in range(vertices.size()):
+				if vertices[i].y<1.528 or vertices[i].z<.08 or absf(vertices[i].x)>.16: continue
+				var spine_weight := 0.0
+				for influence in range(4):
+					var bind := bones[i*4+influence]
+					var name := String(instance.skin.get_bind_name(bind))
+					if name.is_empty(): name = rig.skeleton.get_bone_name(instance.skin.get_bind_bone(bind))
+					if name == "spine": spine_weight += weights[i*4+influence]
+				if spine_weight<.999: return false
+				anchored += 1
+	return anchored>=17
+
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	main = load("res://scenes/main.tscn").instantiate()
@@ -178,6 +201,7 @@ func run() -> void:
 	check(player.rig.skeleton.get_bone_count() == 76,"Imported deforming skeleton has 76 bones including fingers and cape dynamics")
 	check_hands(player.rig)
 	check(fabric_normals_valid(player.rig),"Cloth and leather import real normal maps with tangent data")
+	check(cape_anchor_valid(player.rig),"Imported cape top shares the rigid spine anchor of its clasp")
 	check(not player.wardrobe.equip_uniform("missing"),"Unknown item cannot be equipped")
 	var original_stats := [player.max_health,player.defence,player.attack_bonus]
 	await key(KEY_I)

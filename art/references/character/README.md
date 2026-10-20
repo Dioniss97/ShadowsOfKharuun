@@ -10,7 +10,7 @@
 
 La fuente editable adapta anatomía MakeHuman CC0 fijada en el repositorio. Ropa, materiales y rig se producen en Blender. Equipar cambia el conjunto corporal y el calzado; retirar restaura toda la apariencia base. El uniforme incluye mangas y guantes; las manos descubiertas se restauran con la apariencia base.
 
-El GLB y sus cifras actuales están en el [informe de exportación](export_report.json). El pase 09 usa SHA-256 `f2c59ca94be60f491175e48970b63dc676a44c53c70e7bc558b3cc860b96c159`: 8.636.588 bytes, 76 huesos, 41 piezas editables, 63.854 vértices y 126.584 triángulos sumando ambas apariencias; no todos se dibujan simultáneamente.
+El GLB y sus cifras actuales están en el [informe de exportación](export_report.json). El pase 10 usa SHA-256 `03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2`: 8.630.804 bytes, 76 huesos, 41 piezas editables, 63.854 vértices y 126.584 triángulos sumando ambas apariencias; no todos se dibujan simultáneamente.
 
 ## Comparativas por región
 
@@ -25,6 +25,7 @@ Todas usan el mismo encuadre, iluminación y tiempo de acción dentro de cada pa
 | [07 — piernas](iterations/quality_07/README.md) | Sección de piernas, calzado/solape y orientación de suelas; 62 vistas por versión, incluyendo andar, correr, giro y derrota. |
 | [08 — ropa base](iterations/quality_08/README.md) | Shorts continuos, cintura y dobladillos ajustados; 62 vistas por versión. |
 | [09 — uniforme](iterations/quality_09/README.md) | Uniforme anatómico completo y guantes articulados. |
+| [10 — dinámica](iterations/quality_10/README.md) | Movimiento, cobertura y transiciones del faldón y la capa. |
 
 ## Inventario y templo
 
@@ -36,13 +37,13 @@ I abre el inventario durante la partida. Equipar/Retirar sincroniza personaje y 
 |---|---|
 | ![Base](integration/temple_base.png) | ![Uniforme](integration/temple_uniform.png) |
 
-Estas vistas fijan la posición y usan una cámara de inspección dentro del nivel. No sustituyen la revisión jugable a distancia normal. Las imágenes de integración corresponden al pase 09. `studio/` todavía conserva la galería general del pase 04, identificada por su [informe](studio/report.json).
+Estas vistas fijan la posición y usan una cámara de inspección dentro del nivel. No sustituyen la revisión jugable a distancia normal. Las imágenes de integración corresponden al pase 10. `studio/` todavía conserva la galería general del pase 04, identificada por su [informe](studio/report.json).
 
 ## Evidencia técnica y sus hashes
 
-- [Vestuario sin render](integration/logic_report.json): 29 comprobaciones, 0 fallos, pase 09.
-- [Vestuario GPU](integration/gpu_report.json): 33 comprobaciones, 0 fallos, pase 09; entradas reales y cobertura del conjunto.
-- [Misión del pase 09](iterations/quality_09/mission_headless.json): 213 comprobaciones headless, 0 fallos.
+- [Vestuario sin render](integration/logic_report.json): 30 comprobaciones, 0 fallos, pase 10.
+- [Vestuario GPU](integration/gpu_report.json): 34 comprobaciones, 0 fallos, pase 10; entradas reales y cobertura del conjunto.
+- [Misión del pase 10](iterations/quality_10/mission_headless.json): 213 comprobaciones headless, 0 fallos.
 - [Importación limpia anterior](integration/clean_import_report.json): pase 04, 26/0. No certifica automáticamente los GLB posteriores.
 - [Misión completa anterior](integration/regression_report.json): pase 04, 213 headless/238 GPU sin fallos en ejecuciones finales, recorrido automático hasta victoria. Se conserva también su primer intento GPU con un fallo W+D y posteriores repeticiones satisfactorias; causa indeterminada.
 

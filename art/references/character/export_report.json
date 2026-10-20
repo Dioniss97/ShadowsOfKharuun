@@ -1,8 +1,8 @@
 {
   "source": "art/source/characters/adventurer.blend",
   "glb": "assets/models/characters/adventurer.glb",
-  "glb_sha256": "f2c59ca94be60f491175e48970b63dc676a44c53c70e7bc558b3cc860b96c159",
-  "bytes": 8636588,
+  "glb_sha256": "03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2",
+  "bytes": 8630804,
   "mesh_count": 4,
   "source_mesh_pieces": 41,
   "bones": 76,

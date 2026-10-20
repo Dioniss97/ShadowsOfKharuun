@@ -1,0 +1,121 @@
+{
+  "captures": [
+    "rest_089_front",
+    "rest_089_back",
+    "walk_011_front",
+    "walk_011_back",
+    "walk_029_front",
+    "walk_029_back",
+    "walk_059_front",
+    "walk_059_back",
+    "run_011_front",
+    "run_011_back",
+    "run_029_front",
+    "run_029_back",
+    "run_059_front",
+    "run_059_back",
+    "turn_011_front",
+    "turn_011_back",
+    "turn_029_front",
+    "turn_029_back",
+    "turn_059_front",
+    "turn_059_back",
+    "guard_011_front",
+    "guard_011_back",
+    "guard_029_front",
+    "guard_029_back",
+    "guard_059_front",
+    "guard_059_back",
+    "attack_011_front",
+    "attack_011_back",
+    "attack_029_front",
+    "attack_029_back",
+    "attack_059_front",
+    "attack_059_back",
+    "cast_011_front",
+    "cast_011_back",
+    "cast_029_front",
+    "cast_029_back",
+    "cast_059_front",
+    "cast_059_back",
+    "settle_179_front",
+    "settle_179_back"
+  ],
+  "engine": "4.7.2-stable (official)",
+  "glb_sha256": "03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2",
+  "human_acceptance": "pending",
+  "invalid_poses": 0,
+  "renderer": "forward_plus",
+  "resolution": [
+    960,
+    1200
+  ],
+  "samples": [
+    {
+      "action": "rest",
+      "frames": 90,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.0,
+      "median_frame_ms": 6.063,
+      "p95_frame_ms": 6.211
+    },
+    {
+      "action": "walk",
+      "frames": 90,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.641324460506439,
+      "median_frame_ms": 6.042,
+      "p95_frame_ms": 6.195
+    },
+    {
+      "action": "run",
+      "frames": 90,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.343937814235687,
+      "median_frame_ms": 6.022,
+      "p95_frame_ms": 6.203
+    },
+    {
+      "action": "turn",
+      "frames": 90,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.49459645152092,
+      "median_frame_ms": 6.051,
+      "p95_frame_ms": 6.272
+    },
+    {
+      "action": "guard",
+      "frames": 90,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.641526877880096,
+      "median_frame_ms": 6.059,
+      "p95_frame_ms": 6.184
+    },
+    {
+      "action": "attack",
+      "frames": 90,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.0932814702391624,
+      "median_frame_ms": 6.057,
+      "p95_frame_ms": 6.249
+    },
+    {
+      "action": "cast",
+      "frames": 90,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.00119603995699435,
+      "median_frame_ms": 6.048,
+      "p95_frame_ms": 6.253
+    },
+    {
+      "action": "settle",
+      "frames": 180,
+      "invalid_poses": 0,
+      "max_chain_angle_from_action_start_rad": 0.00119603995699435,
+      "median_frame_ms": 6.059,
+      "p95_frame_ms": 6.155
+    }
+  ],
+  "scope": "Controlled root translation/180-degree turn and production actions; presentation intervals include capture stalls, not GPU timings or a benchmark. Actual controller covered separately by wardrobe_runner.",
+  "character_rig_source_lf_sha256": "fda32d6313697da84e9bc8d3e500844e12d8cbef5cf130929ad216d73cf67ae2"
+}

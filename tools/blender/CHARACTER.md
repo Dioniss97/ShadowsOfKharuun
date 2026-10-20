@@ -63,3 +63,9 @@ Solapas y hebilla se ajustan por proyección y transferencia de pesos. Las dos c
 [Comparativa 09](../../art/references/character/iterations/quality_09/README.md): torso y guantes con idénticas cámaras antes/después. Las pruebas inspeccionan pesos reales de dedos en ambas apariencias y continuidad de la piel base.
 
 Tejido y cuero incorporan normales tangentes originales de 512², con intensidad tenue, además de color/rugosidad. La piel conserva sus mapas anteriores. El importado se comprueba en Godot: material con normal activa, textura real y tangentes de malla; no basta con que el nodo exista en Blender.
+
+## Dinámica y cobertura — pase regional 10
+
+La capa fija su primera fila a `spine`, compartiendo anclaje con el cierre; un fade suave de unos 22 cm conecta con las nueve cadenas. Los pesos importados se inspeccionan en Godot. El bajo tiene holgura posterior y las cadenas siguen su caída: corrige el faldón visible a través de la capa al detenerse. Se mantienen las quince cadenas totales y ocho cápsulas, sin añadir un solver ni colisión entre prendas.
+
+`preview_motion.gd` registra cuarenta vistas por versión en una trayectoria controlada: reposo, andar, carrera, giro de 180°, guardia, ataque, poder y asentamiento. Usa las acciones de producción y traslada la raíz; no simula entradas del jugador. `wardrobe_runner.gd` cubre por separado el controlador real. Las poses finales de SpringBone deben muestrearse en `modification_processed`, ya que `animate` vuelve a escribir la pose anterior al modificador. [Comparativa 10](../../art/references/character/iterations/quality_10/README.md).

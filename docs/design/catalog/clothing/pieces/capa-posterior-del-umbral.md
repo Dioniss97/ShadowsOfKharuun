@@ -12,6 +12,8 @@ Paño trasero de tela grafito que nace de los hombros y cae hasta la pantorrilla
 
 Nueve cadenas secundarias distribuidas por el paño aportan inercia durante el desplazamiento. Ocho cápsulas auxiliares cubren torso, cintura, brazos superiores y piernas para reducir penetraciones. Es dinámica secundaria por huesos; no representa la simulación completa de una malla textil con autocolisión.
 
+El borde superior comparte el anclaje rígido del cierre a la espalda; los siguientes 22 cm transicionan hacia las cadenas secundarias. El bajo conserva holgura posterior respecto al faldón y las cadenas siguen esa caída. Esta separación reduce la penetración observada al detenerse; las cápsulas corporales no constituyen colisión entre prendas.
+
 ## Criterios observables
 
 Se muestra y retira junto al uniforme entero. La capa sigue el rig, reacciona al correr y girar, permanece finita y no presenta penetraciones llamativas en las poses/transiciones revisadas. La evaluación técnica no sustituye la aceptación visual humana.

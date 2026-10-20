@@ -18,7 +18,7 @@
 			"passed": true
 		},
 		{
-			"name": "Finger joints deform exported skin with four normalized influences",
+			"name": "Finger joints deform both bare hands and uniform gloves with four normalized influences",
 			"passed": true
 		},
 		{
@@ -31,6 +31,10 @@
 		},
 		{
 			"name": "Free hand opens for powers, effect origin follows palm and relaxed pose returns",
+			"passed": true
+		},
+		{
+			"name": "Cloth and leather import real normal maps with tangent data",
 			"passed": true
 		},
 		{
@@ -133,45 +137,45 @@
 	"clean_import": false,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
-	"glb_sha256": "0fd9285f725eefe64c72626d84cc0acd2c866d8ca67eae3cde6df7148611ad29",
+	"glb_sha256": "f2c59ca94be60f491175e48970b63dc676a44c53c70e7bc558b3cc860b96c159",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",
 	"views": [
 		{
-			"draw_calls": 2293.0,
-			"frame_interval_median_ms": 7.579,
-			"frame_interval_p95_ms": 8.483,
-			"primitives": 5407373.0,
+			"draw_calls": 2299.0,
+			"frame_interval_median_ms": 6.06,
+			"frame_interval_p95_ms": 6.13,
+			"primitives": 5407353.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
-			"texture_memory_bytes": 175192720.0,
+			"texture_memory_bytes": 180435600.0,
 			"view": "inventory_base"
 		},
 		{
-			"draw_calls": 2308.0,
-			"frame_interval_median_ms": 8.049,
-			"frame_interval_p95_ms": 8.994,
-			"primitives": 5650422.0,
+			"draw_calls": 2314.0,
+			"frame_interval_median_ms": 5.834,
+			"frame_interval_p95_ms": 8.719,
+			"primitives": 5544922.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
-			"texture_memory_bytes": 175192720.0,
+			"texture_memory_bytes": 180435600.0,
 			"view": "inventory_uniform"
 		},
 		{
-			"draw_calls": 249.0,
-			"frame_interval_median_ms": 6.162,
-			"frame_interval_p95_ms": 6.622,
-			"primitives": 1741941.0,
+			"draw_calls": 251.0,
+			"frame_interval_median_ms": 6.063,
+			"frame_interval_p95_ms": 6.131,
+			"primitives": 1706781.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
-			"texture_memory_bytes": 175192720.0,
+			"texture_memory_bytes": 180435600.0,
 			"view": "temple_uniform"
 		},
 		{
-			"draw_calls": 245.0,
-			"frame_interval_median_ms": 6.071,
-			"frame_interval_p95_ms": 6.369,
+			"draw_calls": 247.0,
+			"frame_interval_median_ms": 6.065,
+			"frame_interval_p95_ms": 6.13,
 			"primitives": 1660845.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
-			"texture_memory_bytes": 175192720.0,
+			"texture_memory_bytes": 180435600.0,
 			"view": "temple_base"
 		}
 	]

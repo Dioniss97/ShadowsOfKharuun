@@ -8,7 +8,7 @@ La fuente conserva piezas editables; la exportación reúne copias en cuatro gru
 
 KhCharacterRig conserva los pivotes/reloj de KhRig y traduce sus acciones a poses del Skeleton3D. Las rotaciones locales de reposo se mantienen al aplicar el delta de animación. Se conservan arma derecha, palma izquierda y eventos de daño del combate.
 
-La túnica integra seis paneles sueltos con bordes solapados y una capa posterior. Godot aplica seis cadenas de huesos secundarios al faldón y nueve a la capa, con ocho cápsulas SpringBone ligadas a torso, cintura, brazos superiores y piernas. El cuerpo oculto bajo la chaqueta/pantalón se desactiva al equipar el conjunto; cabeza y manos se conservan. El movimiento usa dinámica secundaria ósea en tiempo real, no un solver por vértice, y las cápsulas SpringBone no son cuerpos de PhysicsServer3D ni garantizan autocolisión completa. La capa tiene hombros fijados al torso, pliegues anchos y borde reforzado; el movimiento y los posibles clipping se revisan con las poses y transiciones reales.
+La túnica integra seis paneles sueltos con bordes solapados y una capa posterior. Godot aplica seis cadenas de huesos secundarios al faldón y nueve a la capa, con ocho cápsulas SpringBone ligadas a torso, cintura, brazos superiores y piernas. El cuerpo oculto y el conjunto base se desactivan al equipar; la cabeza permanece y las manos base se sustituyen por guantes. El movimiento usa dinámica secundaria ósea en tiempo real, no un solver por vértice, y las cápsulas SpringBone no son cuerpos de PhysicsServer3D ni garantizan autocolisión completa. La capa tiene hombros fijados al torso, pliegues anchos y borde reforzado; el movimiento y los posibles clipping se revisan con las poses y transiciones reales.
 
 La estructura de hombros mantiene anclada la tela y reserva la deformación para las cadenas del faldón y la espalda. En Blender, el pinning por grupos de vértices, las colisiones y el bake son el flujo de referencia para una simulación de tela offline; no se usa para esta apariencia ejecutada en tiempo real. Se mantiene una silueta legible, pliegues amplios y pocos acentos para conservar la escala visual del Vigía.
 
@@ -26,7 +26,7 @@ El rig tiene 76 huesos: los 46 anteriores y 30 articulaciones de dedos. `human_b
 
 `HumanHands` es una pieza fuente separada de la cabeza, con subdivisión de un nivel y frontera de antebrazo fijada mediante creases. El GLB conserva los cuatro roles anteriores. La selección de manos usa coordenadas retargeteadas para incluir el pulgar entero; la recesión de piel bajo ropa se limita a vértices dominados por cadera/columna. El warp local desplaza la mano sin la compresión transversal del torso.
 
-`KhCharacterRig` posa los dedos y gira las muñecas para agarre derecho y poder izquierdo. La empuñadura del jugador mide 4 cm de diámetro y sigue la palma del esqueleto; no se añaden acciones ni se modifican sus tiempos. Los guantes completos siguen siendo trabajo de #45: actualmente las manos visibles son las del cuerpo.
+`KhCharacterRig` posa los dedos y gira las muñecas para agarre derecho y poder izquierdo. La empuñadura del jugador mide 4 cm de diámetro y sigue la palma del esqueleto; no se añaden acciones ni se modifican sus tiempos. En el pase 04 se conservaban las manos del cuerpo; desde el pase 09, #45 incorpora guantes del uniforme y mantiene las manos descubiertas en la apariencia base.
 
 Capturas regionales: `--script res://tools/blender/preview_detail.gd -- --out=res://art/references/character/iterations/quality_04/after`. La [comparativa 04](../../art/references/character/iterations/quality_04/README.md) documenta fuentes, límites y aceptación pendiente.
 
@@ -53,3 +53,13 @@ La unión del cuello conserva anchura y comparte normales/UV entre roles. La cab
 Los shorts usan el mismo generador anatómico de prendas que la camiseta, con holgura y espesor propios. Cintura y dobladillos tienen contornos interpolados y pesos transferidos; los dos dobladillos se conservan como dos componentes de una pieza editable. La pelvis y el muslo completos quedan debajo, con recesión gradual de la piel cubierta. Se eliminan las antiguas piezas de shorts que se atravesaban y sus aros separados del cuerpo.
 
 El GLB conserva los cuatro roles de apariencia. [Comparativa 08](../../art/references/character/iterations/quality_08/README.md), con capturas de reposo, zancada, carrera y derrota.
+
+## Uniforme completo y guantes — pase regional 09
+
+Chaqueta con mangas, cuello, pantalón y cinturón se generan sobre la anatomía con holguras propias. Los guantes derivan de las manos, comparten sus treinta articulaciones y alisan detalles pequeños antes de subdividir. `HeadVisible` conserva cabeza/cuello; `BaseOutfit` incluye manos descubiertas y ropa base; `UniformOutfit` reúne todas las prendas del uniforme, guantes incluidos. Se mantienen cuatro roles y 76 huesos.
+
+Solapas y hebilla se ajustan por proyección y transferencia de pesos. Las dos capas de las solapas se desplazan juntas para conservar espesor; en el cruce se separan ligeramente. Los paneles del faldón se ajustan al cinturón, y el borde superior de la capa y su cierre al dorso de la chaqueta. Los puños tienen vuelta geométrica y las botas cubren el bajo del pantalón. La paleta conserva grafito/pizarra, cuero y bronce contenido.
+
+[Comparativa 09](../../art/references/character/iterations/quality_09/README.md): torso y guantes con idénticas cámaras antes/después. Las pruebas inspeccionan pesos reales de dedos en ambas apariencias y continuidad de la piel base.
+
+Tejido y cuero incorporan normales tangentes originales de 512², con intensidad tenue, además de color/rugosidad. La piel conserva sus mapas anteriores. El importado se comprueba en Godot: material con normal activa, textura real y tangentes de malla; no basta con que el nodo exista en Blender.

@@ -14,6 +14,7 @@ import bpy
 import bmesh
 import numpy as np
 from mathutils import Vector
+from mathutils.bvhtree import BVHTree
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(Path(__file__).parent))
@@ -101,6 +102,21 @@ def material(name, color, roughness, weave=False, metal=0, skin=False, leather=F
         rough_tex.image = rough_image
         rough_tex.label = 'Subtle surface roughness variation'
         mat.node_tree.links.new(rough_tex.outputs['Color'], bsdf.inputs['Roughness'])
+        if weave or leather:
+            height=medium*.025+grain*(.008 if leather else .003)
+            if weave:height+=.035*(np.sin(xx*2*math.pi/11)+np.sin(yy*2*math.pi/11))
+            dy,dx=np.gradient(height)
+            normals=np.stack((-dx*3,-dy*3,np.ones_like(dx)),axis=2)
+            normals/=np.linalg.norm(normals,axis=2,keepdims=True)
+            normal_pixels=np.ones((n,n,4),dtype=np.float32)
+            normal_pixels[:,:,:3]=normals*.5+.5
+            normal_image=bpy.data.images.new(name+'_normal',width=n,height=n)
+            normal_image.colorspace_settings.name='Non-Color'
+            normal_image.pixels.foreach_set(normal_pixels.ravel());normal_image.pack()
+            normal_tex=mat.node_tree.nodes.new('ShaderNodeTexImage');normal_tex.image=normal_image
+            normal_map=mat.node_tree.nodes.new('ShaderNodeNormalMap');normal_map.inputs['Strength'].default_value=.35
+            mat.node_tree.links.new(normal_tex.outputs['Color'],normal_map.inputs['Color'])
+            mat.node_tree.links.new(normal_map.outputs['Normal'],bsdf.inputs['Normal'])
     return mat
 
 
@@ -110,8 +126,8 @@ EYE = material('Eyes_ivory', (.55, .48, .39), .3)
 IRIS = material('Iris_dark_hazel', (.055, .036, .016), .35)
 BASE = material('Base_woven_charcoal', (.065, .07, .073), .9, True)
 BASE_TRIM = material('Base_seams', (.13, .125, .112), .85)
-ROBE = material('Robe_graphite', (.16, .145, .128), .88, True)
-PANEL = material('Robe_slate', (.28, .26, .225), .86, True)
+ROBE = material('Robe_graphite', (.14, .155, .175), .88, True)
+PANEL = material('Robe_slate', (.24, .27, .30), .86, True)
 LINEN = material('Linen_warm_grey', (.36, .335, .285), .92, True)
 LEATHER = material('Leather_dark', (.061, .039, .024), .66, leather=True)
 BRONZE = material('Buckle_old_bronze', (.25, .16, .065), .56, False, .65)
@@ -214,17 +230,18 @@ def shoe(name, side, role, high=False):
       (side*.16,.06,.1,.081,.168),(side*.16,.025,.15,.066,.089),
       (side*.16,.005,.21 if high else .18,.067,.07)]
     if high:
-        rings += [(side*.16,0,.34,.095,.086),(side*.16,0,.44,.095,.082)]
+        rings=[(x,y*.92,z,rx*.90,ry*.92) for x,y,z,rx,ry in rings]
+        rings += [(side*.16,0,.34,.095,.086),(side*.16,0,.44,.105,.10)]
     if not high:
         rings=[(x,y*.85,z,rx*.80,ry*.85) for x,y,z,rx,ry in rings]
         rings[-2]=(side*.16,-.005,.15,.0528,.085)
         rings[-1]=(side*.16,-.012,.19,.050,.072)
         rings.append((side*.16,-.005,.245,.050,.074))
     loft(name+'_'+label,rings,LEATHER,role,cap=False)
-    loft(name+'Sole_'+label,[(side*.16,.067*(1 if high else .85),.018,.087*(1 if high else .80),.18*(1 if high else .85)),
-                           (side*.16,.067*(1 if high else .85),.045,.088*(1 if high else .80),.183*(1 if high else .85))],BASE,role,bone='foot_'+label,subdiv=0)
+    loft(name+'Sole_'+label,[(side*.16,.067*(.92 if high else .85),.018,.087*(.90 if high else .80),.18*(.92 if high else .85)),
+                           (side*.16,.067*(.92 if high else .85),.045,.088*(.90 if high else .80),.183*(.92 if high else .85))],BASE,role,bone='foot_'+label,subdiv=0)
     if high:
-        loft(name+'Cuff_'+label,[(side*.16,0,.422,.097,.084),(side*.16,0,.447,.097,.084)],LEATHER,role)
+        loft(name+'Cuff_'+label,[(side*.16,0,.422,.107,.103),(side*.16,0,.447,.107,.103)],LEATHER,role)
 
 
 for side in [-1,1]: shoe('BaseShoes',side,'base')
@@ -241,7 +258,8 @@ for side,label in ((-1,'L'),(1,'R')):
       (side*.402,.002,1.365,.105,.104),(side*.418,.005,1.27,.096,.097),
       (side*.415,.01,1.205,.092,.094),(side*.405,.014,1.12,.086,.09),
       (side*.398,.018,1.01,.081,.086),(side*.397,.02,.93,.078,.084)],ROBE,'uniform')
-    loft('UniformCuff_'+label,[(side*.397,.02,.922,.079,.085),(side*.397,.02,.963,.082,.087)],PANEL,'uniform',cap=False,subdiv=0)
+    loft('UniformCuff_'+label,[(side*.42,.02,.935,.057,.052),(side*.42,.02,.975,.060,.055),
+      (side*.42,.02,.975,.052,.047),(side*.42,.02,.935,.049,.044),(side*.42,.02,.935,.057,.052)],PANEL,'uniform','forearm_'+label,cap=False,subdiv=0)
     loft('UniformTrousers_'+label,[(side*.16,0,.29,.084,.083),(side*.16,0,.55,.1,.1),
       (side*.16,0,.79,.143,.146),(side*.145,0,.98,.145,.151)],BASE,'uniform')
     shoe('UniformBoots',side,'uniform',True)
@@ -365,10 +383,88 @@ bpy.ops.object.mode_set(mode='OBJECT')
 
 # Replace the construction mannequin with anatomically authored CC0 topology.
 for obj in list(PARTS):
-    if obj['wardrobe_role'] in ['body','always'] or obj.name.startswith(('BaseTop','BaseShorts','BaseShortHem','BaseWaistband')):
+    if obj['wardrobe_role'] in ['body','always'] or obj.name.startswith(('BaseTop','BaseShorts','BaseShortHem','BaseWaistband','UniformJacket','UniformCollar','UniformTrousers','UniformBelt')):
         PARTS.remove(obj);bpy.data.objects.remove(obj,do_unlink=True)
-human,IMPORTED_WEIGHTS=build_human(ROOT,BONES,rig,SKIN,HAIR,EYE,IRIS,BASE,BASE_TRIM)
+human,IMPORTED_WEIGHTS=build_human(ROOT,BONES,rig,SKIN,HAIR,EYE,IRIS,BASE,BASE_TRIM,ROBE,LEATHER)
 PARTS.extend(human)
+
+
+def surface_tree(obj):
+    obj.data.update();obj.data.calc_loop_triangles()
+    triangles=[tuple(t.vertices) for t in obj.data.loop_triangles]
+    return BVHTree.FromPolygons([v.co for v in obj.data.vertices],triangles,all_triangles=True),triangles
+
+
+def surface_skin(obj,triangles,index,point):
+    ids=triangles[index];a,b,c=(obj.data.vertices[i].co for i in ids)
+    ab,ac,ap=b-a,c-a,point-a
+    denom=ab.dot(ab)*ac.dot(ac)-ab.dot(ac)**2
+    if abs(denom)<1e-12:return IMPORTED_WEIGHTS[obj.name][ids[0]]
+    v=(ac.dot(ac)*ap.dot(ab)-ab.dot(ac)*ap.dot(ac))/denom
+    w=(ab.dot(ab)*ap.dot(ac)-ab.dot(ac)*ap.dot(ab))/denom
+    merged={}
+    for vertex,factor in zip(ids,[1-v-w,v,w]):
+        for name,weight in IMPORTED_WEIGHTS[obj.name][vertex]:merged[name]=merged.get(name,0)+weight*factor
+    return [(name,value) for name,value in merged.items() if value>.00001]
+
+
+# Fit the existing trims and cloth anchors to the new continuous garments.
+jacket=next(o for o in PARTS if o.name=='UniformJacket')
+belt=next(o for o in PARTS if o.name=='UniformBelt')
+jacket_tree,jacket_triangles=surface_tree(jacket)
+belt_tree,belt_triangles=surface_tree(belt)
+for obj in PARTS:
+    if obj.name.startswith('UniformLapel_'):
+        transferred={}
+        count=len(obj.data.vertices)//2
+        for i in range(count):
+            vertex=obj.data.vertices[i]
+            hit,normal,index,distance=jacket_tree.ray_cast(Vector((vertex.co.x,.6,vertex.co.z)),Vector((0,-1,0)))
+            if hit is None:
+                transferred[i]=[('spine',1)];transferred[i+count]=[('spine',1)];continue
+            lift=.008+(.007*max(0,1-abs(vertex.co.x)/.07) if obj.name.endswith('_L') else 0)
+            shift=hit+normal*lift-vertex.co
+            obj.data.vertices[i].co+=shift;obj.data.vertices[i+count].co+=shift
+            values=surface_skin(jacket,jacket_triangles,index,hit)
+            transferred[i]=values;transferred[i+count]=values
+        IMPORTED_WEIGHTS[obj.name]=transferred
+    elif obj.name=='UniformBuckle':
+        hit,normal,index,distance=belt_tree.ray_cast(Vector((0,.6,1.057)),Vector((0,-1,0)))
+        if hit is not None:
+            centre_y=(min(v.co.y for v in obj.data.vertices)+max(v.co.y for v in obj.data.vertices))/2
+            for vertex in obj.data.vertices:vertex.co.y+=hit.y+.014-centre_y
+            IMPORTED_WEIGHTS[obj.name]={v.index:surface_skin(belt,belt_triangles,index,hit) for v in obj.data.vertices}
+    elif obj.name.startswith('UniformPanel_'):
+        count=len(obj.data.vertices)//2
+        for i in range(count):
+            p=obj.data.vertices[i].co
+            t=max(0,min(1,(1.05-p.z)/.11))
+            if t>=1:continue
+            direction=Vector((p.x,p.y,0)).normalized()
+            hit,normal,index,distance=belt_tree.ray_cast(direction*.6+Vector((0,0,1.057)),-direction)
+            if hit is None:continue
+            target=Vector((hit.x,hit.y,p.z))-direction*.005
+            shift=(target-p)*(1-t)
+            obj.data.vertices[i].co+=shift;obj.data.vertices[i+count].co+=shift
+    elif obj.name=='UniformCape':
+        count=len(obj.data.vertices)//2
+        for i in range(count):
+            p=obj.data.vertices[i].co
+            t=max(0,min(1,(1.535-p.z)/.25))
+            if t>=1:continue
+            hit,normal,index,distance=jacket_tree.ray_cast(Vector((p.x,-.6,p.z)),Vector((0,1,0)))
+            if hit is None:continue
+            shift=(hit+normal*.008-p)*(1-t)
+            obj.data.vertices[i].co+=shift;obj.data.vertices[i+count].co+=shift
+
+cape=next(o for o in PARTS if o.name=='UniformCape')
+cape_tree,_cape_triangles=surface_tree(cape)
+clasp=next(o for o in PARTS if o.name=='UniformCapeClasp')
+centre_z=sum(v.co.z for v in clasp.data.vertices)/len(clasp.data.vertices)
+hit,normal,index,distance=cape_tree.ray_cast(Vector((0,-.6,centre_z)),Vector((0,1,0)))
+if hit is not None:
+    centre_y=(min(v.co.y for v in clasp.data.vertices)+max(v.co.y for v in clasp.data.vertices))/2
+    for vertex in clasp.data.vertices:vertex.co.y+=hit.y-.009-centre_y
 
 
 def segdist(p,a,b):
@@ -431,7 +527,7 @@ for obj in PARTS:
             weights=[(n,w/total) for n,w in vals]
         for n,w in weights:
             if w>.0001: groups[n].add([v.index],w,'REPLACE')
-    if obj.name=='HumanHands':
+    if obj.name in ['HumanHands','UniformGloves']:
         # The authored topology carries the silhouette; one subdivision softens
         # palm/finger facets and interpolates the joint weights before skinning.
         bm=bmesh.new();bm.from_mesh(obj.data)
@@ -443,8 +539,11 @@ for obj in PARTS:
             if tuple(sorted(edge.vertices)) in boundary:
                 crease.data[edge.index].value=1.0
                 for index in edge.vertices:corner.data[index].value=1.0
-        surface=obj.modifiers.new('Hand surface continuity','SUBSURF');surface.levels=1
         bpy.context.view_layer.objects.active=obj
+        if obj.name=='UniformGloves':
+            soften=obj.modifiers.new('Leather bridges nail detail','SMOOTH');soften.factor=.25;soften.iterations=2
+            bpy.ops.object.modifier_apply(modifier=soften.name)
+        surface=obj.modifiers.new('Hand surface continuity','SUBSURF');surface.levels=1
         bpy.ops.object.modifier_apply(modifier=surface.name)
     # glTF's four skin influences are chosen explicitly, including interpolated
     # subdivision weights; no exporter-dependent pruning at finger webbing.
@@ -471,7 +570,7 @@ def body_x(x,z=None):
         outer_scale-=.08*shoulder
     compressed=math.copysign(v*.85 if v<=.24 else .204+(v-.24)*outer_scale,x)
     if z is None:return compressed
-    neck=max(0,min(1,(z-1.52)/.04))*max(0,min(1,(.22-v)/.08))
+    neck=max(0,min(1,(z-1.52)/.04))*max(0,min(1,(.30-v)/.08))
     neck=neck*neck*(3-2*neck)
     return compressed*(1-neck)+x*neck
 
@@ -505,9 +604,9 @@ def hand_x(x,z):
 
 # Slim the old procedural actor proportions while preserving room for its rig.
 for obj in PARTS:
-    if obj['fixed_bone']=='head' or obj.name in ['HumanHead','HumanHands','HairCrop']:
+    if obj['fixed_bone']=='head' or obj.name in ['HumanHead','HumanHands','UniformGloves','HairCrop']:
         # Keep head width and translate hands without flattening their section.
-        if obj.name=='HumanHands':
+        if obj.name in ['HumanHands','UniformGloves']:
             for v in obj.data.vertices:
                 if abs(v.co.x)>.25:v.co.x=hand_x(v.co.x,v.co.z)
         elif obj.name=='HumanHead':
@@ -517,11 +616,11 @@ for obj in PARTS:
     for v in obj.data.vertices:
         original=v.co.copy()
         v.co.x=body_x(original.x,original.z)
-        if obj.name in ['BodyCovered','BaseTop']:
+        if obj.name in ['BodyCovered','BaseTop','UniformJacket','UniformCollar'] or obj.name.startswith('UniformCuff_'):
             amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('upper_arm_','forearm_')))
             amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
             v.co.x=v.co.x*(1-amount)+arm_x(original.x,original.z)*amount
-        if obj.name=='BodyCovered' or obj.name.startswith(('BaseShorts','BaseShortHem','BaseWaistband')):
+        if obj.name=='BodyCovered' or obj.name.startswith(('BaseShorts','BaseShortHem','BaseWaistband','UniformTrousers')):
             amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('thigh_','shin_','foot_')))
             amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
             v.co.x=v.co.x*(1-amount)+leg_x(original.x,original.z)*amount
@@ -577,7 +676,7 @@ bpy.ops.wm.save_as_mainfile(filepath=str(SOURCE/'adventurer.blend'))
 # Source retains named pieces. Export copies are grouped by wardrobe role to
 # avoid a draw submission for every eye, finger and hair ridge.
 copies=[]
-for role,name in [('always','HeadAndHands'),('body','BodyCovered'),('base','BaseOutfit'),('uniform','UniformOutfit')]:
+for role,name in [('always','HeadVisible'),('body','BodyCovered'),('base','BaseOutfit'),('uniform','UniformOutfit')]:
     group=[]
     for obj in PARTS:
         if obj['wardrobe_role']!=role: continue
@@ -597,7 +696,7 @@ report={'source':'art/source/characters/adventurer.blend','glb':'assets/models/c
  'glb_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'bytes':path.stat().st_size,
  'mesh_count':len(copies),'source_mesh_pieces':len(PARTS),'bones':len(BONES),'vertices':sum(len(o.data.vertices) for o in PARTS),
  'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in PARTS),
-  'human_acceptance':'pending','textures':'original packed 512x512 color and roughness maps for skin, woven cloth and leather; anatomy adapted from MakeHuman CC0',
+  'human_acceptance':'pending','textures':'original packed 512x512 color/roughness maps for skin, cloth and leather; subtle tangent normal maps for cloth/leather; anatomy adapted from MakeHuman CC0',
  'anatomy_source_sha256':hashlib.sha256((SOURCE/'vendor/makehuman/base.obj').read_bytes()).hexdigest(),
  'anatomy_source_commit':(SOURCE/'vendor/makehuman/COMMIT.txt').read_text(encoding='utf-8-sig').strip(),
  'roles':{r:[o.name for o in PARTS if o['wardrobe_role']==r] for r in ['always','body','base','uniform']}}

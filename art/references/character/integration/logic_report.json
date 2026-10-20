@@ -18,7 +18,7 @@
 			"passed": true
 		},
 		{
-			"name": "Finger joints deform exported skin with four normalized influences",
+			"name": "Finger joints deform both bare hands and uniform gloves with four normalized influences",
 			"passed": true
 		},
 		{
@@ -31,6 +31,10 @@
 		},
 		{
 			"name": "Free hand opens for powers, effect origin follows palm and relaxed pose returns",
+			"passed": true
+		},
+		{
+			"name": "Cloth and leather import real normal maps with tangent data",
 			"passed": true
 		},
 		{
@@ -117,7 +121,7 @@
 	"clean_import": false,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
-	"glb_sha256": "0fd9285f725eefe64c72626d84cc0acd2c866d8ca67eae3cde6df7148611ad29",
+	"glb_sha256": "f2c59ca94be60f491175e48970b63dc676a44c53c70e7bc558b3cc860b96c159",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",

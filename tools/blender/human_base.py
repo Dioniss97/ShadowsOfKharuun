@@ -10,7 +10,7 @@ from mathutils import Vector, Matrix
 from mathutils.bvhtree import BVHTree
 
 
-def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, base_trim):
+def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, base_trim, robe, leather):
     path = root/'art/source/characters/vendor/makehuman/base.obj'
     raw=[]; faces=[]; groups={}; current=''
     for line in path.read_text(encoding='utf-8-sig').splitlines():
@@ -186,7 +186,7 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         # Keep continuous shoulder/arm skin in the base appearance; the complete
         # covered body is disabled in the uniform appearance.
         head_weight=sum(dict(weights[i]).get('head',0) for i in face)/len(face)
-        is_head=head_weight>.55 and p.z>1.50
+        is_head=(head_weight>.55 and p.z>1.50) or (p.z>1.50 and abs(p.x)<.19 and head_weight>.05)
         # Select in the retargeted limb space. The old source-X threshold cut
         # across the inward-pointing thumb and split it between wardrobe roles.
         # Keep the seam up the forearm, outside the wrist correction envelope.
@@ -196,7 +196,15 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         elif p.z>.20:exposed.append(face)
         if original.z>1.92 or (original.y<-.014 and original.z>1.83):scalp.append(face)
     make('HumanHead',head_faces,skin,'always')
-    make('HumanHands',hand_faces,skin,'always')
+    hands=make('HumanHands',hand_faces,skin,'base')
+    gloves=hands.copy();gloves.data=hands.data.copy();gloves.name='UniformGloves'
+    bpy.context.collection.objects.link(gloves)
+    gloves['wardrobe_role']='uniform'
+    gloves.data.materials.clear();gloves.data.materials.append(leather)
+    hands.data.update()
+    for vertex in gloves.data.vertices:vertex.co+=hands.data.vertices[vertex.index].normal*.0018
+    overrides['UniformGloves']={i:list(values) for i,values in overrides['HumanHands'].items()}
+    result.append(gloves)
     covered=make('BodyCovered',exposed,skin,'body')
     make('HairCrop',scalp,hair,'always',.003)
     # A hidden full anatomical reference supports fitting future clothes.
@@ -223,7 +231,7 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
             if fa>=0:out.append(a)
             if (fa>=0)!=(fb>=0):out.append(mix(a,b,fa/(fa-fb)))
         return out
-    def garment(garment_name,material,role,fields,outset=.006,thickness=.003,max_components=1):
+    def garment(garment_name,material,role,fields,outset=.006,thickness=.003,max_components=1,boundary_iterations=3):
         garment_vertices=[];garment_faces=[];garment_weights=[];lookup={}
         for face in faces:
             poly=[{'p':mapped[i],'n':source_normals[i],'w':dict(weights[i])} for i in face]
@@ -283,7 +291,7 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         triangles=[tuple(t.vertices) for t in reference.data.loop_triangles]
         reference_points=[v.co.copy() for v in reference.data.vertices]
         tree=BVHTree.FromPolygons(reference_points,triangles,all_triangles=True)
-        for _ in range(3):
+        for _ in range(boundary_iterations):
             updates={}
             for index,neighbours in boundary.items():
                 mean=sum((data.vertices[n].co for n in neighbours),Vector())/len(neighbours)
@@ -316,6 +324,12 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
     garment('BaseShorts',base_cloth,'base',shorts_fields,outset=.012,thickness=.004)
     garment('BaseWaistband',base_trim,'base',[lambda v:v['p'].z-1.03,*shorts_fields[1:]],outset=.016,thickness=.002)
     garment('BaseShortHem',base_trim,'base',[shorts_fields[0],lambda v:.750-v['p'].z,shorts_fields[2]],outset=.016,thickness=.002,max_components=2)
+    jacket_fields=[lambda v:v['p'].z-.935,lambda v:1.65-v['p'].z,
+                   lambda v:(v['p'].x/.11)**2+(v['p'].y/.105)**2+((v['p'].z-1.70)/.23)**2-1]
+    garment('UniformJacket',robe,'uniform',jacket_fields,outset=.016,thickness=.004)
+    garment('UniformCollar',base_trim,'uniform',[*jacket_fields,lambda v:.55-jacket_fields[2](v)],outset=.026,thickness=.004,boundary_iterations=6)
+    garment('UniformTrousers',base_cloth,'uniform',[lambda v:v['p'].z-.32,lambda v:1.09-v['p'].z,shorts_fields[2]],outset=.014,thickness=.004)
+    garment('UniformBelt',leather,'uniform',[lambda v:v['p'].z-1.025,lambda v:1.09-v['p'].z,garment_fields[3]],outset=.035,thickness=.008)
     # Recess only skin inside the fitted garment, fading to zero at its contour.
     # The old rectangular torso squeeze also changed exposed shoulder/neck skin.
     covered_ids=sorted(set(i for face in exposed for i in face))

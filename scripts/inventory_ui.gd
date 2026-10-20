@@ -60,7 +60,7 @@ func _ready() -> void:
 		if equip_button.disabled: remove_button.grab_focus()
 		else: equip_button.grab_focus())
 	left.add_child(item_button)
-	var description := KhUI.label("Túnica de grafito y capa posterior de tela,\nprendas inferiores, cinturón y botas.\n\nEl conjunto cambia como una sola pieza.\nLos objetos de cabeza se equipan aparte.",17)
+	var description := KhUI.label("Túnica de grafito con capa de tela,\nmangas, guantes, pantalón, cinturón y botas.\n\nSe equipa el conjunto completo.\nLa cabeza permanece independiente.",17)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	left.add_child(description)

@@ -6,7 +6,7 @@
 
 ## Identidad
 
-Primer conjunto del personaje: [túnica](../pieces/tunica-del-umbral.md) con [capa posterior integrada](../pieces/capa-posterior-del-umbral.md), [pantalones](../pieces/pantalones-del-umbral.md), [botas](../pieces/botas-del-umbral.md), [cinturón](../pieces/cinturon-del-umbral.md) y guantes coordinados con las mangas. La capa no es un objeto de equipamiento independiente. No añade objeto de cabeza: la cabeza y sus accesorios permanecen fuera del uniforme.
+Primer conjunto del personaje: [túnica](../pieces/tunica-del-umbral.md) con [capa posterior integrada](../pieces/capa-posterior-del-umbral.md), [pantalones](../pieces/pantalones-del-umbral.md), [botas](../pieces/botas-del-umbral.md), [cinturón](../pieces/cinturon-del-umbral.md) y [guantes](../pieces/guantes-del-umbral.md) coordinados con las mangas. La capa no es un objeto de equipamiento independiente. No añade objeto de cabeza: la cabeza y sus accesorios permanecen fuera del uniforme.
 
 ## Diseño y comportamiento
 
@@ -24,6 +24,8 @@ La ropa comparte el esqueleto corporal. La candidata usa seis cadenas secundaria
 ## Rutas
 
 Fuente art/source/characters/adventurer.blend, grupo UniformOutfit de assets/models/characters/adventurer.glb. Movimiento y cobertura en scripts/character_rig.gd. Evidencia en art/references/character/.
+
+Chaqueta, cuello, pantalón y cinturón se ajustan desde la anatomía con holgura y pesos transferidos; los guantes comparten las articulaciones de las manos. Las manos descubiertas pertenecen a BaseOutfit, los guantes a UniformOutfit y la cabeza/cuello a HeadVisible. El cuerpo interior y el conjunto base se ocultan al equipar; al retirar se restauran completos.
 
 ## Decisiones
 

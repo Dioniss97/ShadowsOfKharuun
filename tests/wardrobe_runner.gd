@@ -72,9 +72,10 @@ func roles(rig: KhCharacterRig, uniform: bool) -> bool:
 	return rig.mesh_roles.size() == 4
 
 func hand_skin_valid(rig: KhCharacterRig) -> bool:
-	var finger_vertices := 0
+	var finger_vertices := {"base":0,"uniform":0}
 	for instance in rig.mesh_roles:
-		if rig.mesh_roles[instance] != "always": continue
+		var role: String = rig.mesh_roles[instance]
+		if role not in finger_vertices: continue
 		var mesh_instance := instance as MeshInstance3D
 		for surface in range(mesh_instance.mesh.get_surface_count()):
 			var arrays := mesh_instance.mesh.surface_get_arrays(surface)
@@ -96,11 +97,11 @@ func hand_skin_valid(rig: KhCharacterRig) -> bool:
 					if bone_name.is_empty(): bone_name = rig.skeleton.get_bone_name(mesh_instance.skin.get_bind_bone(bind))
 					if bone_name.begins_with("finger_"): has_finger = true
 				if absf(total-1.0)>0.002: return false
-				if has_finger: finger_vertices += 1
-	return finger_vertices > 200
+				if has_finger: finger_vertices[role] += 1
+	return finger_vertices.base>200 and finger_vertices.uniform>200
 
 func forearm_seam_valid(rig: KhCharacterRig) -> bool:
-	var sides := {"always":{},"body":{}}
+	var sides := {"base":{},"body":{}}
 	for instance in rig.mesh_roles:
 		var role: String = rig.mesh_roles[instance]
 		if role not in sides: continue
@@ -113,11 +114,11 @@ func forearm_seam_valid(rig: KhCharacterRig) -> bool:
 				if vertices[i].y<1.01 or vertices[i].y>1.12: continue
 				sides[role][vertices[i].snapped(Vector3.ONE*0.00001)] = [normals[i],uv[i]]
 	var shared := 0
-	for position in sides.always:
+	for position in sides.base:
 		if not sides.body.has(position): continue
 		shared += 1
-		if sides.always[position][0].distance_to(sides.body[position][0])>0.002: return false
-		if sides.always[position][1].distance_to(sides.body[position][1])>0.0001: return false
+		if sides.base[position][0].distance_to(sides.body[position][0])>0.002: return false
+		if sides.base[position][1].distance_to(sides.body[position][1])>0.0001: return false
 	return shared>20
 
 func check_hands(rig: KhCharacterRig) -> void:
@@ -127,7 +128,7 @@ func check_hands(rig: KhCharacterRig) -> void:
 			for segment in range(3):
 				all_fingers = all_fingers and rig.skeleton.find_bone("finger_%s_%d_%d" % [side,finger,segment])>=0
 	check(all_fingers,"Thirty articulated finger joints imported")
-	check(hand_skin_valid(rig),"Finger joints deform exported skin with four normalized influences")
+	check(hand_skin_valid(rig),"Finger joints deform both bare hands and uniform gloves with four normalized influences")
 	check(forearm_seam_valid(rig),"Forearm visibility seam preserves common normals and skin texture coordinates")
 	rig.cancel_action()
 	rig.animate(0.0,0.0)
@@ -148,6 +149,22 @@ func check_hands(rig: KhCharacterRig) -> void:
 	rig.animate(0.0,0.0)
 	check(opens and rest_wrist.angle_to(rig.skeleton.get_bone_pose_rotation(wrist))<0.001,"Free hand opens for powers, effect origin follows palm and relaxed pose returns")
 
+func fabric_normals_valid(rig: KhCharacterRig) -> bool:
+	var cloth := false
+	var leather := false
+	for instance in rig.mesh_roles:
+		if rig.mesh_roles[instance] != "uniform": continue
+		for surface in range(instance.mesh.get_surface_count()):
+			var mat := instance.get_active_material(surface) as StandardMaterial3D
+			if mat == null or not mat.normal_enabled or mat.normal_texture == null: continue
+			var arrays: Array = instance.mesh.surface_get_arrays(surface)
+			if arrays[Mesh.ARRAY_TANGENT] == null: return false
+			if arrays[Mesh.ARRAY_TANGENT].size() != arrays[Mesh.ARRAY_VERTEX].size()*4: return false
+			if mat.normal_texture.get_width() != 512 or mat.normal_texture.get_height() != 512: return false
+			cloth = cloth or mat.resource_name.begins_with("Robe_graphite")
+			leather = leather or mat.resource_name.begins_with("Leather_dark")
+	return cloth and leather
+
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	main = load("res://scenes/main.tscn").instantiate()
@@ -160,6 +177,7 @@ func run() -> void:
 	check(player.wardrobe.uniform_id == "" and roles(player.rig,false),"New game starts with base body/underwear/shoes")
 	check(player.rig.skeleton.get_bone_count() == 76,"Imported deforming skeleton has 76 bones including fingers and cape dynamics")
 	check_hands(player.rig)
+	check(fabric_normals_valid(player.rig),"Cloth and leather import real normal maps with tangent data")
 	check(not player.wardrobe.equip_uniform("missing"),"Unknown item cannot be equipped")
 	var original_stats := [player.max_health,player.defence,player.attack_bonus]
 	await key(KEY_I)

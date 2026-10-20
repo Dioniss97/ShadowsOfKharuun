@@ -6,11 +6,11 @@
 
 | Sin uniforme | Uniforme completo |
 |---|---|
-| ![Base actual](iterations/quality_07/after/base_rest_three_quarter.png) | ![Uniforme actual](iterations/quality_07/after/tunic_rest_three_quarter.png) |
+| ![Base actual](iterations/quality_08/after/base_rest_three_quarter.png) | ![Uniforme actual](iterations/quality_08/after/tunic_rest_three_quarter.png) |
 
 La fuente editable adapta anatomía MakeHuman CC0 fijada en el repositorio. Ropa, materiales y rig se producen en Blender. Equipar cambia el conjunto corporal y el calzado; retirar restaura toda la apariencia base. Los guantes completos siguen previstos en #45; estas imágenes aún conservan manos descubiertas.
 
-El GLB y sus cifras actuales están en el [informe de exportación](export_report.json). El pase 07 usa SHA-256 `92d7addb1532f877e097681c17eee29d3be54310f1d411922fc7a6af6b93cddb`: 6.529.820 bytes, 76 huesos, 44 piezas editables, 58.027 vértices y 114.568 triángulos sumando ambas apariencias; no todos se dibujan simultáneamente.
+El GLB y sus cifras actuales están en el [informe de exportación](export_report.json). El pase 08 usa SHA-256 `0fd9285f725eefe64c72626d84cc0acd2c866d8ca67eae3cde6df7148611ad29`: 6.609.484 bytes, 76 huesos, 41 piezas editables, 58.936 vértices y 116.700 triángulos sumando ambas apariencias; no todos se dibujan simultáneamente.
 
 ## Comparativas por región
 
@@ -23,6 +23,7 @@ Todas usan el mismo encuadre, iluminación y tiempo de acción dentro de cada pa
 | [05 — brazos](iterations/quality_05/README.md) | Sección menos aplanada, flexión de codos y continuidad de normales/UV del antebrazo; 38 vistas por versión. |
 | [06 — torso](iterations/quality_06/README.md) | Cobertura anatómica, camiseta con contornos interpolados, cuello y plano pectoral; 28 vistas por versión. |
 | [07 — piernas](iterations/quality_07/README.md) | Sección de piernas, calzado/solape y orientación de suelas; 62 vistas por versión, incluyendo andar, correr, giro y derrota. |
+| [08 — ropa base](iterations/quality_08/README.md) | Shorts continuos, cintura y dobladillos ajustados; 62 vistas por versión. |
 
 ## Inventario y templo
 
@@ -34,13 +35,13 @@ I abre el inventario durante la partida. Equipar/Retirar sincroniza personaje y 
 |---|---|
 | ![Base](integration/temple_base.png) | ![Uniforme](integration/temple_uniform.png) |
 
-Estas vistas fijan la posición y usan una cámara de inspección dentro del nivel. No sustituyen la revisión jugable a distancia normal. Las imágenes de integración corresponden al pase 07. `studio/` todavía conserva la galería general del pase 04, identificada por su [informe](studio/report.json).
+Estas vistas fijan la posición y usan una cámara de inspección dentro del nivel. No sustituyen la revisión jugable a distancia normal. Las imágenes de integración corresponden al pase 08. `studio/` todavía conserva la galería general del pase 04, identificada por su [informe](studio/report.json).
 
 ## Evidencia técnica y sus hashes
 
-- [Vestuario sin render](integration/logic_report.json): 28 comprobaciones, 0 fallos, pase 07.
-- [Vestuario GPU](integration/gpu_report.json): 32 comprobaciones, 0 fallos, pase 07; entradas reales, cobertura, movimiento, arma/palma y orientación de suelas.
-- [Misión del pase 07](iterations/quality_07/mission_headless.json): 213 comprobaciones headless, 0 fallos.
+- [Vestuario sin render](integration/logic_report.json): 28 comprobaciones, 0 fallos, pase 08.
+- [Vestuario GPU](integration/gpu_report.json): 32 comprobaciones, 0 fallos, pase 08; entradas reales y cobertura del conjunto.
+- [Misión del pase 08](iterations/quality_08/mission_headless.json): 213 comprobaciones headless, 0 fallos.
 - [Importación limpia anterior](integration/clean_import_report.json): pase 04, 26/0. No certifica automáticamente los GLB posteriores.
 - [Misión completa anterior](integration/regression_report.json): pase 04, 213 headless/238 GPU sin fallos en ejecuciones finales, recorrido automático hasta victoria. Se conserva también su primer intento GPU con un fallo W+D y posteriores repeticiones satisfactorias; causa indeterminada.
 
@@ -52,6 +53,6 @@ Faldón y capa usan quince cadenas secundarias y ocho cápsulas SpringBone en to
 
 El informe GPU recoge 30 intervalos de presentación por vista, mediana/p95, llamadas de dibujo, primitivas y memoria de texturas. Son muestras cortas de esta máquina; incluyen CPU/render/presentación y, en inventario, su vista 3D y la escena subyacente. No aíslan el coste del personaje ni garantizan FPS en otras máquinas.
 
-Quedan la construcción final de shorts/cintura, ajuste del uniforme y guantes, dinámica, presentación del inventario y QA integrada de los pases siguientes. La calidad artística, proporciones, cobertura y movimiento requieren aceptación humana antes de entregar. No se declara alcanzada la calidad visual final ni se publica una versión estable.
+La apariencia base necesita aceptación humana. Siguen el ajuste de uniforme/guantes, dinámica, presentación de inventario y QA integrada. La calidad artística, proporciones, cobertura y movimiento requieren aceptación antes de entregar; no se declara calidad final ni se publica una versión estable.
 
 Reproducción y referencias técnicas: [pipeline Blender–Godot](../../../tools/blender/CHARACTER.md).

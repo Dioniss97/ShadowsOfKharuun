@@ -15,3 +15,5 @@ Se muestra con su conjunto, deforma de forma coherente con el esqueleto y no dej
 ## Rutas de producción
 
 Piezas BaseShorts de art/source/characters/adventurer.blend; exportadas en assets/models/characters/adventurer.glb. El estado operativo está en [#35](https://github.com/Dioniss97/ShadowsOfKharuun/issues/35) y [#36](https://github.com/Dioniss97/ShadowsOfKharuun/issues/36).
+
+El pantalón se obtiene como una superficie continua con holgura y espesor, acompañada por cintura y dobladillos ajustados. Los pesos se transfieren desde la anatomía y la piel cubierta se retrae gradualmente; las bandas comparten su contorno, evitando las intersecciones de las piezas tubulares iniciales.

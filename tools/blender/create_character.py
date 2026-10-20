@@ -365,9 +365,9 @@ bpy.ops.object.mode_set(mode='OBJECT')
 
 # Replace the construction mannequin with anatomically authored CC0 topology.
 for obj in list(PARTS):
-    if obj['wardrobe_role'] in ['body','always'] or obj.name=='BaseTop':
+    if obj['wardrobe_role'] in ['body','always'] or obj.name.startswith(('BaseTop','BaseShorts','BaseShortHem','BaseWaistband')):
         PARTS.remove(obj);bpy.data.objects.remove(obj,do_unlink=True)
-human,IMPORTED_WEIGHTS=build_human(ROOT,BONES,rig,SKIN,HAIR,EYE,IRIS,BASE)
+human,IMPORTED_WEIGHTS=build_human(ROOT,BONES,rig,SKIN,HAIR,EYE,IRIS,BASE,BASE_TRIM)
 PARTS.extend(human)
 
 
@@ -521,7 +521,7 @@ for obj in PARTS:
             amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('upper_arm_','forearm_')))
             amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
             v.co.x=v.co.x*(1-amount)+arm_x(original.x,original.z)*amount
-        if obj.name=='BodyCovered' or obj.name.startswith(('BaseShorts_','BaseShortHem_')):
+        if obj.name=='BodyCovered' or obj.name.startswith(('BaseShorts','BaseShortHem','BaseWaistband')):
             amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('thigh_','shin_','foot_')))
             amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
             v.co.x=v.co.x*(1-amount)+leg_x(original.x,original.z)*amount

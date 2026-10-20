@@ -47,3 +47,9 @@ La unión del cuello conserva anchura y comparte normales/UV entre roles. La cab
 `leg_x` conserva el eje y recupera sección de piernas, con transición hacia cadera/pie. El calzado base usa menor huella y un solape de tobillo; el pie interior queda oculto y la piel cubierta se retrae. El borde superior sigue la espinilla y la suela el hueso del pie. La contrapose de tobillo mantiene la orientación de la suela durante la zancada existente; no es un sistema de colocación IK ni garantiza contacto con el suelo.
 
 `--region=leg` añade poses de andar, correr, giro y derrota. La [comparativa 07](../../art/references/character/iterations/quality_07/README.md) conserva 62 vistas por versión. La suite de vestuario comprueba la compensación durante movimiento real.
+
+## Ropa base continua — pase regional 08
+
+Los shorts usan el mismo generador anatómico de prendas que la camiseta, con holgura y espesor propios. Cintura y dobladillos tienen contornos interpolados y pesos transferidos; los dos dobladillos se conservan como dos componentes de una pieza editable. La pelvis y el muslo completos quedan debajo, con recesión gradual de la piel cubierta. Se eliminan las antiguas piezas de shorts que se atravesaban y sus aros separados del cuerpo.
+
+El GLB conserva los cuatro roles de apariencia. [Comparativa 08](../../art/references/character/iterations/quality_08/README.md), con capturas de reposo, zancada, carrera y derrota.

@@ -10,7 +10,7 @@ from mathutils import Vector, Matrix
 from mathutils.bvhtree import BVHTree
 
 
-def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth):
+def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, base_trim):
     path = root/'art/source/characters/vendor/makehuman/base.obj'
     raw=[]; faces=[]; groups={}; current=''
     for line in path.read_text(encoding='utf-8-sig').splitlines():
@@ -193,28 +193,18 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth):
         is_hand=abs(p.x)>.30 and p.z<1.06
         if is_head:head_faces.append(face)
         elif is_hand:hand_faces.append(face)
-        elif p.z>.20 and not ((.80<p.z<1.03 and abs(p.x)<.30) or (.71<p.z<=.80 and abs(p.x)<.09)):exposed.append(face)
+        elif p.z>.20:exposed.append(face)
         if original.z>1.92 or (original.y<-.014 and original.z>1.83):scalp.append(face)
     make('HumanHead',head_faces,skin,'always')
     make('HumanHands',hand_faces,skin,'always')
     covered=make('BodyCovered',exposed,skin,'body')
-    # Recess the concealed anatomy under the fitted opaque base garments,
-    # retaining the original full surface in AnatomyReference for future fitting.
-    for v in covered.data.vertices:
-        p=v.co
-        dominant=max(overrides['BodyCovered'][v.index],key=lambda entry:entry[1])[0]
-        if dominant not in ['hips','spine']:continue
-        if .72<p.z<=1.0 and abs(p.x)<.30:
-            center=.16 if p.x>=0 else -.16
-            amount=min(1,(p.z-.72)/.06)
-            p.x=center+(p.x-center)*(1-.22*amount);p.y*=1-.28*amount
     make('HairCrop',scalp,hair,'always',.003)
     # A hidden full anatomical reference supports fitting future clothes.
     reference=make('AnatomyReference',faces,skin,'reference')
     reference.hide_render=True;reference.hide_set(True)
     result.remove(reference)
 
-    # Fit a sleeveless base garment to the intact anatomy. Clip along continuous
+    # Fit clothing to the intact anatomy. Clip along continuous
     # scalar fields, interpolating both coordinates and skin weights at each cut;
     # selecting whole faces would leave a visibly jagged edge around the arms.
     reference.data.update()
@@ -233,89 +223,99 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth):
             if fa>=0:out.append(a)
             if (fa>=0)!=(fb>=0):out.append(mix(a,b,fa/(fa-fb)))
         return out
-    garment_vertices=[];garment_faces=[];garment_weights=[];lookup={}
-    for face in faces:
-        poly=[{'p':mapped[i],'n':source_normals[i],'w':dict(weights[i])} for i in face]
-        for field in garment_fields:
-            if not poly:break
-            poly=clip(poly,field)
-        if len(poly)<3:continue
-        indices=[]
-        for point in poly:
-            key=tuple(round(v,6) for v in point['p'])
-            if key not in lookup:
-                lookup[key]=len(garment_vertices)
-                garment_vertices.append(point['p']+point['n']*.006)
-                garment_weights.append([(name,value) for name,value in point['w'].items() if value>.00001])
-            indices.append(lookup[key])
-        if len(set(indices))>=3:garment_faces.append(indices)
-    # Scalar cuts may also catch a tiny disconnected patch near the jaw. Keep
-    # the torso component only; it is the garment's single connected surface.
-    adjacency={i:set() for i in range(len(garment_vertices))}
-    for face in garment_faces:
-        for a,b in zip(face,face[1:]+face[:1]):adjacency[a].add(b);adjacency[b].add(a)
-    remaining=set(adjacency);components=[]
-    while remaining:
-        stack=[remaining.pop()];component=set(stack)
-        while stack:
-            for neighbour in adjacency[stack.pop()]:
-                if neighbour in remaining:
-                    remaining.remove(neighbour);component.add(neighbour);stack.append(neighbour)
-        components.append(component)
-    component=max(components,key=len);chosen=sorted(component);remap={old:new for new,old in enumerate(chosen)}
-    garment_faces=[[remap[i] for i in face] for face in garment_faces if all(i in component for i in face)]
-    garment_vertices=[garment_vertices[i] for i in chosen];garment_weights=[garment_weights[i] for i in chosen]
-    data=bpy.data.meshes.new('FittedBaseTop')
-    data.from_pydata(garment_vertices,[],garment_faces);data.update()
-    top=bpy.data.objects.new('BaseTop',data);bpy.context.collection.objects.link(top)
-    data.materials.append(base_cloth);top['wardrobe_role']='base';top['fixed_bone']=''
-    for polygon in data.polygons:polygon.use_smooth=True
-    # Smooth the cut contour on the anatomical surface, transferring its skin
-    # weights barycentrically. Projecting prevents smoothing from sinking fabric
-    # into the skin and preserves deforming coverage around collar and armholes.
-    bm=bmesh.new();bm.from_mesh(data)
-    boundary={}
-    for edge in bm.edges:
-        if edge.is_boundary:
-            a,b=(v.index for v in edge.verts)
-            boundary.setdefault(a,set()).add(b);boundary.setdefault(b,set()).add(a)
-    neighbours={v.index:{n.other_vert(v).index for n in v.link_edges} for v in bm.verts}
-    bm.free()
-    # Interior fabric bridges small anatomical features instead of copying skin
-    # detail. Keep the fitted contour fixed while relaxing the broad surface.
-    for _ in range(4):
-        relaxed={i:data.vertices[i].co.lerp(sum((data.vertices[n].co for n in ns),Vector())/len(ns),.6)
-                 for i,ns in neighbours.items() if i not in boundary and ns}
-        for i,point in relaxed.items():data.vertices[i].co=point
-    reference.data.calc_loop_triangles()
-    triangles=[tuple(t.vertices) for t in reference.data.loop_triangles]
-    reference_points=[v.co.copy() for v in reference.data.vertices]
-    tree=BVHTree.FromPolygons(reference_points,triangles,all_triangles=True)
-    for _ in range(3):
-        updates={}
-        for index,neighbours in boundary.items():
-            mean=sum((data.vertices[n].co for n in neighbours),Vector())/len(neighbours)
-            point,normal,triangle,_distance=tree.find_nearest(data.vertices[index].co.lerp(mean,.5))
-            ids=triangles[triangle];a,b,c=(reference_points[i] for i in ids)
-            ab,ac,ap=b-a,c-a,point-a
-            denom=ab.dot(ab)*ac.dot(ac)-ab.dot(ac)**2
-            if abs(denom)<1e-12:continue
-            v=(ac.dot(ac)*ap.dot(ab)-ab.dot(ac)*ap.dot(ac))/denom
-            w=(ab.dot(ab)*ap.dot(ac)-ab.dot(ac)*ap.dot(ab))/denom
-            bary=[1-v-w,v,w];merged={}
-            for original,factor in zip(ids,bary):
-                for name,weight in weights[used[original]]:merged[name]=merged.get(name,0)+weight*factor
-            updates[index]=(point+normal*.008,[(name,value) for name,value in merged.items() if value>.00001])
-        for index,(point,skin_weights) in updates.items():
-            data.vertices[index].co=point;garment_weights[index]=skin_weights
-    data.update()
-    # Retain a thin physical edge rather than a paper sheet.
-    original_count=len(data.vertices)
-    bpy.context.view_layer.objects.active=top
-    shell=top.modifiers.new('Base fabric thickness','SOLIDIFY');shell.thickness=.003;shell.offset=-1
-    bpy.ops.object.modifier_apply(modifier=shell.name)
-    overrides['BaseTop']={i:garment_weights[i%original_count] for i in range(len(top.data.vertices))}
-    result.append(top)
+    def garment(garment_name,material,role,fields,outset=.006,thickness=.003,max_components=1):
+        garment_vertices=[];garment_faces=[];garment_weights=[];lookup={}
+        for face in faces:
+            poly=[{'p':mapped[i],'n':source_normals[i],'w':dict(weights[i])} for i in face]
+            for field in fields:
+                if not poly:break
+                poly=clip(poly,field)
+            if len(poly)<3:continue
+            indices=[]
+            for point in poly:
+                key=tuple(round(v,6) for v in point['p'])
+                if key not in lookup:
+                    lookup[key]=len(garment_vertices)
+                    garment_vertices.append(point['p']+point['n']*outset)
+                    garment_weights.append([(name,value) for name,value in point['w'].items() if value>.00001])
+                indices.append(lookup[key])
+            if len(set(indices))>=3:garment_faces.append(indices)
+        # Scalar cuts may catch disconnected patches. Keep the intended main
+        # surface, or both leg bands when explicitly requested.
+        adjacency={i:set() for i in range(len(garment_vertices))}
+        for face in garment_faces:
+            for a,b in zip(face,face[1:]+face[:1]):adjacency[a].add(b);adjacency[b].add(a)
+        remaining=set(adjacency);components=[]
+        while remaining:
+            stack=[remaining.pop()];component=set(stack)
+            while stack:
+                for neighbour in adjacency[stack.pop()]:
+                    if neighbour in remaining:
+                        remaining.remove(neighbour);component.add(neighbour);stack.append(neighbour)
+            components.append(component)
+        component=set().union(*sorted(components,key=len,reverse=True)[:max_components])
+        chosen=sorted(component);remap={old:new for new,old in enumerate(chosen)}
+        garment_faces=[[remap[i] for i in face] for face in garment_faces if all(i in component for i in face)]
+        garment_vertices=[garment_vertices[i] for i in chosen];garment_weights=[garment_weights[i] for i in chosen]
+        data=bpy.data.meshes.new('Fitted'+garment_name)
+        data.from_pydata(garment_vertices,[],garment_faces);data.update()
+        top=bpy.data.objects.new(garment_name,data);bpy.context.collection.objects.link(top)
+        data.materials.append(material);top['wardrobe_role']=role;top['fixed_bone']=''
+        for polygon in data.polygons:polygon.use_smooth=True
+        # Smooth the cut contour on the anatomical surface, transferring its skin
+        # weights barycentrically. Projecting prevents smoothing from sinking fabric
+        # into the skin and preserves deforming coverage around collar and armholes.
+        bm=bmesh.new();bm.from_mesh(data)
+        boundary={}
+        for edge in bm.edges:
+            if edge.is_boundary:
+                a,b=(v.index for v in edge.verts)
+                boundary.setdefault(a,set()).add(b);boundary.setdefault(b,set()).add(a)
+        neighbours={v.index:{n.other_vert(v).index for n in v.link_edges} for v in bm.verts}
+        bm.free()
+        # Interior fabric bridges small anatomical features instead of copying skin
+        # detail. Keep the fitted contour fixed while relaxing the broad surface.
+        for _ in range(4):
+            relaxed={i:data.vertices[i].co.lerp(sum((data.vertices[n].co for n in ns),Vector())/len(ns),.6)
+                     for i,ns in neighbours.items() if i not in boundary and ns}
+            for i,point in relaxed.items():data.vertices[i].co=point
+        reference.data.calc_loop_triangles()
+        triangles=[tuple(t.vertices) for t in reference.data.loop_triangles]
+        reference_points=[v.co.copy() for v in reference.data.vertices]
+        tree=BVHTree.FromPolygons(reference_points,triangles,all_triangles=True)
+        for _ in range(3):
+            updates={}
+            for index,neighbours in boundary.items():
+                mean=sum((data.vertices[n].co for n in neighbours),Vector())/len(neighbours)
+                point,normal,triangle,_distance=tree.find_nearest(data.vertices[index].co.lerp(mean,.5))
+                ids=triangles[triangle];a,b,c=(reference_points[i] for i in ids)
+                ab,ac,ap=b-a,c-a,point-a
+                denom=ab.dot(ab)*ac.dot(ac)-ab.dot(ac)**2
+                if abs(denom)<1e-12:continue
+                v=(ac.dot(ac)*ap.dot(ab)-ab.dot(ac)*ap.dot(ac))/denom
+                w=(ab.dot(ab)*ap.dot(ac)-ab.dot(ac)*ap.dot(ab))/denom
+                bary=[1-v-w,v,w];merged={}
+                for original,factor in zip(ids,bary):
+                    for name,weight in weights[used[original]]:merged[name]=merged.get(name,0)+weight*factor
+                updates[index]=(point+normal*(outset+.002),[(name,value) for name,value in merged.items() if value>.00001])
+            for index,(point,skin_weights) in updates.items():
+                data.vertices[index].co=point;garment_weights[index]=skin_weights
+        data.update()
+        # Retain a thin physical edge rather than a paper sheet.
+        original_count=len(data.vertices)
+        bpy.context.view_layer.objects.active=top
+        shell=top.modifiers.new('Base fabric thickness','SOLIDIFY');shell.thickness=thickness;shell.offset=-1
+        bpy.ops.object.modifier_apply(modifier=shell.name)
+        overrides[garment_name]={i:garment_weights[i%original_count] for i in range(len(top.data.vertices))}
+        result.append(top)
+        return top
+
+    garment('BaseTop',base_cloth,'base',garment_fields)
+    shorts_fields=[lambda v:v['p'].z-.735,lambda v:1.055-v['p'].z,
+                   lambda v:sum(value for name,value in v['w'].items() if name=='hips' or name.startswith(('thigh_','shin_')))-.60]
+    garment('BaseShorts',base_cloth,'base',shorts_fields,outset=.012,thickness=.004)
+    garment('BaseWaistband',base_trim,'base',[lambda v:v['p'].z-1.03,*shorts_fields[1:]],outset=.016,thickness=.002)
+    garment('BaseShortHem',base_trim,'base',[shorts_fields[0],lambda v:.750-v['p'].z,shorts_fields[2]],outset=.016,thickness=.002,max_components=2)
     # Recess only skin inside the fitted garment, fading to zero at its contour.
     # The old rectangular torso squeeze also changed exposed shoulder/neck skin.
     covered_ids=sorted(set(i for face in exposed for i in face))
@@ -323,6 +323,9 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth):
         point={'p':mapped[original],'w':dict(weights[original])}
         values=[field(point) for field in garment_fields]
         amount=min(max(0,min(1,value/scale)) for value,scale in zip(values,[.015,.015,.25,.12]))
+        shorts_values=[field(point) for field in shorts_fields]
+        shorts_amount=min(max(0,min(1,value/scale)) for value,scale in zip(shorts_values,[.018,.018,.12]))
+        amount=max(amount,shorts_amount)
         amount=amount*amount*(3-2*amount)
         vertex.co-=source_normals[original]*(.012*amount)
         if vertex.co.z<.27:

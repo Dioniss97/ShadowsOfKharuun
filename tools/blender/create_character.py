@@ -213,8 +213,8 @@ def combine_skin(objects, name):
 
 
 # Base underwear, sleeveless top and short trousers have deliberate seams.
-loft('BaseTop',[(0,0,1.0,.25,.17),(0,0,1.1,.23,.16),(0,0,1.18,.225,.151),(0,0,1.32,.285,.18),
- (0,0,1.43,.365,.19),(0,0,1.50,.40,.172),(0,0,1.57,.20,.135),
+loft('BaseTop',[(0,0,1.0,.25,.17),(0,0,1.1,.27,.17),(0,0,1.18,.27,.165),(0,0,1.32,.34,.19),
+ (0,0,1.43,.35,.19),(0,0,1.50,.375,.172),(0,0,1.57,.20,.135),
  (0,0,1.635,.125,.125),(0,0,1.645,.125,.125)],BASE,'base','spine',cap=False,subdiv=1)
 loft('BaseShortsHip',[(0,0,.87,.23,.169),(0,0,.96,.253,.18),(0,0,1.035,.25,.173)],BASE,'base','hips')
 for side,label in ((-1,'L'),(1,'R')):
@@ -249,15 +249,15 @@ for side in [-1,1]: shoe('BaseShoes',side,'base')
 
 # Jacket and sleeves: opaque body coverage removes the hidden anatomy from
 # rendering while the cloth envelope and shared weights control silhouette.
-loft('UniformTorso',[(0,0,.92,.255,.174),(0,0,1.06,.244,.163),
- (0,0,1.18,.23,.155),(0,0,1.33,.281,.179),(0,0,1.45,.32,.171),
- (0,0,1.52,.26,.14),(0,0,1.585,.106,.102)],ROBE,'uniform')
+loft('UniformTorso',[(0,0,.92,.255,.174),(0,0,1.06,.27,.172),
+ (0,0,1.18,.27,.165),(0,0,1.33,.34,.19),(0,0,1.45,.31,.171),
+ (0,0,1.52,.25,.14),(0,0,1.585,.106,.102)],ROBE,'uniform')
 loft('UniformCollar',[(0,0,1.545,.15,.135),(0,0,1.56,.15,.135),(0,0,1.615,.132,.126),(0,0,1.625,.13,.125)],LINEN,'uniform','spine',cap=False)
 for side,label in ((-1,'L'),(1,'R')):
-    ellipsoid('UniformShoulder_'+label,(side*.278,0,1.474),(.103,.092,.074),ROBE,'uniform')
-    # Fill the cloth bridge between the narrow torso and sleeve inner wall.
-    # Without this gusset the hidden body leaves a visible hole under the arm.
-    ellipsoid('UniformAxilla_'+label,(side*.30,0,1.315),(.083,.09,.095),ROBE,'uniform')
+    ellipsoid('UniformShoulder_'+label,(side*.274,0,1.474),(.085,.080,.066),ROBE,'uniform')
+    # A restrained gusset joins the torso and sleeve without making a bulb under
+    # the arm; the broader rib cage supplies more of the silhouette transition.
+    ellipsoid('UniformAxilla_'+label,(side*.28,0,1.325),(.060,.064,.068),ROBE,'uniform')
     loft('UniformSleeve_'+label,[(side*.30,0,1.49,.103,.106),(side*.355,0,1.445,.116,.112),
       (side*.402,.002,1.365,.105,.104),(side*.418,.005,1.27,.096,.097),
       (side*.415,.01,1.205,.092,.094),(side*.405,.014,1.12,.086,.09),

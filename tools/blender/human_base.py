@@ -87,12 +87,16 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         cap=.138*math.sqrt(max(0,1-(p.x/.34)**2))
         p.y=min(p.y,p.y*(1-t)+cap*t)
 
-    # Broad anatomical planes: soften deltoid bulges, support the waist, and
-    # avoid pinching the wrist between the forearm and palm.
+    # Broaden the rib cage and waist slightly so the shoulders do not dominate
+    # the torso silhouette. Keep the change on the weighted body core, fading
+    # through the shoulder and hip joints instead of scaling the whole figure.
     for i,p in mapped.items():
         w=dict(weights[i])
         core=w.get('spine',0)+w.get('hips',0)
-        p.x*=1+.12*math.exp(-((p.z-1.16)/.13)**2)*core
+        ribcage=math.exp(-((p.z-1.32)/.21)**2)*core
+        waist=math.exp(-((p.z-1.10)/.18)**2)*core
+        p.x*=1+.11*ribcage+.08*waist
+        p.y*=1+.07*ribcage+.04*waist
         arm=sum(value for name,value in w.items() if name.startswith('upper_arm_'))
         shoulder=math.exp(-((p.z-1.46)/.085)**2)*arm
         p.y*=1-.13*shoulder

@@ -2,11 +2,15 @@
 
 ## Correcciones tras la auditoría — calidad 12
 
-La [comparativa 13](../../art/references/character/iterations/quality_13/README.md) documenta el último pase regional; la [12](../../art/references/character/iterations/quality_12/README.md) conserva sus correcciones de piel, ropa y materiales. `character_surfaces.py` conserva el atlas anatómico CC0 y genera mapas propios de piel de 1024² y UV de tejido con escala física común. Las piezas comparten el nombre `UVMap` antes del join. `human_base.py` construye ribetes desde los bordes de la ropa y los ajusta por proximidad a su superficie con espesor. Las secciones históricas inferiores describen sus respectivos pases.
+La [comparativa 14](../../art/references/character/iterations/quality_14/README.md) documenta el último pase regional; la [13](../../art/references/character/iterations/quality_13/README.md) conserva la corrección de agarre y axila, y la [12](../../art/references/character/iterations/quality_12/README.md) sus ajustes de piel, ropa y materiales. `character_surfaces.py` conserva el atlas anatómico CC0 y genera mapas propios de piel de 1024² y UV de tejido con escala física común. Las piezas comparten el nombre `UVMap` antes del join. `human_base.py` construye ribetes desde los bordes de la ropa y los ajusta por proximidad a su superficie con espesor. Las secciones históricas inferiores describen sus respectivos pases.
 
 El correctivo `art/source/characters/grip_contact_fit.json` se aplica en reposo a la mano y al guante después de subdividirlos; el exportador exige correspondencia de al menos el 98% de sus puntos a 0,15 mm. Cambiar anatomía, pesos o pose exige revisar el contacto. Rotaciones locales de dedos/muñecas componen reposo por delta; marco del arma calibrado respecto a la mano, flexiones distintas por dedo y oposición del pulgar. Es un agarre concreto, no un solucionador para cualquier arma.
 
 `scripts/character_materials.gd` aplica recetas explícitas compartidas: especular .32 piel, .22 tejido, .30 cuero, normal textil/cuero .65 y SSS de piel .06. No se confía en que los parámetros Blender se traduzcan idénticos a Godot. Se mantiene la paleta propia, sin mapas externos. [Propiedades del material Godot](https://docs.godotengine.org/en/4.7/classes/class_basematerial3d.html).
+
+## Proporciones torso/brazos — calidad 14
+
+`human_base.py` da un poco más de anchura/profundidad al torso con una influencia suavizada por pesos. Los perfiles de `BaseTop` y `UniformTorso` acompañan el cambio; el radio de las piezas `UniformShoulder_*` y `UniformAxilla_*` se reduce para limitar el bulto de la sisa. `KhCharacterRig` acerca los brazos colgantes hasta 0,22 rad y desvanece el ajuste al elevarlos. Comparación antes/después y resultados en [calidad 14](../../art/references/character/iterations/quality_14/README.md). Vestuario 35/40 y misión headless 213/213; misión GPU incompleta en esta ronda.
 
 ## Hombros y contacto de sable — calidad 13
 

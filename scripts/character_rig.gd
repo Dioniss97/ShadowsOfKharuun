@@ -62,8 +62,8 @@ func animate(delta: float, speed: float) -> void:
 	# then fade this rest-pose correction while an arm rises for combat or powers.
 	var left_tuck := 1.0-smoothstep(0.25,0.9,absf(left_arm.rotation.x))
 	var right_tuck := 1.0-smoothstep(0.25,0.9,absf(right_arm.rotation.x))
-	var left_shoulder_pose := left_arm.rotation+Vector3(0.0,0.0,0.16*left_tuck)
-	var right_shoulder_pose := right_arm.rotation+Vector3(0.0,0.0,-0.16*right_tuck)
+	var left_shoulder_pose := left_arm.rotation+Vector3(0.0,0.0,0.22*left_tuck)
+	var right_shoulder_pose := right_arm.rotation+Vector3(0.0,0.0,-0.22*right_tuck)
 	_pose("upper_arm_L", left_shoulder_pose)
 	_pose("upper_arm_R", right_shoulder_pose)
 	_pose("thigh_L", left_leg.rotation)

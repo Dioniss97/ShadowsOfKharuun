@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-20",
+  "scope": "Research and visual diagnosis; production model/code not changed; proposals not implemented.",
+  "examined_commit": "94119adfa262c5f5aeaa79c41c589bebf406fd0f",
+  "glb_sha256": "03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2",
+  "source_hashes_lf_sha256": {
+    "scripts/character_rig.gd": "fda32d6313697da84e9bc8d3e500844e12d8cbef5cf130929ad216d73cf67ae2",
+    "scripts/inventory_ui.gd": "044737aaf6650f9c97ce1ee7594f76758325521d89ca10a6e970ff632033c70a",
+    "tests/wardrobe_runner.gd": "8ce8c8750b17eb75d634d042707b17a297abbdd212cd5664620ccf0cfd6aec78",
+    "tools/blender/create_character.py": "e873c81012d4461aaf78d150033e338b46ab5d1b96d16d8917142ba53ea78150",
+    "tools/blender/human_base.py": "22f0713338bcbbce931ea7fbc05bcc5b03cdf1c3e6748840f22c235a8d7feac1",
+    "tools/blender/preview_detail.gd": "61af6a239355a0edb8b7a9a411b0edcd7681c1a07bd7ddf4d8cead9ac26534ba",
+    "tools/blender/preview_motion.gd": "481cdf43e9c6a6819f47fd93063658072256dde4a368bcbc8eecb3a439d680b7"
+  },
+  "captures": {
+    "hands": {
+      "count": 42,
+      "report": "hands/report.json"
+    },
+    "body": {
+      "count": 28,
+      "report": "body/report.json"
+    },
+    "legs": {
+      "count": 62,
+      "report": "legs/report.json"
+    },
+    "motion": {
+      "count": 40,
+      "report": "motion/report.json"
+    }
+  },
+  "total_new_captures": 172,
+  "main_project": {
+    "directory": "C:/proyectos-personales/ShadowsOfKharuun",
+    "branch": "main",
+    "commit": "f7af77a",
+    "version": "0.4.0",
+    "new_character_glb_present": false
+  },
+  "candidate_project": {
+    "directory": "C:\\proyectos-personales\\ShadowsOfKharuun\\tools\\logs\\production-050",
+    "branch": "codex/0.5.0-character-equipment",
+    "version": "0.5.0-dev",
+    "launch": "PLAY.bat"
+  },
+  "human_review": "User reports unacceptable plastic materials, anatomy and grip; acceptance remains pending."
+}

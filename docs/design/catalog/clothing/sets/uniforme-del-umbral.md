@@ -23,6 +23,8 @@ La ropa comparte el esqueleto corporal. La candidata usa seis cadenas secundaria
 
 ## Rutas
 
+La revisión tras la auditoría aumenta holgura de chaqueta, introduce pliegues amplios contenidos y deriva el cuello del borde de la prenda con ajuste a su superficie. Tejido con coordenadas de escala física común y material explícito en Godot; evidencia y límites en [calidad 12](../../../../../art/references/character/iterations/quality_12/README.md). La dinámica de capa/faldón mantiene las cadenas y cápsulas existentes.
+
 Fuente art/source/characters/adventurer.blend, grupo UniformOutfit de assets/models/characters/adventurer.glb. Movimiento y cobertura en scripts/character_rig.gd. Evidencia en art/references/character/.
 
 Chaqueta, cuello, pantalón y cinturón se ajustan desde la anatomía con holgura y pesos transferidos; los guantes comparten las articulaciones de las manos. Las manos descubiertas pertenecen a BaseOutfit, los guantes a UniformOutfit y la cabeza/cuello a HeadVisible. El cuerpo interior y el conjunto base se ocultan al equipar; al retirar se restauran completos.

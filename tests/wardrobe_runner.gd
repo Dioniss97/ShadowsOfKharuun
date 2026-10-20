@@ -112,13 +112,23 @@ func forearm_seam_valid(rig: KhCharacterRig) -> bool:
 			var uv: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
 			for i in range(vertices.size()):
 				if vertices[i].y<1.01 or vertices[i].y>1.12: continue
-				sides[role][vertices[i].snapped(Vector3.ONE*0.00001)] = [normals[i],uv[i]]
+				var position := vertices[i].snapped(Vector3.ONE*0.00001)
+				if not sides[role].has(position): sides[role][position] = []
+				sides[role][position].append([normals[i],uv[i]])
 	var shared := 0
 	for position in sides.base:
 		if not sides.body.has(position): continue
 		shared += 1
-		if sides.base[position][0].distance_to(sides.body[position][0])>0.002: return false
-		if sides.base[position][1].distance_to(sides.body[position][1])>0.0001: return false
+		# UV islands duplicate a position. Compare every normal/UV variant in
+		# both directions rather than whichever exported duplicate came last.
+		for direction in [[sides.base[position],sides.body[position]], [sides.body[position],sides.base[position]]]:
+			for sample in direction[0]:
+				var matched := false
+				for other in direction[1]:
+					if sample[0].distance_to(other[0])<=0.002 and sample[1].distance_to(other[1])<=0.0001:
+						matched = true
+						break
+				if not matched: return false
 	return shared>20
 
 func check_hands(rig: KhCharacterRig) -> void:
@@ -139,7 +149,7 @@ func check_hands(rig: KhCharacterRig) -> void:
 	var right_hand := rig.skeleton.global_transform*rig.skeleton.get_bone_global_pose(rig.skeleton.find_bone("hand_R"))
 	var grip := rig.sword.get_node("SwordGrip") as MeshInstance3D
 	var grip_mesh := grip.mesh as CylinderMesh
-	check(rig.sword.to_global(Vector3(0,0.04,0)).distance_to(right_hand*Vector3(0,.085,.025))<0.001 and is_equal_approx(grip_mesh.top_radius,.02),"Sword grip follows the posed palm with a four centimetre diameter")
+	check(rig.sword.to_global(Vector3(0,0.04,0)).distance_to((right_hand*KhCharacterRig.GRIP_FRAME).origin)<0.001 and is_equal_approx(grip_mesh.top_radius,.02),"Sword grip follows the authored hand frame with a four centimetre diameter")
 	rig.cast("push")
 	rig.animate(0.4,0.0)
 	var left_hand := rig.skeleton.global_transform*rig.skeleton.get_bone_global_pose(wrist)
@@ -188,6 +198,44 @@ func cape_anchor_valid(rig: KhCharacterRig) -> bool:
 				anchored += 1
 	return anchored>=17
 
+func grip_clear(rig: KhCharacterRig) -> bool:
+	var grip := rig.sword.get_node("SwordGrip") as MeshInstance3D
+	var count := 0
+	for instance in rig.mesh_roles:
+		if rig.mesh_roles[instance] not in ["base","uniform"]: continue
+		for surface in range(instance.mesh.get_surface_count()):
+			var a: Array = instance.mesh.surface_get_arrays(surface)
+			for i in range(a[Mesh.ARRAY_VERTEX].size()):
+				var p: Vector3 = a[Mesh.ARRAY_VERTEX][i]
+				var hand := false
+				var posed := Vector3.ZERO
+				for k in range(4):
+					var weight: float = a[Mesh.ARRAY_WEIGHTS][i*4+k]
+					if weight<.00001: continue
+					var bind: int = a[Mesh.ARRAY_BONES][i*4+k]
+					var name := String(instance.skin.get_bind_name(bind))
+					if name == "hand_R" or name.begins_with("finger_R_"): hand = true
+					var bone := rig.skeleton.find_bone(name)
+					posed += (rig.skeleton.get_bone_global_pose(bone)*instance.skin.get_bind_pose(bind)*p)*weight
+				if not hand: continue
+				var local := grip.to_local(rig.skeleton.to_global(posed))
+				if absf(local.y)>.108: continue
+				count+=1
+				if Vector2(local.x,local.z).length()<.0195: return false
+	return count>1000
+
+func material_recipes_valid(rig: KhCharacterRig) -> bool:
+	var skin := false
+	var cloth := false
+	for instance in rig.mesh_roles:
+		for surface in range(instance.mesh.get_surface_count()):
+			var mat := instance.get_active_material(surface) as StandardMaterial3D
+			if mat.resource_name.begins_with("Skin_"):
+				skin = mat.normal_enabled and mat.normal_texture.get_width()==1024 and mat.subsurf_scatter_enabled and is_equal_approx(mat.metallic_specular,.32)
+			elif mat.resource_name.begins_with("Robe_graphite"):
+				cloth = is_equal_approx(mat.metallic_specular,.22)
+	return skin and cloth
+
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	main = load("res://scenes/main.tscn").instantiate()
@@ -200,6 +248,18 @@ func run() -> void:
 	check(player.wardrobe.uniform_id == "" and roles(player.rig,false),"New game starts with base body/underwear/shoes")
 	check(player.rig.skeleton.get_bone_count() == 76,"Imported deforming skeleton has 76 bones including fingers and cape dynamics")
 	check_hands(player.rig)
+	var clear := true
+	for action in ["rest","guard","attack"]:
+		player.rig.cancel_action()
+		player.rig.guarding = action == "guard"
+		if action == "attack": player.rig.swing()
+		player.rig.animate(.4 if action == "attack" else 0,0)
+		clear = clear and grip_clear(player.rig)
+	player.rig.cancel_action()
+	player.rig.guarding = false
+	player.rig.animate(0,0)
+	check(clear,"Bare hand and glove vertices clear the grip in rest, guard and attack")
+	check(material_recipes_valid(player.rig),"Engine material recipes preserve calibrated skin and cloth responses")
 	check(fabric_normals_valid(player.rig),"Cloth and leather import real normal maps with tangent data")
 	check(cape_anchor_valid(player.rig),"Imported cape top shares the rigid spine anchor of its clasp")
 	check(not player.wardrobe.equip_uniform("missing"),"Unknown item cannot be equipped")

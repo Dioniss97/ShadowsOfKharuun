@@ -1,5 +1,13 @@
 # Personaje y vestuario Blender–Godot
 
+## Correcciones tras la auditoría — calidad 12
+
+La [comparativa 12](../../art/references/character/iterations/quality_12/README.md) documenta el estado más reciente. `character_surfaces.py` conserva el atlas anatómico CC0 y genera mapas propios de piel de 1024² y UV de tejido con escala física común. Las piezas comparten el nombre `UVMap` antes del join. `human_base.py` construye ribetes desde los bordes de la ropa y los ajusta por proximidad a su superficie con espesor. Las secciones históricas inferiores describen sus respectivos pases.
+
+El correctivo `art/source/characters/grip_contact_fit.json` se aplica en reposo a la mano y al guante después de subdividirlos; el exportador exige correspondencia de al menos el 98% de sus puntos a 0,15 mm. Cambiar anatomía, pesos o pose exige revisar el contacto. Rotaciones locales de dedos/muñecas componen reposo por delta; marco del arma calibrado respecto a la mano, flexiones distintas por dedo y oposición del pulgar. Es un agarre concreto, no un solucionador para cualquier arma.
+
+`scripts/character_materials.gd` aplica recetas explícitas compartidas: especular .32 piel, .22 tejido, .30 cuero, normal textil/cuero .65 y SSS de piel .06. No se confía en que los parámetros Blender se traduzcan idénticos a Godot. Se mantiene la paleta propia, sin mapas externos. [Propiedades del material Godot](https://docs.godotengine.org/en/4.7/classes/class_basematerial3d.html).
+
 Requiere la instalación Blender 5.2.2 LTS utilizada para el Vigía. Ejecutar Blender en segundo plano con --python-exit-code 1 --python tools/blender/create_character.py desde el repositorio. El script reconstruye la fuente; guardar aparte ediciones manuales antes de regenerar.
 
 La base anatómica CC0 está fijada en art/source/characters/vendor/makehuman. human_base.py adapta la anatomía y calcula pesos en Blender. create_character.py crea el rig compartido, la ropa base y el uniforme con materiales propios; guarda art/source/characters/adventurer.blend y exporta assets/models/characters/adventurer.glb.

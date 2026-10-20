@@ -6,6 +6,9 @@ extends KhRig
 const MODEL = preload("res://assets/models/characters/adventurer.glb")
 const PANEL_CHAINS := 6
 const CAPE_CHAINS := 9
+const RIGHT_GRIP_FLEX := [Vector3(0.03700000,1.80000000,1.20100000),Vector3(1.21633655,1.64758983,0.79169893),Vector3(1.27000000,1.83000000,1.36400000),Vector3(1.19321404,0.95489881,0.04500000),Vector3(1.60000000,1.05497115,0.20955164)]
+const THUMB_OPPOSITION := Vector2(-0.10233942,-1.30000000)
+const GRIP_FRAME := Transform3D(Basis(Vector3(0.56464275,0.46601938,-0.68117824),Vector3(0.78047511,-0.03309686,0.62430917),Vector3(0.26839554,-0.88415547,-0.38240495)),Vector3(-0.01612308,0.04935014,-0.00317670))
 var model: Node3D
 var skeleton: Skeleton3D
 var uniform_id := ""
@@ -26,6 +29,7 @@ func build(tint: Color, blade_color: Color, guardian: bool = false) -> void:
 	add_child(model)
 	skeleton = model.find_children("*", "Skeleton3D", true, false)[0]
 	for mesh in model.find_children("*", "MeshInstance3D", true, false):
+		KhCharacterMaterials.apply(mesh)
 		var role := "always"
 		if String(mesh.name).begins_with("Uniform"): role = "uniform"
 		elif String(mesh.name).begins_with("Base"): role = "base"
@@ -91,27 +95,30 @@ func _pose_fingers() -> void:
 		var wrist := skeleton.find_bone("hand_"+side)
 		if wrist >= 0:
 			var twist := -PI/2.0 if side == "R" else lerpf(PI/2.0,0.0,extension)
-			skeleton.set_bone_pose_rotation(wrist,Quaternion(Vector3.UP,twist))
+			var wrist_rest := skeleton.get_bone_rest(wrist).basis.orthonormalized().get_rotation_quaternion()
+			skeleton.set_bone_pose_rotation(wrist,wrist_rest*Quaternion(Vector3.UP,twist))
 		for finger in range(1,6):
 			for segment in range(3):
 				var index := skeleton.find_bone("finger_%s_%d_%d" % [side,finger,segment])
 				if index < 0: continue
 				var flex: float
 				if side == "R":
-					flex = [0.55,0.70,0.40][segment] if finger == 1 else [0.95,1.25,0.85][segment]
+					flex = RIGHT_GRIP_FLEX[finger-1][segment]
 				else:
 					flex = lerpf([0.10,0.16,0.12][segment],0.02,extension)
-				skeleton.set_bone_pose_rotation(index,Quaternion(Vector3.RIGHT,flex))
+				var joint_rest := skeleton.get_bone_rest(index).basis.orthonormalized().get_rotation_quaternion()
+				var delta := Quaternion(Vector3.RIGHT,flex)
+				if side == "R" and finger == 1 and segment == 0:
+					delta = Quaternion(Vector3.UP,THUMB_OPPOSITION.x)*Quaternion(Vector3.BACK,THUMB_OPPOSITION.y)*delta
+				skeleton.set_bone_pose_rotation(index,joint_rest*delta)
 
 func _fit_grip() -> void:
 	var hand := skeleton.find_bone("hand_R")
 	if hand < 0: return
 	var hand_pose := skeleton.global_transform*skeleton.get_bone_global_pose(hand)
-	var centre := hand_pose*Vector3(0,0.085,0.025)
-	var forearm := skeleton.find_bone("forearm_R")
-	var forearm_delta := skeleton.get_bone_global_pose(forearm).basis*skeleton.get_bone_global_rest(forearm).basis.inverse()
-	sword.global_basis = skeleton.global_basis*forearm_delta*Basis(Vector3.RIGHT,-PI/2.0)
-	sword.global_position = centre-sword.global_basis*Vector3(0,0.04,0)
+	var grip_pose := hand_pose*GRIP_FRAME
+	sword.global_basis = grip_pose.basis.orthonormalized()
+	sword.global_position = grip_pose.origin-sword.global_basis*Vector3(0,0.04,0)
 	var free_hand := skeleton.find_bone("hand_L")
 	left_palm.global_position = skeleton.global_transform*(skeleton.get_bone_global_pose(free_hand)*Vector3(0,.085,.015))
 

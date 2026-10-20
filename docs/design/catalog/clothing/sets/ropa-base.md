@@ -14,4 +14,6 @@ Nueva partida y retirar el uniforme muestran todas las piezas base. Equipar un c
 
 ## Producción
 
+La revisión tras la auditoría usa una sisa geométrica interpolada; cintura y dobladillos nacen de los bucles de los shorts y se ajustan a la superficie con espesor. Se conserva el cambio completo y reversible de apariencia; véanse [capturas y límites de calidad 12](../../../../../art/references/character/iterations/quality_12/README.md).
+
 Fuente y export compartidos con [el cuerpo](../../characters/cuerpo-aventurero.md). El grupo BaseOutfit del GLB y las zonas expuestas BodyCovered constituyen este estado.

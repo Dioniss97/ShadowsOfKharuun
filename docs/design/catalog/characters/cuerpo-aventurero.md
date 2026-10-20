@@ -20,6 +20,8 @@ El nivel de acabado y los materiales deben leerse como parte del mismo juego que
 
 ## Rutas de producción
 
+La candidata conserva el atlas UV anatómico CC0 con mapas propios de piel de 1024² y material explícito en Godot. Muñecas y falanges componen reposo por delta; la mano derecha tiene pose y correctivo de contacto específicos para el mango actual. Ajustes suaves de cintura, deltoides y muñecas, evidencia y límites en [calidad 12](../../../../art/references/character/iterations/quality_12/README.md). Implementación sin aceptación artística implícita.
+
 - Fuente: art/source/characters/adventurer.blend.
 - Base CC0 y licencia: art/source/characters/vendor/makehuman/.
 - GLB: assets/models/characters/adventurer.glb.

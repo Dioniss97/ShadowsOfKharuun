@@ -1,0 +1,211 @@
+{
+	"contacts": [
+		{
+			"grip_height_mm": 219.999998807907,
+			"grip_radius_mm": 19.9999995529652,
+			"hand_vertices_in_grip_height": 7127,
+			"maximum_radial_depth_mm": 0.0,
+			"outfit": "base",
+			"pose": "rest",
+			"rest_skinning_consistency_error_m": 0.0000428845232818276,
+			"vertices_deeper_than_half_mm": 0
+		},
+		{
+			"grip_height_mm": 219.999998807907,
+			"grip_radius_mm": 19.9999995529652,
+			"hand_vertices_in_grip_height": 7127,
+			"maximum_radial_depth_mm": 0.0,
+			"outfit": "base",
+			"pose": "guard",
+			"rest_skinning_consistency_error_m": 0.0000428845232818276,
+			"vertices_deeper_than_half_mm": 0
+		},
+		{
+			"grip_height_mm": 219.999998807907,
+			"grip_radius_mm": 19.9999995529652,
+			"hand_vertices_in_grip_height": 7127,
+			"maximum_radial_depth_mm": 0.0,
+			"outfit": "base",
+			"pose": "attack",
+			"rest_skinning_consistency_error_m": 0.0000428845232818276,
+			"vertices_deeper_than_half_mm": 0
+		},
+		{
+			"grip_height_mm": 219.999998807907,
+			"grip_radius_mm": 19.9999995529652,
+			"hand_vertices_in_grip_height": 7197,
+			"maximum_radial_depth_mm": 0.0,
+			"outfit": "uniform",
+			"pose": "rest",
+			"rest_skinning_consistency_error_m": 0.0000429423562309239,
+			"vertices_deeper_than_half_mm": 0
+		},
+		{
+			"grip_height_mm": 219.999998807907,
+			"grip_radius_mm": 19.9999995529652,
+			"hand_vertices_in_grip_height": 7197,
+			"maximum_radial_depth_mm": 0.0,
+			"outfit": "uniform",
+			"pose": "guard",
+			"rest_skinning_consistency_error_m": 0.0000429423562309239,
+			"vertices_deeper_than_half_mm": 0
+		},
+		{
+			"grip_height_mm": 219.999998807907,
+			"grip_radius_mm": 19.9999995529652,
+			"hand_vertices_in_grip_height": 7197,
+			"maximum_radial_depth_mm": 0.0,
+			"outfit": "uniform",
+			"pose": "attack",
+			"rest_skinning_consistency_error_m": 0.0000429423562309239,
+			"vertices_deeper_than_half_mm": 0
+		}
+	],
+	"glb_sha256": "d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c",
+	"materials": {
+		"Base_seams": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.5,
+			"normal_enabled": false,
+			"normal_scale": 1.0,
+			"rim_enabled": false,
+			"roughness": 0.850000023841858,
+			"roughness_channel": 0,
+			"roughness_texture": false,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Base_woven_charcoal": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.219999998807907,
+			"normal_enabled": true,
+			"normal_scale": 0.649999976158142,
+			"rim_enabled": false,
+			"roughness": 1.0,
+			"roughness_channel": 1,
+			"roughness_texture": true,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Buckle_old_bronze": {
+			"clearcoat_enabled": false,
+			"metallic": 0.649999976158142,
+			"metallic_specular": 0.5,
+			"normal_enabled": false,
+			"normal_scale": 1.0,
+			"rim_enabled": false,
+			"roughness": 0.560000002384186,
+			"roughness_channel": 0,
+			"roughness_texture": false,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Eyes_ivory": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.5,
+			"normal_enabled": false,
+			"normal_scale": 1.0,
+			"rim_enabled": false,
+			"roughness": 0.300000011920929,
+			"roughness_channel": 0,
+			"roughness_texture": false,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Hair_umber": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.5,
+			"normal_enabled": false,
+			"normal_scale": 1.0,
+			"rim_enabled": false,
+			"roughness": 0.899999976158142,
+			"roughness_channel": 0,
+			"roughness_texture": false,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Iris_dark_hazel": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.5,
+			"normal_enabled": false,
+			"normal_scale": 1.0,
+			"rim_enabled": false,
+			"roughness": 0.349999994039536,
+			"roughness_channel": 0,
+			"roughness_texture": false,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Leather_dark": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.300000011920929,
+			"normal_enabled": true,
+			"normal_scale": 0.649999976158142,
+			"rim_enabled": false,
+			"roughness": 1.0,
+			"roughness_channel": 1,
+			"roughness_texture": true,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Linen_warm_grey": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.219999998807907,
+			"normal_enabled": true,
+			"normal_scale": 0.649999976158142,
+			"rim_enabled": false,
+			"roughness": 1.0,
+			"roughness_channel": 1,
+			"roughness_texture": true,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Robe_graphite": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.219999998807907,
+			"normal_enabled": true,
+			"normal_scale": 0.649999976158142,
+			"rim_enabled": false,
+			"roughness": 1.0,
+			"roughness_channel": 1,
+			"roughness_texture": true,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Robe_slate": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.219999998807907,
+			"normal_enabled": true,
+			"normal_scale": 0.649999976158142,
+			"rim_enabled": false,
+			"roughness": 1.0,
+			"roughness_channel": 1,
+			"roughness_texture": true,
+			"sss_enabled": false,
+			"sss_strength": 0.0
+		},
+		"Skin_warm_sand": {
+			"clearcoat_enabled": false,
+			"metallic": 0.0,
+			"metallic_specular": 0.319999992847443,
+			"normal_enabled": true,
+			"normal_scale": 0.550000011920929,
+			"rim_enabled": false,
+			"roughness": 1.0,
+			"roughness_channel": 1,
+			"roughness_texture": true,
+			"sss_enabled": true,
+			"sss_strength": 0.0599999986588955
+		}
+	},
+	"scope": "Read-only imported-material and CPU vertex/cylinder diagnostic. Samples do not prove triangle-volume intersection absence."
+}

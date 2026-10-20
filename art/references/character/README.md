@@ -2,6 +2,8 @@
 
 20-10-2026. Evidencia de Godot 4.7.2, Vulkan Forward+, Radeon RX 6600. Alcance aprobado [#34](https://github.com/Dioniss97/ShadowsOfKharuun/issues/34); producción en [PR #39](https://github.com/Dioniss97/ShadowsOfKharuun/pull/39). El estado operativo y la aceptación viven en GitHub. La candidata no es una entrega estable.
 
+Para probar esta candidata desde el checkout de producción: `tools/logs/production-050/PLAY.bat` respecto al workspace principal. El PLAY.bat de main continúa mostrando la estable 0.4.0.
+
 ## Apariencias actuales
 
 | Sin uniforme | Uniforme completo |
@@ -10,7 +12,7 @@
 
 Anatomía MakeHuman CC0 fijada y adaptada en Blender; ropa, rig y materiales propios. Equipar cambia túnica, mangas, guantes, pantalón, cinturón, botas y capa en un solo conjunto. Retirar restaura camiseta/shorts/calzado y manos base. Cabeza y sus accesorios quedan aparte.
 
-GLB `03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2`: 8,630,804 bytes, 76 huesos, 41 piezas editables, 63,854 vértices y 126,584 triángulos sumando ambas apariencias. Cuatro roles exportados; las dos apariencias no se dibujan a la vez. [Exportación](export_report.json).
+GLB `d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c`: 9,916,812 bytes, 76 huesos, 41 piezas editables, 64,018 vértices y 126,912 triángulos sumando ambas apariencias. Cuatro roles exportados; las dos apariencias no se dibujan a la vez. [Exportación](export_report.json).
 
 ## Comparaciones por región
 
@@ -27,6 +29,8 @@ Parejas con cámara, iluminación y protocolo comunes; GLB/render Godot reales. 
 | [09 — uniforme](iterations/quality_09/README.md) | Prendas anatómicas, guantes y normales textiles/cuero; 70 vistas por versión. |
 | [10 — movimiento](iterations/quality_10/README.md) | Anclaje de capa, separación de faldón y amortiguación; 40 vistas por versión. |
 | [11 — inventario](iterations/quality_11/README.md) | Encuadre, relleno, giro y retorno a pausa previa. |
+
+| [12 — correcciones tras auditoría](iterations/quality_12/README.md) | Orientación de dedos/agarre, anatomía, confección, atlas de piel, trama y materiales Godot explícitos. |
 
 ## Inventario
 
@@ -48,14 +52,14 @@ El visor final usa la escena y luz reales sin cambiar materiales ni la escala de
 
 | Suite | Comprobaciones | Fallos | Informe |
 |---|---:|---:|---|
-| Vestuario headless | 33 | 0 | [Lógica](integration/logic_report.json) |
-| Vestuario GPU | 38 | 0 | [GPU y métricas](integration/gpu_report.json) |
-| Reimportación vacía + vestuario headless | 33 | 0 | [Importación limpia](integration/clean_import_report.json) |
-| Misma copia limpia + vestuario GPU | 38 | 0 | [GPU limpia](integration/clean_import_gpu_report.json) |
+| Vestuario headless | 35 | 0 | [Lógica](integration/logic_report.json) |
+| Vestuario GPU | 40 | 0 | [GPU y métricas](integration/gpu_report.json) |
+| Reimportación vacía + vestuario headless | 35 | 0 | [Importación limpia](integration/clean_import_report.json) |
+| Misma copia limpia + vestuario GPU | 40 | 0 | [GPU limpia](integration/clean_import_gpu_report.json) |
 | Misión headless | 213 | 0 | [Misión](integration/mission_headless.json) |
 | Misión GPU, recorrido automático hasta victoria | 238 | 0 | [Misión GPU](integration/mission_gpu.json) |
 
-[Procedencia y hashes de fuentes](integration/final_provenance.json), [regresión resumida](integration/regression_report.json), [cámaras del templo](integration/final/report.json), [estudio](studio/report.json). La copia limpia se creó sin `.godot`, se importó con editor y se probaron ambas rutas. Se conserva el primer fallo GPU de movimiento del pase 04 y sus repeticiones en aquella carpeta; no se atribuye una causa que no se demostró. El resultado final actual corresponde a estas fuentes.
+[Procedencia y hashes de fuentes](integration/final_provenance.json), [regresión resumida](integration/regression_report.json), [cámaras del templo](integration/final/report.json), [estudio](studio/report.json). La copia limpia se creó sin `.godot`, se importó con editor y se probaron ambas rutas. Se conserva el primer fallo GPU de movimiento del pase 04 y sus repeticiones en aquella carpeta; no se atribuye una causa que no se demostró. El resultado final actual corresponde a estas fuentes. En calidad 12 se registró una excepción nativa GPU al iniciar vestuario; repetición aislada 40/0 y copia limpia 40/0, causa no determinada.
 
 ## Movimiento, coste y límites
 

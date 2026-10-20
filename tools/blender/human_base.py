@@ -12,17 +12,20 @@ from mathutils.bvhtree import BVHTree
 
 def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, base_trim, robe, leather):
     path = root/'art/source/characters/vendor/makehuman/base.obj'
-    raw=[]; faces=[]; groups={}; current=''
+    raw=[]; faces=[]; face_uvs={};texcoords=[]; groups={}; current=''
     for line in path.read_text(encoding='utf-8-sig').splitlines():
         row=line.split()
         if not row: continue
         if row[0]=='v': raw.append(Vector(tuple(map(float,row[1:4]))))
+        elif row[0]=='vt':texcoords.append(tuple(map(float,row[1:3])))
         elif row[0]=='g': current=row[1];groups.setdefault(current,set())
         elif row[0]=='f':
             # Y-up -> Z-up swaps two axes, so reverse polygon winding.
             face=tuple(reversed([int(w.split('/')[0])-1 for w in row[1:]]))
             groups[current].update(face)
-            if current=='body': faces.append(face)
+            if current=='body':
+                faces.append(face)
+                face_uvs[face]=[texcoords[int(w.split('/')[1])-1] for w in reversed(row[1:])]
     scale=2.0/(8.4913+8.1676)
     points=[Vector((p.x*scale,p.z*scale,(p.y+8.1676)*scale)) for p in raw]
 
@@ -83,6 +86,21 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         t=t*t*(3-2*t)
         cap=.138*math.sqrt(max(0,1-(p.x/.34)**2))
         p.y=min(p.y,p.y*(1-t)+cap*t)
+
+    # Broad anatomical planes: soften deltoid bulges, support the waist, and
+    # avoid pinching the wrist between the forearm and palm.
+    for i,p in mapped.items():
+        w=dict(weights[i])
+        core=w.get('spine',0)+w.get('hips',0)
+        p.x*=1+.12*math.exp(-((p.z-1.16)/.13)**2)*core
+        arm=sum(value for name,value in w.items() if name.startswith('upper_arm_'))
+        shoulder=math.exp(-((p.z-1.46)/.085)**2)*arm
+        p.y*=1-.13*shoulder
+        wrist=math.exp(-((p.z-1.025)/.065)**2)*sum(value for name,value in w.items() if name.startswith(('forearm_','hand_')))
+        if abs(p.x)>.30:
+            centre=math.copysign(.42,p.x)
+            p.x=centre+(p.x-centre)*(1+.12*wrist)
+            p.y=.015+(p.y-.015)*(1+.08*wrist)
 
     # The source already contains authored finger loops and joint markers.
     # Retarget those markers with the hand frame, rather than approximating
@@ -168,6 +186,10 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         data=bpy.data.meshes.new(name)
         data.from_pydata([mapped[i] for i in ids],[],[tuple(ix[i] for i in f) for f in selected])
         data.update()
+        if role in ['always','body','base'] and mat==skin:
+            uv=data.uv_layers.new(name='UVMap')
+            for polygon,original_face in zip(data.polygons,selected):
+                for loop,co in zip(polygon.loop_indices,face_uvs[original_face]):uv.data[loop].uv=co
         if offset:
             for v in data.vertices:v.co+=v.normal*offset
         obj=bpy.data.objects.new(name,data);bpy.context.collection.objects.link(obj)
@@ -219,7 +241,7 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
     source_normals={i:reference.data.vertices[j].normal.copy() for j,i in enumerate(used)}
     garment_fields=[lambda v:v['p'].z-1.01,lambda v:1.64-v['p'].z,
                     lambda v:(v['p'].x/.13)**2+(v['p'].y/.13)**2+((v['p'].z-1.70)/.25)**2-1,
-                    lambda v:sum(v['w'].get(name,0) for name in ['spine','hips','head'])-.40]
+                    lambda v:.30+.025*math.exp(-((v['p'].z-1.50)/.07)**2)-abs(v['p'].x)]
     def mix(a,b,t):
         keys=set(a['w'])|set(b['w'])
         return {'p':a['p'].lerp(b['p'],t),'n':a['n'].lerp(b['n'],t).normalized(),
@@ -231,6 +253,7 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
             if fa>=0:out.append(a)
             if (fa>=0)!=(fb>=0):out.append(mix(a,b,fa/(fa-fb)))
         return out
+    garment_surfaces={}
     def garment(garment_name,material,role,fields,outset=.006,thickness=.003,max_components=1,boundary_iterations=3):
         garment_vertices=[];garment_faces=[];garment_weights=[];lookup={}
         for face in faces:
@@ -283,7 +306,7 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         bm.free()
         # Interior fabric bridges small anatomical features instead of copying skin
         # detail. Keep the fitted contour fixed while relaxing the broad surface.
-        for _ in range(4):
+        for _ in range(10 if garment_name=='UniformJacket' else 4):
             relaxed={i:data.vertices[i].co.lerp(sum((data.vertices[n].co for n in ns),Vector())/len(ns),.6)
                      for i,ns in neighbours.items() if i not in boundary and ns}
             for i,point in relaxed.items():data.vertices[i].co=point
@@ -309,8 +332,28 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
             for index,(point,skin_weights) in updates.items():
                 data.vertices[index].co=point;garment_weights[index]=skin_weights
         data.update()
+        # Restrained broad folds follow points of support rather than adding
+        # skin detail to a body offset. They are part of the deforming mesh.
+        if garment_name in ['UniformJacket','UniformTrousers','BaseTop','BaseShorts']:
+            for vertex in data.vertices:
+                p=vertex.co;n=vertex.normal
+                front=max(0,min(1,p.y/.10))
+                if garment_name=='UniformJacket':
+                    chest=math.exp(-((p.z-1.27)/.18)**2)*max(0,1-abs(p.x)/.29)
+                    gather=math.exp(-((p.z-1.12)/.055)**2)
+                    elbow=math.exp(-((p.z-1.22)/.06)**2)*max(0,min(1,(abs(p.x)-.27)/.06))
+                    fold=.0035*math.sin(p.z*53+abs(p.x)*14)*chest*front
+                    fold+=.004*math.cos(p.x*62)*gather
+                    fold+=.004*math.sin(p.z*104+p.y*12)*elbow
+                elif garment_name=='UniformTrousers':
+                    fold=.0035*math.sin(p.z*94+p.x*11)*math.exp(-((p.z-.55)/.07)**2)
+                else:
+                    fold=.0015*math.sin(p.z*68+p.x*19)*front
+                vertex.co+=n*fold
+            data.update()
         # Retain a thin physical edge rather than a paper sheet.
         original_count=len(data.vertices)
+        garment_surfaces[garment_name]=(top,original_count,boundary,garment_weights)
         bpy.context.view_layer.objects.active=top
         shell=top.modifiers.new('Base fabric thickness','SOLIDIFY');shell.thickness=thickness;shell.offset=-1
         bpy.ops.object.modifier_apply(modifier=shell.name)
@@ -318,16 +361,61 @@ def build(root, target_bones, target_rig, skin, hair, eye, iris, base_cloth, bas
         result.append(top)
         return top
 
-    garment('BaseTop',base_cloth,'base',garment_fields)
+    def edge_trim(source_name,name,material,upper=True,drop=.024,loops_to_keep=1):
+        from mathutils.bvhtree import BVHTree
+        source,count,boundary,skin_weights=garment_surfaces[source_name]
+        outer_faces=[tuple(p.vertices) for p in source.data.polygons if all(i<count for i in p.vertices)]
+        surface=BVHTree.FromPolygons([v.co.copy() for v in source.data.vertices[:count]],outer_faces)
+        remaining=set(boundary);loops=[]
+        while remaining:
+            start=next(iter(remaining));order=[];current=start;previous=-1
+            while current in remaining:
+                remaining.remove(current);order.append(current)
+                candidates=[n for n in boundary[current] if n!=previous and n in remaining]
+                if not candidates:break
+                previous,current=current,candidates[0]
+            if len(order)>6:loops.append(order)
+        loops.sort(key=lambda loop:sum(source.data.vertices[i].co.z for i in loop)/len(loop),reverse=upper)
+        vertices=[];polygons=[];skin=[]
+        for loop in loops[:loops_to_keep]:
+            coords=[source.data.vertices[i].co.copy() for i in loop]
+            base=len(vertices);size=len(loop)
+            for row in range(3):
+                t=row/2
+                for i,p in enumerate(coords):
+                    target=p+Vector((0,0,-drop*t if upper else drop*t))
+                    fitted,normal,_,_=surface.find_nearest(target)
+                    # Follow the actual garment surface, including each thigh.
+                    # A radial band from the world origin crosses the shorts.
+                    vertices.append(fitted+normal*.0045);skin.append(skin_weights[loop[i]])
+            for row in range(2):
+                for i in range(size):
+                    j=(i+1)%size
+                    polygons.append((base+row*size+i,base+row*size+j,base+(row+1)*size+j,base+(row+1)*size+i))
+        data=bpy.data.meshes.new(name);data.from_pydata(vertices,[],polygons);data.update()
+        if sum(p.normal.dot(Vector((p.center.x,p.center.y,0))) for p in data.polygons)<0:
+            bm=bmesh.new();bm.from_mesh(data)
+            bmesh.ops.reverse_faces(bm,faces=list(bm.faces));bm.to_mesh(data);bm.free();data.update()
+        obj=bpy.data.objects.new(name,data);bpy.context.collection.objects.link(obj)
+        data.materials.append(material);obj['wardrobe_role']=source['wardrobe_role'];obj['fixed_bone']=''
+        for p in data.polygons:p.use_smooth=True
+        bpy.context.view_layer.objects.active=obj
+        shell=obj.modifiers.new('Tailored edge thickness','SOLIDIFY');shell.thickness=.003;shell.offset=0
+        bpy.ops.object.modifier_apply(modifier=shell.name)
+        overrides[name]={i:skin[i%len(skin)] for i in range(len(obj.data.vertices))}
+        result.append(obj)
+        return obj
+
+    garment('BaseTop',base_cloth,'base',garment_fields,boundary_iterations=10)
     shorts_fields=[lambda v:v['p'].z-.735,lambda v:1.055-v['p'].z,
                    lambda v:sum(value for name,value in v['w'].items() if name=='hips' or name.startswith(('thigh_','shin_')))-.60]
     garment('BaseShorts',base_cloth,'base',shorts_fields,outset=.012,thickness=.004)
-    garment('BaseWaistband',base_trim,'base',[lambda v:v['p'].z-1.03,*shorts_fields[1:]],outset=.016,thickness=.002)
-    garment('BaseShortHem',base_trim,'base',[shorts_fields[0],lambda v:.750-v['p'].z,shorts_fields[2]],outset=.016,thickness=.002,max_components=2)
+    edge_trim('BaseShorts','BaseWaistband',base_trim,upper=True,drop=.016)
+    edge_trim('BaseShorts','BaseShortHem',base_trim,upper=False,drop=.014,loops_to_keep=2)
     jacket_fields=[lambda v:v['p'].z-.935,lambda v:1.65-v['p'].z,
                    lambda v:(v['p'].x/.11)**2+(v['p'].y/.105)**2+((v['p'].z-1.70)/.23)**2-1]
-    garment('UniformJacket',robe,'uniform',jacket_fields,outset=.016,thickness=.004)
-    garment('UniformCollar',base_trim,'uniform',[*jacket_fields,lambda v:.55-jacket_fields[2](v)],outset=.026,thickness=.004,boundary_iterations=6)
+    garment('UniformJacket',robe,'uniform',jacket_fields,outset=.026,thickness=.004,boundary_iterations=8)
+    edge_trim('UniformJacket','UniformCollar',base_trim,upper=True,drop=.024)
     garment('UniformTrousers',base_cloth,'uniform',[lambda v:v['p'].z-.32,lambda v:1.09-v['p'].z,shorts_fields[2]],outset=.014,thickness=.004)
     garment('UniformBelt',leather,'uniform',[lambda v:v['p'].z-1.025,lambda v:1.09-v['p'].z,garment_fields[3]],outset=.035,thickness=.008)
     # Recess only skin inside the fitted garment, fading to zero at its contour.

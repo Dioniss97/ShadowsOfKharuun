@@ -19,6 +19,7 @@ from mathutils.bvhtree import BVHTree
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(Path(__file__).parent))
 from human_base import build as build_human
+from character_surfaces import skin_atlas, cloth_coordinates, grip_contact
 SOURCE = ROOT / 'art/source/characters'
 EXPORT = ROOT / 'assets/models/characters'
 EVIDENCE = ROOT / 'art/references/character'
@@ -74,8 +75,8 @@ def material(name, color, roughness, weave=False, metal=0, skin=False, leather=F
             value = broad * .018 + medium * .010 + grain * .006
             warmth = smooth_noise(n, 18, rng) * .003
         else:
-            threads = .006 * (np.sin(xx * 2 * math.pi / 11) + np.sin(yy * 2 * math.pi / 11))
-            value = broad * .026 + medium * .012 + grain * .007 + threads
+            threads = .002 * (np.sin(xx * 2 * math.pi / 4) + np.sin(yy * 2 * math.pi / 4))
+            value = broad * .012 + medium * .005 + grain * .003 + threads
             warmth = smooth_noise(n, 18, rng) * .004
         # Linear pixels; Blender encodes the exported image with its color space.
         pixels = np.ones((n, n, 4), dtype=np.float32)
@@ -104,7 +105,7 @@ def material(name, color, roughness, weave=False, metal=0, skin=False, leather=F
         mat.node_tree.links.new(rough_tex.outputs['Color'], bsdf.inputs['Roughness'])
         if weave or leather:
             height=medium*.025+grain*(.008 if leather else .003)
-            if weave:height+=.035*(np.sin(xx*2*math.pi/11)+np.sin(yy*2*math.pi/11))
+            if weave:height+=.035*(np.sin(xx*2*math.pi/4)+np.sin(yy*2*math.pi/4))
             dy,dx=np.gradient(height)
             normals=np.stack((-dx*3,-dy*3,np.ones_like(dx)),axis=2)
             normals/=np.linalg.norm(normals,axis=2,keepdims=True)
@@ -561,12 +562,14 @@ for obj in PARTS:
         for group,weight in keep:obj.vertex_groups[group].add([vertex.index],weight/total,'REPLACE')
     mod=obj.modifiers.new('Shared skeleton','ARMATURE');mod.object=rig
     obj.parent=rig
-    # Unwrap to provide repeatable exported woven texture sampling.
-    bpy.context.view_layer.objects.active=obj
-    bpy.ops.object.select_all(action='DESELECT');obj.select_set(True)
-    bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.uv.smart_project(angle_limit=1.15,island_margin=.015)
-    bpy.ops.object.mode_set(mode='OBJECT')
+    # Preserve the original anatomical atlas across visibility boundaries.
+    # Cloth is unwrapped separately below with a common physical weave scale.
+    if not obj.data.uv_layers:
+        bpy.context.view_layer.objects.active=obj
+        bpy.ops.object.select_all(action='DESELECT');obj.select_set(True)
+        bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.smart_project(angle_limit=1.15,island_margin=.015)
+        bpy.ops.object.mode_set(mode='OBJECT')
 
 def body_x(x,z=None):
     v=abs(x)
@@ -661,13 +664,11 @@ for members in seam.values():
     for obj,index in members:normals[obj.name][index]=normal
 for obj in skin_parts:
     obj.data.normals_split_custom_set_from_vertices(normals[obj.name])
-    # These skin maps contain low-frequency tonal/roughness variation, not
-    # painted anatomical landmarks. A common XZ projection keeps that sampling
-    # continuous across the two visibility roles instead of per-piece islands.
-    for loop in obj.data.loops:
-        p=obj.data.vertices[loop.vertex_index].co
-        obj.data.uv_layers.active.data[loop.index].uv=(p.x*.8+.5,p.z*.5)
+    # All skin roles preserve the same authored anatomical UV atlas.
 
+grip_contact(PARTS,SOURCE/'grip_contact_fit.json')
+skin_atlas(SKIN,PARTS)
+cloth_coordinates(PARTS)
 bpy.context.scene['asset']='Adventurer: adapted CC0 anatomy and original wardrobe'
 bpy.context.scene['human_acceptance']='pending'
 for role in ['always','body','base','uniform']:
@@ -702,7 +703,7 @@ report={'source':'art/source/characters/adventurer.blend','glb':'assets/models/c
  'glb_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'bytes':path.stat().st_size,
  'mesh_count':len(copies),'source_mesh_pieces':len(PARTS),'bones':len(BONES),'vertices':sum(len(o.data.vertices) for o in PARTS),
  'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in PARTS),
-  'human_acceptance':'pending','textures':'original packed 512x512 color/roughness maps for skin, cloth and leather; subtle tangent normal maps for cloth/leather; anatomy adapted from MakeHuman CC0',
+  'human_acceptance':'pending','textures':'original 1024x1024 anatomical skin color/roughness/normal atlas; 512x512 cloth/leather maps with shared physical weave scale; anatomy and UV layout adapted from pinned MakeHuman CC0',
  'anatomy_source_sha256':hashlib.sha256((SOURCE/'vendor/makehuman/base.obj').read_bytes()).hexdigest(),
  'anatomy_source_commit':(SOURCE/'vendor/makehuman/COMMIT.txt').read_text(encoding='utf-8-sig').strip(),
  'roles':{r:[o.name for o in PARTS if o['wardrobe_role']==r] for r in ['always','body','base','uniform']}}

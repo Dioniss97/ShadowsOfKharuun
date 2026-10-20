@@ -1,6 +1,6 @@
 {
 	"engine": "4.7.2-stable (official)",
-	"glb_sha256": "03a36eec3adfe803aa5b6ce14c8e8bae1b3a8a156869f5b3219ef061d0734bb2",
+	"glb_sha256": "d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"resolution": [

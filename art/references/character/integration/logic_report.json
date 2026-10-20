@@ -70,11 +70,23 @@
 			"passed": true
 		},
 		{
+			"name": "Preview rotation button turns only the inventory character",
+			"passed": true
+		},
+		{
+			"name": "Reverse rotation restores the preview angle",
+			"passed": true
+		},
+		{
 			"name": "Mouse remove restores all base parts and footwear",
 			"passed": true
 		},
 		{
 			"name": "ESC returns to previous running state",
+			"passed": true
+		},
+		{
+			"name": "Return button closes inventory and resumes the previous running state",
 			"passed": true
 		},
 		{

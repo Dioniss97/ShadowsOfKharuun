@@ -10,7 +10,8 @@ var close_button: Button
 var state_label: Label
 var preview_rig: KhCharacterRig
 var viewport: SubViewport
-var preview_angle := -0.2
+var preview_angle := -0.45
+var rotation_buttons: Array[Button] = []
 var observed: KhWardrobe
 
 func _ready() -> void:
@@ -97,6 +98,7 @@ func _ready() -> void:
 		var turn := KhUI.button("↶  GIRAR" if direction == -1 else "GIRAR  ↷")
 		turn.pressed.connect(func(): preview_angle += direction*PI/4)
 		rotations.add_child(turn)
+		rotation_buttons.append(turn)
 	var footer := KhUI.label("Sin uniforme: ropa base y calzado.  ·  Cabeza: sin objeto equipado.",12,KhUI.DIM)
 	footer.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(footer)
@@ -120,16 +122,21 @@ func _build_studio() -> void:
 	light.light_color = Color(1,0.92,0.82)
 	light.light_energy = 1.7
 	stage.add_child(light)
+	var fill := DirectionalLight3D.new()
+	fill.rotation_degrees = Vector3(-18,-45,0)
+	fill.light_color = Color(.68,.79,1)
+	fill.light_energy = .55
+	stage.add_child(fill)
 	preview_rig = KhCharacterRig.new()
 	stage.add_child(preview_rig)
 	preview_rig.build(Color.WHITE,Color(0.25,0.8,1))
 	preview_rig.sword.hide()
 	var camera := Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	camera.size = 2.45
+	camera.size = 2.15
 	camera.position = Vector3(0,1.15,-5)
 	stage.add_child(camera)
-	camera.look_at(Vector3(0,1.02,0))
+	camera.look_at(Vector3(0,.97,0))
 	camera.current = true
 
 func show_inventory() -> void:

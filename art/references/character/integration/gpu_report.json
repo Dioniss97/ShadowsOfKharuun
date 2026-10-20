@@ -78,11 +78,27 @@
 			"passed": true
 		},
 		{
+			"name": "Preview rotation button turns only the inventory character",
+			"passed": true
+		},
+		{
+			"name": "Capture inventory_rotated",
+			"passed": true
+		},
+		{
+			"name": "Reverse rotation restores the preview angle",
+			"passed": true
+		},
+		{
 			"name": "Mouse remove restores all base parts and footwear",
 			"passed": true
 		},
 		{
 			"name": "ESC returns to previous running state",
+			"passed": true
+		},
+		{
+			"name": "Return button closes inventory and resumes the previous running state",
 			"passed": true
 		},
 		{
@@ -148,8 +164,8 @@
 	"views": [
 		{
 			"draw_calls": 2299.0,
-			"frame_interval_median_ms": 6.066,
-			"frame_interval_p95_ms": 6.138,
+			"frame_interval_median_ms": 6.056,
+			"frame_interval_p95_ms": 6.129,
 			"primitives": 5407353.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 180435600.0,
@@ -157,17 +173,26 @@
 		},
 		{
 			"draw_calls": 2314.0,
-			"frame_interval_median_ms": 5.701,
-			"frame_interval_p95_ms": 8.635,
+			"frame_interval_median_ms": 5.855,
+			"frame_interval_p95_ms": 8.718,
 			"primitives": 5544922.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 180435600.0,
 			"view": "inventory_uniform"
 		},
 		{
+			"draw_calls": 2314.0,
+			"frame_interval_median_ms": 5.675,
+			"frame_interval_p95_ms": 8.723,
+			"primitives": 5544922.0,
+			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
+			"texture_memory_bytes": 180435600.0,
+			"view": "inventory_rotated"
+		},
+		{
 			"draw_calls": 251.0,
 			"frame_interval_median_ms": 6.051,
-			"frame_interval_p95_ms": 6.141,
+			"frame_interval_p95_ms": 6.142,
 			"primitives": 1706781.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 180435600.0,
@@ -175,8 +200,8 @@
 		},
 		{
 			"draw_calls": 247.0,
-			"frame_interval_median_ms": 6.049,
-			"frame_interval_p95_ms": 6.143,
+			"frame_interval_median_ms": 6.055,
+			"frame_interval_p95_ms": 6.138,
 			"primitives": 1660845.0,
 			"scope": "30 frame presentation intervals, includes CPU/render/presentation; not GPU-only or FPS guarantee",
 			"texture_memory_bytes": 180435600.0,

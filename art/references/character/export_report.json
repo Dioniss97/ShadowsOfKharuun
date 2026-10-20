@@ -1,13 +1,13 @@
 {
   "source": "art/source/characters/adventurer.blend",
   "glb": "assets/models/characters/adventurer.glb",
-  "glb_sha256": "5c11fe876735adc6b628ddd8a2304d9ad3f3eca6583dbc32d049f4f378d5864a",
-  "bytes": 6514460,
+  "glb_sha256": "adbcb05d209516139242b4cb2faa3a1b9fbeb12c5ce256b542aaa9b63f3c235d",
+  "bytes": 6557408,
   "mesh_count": 4,
   "source_mesh_pieces": 44,
   "bones": 76,
-  "vertices": 56329,
-  "triangles": 111472,
+  "vertices": 57845,
+  "triangles": 114696,
   "human_acceptance": "pending",
   "textures": "original packed 512x512 color and roughness maps for skin, woven cloth and leather; anatomy adapted from MakeHuman CC0",
   "anatomy_source_sha256": "bea00279464133e86b634220cd2774ebf3b470de280d11222a6b2269e4a8d950",
@@ -26,7 +26,6 @@
       "BodyCovered"
     ],
     "base": [
-      "BaseTop",
       "BaseShortsHip",
       "BaseShorts_L",
       "BaseShortHem_L",
@@ -36,7 +35,8 @@
       "BaseShoes_L",
       "BaseShoesSole_L",
       "BaseShoes_R",
-      "BaseShoesSole_R"
+      "BaseShoesSole_R",
+      "BaseTop"
     ],
     "uniform": [
       "UniformJacket",

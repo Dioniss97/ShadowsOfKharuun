@@ -338,7 +338,7 @@ def bone(name,head,tail,parent=None):
 bone('root',(0,0,0),(0,0,.2))
 bone('hips',(0,0,.9),(0,0,1.1),'root')
 bone('spine',(0,0,1.06),(0,0,1.59),'hips')
-bone('head',(0,0,1.64),(0,0,1.95),'spine')
+bone('head',(0,0,1.615),(0,0,1.925),'spine')
 for side,label in ((-1,'L'),(1,'R')):
     bone('upper_arm_'+label,(side*.42,0,1.5),(side*.42,.01,1.2),'spine')
     bone('forearm_'+label,(side*.42,.01,1.2),(side*.42,.02,.91),'upper_arm_'+label)
@@ -359,7 +359,7 @@ bpy.ops.object.mode_set(mode='OBJECT')
 
 # Replace the construction mannequin with anatomically authored CC0 topology.
 for obj in list(PARTS):
-    if obj['wardrobe_role'] in ['body','always']:
+    if obj['wardrobe_role'] in ['body','always'] or obj.name=='BaseTop':
         PARTS.remove(obj);bpy.data.objects.remove(obj,do_unlink=True)
 human,IMPORTED_WEIGHTS=build_human(ROOT,BONES,rig,SKIN,HAIR,EYE,IRIS,BASE)
 PARTS.extend(human)
@@ -463,7 +463,11 @@ def body_x(x,z=None):
     if z is not None:
         shoulder=max(0,min(1,(z-1.28)/.12,(1.58-z)/.12))
         outer_scale-=.08*shoulder
-    return math.copysign(v*.85 if v<=.24 else .204+(v-.24)*outer_scale,x)
+    compressed=math.copysign(v*.85 if v<=.24 else .204+(v-.24)*outer_scale,x)
+    if z is None:return compressed
+    neck=max(0,min(1,(z-1.52)/.04))*max(0,min(1,(.22-v)/.08))
+    neck=neck*neck*(3-2*neck)
+    return compressed*(1-neck)+x*neck
 
 
 def arm_x(x,z):
@@ -492,11 +496,14 @@ for obj in PARTS:
         if obj.name=='HumanHands':
             for v in obj.data.vertices:
                 if abs(v.co.x)>.25:v.co.x=hand_x(v.co.x,v.co.z)
+        elif obj.name=='HumanHead':
+            for v in obj.data.vertices:
+                if v.co.z<1.58:v.co.x=body_x(v.co.x,v.co.z)
         continue
     for v in obj.data.vertices:
         original=v.co.copy()
         v.co.x=body_x(original.x,original.z)
-        if obj.name=='BodyCovered':
+        if obj.name in ['BodyCovered','BaseTop']:
             amount=sum(g.weight for g in v.groups if obj.vertex_groups[g.group].name.startswith(('upper_arm_','forearm_')))
             amount=max(0,min(1,(amount-.25)/.60));amount=amount*amount*(3-2*amount)
             v.co.x=v.co.x*(1-amount)+arm_x(original.x,original.z)*amount
@@ -509,7 +516,7 @@ bpy.ops.object.mode_set(mode='OBJECT')
 
 # Both appearance roles meet on the same forearm loop. Give coincident seam
 # vertices a common area-weighted normal, while keeping body visibility separate.
-skin_parts=[o for o in PARTS if o.name in ['BodyCovered','HumanHands']]
+skin_parts=[o for o in PARTS if o.name in ['BodyCovered','HumanHands','HumanHead']]
 seam={}
 for obj in skin_parts:
     obj.data.update()

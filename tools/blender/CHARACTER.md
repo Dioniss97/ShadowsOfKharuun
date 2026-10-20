@@ -35,3 +35,9 @@ Capturas regionales: `--script res://tools/blender/preview_detail.gd -- --out=re
 `arm_x` compensa la sección del brazo alrededor de su eje existente, usando pesos anatómicos para proteger el torso y transiciones en muñeca/deltoides. El esqueleto sigue teniendo 76 huesos; los antebrazos existentes ahora flexionan de forma moderada. Espada y marcador de poderes siguen las manos posadas.
 
 La unión de `BodyCovered` y `HumanHands` comparte normales ponderadas por área y muestreo UV XZ para los mapas tenues de piel. Esto corrige el salto de sombreado/tono que producía separar las piezas y desenvolverlas por separado. La proyección no sirve como layout anatómico pintado; si se incorpora uno, debe mantener continuidad en esta frontera. La suite comprueba normales y UV del GLB importado. Capturas con `--region=arm`; [comparativa 05](../../art/references/character/iterations/quality_05/README.md).
+
+## Torso y cobertura — pase regional 06
+
+`human_base.py` genera la camiseta base desde la anatomía con cortes interpolados para escote y sisas, conserva el componente torácico, suaviza el contorno sobre una BVH y transfiere pesos baricéntricos antes de dar espesor. La recesión de piel cubierta usa esos mismos campos con transición gradual; sustituye la compresión rectangular anterior. La fuente anatómica completa permanece como referencia oculta.
+
+La unión del cuello conserva anchura y comparte normales/UV entre roles. La cabeza baja 2,5 cm sin cambiar su forma; su clasificación usa pesos de hueso para conservar mandíbula y cuello al ocultar el cuerpo bajo el uniforme. Para revisar frontal, espalda y acciones: `--region=torso`; [comparativa 06](../../art/references/character/iterations/quality_06/README.md).

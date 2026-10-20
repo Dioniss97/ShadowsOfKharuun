@@ -113,7 +113,7 @@
 	"clean_import": false,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
-	"glb_sha256": "5c11fe876735adc6b628ddd8a2304d9ad3f3eca6583dbc32d049f4f378d5864a",
+	"glb_sha256": "adbcb05d209516139242b4cb2faa3a1b9fbeb12c5ce256b542aaa9b63f3c235d",
 	"human_acceptance": "pending",
 	"renderer": "forward_plus",
 	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",

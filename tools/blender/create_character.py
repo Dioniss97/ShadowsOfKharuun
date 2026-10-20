@@ -255,6 +255,9 @@ loft('UniformTorso',[(0,0,.92,.255,.174),(0,0,1.06,.244,.163),
 loft('UniformCollar',[(0,0,1.545,.15,.135),(0,0,1.56,.15,.135),(0,0,1.615,.132,.126),(0,0,1.625,.13,.125)],LINEN,'uniform','spine',cap=False)
 for side,label in ((-1,'L'),(1,'R')):
     ellipsoid('UniformShoulder_'+label,(side*.278,0,1.474),(.103,.092,.074),ROBE,'uniform')
+    # Fill the cloth bridge between the narrow torso and sleeve inner wall.
+    # Without this gusset the hidden body leaves a visible hole under the arm.
+    ellipsoid('UniformAxilla_'+label,(side*.30,0,1.315),(.083,.09,.095),ROBE,'uniform')
     loft('UniformSleeve_'+label,[(side*.30,0,1.49,.103,.106),(side*.355,0,1.445,.116,.112),
       (side*.402,.002,1.365,.105,.104),(side*.418,.005,1.27,.096,.097),
       (side*.415,.01,1.205,.092,.094),(side*.405,.014,1.12,.086,.09),
@@ -273,7 +276,7 @@ for side,label in ((-1,'L'),(1,'R')):
     thickness=lapel.modifiers.new('Fold thickness','SOLIDIFY');thickness.thickness=.006
     bpy.context.view_layer.objects.active=lapel
     bpy.ops.object.modifier_apply(modifier=thickness.name)
-combine_skin([o for o in PARTS if o.name=='UniformTorso' or o.name.startswith('UniformSleeve') or o.name.startswith('UniformShoulder')],'UniformJacket')
+combine_skin([o for o in PARTS if o.name=='UniformTorso' or o.name.startswith(('UniformSleeve','UniformShoulder','UniformAxilla'))],'UniformJacket')
 loft('UniformBelt',[(0,0,1.025,.251,.173),(0,0,1.09,.245,.168)],LEATHER,'uniform','spine')
 ellipsoid('UniformBuckle',(0,.178,1.057),(.045,.012,.03),BRONZE,'uniform','spine')
 

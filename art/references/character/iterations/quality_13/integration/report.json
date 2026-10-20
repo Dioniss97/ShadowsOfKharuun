@@ -1,0 +1,59 @@
+{
+  "glb_sha256": "190a7e0559669550cb5b22f094c3ea3d778c99762aef57138a49ee4b9f3d584e",
+  "engine": "4.7.2-stable",
+  "renderer": "Vulkan Forward+ / Radeon RX 6600",
+  "human_acceptance": "pending",
+  "suites": {
+    "wardrobe_headless": {
+      "checks": 35,
+      "failures": 0
+    },
+    "wardrobe_gpu": {
+      "checks": 40,
+      "failures": 0
+    },
+    "clean_import_headless": {
+      "checks": 35,
+      "failures": 0
+    },
+    "clean_import_gpu": {
+      "checks": 40,
+      "failures": 0
+    },
+    "mission_headless": {
+      "checks": 213,
+      "failures": 0
+    },
+    "mission_gpu": {
+      "checks": 238,
+      "failures": 0
+    }
+  },
+  "fresh_import": {
+    "project": "tools/logs/clean-quality13-final",
+    "initial_godot_cache_present": false,
+    "editor_import_succeeded": true
+  },
+  "captures": {
+    "before_glb_sha256": "d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c",
+    "after_glb_sha256": "190a7e0559669550cb5b22f094c3ea3d778c99762aef57138a49ee4b9f3d584e",
+    "hand": 42,
+    "torso": 28,
+    "camera_and_lighting": "same regional preview protocol, base/uniform, rest and posed views"
+  },
+  "grip_probe_mm": {
+    "minimum_radius": 20.847,
+    "threshold_radius": 19.5,
+    "penetrating_vertices": 0,
+    "poses": [
+      "rest",
+      "guard",
+      "attack"
+    ],
+    "appearances": [
+      "base",
+      "uniform"
+    ]
+  },
+  "scope": "Regional art iteration and technical regression only; human acceptance remains pending."
+}

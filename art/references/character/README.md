@@ -12,7 +12,7 @@ Para probar esta candidata desde el checkout de producción: `tools/logs/product
 
 Anatomía MakeHuman CC0 fijada y adaptada en Blender; ropa, rig y materiales propios. Equipar cambia túnica, mangas, guantes, pantalón, cinturón, botas y capa en un solo conjunto. Retirar restaura camiseta/shorts/calzado y manos base. Cabeza y sus accesorios quedan aparte.
 
-GLB `d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c`: 9,916,812 bytes, 76 huesos, 41 piezas editables, 64,018 vértices y 126,912 triángulos sumando ambas apariencias. Cuatro roles exportados; las dos apariencias no se dibujan a la vez. [Exportación](export_report.json).
+GLB actual de la candidata: `190a7e0559669550cb5b22f094c3ea3d778c99762aef57138a49ee4b9f3d584e`: 9,916,872 bytes, 76 huesos, 41 piezas editables, 64,018 vértices y 126,912 triángulos sumando ambas apariencias. Cuatro roles exportados; las dos apariencias no se dibujan a la vez. [Exportación](export_report.json).
 
 ## Comparaciones por región
 
@@ -31,6 +31,7 @@ Parejas con cámara, iluminación y protocolo comunes; GLB/render Godot reales. 
 | [11 — inventario](iterations/quality_11/README.md) | Encuadre, relleno, giro y retorno a pausa previa. |
 
 | [12 — correcciones tras auditoría](iterations/quality_12/README.md) | Orientación de dedos/agarre, anatomía, confección, atlas de piel, trama y materiales Godot explícitos. |
+| [13 — hombros, axilas y agarre](iterations/quality_13/README.md) | Aducción graduada de brazos, unión bajo la axila, agarre reajustado y suites repetidas en una importación limpia. La aceptación artística sigue pendiente. |
 
 ## Inventario
 
@@ -59,7 +60,7 @@ El visor final usa la escena y luz reales sin cambiar materiales ni la escala de
 | Misión headless | 213 | 0 | [Misión](integration/mission_headless.json) |
 | Misión GPU, recorrido automático hasta victoria | 238 | 0 | [Misión GPU](integration/mission_gpu.json) |
 
-[Procedencia y hashes de fuentes](integration/final_provenance.json), [regresión resumida](integration/regression_report.json), [cámaras del templo](integration/final/report.json), [estudio](studio/report.json). La copia limpia se creó sin `.godot`, se importó con editor y se probaron ambas rutas. Se conserva el primer fallo GPU de movimiento del pase 04 y sus repeticiones en aquella carpeta; no se atribuye una causa que no se demostró. El resultado final actual corresponde a estas fuentes. En calidad 12 se registró una excepción nativa GPU al iniciar vestuario; repetición aislada 40/0 y copia limpia 40/0, causa no determinada.
+[Procedencia y hashes de fuentes](integration/final_provenance.json), [regresión resumida](integration/regression_report.json), [cámaras del templo](integration/final/report.json), [estudio](studio/report.json). Esos informes conservan la validación de calidad 12; la ronda actual tiene su [registro separado](iterations/quality_13/README.md). La copia limpia de calidad 13 se creó sin `.godot`, se importó con editor y pasó ambos recorridos.
 
 ## Movimiento, coste y límites
 

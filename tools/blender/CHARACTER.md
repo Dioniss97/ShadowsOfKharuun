@@ -2,11 +2,15 @@
 
 ## Correcciones tras la auditoría — calidad 12
 
-La [comparativa 12](../../art/references/character/iterations/quality_12/README.md) documenta el estado más reciente. `character_surfaces.py` conserva el atlas anatómico CC0 y genera mapas propios de piel de 1024² y UV de tejido con escala física común. Las piezas comparten el nombre `UVMap` antes del join. `human_base.py` construye ribetes desde los bordes de la ropa y los ajusta por proximidad a su superficie con espesor. Las secciones históricas inferiores describen sus respectivos pases.
+La [comparativa 13](../../art/references/character/iterations/quality_13/README.md) documenta el último pase regional; la [12](../../art/references/character/iterations/quality_12/README.md) conserva sus correcciones de piel, ropa y materiales. `character_surfaces.py` conserva el atlas anatómico CC0 y genera mapas propios de piel de 1024² y UV de tejido con escala física común. Las piezas comparten el nombre `UVMap` antes del join. `human_base.py` construye ribetes desde los bordes de la ropa y los ajusta por proximidad a su superficie con espesor. Las secciones históricas inferiores describen sus respectivos pases.
 
 El correctivo `art/source/characters/grip_contact_fit.json` se aplica en reposo a la mano y al guante después de subdividirlos; el exportador exige correspondencia de al menos el 98% de sus puntos a 0,15 mm. Cambiar anatomía, pesos o pose exige revisar el contacto. Rotaciones locales de dedos/muñecas componen reposo por delta; marco del arma calibrado respecto a la mano, flexiones distintas por dedo y oposición del pulgar. Es un agarre concreto, no un solucionador para cualquier arma.
 
 `scripts/character_materials.gd` aplica recetas explícitas compartidas: especular .32 piel, .22 tejido, .30 cuero, normal textil/cuero .65 y SSS de piel .06. No se confía en que los parámetros Blender se traduzcan idénticos a Godot. Se mantiene la paleta propia, sin mapas externos. [Propiedades del material Godot](https://docs.godotengine.org/en/4.7/classes/class_basematerial3d.html).
+
+## Hombros y contacto de sable — calidad 13
+
+`KhCharacterRig` acerca los brazos hasta 0,16 radianes en reposo y desvanece la corrección al elevarlos. `create_character.py` remalla una pieza pequeña bajo cada axila con `UniformJacket`. La calibración de agarre conserva las entradas previas y añade los puntos del GLB anterior a la ronda; si se mueven dedos, muñeca, marco o geometría, repetir capturas y la sonda de `wardrobe_runner.gd`. [Comparativa 13](../../art/references/character/iterations/quality_13/README.md), con pruebas 35/40 de vestuario y 213/238 de misión tanto en caché normal como después de una importación limpia. Acabado humano pendiente.
 
 Requiere la instalación Blender 5.2.2 LTS utilizada para el Vigía. Ejecutar Blender en segundo plano con --python-exit-code 1 --python tools/blender/create_character.py desde el repositorio. El script reconstruye la fuente; guardar aparte ediciones manuales antes de regenerar.
 

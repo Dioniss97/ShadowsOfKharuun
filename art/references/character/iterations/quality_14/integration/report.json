@@ -1,0 +1,24 @@
+{
+	"glb_sha256": "e12260519daa0fd36c124aa567aa5845def1ba7f394b81f1e45b7b50495a48d3",
+	"engine": "4.7.2-stable",
+	"renderer": "Vulkan Forward+ / Radeon RX 6600",
+	"human_acceptance": "pending",
+	"suites": {
+		"wardrobe_headless": {"checks": 35, "failures": 0},
+		"wardrobe_gpu": {"checks": 40, "failures": 0},
+		"mission_headless": {"checks": 213, "failures": 0},
+		"mission_gpu": {"status": "incomplete", "summary_written": false}
+	},
+	"captures": {
+		"before_glb_sha256": "190a7e0559669550cb5b22f094c3ea3d778c99762aef57138a49ee4b9f3d584e",
+		"after_glb_sha256": "e12260519daa0fd36c124aa567aa5845def1ba7f394b81f1e45b7b50495a48d3",
+		"torso_views": 28,
+		"inventory_and_temple_views": 5
+	},
+	"grip_contact_build": {
+		"HumanHands": "227/227",
+		"UniformGloves": "360/361",
+		"minimum_match_ratio": 0.98
+	},
+	"scope": "Regional body proportion and garment silhouette revision; art acceptance remains pending."
+}

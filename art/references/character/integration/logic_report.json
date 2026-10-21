@@ -1,0 +1,153 @@
+{
+	"capture": false,
+	"checks": [
+		{
+			"name": "Inventory blocked in menu",
+			"passed": true
+		},
+		{
+			"name": "New game starts with base body/underwear/shoes",
+			"passed": true
+		},
+		{
+			"name": "Imported deforming skeleton has 76 bones including fingers and cape dynamics",
+			"passed": true
+		},
+		{
+			"name": "Thirty articulated finger joints imported",
+			"passed": true
+		},
+		{
+			"name": "Finger joints deform both bare hands and uniform gloves with four normalized influences",
+			"passed": true
+		},
+		{
+			"name": "Forearm visibility seam preserves common normals and skin texture coordinates",
+			"passed": true
+		},
+		{
+			"name": "Sword grip follows the authored hand frame with a four centimetre diameter",
+			"passed": true
+		},
+		{
+			"name": "Free hand opens for powers, effect origin follows palm and relaxed pose returns",
+			"passed": true
+		},
+		{
+			"name": "Bare hand and glove vertices clear the grip in rest, guard and attack",
+			"passed": true
+		},
+		{
+			"name": "Engine material recipes preserve calibrated skin and cloth responses",
+			"passed": true
+		},
+		{
+			"name": "Cloth and leather import real normal maps with tangent data",
+			"passed": true
+		},
+		{
+			"name": "Imported cape top shares the rigid spine anchor of its clasp",
+			"passed": true
+		},
+		{
+			"name": "Unknown item cannot be equipped",
+			"passed": true
+		},
+		{
+			"name": "I opens inventory and pauses gameplay",
+			"passed": true
+		},
+		{
+			"name": "Mission clock frozen in inventory",
+			"passed": true
+		},
+		{
+			"name": "Mouse equip changes complete outfit including body coverage",
+			"passed": true
+		},
+		{
+			"name": "3D preview and buttons synchronized",
+			"passed": true
+		},
+		{
+			"name": "Fifteen cloth chains and eight torso, waist, arm and leg collision guards enabled",
+			"passed": true
+		},
+		{
+			"name": "Appearance does not change combat statistics",
+			"passed": true
+		},
+		{
+			"name": "Preview rotation button turns only the inventory character",
+			"passed": true
+		},
+		{
+			"name": "Reverse rotation restores the preview angle",
+			"passed": true
+		},
+		{
+			"name": "Mouse remove restores all base parts and footwear",
+			"passed": true
+		},
+		{
+			"name": "ESC returns to previous running state",
+			"passed": true
+		},
+		{
+			"name": "Return button closes inventory and resumes the previous running state",
+			"passed": true
+		},
+		{
+			"name": "Inventory opens over tactical pause",
+			"passed": true
+		},
+		{
+			"name": "I closes and preserves previous tactical pause",
+			"passed": true
+		},
+		{
+			"name": "Skinned character moves with production controller",
+			"passed": true
+		},
+		{
+			"name": "Ankle compensation preserves sole orientation during the existing stride",
+			"passed": true
+		},
+		{
+			"name": "Tunic reacts during real movement",
+			"passed": true
+		},
+		{
+			"name": "Cloth remains finite after movement",
+			"passed": true
+		},
+		{
+			"name": "Separate cape reacts during real movement",
+			"passed": true
+		},
+		{
+			"name": "Cape remains finite after movement",
+			"passed": true
+		},
+		{
+			"name": "Inventory blocked during dialogue",
+			"passed": true
+		},
+		{
+			"name": "Restart clears wardrobe and inventory pause",
+			"passed": true
+		},
+		{
+			"name": "Inventory blocked after defeat",
+			"passed": true
+		}
+	],
+	"clean_import": false,
+	"engine": "4.7.2-stable (official)",
+	"failures": 0,
+	"glb_sha256": "d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c",
+	"human_acceptance": "pending",
+	"renderer": "forward_plus",
+	"scope": "Real input and production scene; visual captures use frozen placement. Not human QA.",
+	"views": []
+}

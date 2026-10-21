@@ -14,7 +14,7 @@ var yaw = 0.0
 var pitch = -0.20
 var camera_pivot: Node3D
 var camera: Camera3D
-var rig: KhRig
+var rig: KhCharacterRig
 var combat: Node
 var invulnerable = 0.0
 var automation_direction = Vector3.ZERO
@@ -24,6 +24,7 @@ var attack_bonus = 8
 var defence = 14
 var camera_follow_motion = false
 var interaction_target: Node3D
+var wardrobe := KhWardrobe.new()
 
 func _ready() -> void:
 	floor_snap_length = 0.7
@@ -35,9 +36,10 @@ func _ready() -> void:
 	collision.shape = capsule
 	collision.position.y = 0.91
 	add_child(collision)
-	rig = KhRig.new()
+	rig = KhCharacterRig.new()
 	add_child(rig)
 	rig.build(Color(0.065,0.105,0.15),Color(0.25,0.80,1.0))
+	wardrobe.changed.connect(func(): rig.set_uniform(wardrobe.uniform_id))
 	camera_pivot = Node3D.new()
 	get_parent().add_child(camera_pivot)
 	var arm = SpringArm3D.new()

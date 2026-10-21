@@ -11,6 +11,8 @@ var tactical_ui: KhTacticalUI
 var encounters_started: Array = []
 var seeking_initial_target = false
 var context_cursor: KhContextCursor
+var inventory_ui: KhInventoryUI
+var inventory_open := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -40,6 +42,9 @@ func _ready() -> void:
 	context_cursor = KhContextCursor.new()
 	context_cursor.main = self
 	add_child(context_cursor)
+	inventory_ui = KhInventoryUI.new()
+	inventory_ui.main = self
+	add_child(inventory_ui)
 	create_level()
 	ui.show_menu()
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
@@ -54,6 +59,11 @@ func _ready() -> void:
 	elif "--mission" in args: new_game()
 
 func setup_input() -> void:
+	if not InputMap.has_action("inventory"): InputMap.add_action("inventory")
+	InputMap.action_erase_events("inventory")
+	var inventory_key := InputEventKey.new()
+	inventory_key.physical_keycode = KEY_I
+	InputMap.action_add_event("inventory",inventory_key)
 	var keys = {"move_forward": KEY_W, "move_back": KEY_S, "move_left": KEY_A, "move_right": KEY_D, "sprint": KEY_SHIFT, "push": KEY_1, "lightning": KEY_2, "interact": KEY_E, "pause": KEY_ESCAPE, "tactical_pause": KEY_SPACE, "queue_attack": KEY_3, "queue_flurry": KEY_4, "queue_heal": KEY_5, "queue_medkit": KEY_6, "cycle_target": KEY_TAB, "disengage": KEY_F}
 	for action in keys:
 		if not InputMap.has_action(action): InputMap.add_action(action)
@@ -122,6 +132,8 @@ func restart_current() -> void:
 	else: new_game()
 
 func reset_pause() -> void:
+	inventory_open = false
+	if is_instance_valid(inventory_ui): inventory_ui.hide_inventory()
 	paused = false
 	tactical_paused = false
 	dialogue_paused = false
@@ -129,7 +141,7 @@ func reset_pause() -> void:
 	get_tree().paused = false
 
 func apply_pause() -> void:
-	get_tree().paused = paused or tactical_paused or dialogue_paused
+	get_tree().paused = paused or tactical_paused or dialogue_paused or inventory_open
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 func begin_encounter(id: String) -> void:
@@ -238,6 +250,15 @@ func _process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.echo: return
+	if event.is_action_pressed("inventory"):
+		if inventory_open: close_inventory()
+		else: open_inventory()
+		get_viewport().set_input_as_handled()
+		return
+	if inventory_open:
+		if event.is_action_pressed("pause"): close_inventory()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("pause"):
 		toggle_pause()
 		get_viewport().set_input_as_handled()
@@ -268,3 +289,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cycle_target"): level.combat.cycle_target()
 	if event.is_action_pressed("disengage"):
 		cancel_combat()
+
+func open_inventory() -> bool:
+	if paused or dialogue_paused or mission.state not in [KhMission.State.EXPLORATION,KhMission.State.COMBAT,KhMission.State.BOSS,KhMission.State.DUEL,KhMission.State.GUARDIAN_WAIT,KhMission.State.TEMPLE]: return false
+	inventory_open = true
+	apply_pause()
+	inventory_ui.show_inventory()
+	return true
+
+func close_inventory() -> void:
+	inventory_open = false
+	inventory_ui.hide_inventory()
+	apply_pause()

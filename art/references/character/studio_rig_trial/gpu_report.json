@@ -1,0 +1,591 @@
+{
+	"capture": true,
+	"captures": [
+		"native_front",
+		"native_three_quarter",
+		"native_side",
+		"native_back",
+		"rest_front",
+		"rest_three_quarter",
+		"rest_side",
+		"rest_back",
+		"rest_shoulder_detail",
+		"rest_hand_oblique",
+		"shoulder_front",
+		"shoulder_three_quarter",
+		"shoulder_side",
+		"shoulder_back",
+		"shoulder_shoulder_detail",
+		"grip_close_0",
+		"grip_close_25",
+		"grip_close_50",
+		"grip_close_75",
+		"grip_close_100",
+		"grip_full",
+		"grip_hand_front",
+		"grip_hand_back",
+		"grip_hand_side",
+		"grip_hand_oblique",
+		"grip_hand_palm",
+		"grip_hand_dorsal",
+		"grip_hand_thumb",
+		"walk_00",
+		"walk_01",
+		"walk_02",
+		"walk_03",
+		"walk_04",
+		"walk_05",
+		"walk_06",
+		"walk_07",
+		"walk_08",
+		"walk_09",
+		"walk_10",
+		"walk_11",
+		"walk_12",
+		"walk_13",
+		"walk_14",
+		"walk_15",
+		"turn_00",
+		"turn_01",
+		"turn_02",
+		"turn_03"
+	],
+	"checks": [
+		{
+			"message": "Imported complete deform rig has 53 named bones",
+			"ok": true
+		},
+		{
+			"message": "Imported skin weights are normalized and every bind resolves",
+			"ok": true
+		},
+		{
+			"message": "Finite transforms across native motion samples",
+			"ok": true
+		},
+		{
+			"message": "Finite transforms across rest motion samples",
+			"ok": true
+		},
+		{
+			"message": "Finite transforms across shoulder motion samples",
+			"ok": true
+		},
+		{
+			"message": "Finite transforms across walk motion samples",
+			"ok": true
+		},
+		{
+			"message": "Finite transforms across turn motion samples",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.0",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.05",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.1",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.15",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.2",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.25",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.3",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.35",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.4",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.45",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.5",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.55",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.6",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.65",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.7",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.75",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.8",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.85",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.9",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 0.95",
+			"ok": true
+		},
+		{
+			"message": "Finite imported skin during grip closure 1.0",
+			"ok": true
+		},
+		{
+			"message": "Grip probe covers the imported right hand",
+			"ok": true
+		},
+		{
+			"message": "Closed grip skin clears the shaft within 0.5 mm",
+			"ok": true
+		},
+		{
+			"message": "Walk samples retain floor support within 0.1 mm numeric tolerance",
+			"ok": true
+		},
+		{
+			"message": "Returning from grip restores the neutral hand transform",
+			"ok": true
+		}
+	],
+	"diagnostic_grasp_interpolation_clear": true,
+	"engine": "4.7.2-stable (official)",
+	"failures": 0,
+	"feet_samples": [
+		{
+			"maximum_y_m": 0.1346635222435,
+			"minimum_y_m": -0.00799996219575405,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.144680917263031,
+			"minimum_y_m": -0.00799962412565947,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.156874448060989,
+			"minimum_y_m": -0.00799990817904472,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.168112188577652,
+			"minimum_y_m": -0.00799984391778708,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.17796203494072,
+			"minimum_y_m": -0.00799981225281954,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.18604551255703,
+			"minimum_y_m": -0.00799969024956226,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.192052140831947,
+			"minimum_y_m": -0.00799980107694864,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.195751085877419,
+			"minimum_y_m": -0.00799985229969025,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.197000056505203,
+			"minimum_y_m": -0.00799989048391581,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.195751115679741,
+			"minimum_y_m": -0.00799973867833614,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.192052185535431,
+			"minimum_y_m": -0.00800004415214062,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.18604564666748,
+			"minimum_y_m": -0.0079998355358839,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.177962064743042,
+			"minimum_y_m": -0.00799995847046375,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.168112143874168,
+			"minimum_y_m": -0.0079999091103673,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.156874716281891,
+			"minimum_y_m": -0.00705035589635372,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.144680991768837,
+			"minimum_y_m": -0.00576153583824635,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.13467538356781,
+			"minimum_y_m": -0.00799985602498055,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.144681096076965,
+			"minimum_y_m": -0.00799997709691525,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.156874507665634,
+			"minimum_y_m": -0.00799993705004454,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.168112143874168,
+			"minimum_y_m": -0.00799993425607681,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.177962049841881,
+			"minimum_y_m": -0.00800000131130219,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.186045631766319,
+			"minimum_y_m": -0.00799980014562607,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.192052334547043,
+			"minimum_y_m": -0.00799987744539976,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.195751145482063,
+			"minimum_y_m": -0.00799988489598036,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.19700014591217,
+			"minimum_y_m": -0.0079999016597867,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.195751219987869,
+			"minimum_y_m": -0.00800000037997961,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.192052364349365,
+			"minimum_y_m": -0.00799992214888334,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.18604551255703,
+			"minimum_y_m": -0.00799989234656096,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.177962243556976,
+			"minimum_y_m": -0.00799985509365797,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.168112337589264,
+			"minimum_y_m": -0.00800001248717308,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.156874597072601,
+			"minimum_y_m": -0.00706235598772764,
+			"sampled_vertices": 14152
+		},
+		{
+			"maximum_y_m": 0.144681036472321,
+			"minimum_y_m": -0.00577339809387922,
+			"sampled_vertices": 14152
+		}
+	],
+	"glb_sha256": "51b2088b693b31bf215c51bf22aa150a0beafc6b1dc125f356cc1afe9b43ea4c",
+	"grip_samples": {
+		"0.0": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 3940,
+			"tolerance_m": 0.0005
+		},
+		"0.05": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 3973,
+			"tolerance_m": 0.0005
+		},
+		"0.1": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 3998,
+			"tolerance_m": 0.0005
+		},
+		"0.15": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4039,
+			"tolerance_m": 0.0005
+		},
+		"0.2": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4066,
+			"tolerance_m": 0.0005
+		},
+		"0.25": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4093,
+			"tolerance_m": 0.0005
+		},
+		"0.3": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.036102682352066,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4124,
+			"tolerance_m": 0.0005
+		},
+		"0.35": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.034229714423418,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4165,
+			"tolerance_m": 0.0005
+		},
+		"0.4": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.032398447394371,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.45": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0306841395795345,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.5": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0291025806218386,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.55": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0276378113776445,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.6": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0262372959405184,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.65": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0249769035726786,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.7": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0238584093749523,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.75": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0228644236922264,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.8": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0219370871782303,
+			"near_contact_vertices": 1,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.85": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0211829803884029,
+			"near_contact_vertices": 25,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.9": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.020599115639925,
+			"near_contact_vertices": 35,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"0.95": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0201309528201818,
+			"near_contact_vertices": 41,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		},
+		"1.0": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0197999700903893,
+			"near_contact_vertices": 58,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4189,
+			"tolerance_m": 0.0005
+		}
+	},
+	"human_acceptance": "pending",
+	"known_limitations": [
+		"The fixed-hilt open/closed hand interpolation is a pose diagnostic, not a gameplay pickup animation.",
+		"No finger/finger, cloth, guard or blade collision checks.",
+		"Base shirt, shorts and shoes are first fit prototypes with plain materials; no uniform, cloth motion or clothing intersection probe.",
+		"In-place diagnostic gait, not the gameplay controller; no final skin materials."
+	],
+	"renderer": "forward_plus",
+	"scope": "isolated deformation trial; not mission gameplay"
+}

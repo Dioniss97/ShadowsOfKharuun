@@ -1,0 +1,41 @@
+{
+  "glb_sha256": "d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c",
+  "source_commit_parent": "425dd9460723cf5adb16caf6d62b5ab561e2a4e1",
+  "source_identification": "Source hashes identify the production changes committed with this report; parent is the preceding research commit, not the final source.",
+  "blend_sha256": "cd6fdd998a1c0a28f51b4d9add62ddaa43a82d1a09895d80b6bb2ecfe28e49da",
+  "human_acceptance": "pending",
+  "source_hashes_lf_sha256": {
+    "scripts/character_rig.gd": "39e055ee4d547132f75da8bd308e2f5485056b65e940d1fd34b182d9f3bcd4dc",
+    "scripts/character_materials.gd": "157997bb74ba4d2362d0300210e752fe9fd9230f1faba83da3a147369f6b41d5",
+    "scripts/inventory_ui.gd": "044737aaf6650f9c97ce1ee7594f76758325521d89ca10a6e970ff632033c70a",
+    "tests/wardrobe_runner.gd": "43fcfc480d6270475e5f61fb011d8b3daf61e574123cbe7db47cfd4b67e46bde",
+    "tools/blender/create_character.py": "fec483be0ddb393f881b04ffbf6cb0c593445be1697af5691c2140cea816e3e9",
+    "tools/blender/human_base.py": "2fc1c8b62b445f019aee9e0adff115057859bcab33e1b3becb1067cc99ee21cf",
+    "tools/blender/character_surfaces.py": "acd801a59115973d9369871be413c27ff1d3ff1f172f108cd9f6a557eecd50f1",
+    "art/source/characters/grip_contact_fit.json": "b9823c05cce200bcc922f809f05ce8c30b55f0d58182e83c22f59ae93d4694c5",
+    "tools/blender/preview_temple.gd": "b7fdc4e0cf5b2dda768613ada656431259a7227a18b34060ab4478e08b050376"
+  },
+  "suites": {
+    "logic_report": 35,
+    "gpu_report": 40,
+    "clean_import_report": 35,
+    "clean_import_gpu_report": 40,
+    "mission_headless": 213,
+    "mission_gpu": 238
+  },
+  "fresh_import": {
+    "initial_godot_cache_present": false,
+    "copy": "tools/logs/clean-quality12-final",
+    "method": "New directory; tracked and current untracked project/scripts/scenes/assets/tests copied from working tree, no cache. Editor import, then headless and GPU wardrobe."
+  },
+  "scope": "Technical evidence after quality12 corrections; human art/play acceptance required.",
+  "native_gpu_attempt": {
+    "exception": "0xC0000374",
+    "point": "Wardrobe startup after TTS initialization",
+    "cause": "undetermined",
+    "isolated_retry": {
+      "checks": 40,
+      "failures": 0
+    }
+  }
+}

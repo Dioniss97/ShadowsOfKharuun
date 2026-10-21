@@ -1,0 +1,49 @@
+{
+	"engine": "4.7.2-stable (official)",
+	"glb_sha256": "d27b856ca9a22a45f69707a6b200f137d5426b9002c6ef585ad354f2e97b9b8c",
+	"human_acceptance": "pending",
+	"renderer": "forward_plus",
+	"resolution": [
+		1280,
+		720
+	],
+	"views": [
+		{
+			"camera_position": "(-6.459498, 2.827282, -0.452622)",
+			"fov": 68.0,
+			"name": "base_game_camera",
+			"scope": "Production player camera, fixed placement; no player input"
+		},
+		{
+			"camera_position": "(-5.0, 1.925, -10.3)",
+			"fov": 36.0,
+			"name": "base_near",
+			"scope": "Inspection camera in temple, fixed placement"
+		},
+		{
+			"camera_position": "(-4.4, 2.8, 0.5)",
+			"fov": 62.0,
+			"name": "base_vigia",
+			"scope": "Player and existing Vigia in unchanged temple light; different physical scales"
+		},
+		{
+			"camera_position": "(-6.459498, 2.827282, -0.452622)",
+			"fov": 68.0,
+			"name": "uniform_game_camera",
+			"scope": "Production player camera, fixed placement; no player input"
+		},
+		{
+			"camera_position": "(-5.0, 1.925, -10.3)",
+			"fov": 36.0,
+			"name": "uniform_near",
+			"scope": "Inspection camera in temple, fixed placement"
+		},
+		{
+			"camera_position": "(-4.4, 2.8, 0.5)",
+			"fov": 62.0,
+			"name": "uniform_vigia",
+			"scope": "Player and existing Vigia in unchanged temple light; different physical scales"
+		}
+	],
+	"vigia_glb_sha256": "192a22bc4f519bbdaa0cb594756344b0b75f055211ae4d128bec1841824b248e"
+}

@@ -1,0 +1,40 @@
+{
+	"captures": [
+		"base_rest_front",
+		"base_rest_three_quarter",
+		"base_rest_side",
+		"base_rest_back",
+		"base_torso_rest_front",
+		"base_torso_rest_side",
+		"base_torso_rest_three_quarter",
+		"base_torso_rest_back",
+		"base_guard_three_quarter",
+		"base_torso_guard_three_quarter",
+		"base_attack_three_quarter",
+		"base_torso_attack_three_quarter",
+		"base_cast_three_quarter",
+		"base_torso_cast_three_quarter",
+		"tunic_rest_front",
+		"tunic_rest_three_quarter",
+		"tunic_rest_side",
+		"tunic_rest_back",
+		"tunic_torso_rest_front",
+		"tunic_torso_rest_side",
+		"tunic_torso_rest_three_quarter",
+		"tunic_torso_rest_back",
+		"tunic_guard_three_quarter",
+		"tunic_torso_guard_three_quarter",
+		"tunic_attack_three_quarter",
+		"tunic_torso_attack_three_quarter",
+		"tunic_cast_three_quarter",
+		"tunic_torso_cast_three_quarter"
+	],
+	"engine": "4.7.2-stable (official)",
+	"glb_sha256": "0fd9285f725eefe64c72626d84cc0acd2c866d8ca67eae3cde6df7148611ad29",
+	"human_acceptance": "pending",
+	"renderer": "forward_plus",
+	"resolution": [
+		960,
+		1200
+	]
+}

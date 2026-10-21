@@ -1,0 +1,74 @@
+extends SceneTree
+## Read-only diagnosis; never changes the production model or material.
+func _initialize() -> void:
+	call_deferred("run")
+
+func run() -> void:
+	var rig := KhCharacterRig.new()
+	root.add_child(rig)
+	rig.build(Color.WHITE,Color.CYAN)
+	var materials: Dictionary = {}
+	for instance in rig.mesh_roles:
+		for surface in range(instance.mesh.get_surface_count()):
+			var mat := instance.get_active_material(surface) as StandardMaterial3D
+			if mat == null or materials.has(mat.resource_name): continue
+			materials[mat.resource_name] = {"roughness":mat.roughness,"roughness_texture":mat.roughness_texture != null,"roughness_channel":mat.roughness_texture_channel,"metallic":mat.metallic,"metallic_specular":mat.metallic_specular,"normal_enabled":mat.normal_enabled,"normal_scale":mat.normal_scale,"sss_enabled":mat.subsurf_scatter_enabled,"sss_strength":mat.subsurf_scatter_strength,"rim_enabled":mat.rim_enabled,"clearcoat_enabled":mat.clearcoat_enabled}
+	var contacts: Array = []
+	for outfit in ["base","uniform"]:
+		rig.set_uniform("" if outfit == "base" else "umbral")
+		for pose in ["rest","guard","attack"]:
+			rig.cancel_action()
+			rig.guarding = pose == "guard"
+			if pose == "attack": rig.swing()
+			rig.animate(.4 if pose == "attack" else 0,0)
+			await process_frame
+			contacts.append(measure_contact(rig,outfit,pose))
+	var result := {"scope":"Read-only imported-material and CPU vertex/cylinder diagnostic. Samples do not prove triangle-volume intersection absence.","glb_sha256":FileAccess.get_sha256("res://assets/models/characters/adventurer.glb"),"materials":materials,"contacts":contacts}
+	var file := FileAccess.open("res://art/references/character/iterations/quality_12/import_and_grip.json",FileAccess.WRITE)
+	file.store_string(JSON.stringify(result,"\t")+"\n")
+	print(JSON.stringify(result))
+	quit()
+
+func measure_contact(rig: KhCharacterRig, outfit: String, pose: String) -> Dictionary:
+	var grip := rig.sword.get_node("SwordGrip") as MeshInstance3D
+	var cylinder := grip.mesh as CylinderMesh
+	var penetrated := 0
+	var sampled := 0
+	var max_depth := 0.0
+	var max_rest_error := 0.0
+	var radius := cylinder.top_radius
+	for instance in rig.mesh_roles:
+		if rig.mesh_roles[instance] != ("base" if outfit == "base" else "uniform"): continue
+		for surface in range(instance.mesh.get_surface_count()):
+			var arrays: Array = instance.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+			var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+			for i in range(vertices.size()):
+				var belongs_to_right_hand := false
+				for k in range(4):
+					var bind := bones[i*4+k]
+					var name := String(instance.skin.get_bind_name(bind))
+					if (name == "hand_R" or name.begins_with("finger_R_")) and weights[i*4+k]>.01: belongs_to_right_hand = true
+				if not belongs_to_right_hand: continue
+				var current := Vector3.ZERO
+				var rest := Vector3.ZERO
+				for k in range(4):
+					var index := i*4+k
+					if weights[index]<=0: continue
+					var bind := bones[index]
+					var name := String(instance.skin.get_bind_name(bind))
+					var bone: int = rig.skeleton.find_bone(name) if name != "" else instance.skin.get_bind_bone(bind)
+					var point: Vector3 = instance.skin.get_bind_pose(bind)*vertices[i]
+					current += (rig.skeleton.get_bone_global_pose(bone)*point)*weights[index]
+					rest += (rig.skeleton.get_bone_global_rest(bone)*point)*weights[index]
+				max_rest_error = maxf(max_rest_error,(rig.skeleton.global_transform*rest).distance_to(instance.global_transform*vertices[i]))
+				var p: Vector3 = grip.to_local(rig.skeleton.to_global(current))
+				if absf(p.y)>cylinder.height*.5: continue
+				sampled += 1
+				var depth := radius-Vector2(p.x,p.z).length()
+				if depth>.0005:
+					penetrated += 1
+					max_depth = maxf(max_depth,depth)
+	return {"outfit":outfit,"pose":pose,"hand_vertices_in_grip_height":sampled,"vertices_deeper_than_half_mm":penetrated,"maximum_radial_depth_mm":max_depth*1000,"rest_skinning_consistency_error_m":max_rest_error,"grip_radius_mm":radius*1000,"grip_height_mm":cylinder.height*1000}
+

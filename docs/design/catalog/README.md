@@ -5,5 +5,7 @@ Las fichas de objetos de producción viven aquí aunque un objeto solo aparezca 
 ## Categorías
 
 - [Entorno](environment/README.md): arquitectura, estatuas y otros elementos del escenario.
+- [Personajes de producción](characters/README.md): cuerpos y representaciones del personaje.
+- [Vestuario](clothing/README.md): conjuntos y prendas.
 
 [Volver a la biblioteca de diseño](../README.md).

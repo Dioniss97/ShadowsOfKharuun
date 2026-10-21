@@ -6,6 +6,7 @@ rebuilds or replaces adventurer.blend/adventurer.glb.
 from pathlib import Path
 import math, json, hashlib
 import bpy
+import bmesh
 from mathutils import Vector, Matrix
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -119,10 +120,13 @@ for label,sgn,upper,fore,palm,thigh,shin,foot,starts in [
     bone('shin_'+label,knee,ankle,'thigh_'+label)
     bone('foot_'+label,ankle,ball,'shin_'+label,Vector((0,0,1)))
     bone('toes_'+label,ball,ball+Vector((.015*sgn,.060,-.005)),'foot_'+label,Vector((0,0,1)))
-    grip_y=across
+    # The hilt runs from wrist to knuckles through the palm; it must not lie
+    # crosswise along the knuckle row. In the relaxed arm pose this aligns the
+    # blade with the forearm/hand, as a held sword should.
+    grip_y=long
     grip_z=(inward-grip_y*inward.dot(grip_y)).normalized();grip_x=grip_y.cross(grip_z).normalized()
     grip=Matrix((grip_x,grip_y,grip_z)).transposed().to_4x4()
-    grip.translation=knuckles+inward*.034+long*.025
+    grip.translation=wrist+long*((knuckles-wrist).length*.58)+inward*.025
     hand_frames[label]={'grip_world':grip,'wrist':wrist,'long':long,'palm':palm,'fore':fore}
 bpy.ops.object.mode_set(mode='OBJECT')
 
@@ -174,6 +178,167 @@ for v in mesh.vertices:
     weights(v.index,dict(values))
 if unweighted:raise RuntimeError(f'Unweighted body vertices: {len(unweighted)}')
 
+# First clothing fit for the isolated Blender Studio candidate: a simple dark
+# base shirt, shorts and low shoes. These are separate skinned shells and do
+# not replace the approved production character or its full uniform.
+base_cloth=mat('Trial_BaseCloth',(.055,.064,.072),.94)
+base_shoe=mat('Trial_BaseLeather',(.070,.046,.029),.84)
+base_trim=mat('Trial_BaseTrim',(.13,.12,.105),.88)
+
+def get_weights(index):
+    values={}
+    for group in mesh.vertices[index].groups:
+        name=body.vertex_groups[group.group].name
+        values[name]=group.weight
+    return values
+
+def interpolate(a,b,t):
+    names=set(a['w'])|set(b['w'])
+    return {'p':a['p'].lerp(b['p'],t),'n':a['n'].lerp(b['n'],t).normalized(),
+        'w':{name:a['w'].get(name,0)*(1-t)+b['w'].get(name,0)*t for name in names}}
+
+def clip_polygon(poly,field):
+    out=[]
+    for a,b in zip(poly,poly[1:]+poly[:1]):
+        fa,fb=field(a),field(b)
+        if fa>=0:out.append(a)
+        if (fa>=0)!=(fb>=0):out.append(interpolate(a,b,fa/(fa-fb)))
+    return out
+
+def fitted_garment(name,material,fields,outset=.007,thickness=.003,max_components=1):
+    vertices=[];normals=[];point_weights=[];faces=[];lookup={}
+    for polygon in mesh.polygons:
+        poly=[{'p':mesh.vertices[i].co.copy(),'n':mesh.vertices[i].normal.copy(),'w':get_weights(i)} for i in polygon.vertices]
+        for field in fields:
+            if not poly:break
+            poly=clip_polygon(poly,field)
+        if len(poly)<3:continue
+        indices=[]
+        for point in poly:
+            key=tuple(round(c,6) for c in point['p'])
+            if key not in lookup:
+                lookup[key]=len(vertices);vertices.append(point['p']);normals.append(point['n'])
+                point_weights.append(point['w'])
+            indices.append(lookup[key])
+        if len(set(indices))>=3:faces.append(indices)
+    if not faces:raise RuntimeError(f'Fitted clothing surface is empty: {name}')
+    adjacency={i:set() for i in range(len(vertices))};edge_counts={}
+    for face in faces:
+        for a,b in zip(face,face[1:]+face[:1]):
+            adjacency[a].add(b);adjacency[b].add(a)
+            edge=tuple(sorted((a,b)));edge_counts[edge]=edge_counts.get(edge,0)+1
+    remaining=set(adjacency);components=[]
+    while remaining:
+        stack=[remaining.pop()];component=set(stack)
+        while stack:
+            for neighbour in adjacency[stack.pop()]:
+                if neighbour in remaining:
+                    remaining.remove(neighbour);component.add(neighbour);stack.append(neighbour)
+        components.append(component)
+    keep=set().union(*sorted(components,key=len,reverse=True)[:max_components])
+    chosen=sorted(keep);remap={old:new for new,old in enumerate(chosen)}
+    faces=[[remap[i] for i in face] for face in faces if all(i in keep for i in face)]
+    vertices=[vertices[i] for i in chosen];normals=[normals[i] for i in chosen]
+    point_weights=[point_weights[i] for i in chosen]
+    # The base garment should read as fabric instead of a dark copy of the
+    # body's pecs, abs and toes. Relax the broad surface while holding every
+    # cut contour in place; hidden skin is recessed separately below.
+    adjacency={i:set() for i in range(len(vertices))};edge_counts={}
+    for face in faces:
+        for a,b in zip(face,face[1:]+face[:1]):
+            adjacency[a].add(b);adjacency[b].add(a)
+            edge=tuple(sorted((a,b)));edge_counts[edge]=edge_counts.get(edge,0)+1
+    boundary={i for edge,uses in edge_counts.items() if uses==1 for i in edge}
+    iterations=4 if name=='BaseTop' else 4 if name=='BaseShorts' else 8
+    coords=[point.copy() for point in vertices]
+    for _ in range(iterations):
+        updates={i:coords[i].lerp(sum((coords[n] for n in adjacency[i]),Vector())/len(adjacency[i]),.14)
+            for i in adjacency if i not in boundary and adjacency[i]}
+        for i,point in updates.items():coords[i]=point
+    vertices=coords
+    count=len(vertices)
+    outer=[vertices[i]+normals[i]*outset for i in range(count)]
+    inner=[vertices[i]+normals[i]*(outset-thickness) for i in range(count)]
+    shell_faces=list(faces)+[list(reversed([i+count for i in face])) for face in faces]
+    for (a,b),uses in edge_counts.items():
+        if uses==1 and a in remap and b in remap:
+            a,b=remap[a],remap[b];shell_faces.append([a,b,b+count,a+count])
+    data=bpy.data.meshes.new(name+'Mesh');data.from_pydata(outer+inner,[],shell_faces);data.update()
+    bm=bmesh.new();bm.from_mesh(data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(data);bm.free()
+    data.materials.append(material)
+    obj=bpy.data.objects.new(name,data);bpy.context.scene.collection.objects.link(obj)
+    obj.parent=rig;obj['wardrobe_role']='base';obj['fixed_bone']=''
+    for polygon in data.polygons:polygon.use_smooth=True
+    group_names=sorted(set(name for values in point_weights for name in values))
+    groups={name:obj.vertex_groups.new(name=name) for name in group_names}
+    for i,values in enumerate(point_weights):
+        ordered=sorted(values.items(),key=lambda pair:pair[1],reverse=True)[:4]
+        total=sum(weight for _,weight in ordered)
+        if total<=1e-8:raise RuntimeError(f'Unweighted garment point in {name}')
+        for group_name,weight in ordered:
+            if weight>1e-7:
+                groups[group_name].add([i,i+count],weight/total,'REPLACE')
+    modifier=obj.modifiers.new('Studio trial skin','ARMATURE');modifier.object=rig
+    return obj
+
+top_fields=[lambda v:v['p'].z-1.01,lambda v:1.64-v['p'].z,
+    lambda v:(v['p'].x/.13)**2+(v['p'].y/.13)**2+((v['p'].z-1.70)/.25)**2-1,
+    lambda v:.30+.025*math.exp(-((v['p'].z-1.50)/.07)**2)-abs(v['p'].x),
+    lambda v:.12-v['w'].get('head',0)]
+shorts_fields=[lambda v:v['p'].z-.735,lambda v:1.055-v['p'].z,
+    lambda v:sum(value for name,value in v['w'].items() if name=='pelvis' or name.startswith('thigh_'))-.58]
+shirt=fitted_garment('BaseTop',base_cloth,top_fields,outset=.007,thickness=.003)
+shorts=fitted_garment('BaseShorts',base_cloth,shorts_fields,outset=.006,thickness=.003)
+
+shoes=[]
+def attached_shoe_part(name,material,label,rings):
+    centre_x=.2217*(1 if label=='R' else -1);centre_y=.0159;sides=32
+    vertices=[];faces=[]
+    for y,centre_z,rx,rz in rings:
+        for i in range(sides):
+            angle=math.tau*i/sides
+            vertices.append((centre_x+rx*math.cos(angle),centre_y+y,centre_z+rz*math.sin(angle)))
+    faces.append(tuple(reversed(range(sides))))
+    for row in range(len(rings)-1):
+        for i in range(sides):
+            a=row*sides+i;b=row*sides+(i+1)%sides
+            faces.append((a,b,b+sides,a+sides))
+    faces.append(tuple((len(rings)-1)*sides+i for i in range(sides)))
+    data=bpy.data.meshes.new(name+'Mesh');data.from_pydata(vertices,[],faces);data.update()
+    bm=bmesh.new();bm.from_mesh(data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(data);bm.free()
+    data.materials.append(material)
+    obj=bpy.data.objects.new(name,data);bpy.context.scene.collection.objects.link(obj)
+    obj.parent=rig;obj['wardrobe_role']='base';obj['fixed_bone']='foot_'+label
+    for polygon in data.polygons:polygon.use_smooth=True
+    group=obj.vertex_groups.new(name='foot_'+label)
+    group.add(list(range(len(data.vertices))),1.0,'REPLACE')
+    modifier=obj.modifiers.new('Studio trial shoe skin','ARMATURE');modifier.object=rig
+    return obj
+
+for side,label in [(1,'R'),(-1,'L')]:
+    # Measured from the Studio mesh's weighted foot/toe vertices; the source
+    # foot is wider and longer than its ankle-to-toe bone landmarks suggest.
+    # A tapered closed shoe volume hides the toe anatomy instead of tracing it.
+    shoes.append(attached_shoe_part('BaseShoeUpper_'+label,base_shoe,label,
+        [(-.136,.061,.042,.069),(-.110,.065,.057,.067),(-.074,.063,.072,.062),
+         (-.034,.060,.078,.057),(.010,.054,.078,.051),(.054,.041,.071,.040),
+         (.094,.028,.058,.028),(.124,.020,.036,.019),(.137,.017,.012,.013)]))
+    shoes.append(attached_shoe_part('BaseShoeSole_'+label,base_trim,label,
+        [(-.140,.010,.042,.010),(-.120,.010,.062,.010),(-.075,.010,.078,.010),
+         (-.030,.010,.083,.010),(.015,.010,.082,.010),(.060,.010,.074,.010),
+         (.100,.010,.061,.010),(.132,.010,.039,.010),(.143,.010,.015,.010)]))
+
+# The fitted shoe wraps the toes; use the same dark leather on any toe details
+# that remain visible through the simple shell. This keeps skin from reading as
+# bare toes while the candidate's foot proportions and rig stay intact.
+mesh.materials.append(base_shoe)
+for polygon in mesh.polygons:
+    centre=sum((mesh.vertices[i].co for i in polygon.vertices),Vector())/len(polygon.vertices)
+    foot_amount=sum(max(get_weights(i).get('foot_R',0)+get_weights(i).get('toes_R',0),
+        get_weights(i).get('foot_L',0)+get_weights(i).get('toes_L',0)) for i in polygon.vertices)/len(polygon.vertices)
+    if centre.z<.265 and foot_amount>.28:polygon.material_index=2
+mesh.update()
+
 objects=[body,rig]
 for name,data in eye_meshes:
     eye=bpy.data.objects.new('StudioTrialEye_'+name[-1],data);bpy.context.scene.collection.objects.link(eye)
@@ -182,6 +347,7 @@ for name,data in eye_meshes:
     mod=eye.modifiers.new('Trial head skin','ARMATURE');mod.object=rig;eye.parent=rig
     for p in data.polygons:p.use_smooth=True
     objects.append(eye)
+objects.extend([shirt,shorts,*shoes])
 local_grips={}
 for label in ['R','L']:
     grip=hand_frames[label]['grip_world']
@@ -203,9 +369,10 @@ path=EXPORT/'studio_rig_trial.glb'
 bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_selection=True,
     export_skins=True,export_animations=False,export_extras=True,export_yup=True)
 report={'source_bundle':'Human Base Meshes v1.4.1','asset':'Body Male - Realistic','author':'Dan Ulrich','license':'CC0',
-    'scope':'rig, weights, neutral posture, grip, walk and turn trial only; no wardrobe/mission replacement',
+    'scope':'isolated rig, fitted base clothing and footwear trial; no uniform/mission replacement',
     'height_m':1.8,'vertices':len(mesh.vertices),'bones':len(ad.bones),'glb_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
     'unweighted_vertices':len(unweighted),'rest_shape_sculpt_corrections':0,'max_influences':4,'grips':local_grips,
+    'base_clothing':['BaseTop','BaseShorts','BaseShoeUpper_R','BaseShoeSole_R','BaseShoeUpper_L','BaseShoeSole_L'],
     'bones_blender':{n:{'head':list(a),'tail':list(b)} for n,(a,b) in bones.items()},
     'finger_landmarks':{side:[[list(p) for p in chain] for chain in cs] for side,cs in chains.items()},
     'human_acceptance':'pending'}

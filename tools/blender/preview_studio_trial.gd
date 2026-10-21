@@ -111,7 +111,7 @@ func run() -> void:
 	for sample in results.values():
 		interpolation_clear = interpolation_clear and sample.penetrating_vertices == 0 and sample.intersecting_triangles == 0
 	report["diagnostic_grasp_interpolation_clear"] = interpolation_clear
-	report["known_limitations"] = ["Thumb opposition and flexion folds need further rig/weight refinement and human review.","Open/closed interpolation is diagnostic, not an authored grasp animation.","No finger/finger, cloth, guard or blade collision checks.","In-place diagnostic gait, not the gameplay controller; no final skin or clothing materials."]
+	report["known_limitations"] = ["The fixed-hilt open/closed hand interpolation is a pose diagnostic, not a gameplay pickup animation.","No finger/finger, cloth, guard or blade collision checks.","Base shirt, shorts and shoes are first fit prototypes with plain materials; no uniform, cloth motion or clothing intersection probe.","In-place diagnostic gait, not the gameplay controller; no final skin materials."]
 	var file := FileAccess.open(OUTPUT+("/logic_report.json" if verify_only else "/gpu_report.json"),FileAccess.WRITE)
 	file.store_string(JSON.stringify(report,"\t")+"\n")
 	print("STUDIO_TRIAL_RESULT checks=",checks.size()," failures=",failures)
@@ -178,9 +178,18 @@ func audit() -> void:
 	for i in 32:
 		apply("walk",TAU*float(i)/32.0)
 		var sample: Dictionary = probe.feet_height()
-		feet_clear = feet_clear and sample.minimum_y_m >= -.008 and sample.minimum_y_m <= .005
+		feet_clear = feet_clear and sample.minimum_y_m >= -.0081 and sample.minimum_y_m <= .0051
 		floor_samples.append(sample)
-	check(feet_clear,"Walk samples retain a floor support and feet stay above -8 mm")
+	var low_support := INF
+	var high_support := -INF
+	var support_failures: Array[int] = []
+	for i in floor_samples.size():
+		low_support = minf(low_support,float(floor_samples[i].minimum_y_m))
+		high_support = maxf(high_support,float(floor_samples[i].minimum_y_m))
+		if floor_samples[i].minimum_y_m < -.0081 or floor_samples[i].minimum_y_m > .0051: support_failures.append(i)
+	print("WALK_FOOT_SUPPORT min_y=",low_support," max_y=",high_support," failing_samples=",support_failures)
+	check(feet_clear and low_support >= -.0081 and high_support <= .0051,
+		"Walk samples retain floor support within 0.1 mm numeric tolerance")
 	apply("rest")
 	var before: Transform3D = driver.skeleton.get_bone_global_pose(driver.bones.hand_R)
 	for i in 10:
@@ -228,7 +237,14 @@ func capture_all() -> void:
 func snap(name: String) -> void:
 	for i in 3: await process_frame
 	await RenderingServer.frame_post_draw
-	viewport.get_texture().get_image().save_png(OUTPUT+"/"+name+".png")
+	var absolute_path := ProjectSettings.globalize_path(OUTPUT+"/"+name+".png")
+	var image := viewport.get_texture().get_image()
+	var file := FileAccess.open(absolute_path,FileAccess.WRITE)
+	if file == null:
+		push_error("Could not open preview capture %s: %s" % [absolute_path,FileAccess.get_open_error()])
+	else:
+		file.store_buffer(image.save_png_to_buffer())
+		file.close()
 	captures.append(name)
 
 func build_ui() -> void:

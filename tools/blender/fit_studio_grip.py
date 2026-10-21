@@ -25,8 +25,9 @@ for j,i in enumerate(selected):
 static=points*(1-weights.sum(1))[:,None]
 weighted={n:points*weights[:,i,None] for i,n in enumerate(names)}
 palm=weights.sum(1)<.15
-frame=np.eye(4);frame[:3,:3]=np.array(metadata['grips']['R']['basis_columns']).T
-frame[:3,3]=metadata['grips']['R']['origin']
+local_frame=np.eye(4);local_frame[:3,:3]=np.array(metadata['grips']['R']['basis_columns']).T
+local_frame[:3,3]=metadata['grips']['R']['origin']
+frame=rest['hand_R'] @ local_frame
 radius=config['grip_radius']
 
 def rx(a):
@@ -48,8 +49,11 @@ def skin(params,closure=1.0,center_handle=True):
             if f==0 and k==0:delta=ry(params[19]*closure) @ delta @ rz(params[15]*closure)
             poses[n]=poses[parent] @ local[n] @ delta
             posed+=weighted[n] @ (poses[n] @ inverse[n]).T
-    grip=frame.copy();grip[:3,3]+=params[16:19]
-    transform=np.linalg.inv(rest['hand_R'] @ grip)
+    grip=frame.copy();grip[:3,3]+=rest['hand_R'][:3,:3] @ params[16:19]
+    # points and bone matrices are already in armature space; frame is the
+    # socket's armature-space transform. Multiplying by hand_R here again
+    # applies the hand rest transform twice and sends the hilt far away.
+    transform=np.linalg.inv(grip)
     pts=posed @ transform.T
     tips=[]
     for f in range(5):
@@ -75,7 +79,7 @@ def score(params,details=False):
     # Report interpolation with the same fixed socket used by the end pose.
     transition=[]
     if details:
-        centered=params.copy();centered[16:19]+=frame[:3,1]*center
+        centered=params.copy();centered[16:19]+=local_frame[:3,1]*center
         for closure in [0.0,.25,.5,.75]:
             intermediate,_,_=skin(centered,closure,False)
             radial_i=np.linalg.norm(intermediate[:,[0,2]],axis=1)
@@ -105,7 +109,8 @@ if '--report-only' in sys.argv:
     (ROOT/'art/references/character/studio_rig_trial/grip_fit_report.json').write_text(json.dumps(score(prior,True),indent=2),encoding='utf8')
     print('GRIP_REPORT_ONLY',score(prior,True),flush=True)
     sys.exit(0)
-best=prior.copy();bestscore=score(best)
+best=np.array([np.clip(v,*bounds[i]) for i,v in enumerate(prior)])
+bestscore=score(best)
 print('GRIP_FIT_START',score(best,True),flush=True)
 for restart in range(10):
     current=best.copy() if restart<2 else prior+rng.normal(0,.45,len(prior))
@@ -125,11 +130,16 @@ for restart in range(10):
     if current_score<bestscore:best,bestscore=current,current_score
     print('GRIP_FIT_RESTART',restart,score(best,True),flush=True)
 _,_,center=skin(best)
-best[16:19]+=frame[:3,1]*center
+best[16:19]+=local_frame[:3,1]*center
+final_quality=score(best,True)
+if final_quality['inside_vertices'] or final_quality['minimum_radius'] < radius-.0005:
+    raise RuntimeError(f'No valid static grip found: {final_quality}')
+if np.max(np.abs(best[16:19])) > .075:
+    raise RuntimeError(f'Grip socket moved implausibly far from the hand: {best[16:19]}')
 config['grip_flex']=best[:15].reshape((5,3)).tolist()
 config['thumb_opposition']=float(best[15])
 config['grip_socket_offset']=best[16:19].tolist()
 config['thumb_twist']=float(best[19])
 path.write_text(json.dumps(config,indent=2)+'\n',encoding='utf8')
-(ROOT/'art/references/character/studio_rig_trial/grip_fit_report.json').write_text(json.dumps(score(best,True),indent=2),encoding='utf8')
+(ROOT/'art/references/character/studio_rig_trial/grip_fit_report.json').write_text(json.dumps(final_quality,indent=2),encoding='utf8')
 print('GRIP_FIT_OK',config,flush=True)

@@ -172,7 +172,7 @@
 			"ok": true
 		},
 		{
-			"message": "Walk samples retain a floor support and feet stay above -8 mm",
+			"message": "Walk samples retain floor support within 0.1 mm numeric tolerance",
 			"ok": true
 		},
 		{
@@ -180,188 +180,265 @@
 			"ok": true
 		}
 	],
-	"diagnostic_grasp_interpolation_clear": false,
+	"diagnostic_grasp_interpolation_clear": true,
 	"engine": "4.7.2-stable (official)",
 	"failures": 0,
 	"feet_samples": [
 		{
-			"maximum_y_m": 0.0979480966925621,
-			"minimum_y_m": 0.000262206303887069,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.1346635222435,
+			"minimum_y_m": -0.00799996219575405,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.103731654584408,
-			"minimum_y_m": 0.000271708937361836,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.144680917263031,
+			"minimum_y_m": -0.00799962412565947,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.114433400332928,
-			"minimum_y_m": 0.000299159903079271,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.156874448060989,
+			"minimum_y_m": -0.00799990817904472,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.124778158962727,
-			"minimum_y_m": 0.000316807359922677,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.168112188577652,
+			"minimum_y_m": -0.00799984391778708,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.134152039885521,
-			"minimum_y_m": 0.000316884281346574,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.17796203494072,
+			"minimum_y_m": -0.00799981225281954,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.142109245061874,
-			"minimum_y_m": 0.000317038618959486,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.18604551255703,
+			"minimum_y_m": -0.00799969024956226,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.148297250270844,
-			"minimum_y_m": 0.000316869874950498,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.192052140831947,
+			"minimum_y_m": -0.00799980107694864,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.152447432279587,
-			"minimum_y_m": 0.000316845340421423,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.195751085877419,
+			"minimum_y_m": -0.00799985229969025,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.154376119375229,
-			"minimum_y_m": 0.000316832942189649,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.197000056505203,
+			"minimum_y_m": -0.00799989048391581,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.153988242149353,
-			"minimum_y_m": 0.000317012018058449,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.195751115679741,
+			"minimum_y_m": -0.00799973867833614,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.151279911398888,
-			"minimum_y_m": 0.000316683028358966,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.192052185535431,
+			"minimum_y_m": -0.00800004415214062,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.14634020626545,
-			"minimum_y_m": 0.000316922145429999,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.18604564666748,
+			"minimum_y_m": -0.0079998355358839,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.139350071549416,
-			"minimum_y_m": 0.000316814373945817,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.177962064743042,
+			"minimum_y_m": -0.00799995847046375,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.130689799785614,
-			"minimum_y_m": 0.000316880876198411,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.168112143874168,
+			"minimum_y_m": -0.0079999091103673,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.120603740215302,
-			"minimum_y_m": 0.00126643199473619,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.156874716281891,
+			"minimum_y_m": -0.00705035589635372,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.109510228037834,
-			"minimum_y_m": 0.00255529070273042,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.144680991768837,
+			"minimum_y_m": -0.00576153583824635,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.0978966057300568,
-			"minimum_y_m": 0.000268388685071841,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.13467538356781,
+			"minimum_y_m": -0.00799985602498055,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.104031085968018,
-			"minimum_y_m": 0.000279601896181703,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.144681096076965,
+			"minimum_y_m": -0.00799997709691525,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.114747822284698,
-			"minimum_y_m": 0.000306983012706041,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.156874507665634,
+			"minimum_y_m": -0.00799993705004454,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.125101655721664,
-			"minimum_y_m": 0.000317263940814883,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.168112143874168,
+			"minimum_y_m": -0.00799993425607681,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.134480744600296,
-			"minimum_y_m": 0.00031723635038361,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.177962049841881,
+			"minimum_y_m": -0.00800000131130219,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.142439782619476,
-			"minimum_y_m": 0.000317426776746288,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.186045631766319,
+			"minimum_y_m": -0.00799980014562607,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.148626685142517,
-			"minimum_y_m": 0.000317369122058153,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.192052334547043,
+			"minimum_y_m": -0.00799987744539976,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.152772828936577,
-			"minimum_y_m": 0.000317370489938185,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.195751145482063,
+			"minimum_y_m": -0.00799988489598036,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.15469528734684,
-			"minimum_y_m": 0.000317394995363429,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.19700014591217,
+			"minimum_y_m": -0.0079999016597867,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.154299199581146,
-			"minimum_y_m": 0.000317212747177109,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.195751219987869,
+			"minimum_y_m": -0.00800000037997961,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.151581212878227,
-			"minimum_y_m": 0.000317350379191339,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.192052364349365,
+			"minimum_y_m": -0.00799992214888334,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.146630346775055,
-			"minimum_y_m": 0.000317378580803052,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.18604551255703,
+			"minimum_y_m": -0.00799989234656096,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.139629051089287,
-			"minimum_y_m": 0.000317424506647512,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.177962243556976,
+			"minimum_y_m": -0.00799985509365797,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.130846947431564,
-			"minimum_y_m": 0.000317236321279779,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.168112337589264,
+			"minimum_y_m": -0.00800001248717308,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.120722271502018,
-			"minimum_y_m": 0.00125492957886308,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.156874597072601,
+			"minimum_y_m": -0.00706235598772764,
+			"sampled_vertices": 14152
 		},
 		{
-			"maximum_y_m": 0.109595015645027,
-			"minimum_y_m": 0.00254387664608657,
-			"sampled_vertices": 13000
+			"maximum_y_m": 0.144681036472321,
+			"minimum_y_m": -0.00577339809387922,
+			"sampled_vertices": 14152
 		}
 	],
-	"glb_sha256": "2db4764e84f34e60cdfd23d9a5ec213541d3267977d7e8af98442c5e1a360ad6",
+	"glb_sha256": "51b2088b693b31bf215c51bf22aa150a0beafc6b1dc125f356cc1afe9b43ea4c",
 	"grip_samples": {
 		"0.0": {
 			"intersecting_triangles": 0,
 			"maximum_vertex_depth_m": 0.0,
-			"minimum_vertex_radius_m": 0.0246145017445087,
+			"minimum_vertex_radius_m": 0.0366011932492256,
 			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
 			"penetrating_vertices": 0,
 			"radius_m": 0.019,
-			"sampled_vertices": 4189,
+			"sampled_vertices": 3940,
 			"tolerance_m": 0.0005
 		},
 		"0.05": {
 			"intersecting_triangles": 0,
 			"maximum_vertex_depth_m": 0.0,
-			"minimum_vertex_radius_m": 0.0231749843806028,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 3973,
+			"tolerance_m": 0.0005
+		},
+		"0.1": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 3998,
+			"tolerance_m": 0.0005
+		},
+		"0.15": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4039,
+			"tolerance_m": 0.0005
+		},
+		"0.2": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4066,
+			"tolerance_m": 0.0005
+		},
+		"0.25": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0366011932492256,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4093,
+			"tolerance_m": 0.0005
+		},
+		"0.3": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.036102682352066,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4124,
+			"tolerance_m": 0.0005
+		},
+		"0.35": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.034229714423418,
+			"near_contact_vertices": 0,
+			"non_finite_vertices": 0,
+			"penetrating_vertices": 0,
+			"radius_m": 0.019,
+			"sampled_vertices": 4165,
+			"tolerance_m": 0.0005
+		},
+		"0.4": {
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.032398447394371,
 			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
 			"penetrating_vertices": 0,
@@ -369,200 +446,123 @@
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
-		"0.1": {
-			"intersecting_triangles": 0,
-			"maximum_vertex_depth_m": 0.0,
-			"minimum_vertex_radius_m": 0.0214080791920424,
-			"near_contact_vertices": 5,
-			"non_finite_vertices": 0,
-			"penetrating_vertices": 0,
-			"radius_m": 0.019,
-			"sampled_vertices": 4189,
-			"tolerance_m": 0.0005
-		},
-		"0.15": {
-			"intersecting_triangles": 0,
-			"maximum_vertex_depth_m": 0.0,
-			"minimum_vertex_radius_m": 0.0194622259587049,
-			"near_contact_vertices": 13,
-			"non_finite_vertices": 0,
-			"penetrating_vertices": 0,
-			"radius_m": 0.019,
-			"sampled_vertices": 4189,
-			"tolerance_m": 0.0005
-		},
-		"0.2": {
-			"intersecting_triangles": 14,
-			"maximum_vertex_depth_m": 0.00166097158193588,
-			"minimum_vertex_radius_m": 0.0173390284180641,
-			"near_contact_vertices": 18,
-			"non_finite_vertices": 0,
-			"penetrating_vertices": 5,
-			"radius_m": 0.019,
-			"sampled_vertices": 4189,
-			"tolerance_m": 0.0005
-		},
-		"0.25": {
-			"intersecting_triangles": 32,
-			"maximum_vertex_depth_m": 0.00414785338193178,
-			"minimum_vertex_radius_m": 0.0148521466180682,
-			"near_contact_vertices": 22,
-			"non_finite_vertices": 0,
-			"penetrating_vertices": 15,
-			"radius_m": 0.019,
-			"sampled_vertices": 4189,
-			"tolerance_m": 0.0005
-		},
-		"0.3": {
-			"intersecting_triangles": 46,
-			"maximum_vertex_depth_m": 0.00683078603446484,
-			"minimum_vertex_radius_m": 0.0121692139655352,
-			"near_contact_vertices": 23,
-			"non_finite_vertices": 0,
-			"penetrating_vertices": 24,
-			"radius_m": 0.019,
-			"sampled_vertices": 4189,
-			"tolerance_m": 0.0005
-		},
-		"0.35": {
-			"intersecting_triangles": 74,
-			"maximum_vertex_depth_m": 0.00961988014727831,
-			"minimum_vertex_radius_m": 0.00938011985272169,
-			"near_contact_vertices": 25,
-			"non_finite_vertices": 0,
-			"penetrating_vertices": 38,
-			"radius_m": 0.019,
-			"sampled_vertices": 4189,
-			"tolerance_m": 0.0005
-		},
-		"0.4": {
-			"intersecting_triangles": 100,
-			"maximum_vertex_depth_m": 0.0123713581413031,
-			"minimum_vertex_radius_m": 0.00662864185869694,
-			"near_contact_vertices": 39,
-			"non_finite_vertices": 0,
-			"penetrating_vertices": 54,
-			"radius_m": 0.019,
-			"sampled_vertices": 4189,
-			"tolerance_m": 0.0005
-		},
 		"0.45": {
-			"intersecting_triangles": 134,
-			"maximum_vertex_depth_m": 0.01457598028332,
-			"minimum_vertex_radius_m": 0.00442401971668005,
-			"near_contact_vertices": 58,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0306841395795345,
+			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 74,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.5": {
-			"intersecting_triangles": 183,
-			"maximum_vertex_depth_m": 0.0154375284034759,
-			"minimum_vertex_radius_m": 0.00356247159652412,
-			"near_contact_vertices": 67,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0291025806218386,
+			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 115,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.55": {
-			"intersecting_triangles": 264,
-			"maximum_vertex_depth_m": 0.0171632607523352,
-			"minimum_vertex_radius_m": 0.00183673924766481,
-			"near_contact_vertices": 59,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0276378113776445,
+			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 170,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.6": {
-			"intersecting_triangles": 325,
-			"maximum_vertex_depth_m": 0.0184046370848082,
-			"minimum_vertex_radius_m": 0.000595362915191799,
-			"near_contact_vertices": 73,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0262372959405184,
+			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 213,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.65": {
-			"intersecting_triangles": 376,
-			"maximum_vertex_depth_m": 0.0170859073111787,
-			"minimum_vertex_radius_m": 0.00191409268882126,
-			"near_contact_vertices": 30,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0249769035726786,
+			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 262,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.7": {
-			"intersecting_triangles": 369,
-			"maximum_vertex_depth_m": 0.0178094659056515,
-			"minimum_vertex_radius_m": 0.00119053409434855,
-			"near_contact_vertices": 25,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0238584093749523,
+			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 261,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.75": {
-			"intersecting_triangles": 367,
-			"maximum_vertex_depth_m": 0.018153662356548,
-			"minimum_vertex_radius_m": 0.000846337643451989,
-			"near_contact_vertices": 20,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0228644236922264,
+			"near_contact_vertices": 0,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 258,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.8": {
-			"intersecting_triangles": 330,
-			"maximum_vertex_depth_m": 0.016582639567554,
-			"minimum_vertex_radius_m": 0.002417360432446,
-			"near_contact_vertices": 49,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0219370871782303,
+			"near_contact_vertices": 1,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 220,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.85": {
-			"intersecting_triangles": 271,
-			"maximum_vertex_depth_m": 0.0127692158855498,
-			"minimum_vertex_radius_m": 0.00623078411445022,
-			"near_contact_vertices": 60,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0211829803884029,
+			"near_contact_vertices": 25,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 171,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.9": {
-			"intersecting_triangles": 209,
-			"maximum_vertex_depth_m": 0.00795976506173611,
-			"minimum_vertex_radius_m": 0.0110402349382639,
-			"near_contact_vertices": 51,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.020599115639925,
+			"near_contact_vertices": 35,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 127,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
 		},
 		"0.95": {
-			"intersecting_triangles": 106,
-			"maximum_vertex_depth_m": 0.00320135304331779,
-			"minimum_vertex_radius_m": 0.0157986469566822,
-			"near_contact_vertices": 71,
+			"intersecting_triangles": 0,
+			"maximum_vertex_depth_m": 0.0,
+			"minimum_vertex_radius_m": 0.0201309528201818,
+			"near_contact_vertices": 41,
 			"non_finite_vertices": 0,
-			"penetrating_vertices": 58,
+			"penetrating_vertices": 0,
 			"radius_m": 0.019,
 			"sampled_vertices": 4189,
 			"tolerance_m": 0.0005
@@ -570,8 +570,8 @@
 		"1.0": {
 			"intersecting_triangles": 0,
 			"maximum_vertex_depth_m": 0.0,
-			"minimum_vertex_radius_m": 0.0197945535182953,
-			"near_contact_vertices": 43,
+			"minimum_vertex_radius_m": 0.0197999700903893,
+			"near_contact_vertices": 58,
 			"non_finite_vertices": 0,
 			"penetrating_vertices": 0,
 			"radius_m": 0.019,
@@ -581,10 +581,10 @@
 	},
 	"human_acceptance": "pending",
 	"known_limitations": [
-		"Thumb opposition and flexion folds need further rig/weight refinement and human review.",
-		"Open/closed interpolation is diagnostic, not an authored grasp animation.",
+		"The fixed-hilt open/closed hand interpolation is a pose diagnostic, not a gameplay pickup animation.",
 		"No finger/finger, cloth, guard or blade collision checks.",
-		"In-place diagnostic gait, not the gameplay controller; no final skin or clothing materials."
+		"Base shirt, shorts and shoes are first fit prototypes with plain materials; no uniform, cloth motion or clothing intersection probe.",
+		"In-place diagnostic gait, not the gameplay controller; no final skin materials."
 	],
 	"renderer": "forward_plus",
 	"scope": "isolated deformation trial; not mission gameplay"

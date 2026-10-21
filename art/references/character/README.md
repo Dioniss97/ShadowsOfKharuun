@@ -4,6 +4,10 @@
 
 Para probar esta candidata desde el checkout de producción: `tools/logs/production-050/PLAY.bat` respecto al workspace principal. El PLAY.bat de main continúa mostrando la estable 0.4.0.
 
+## Evaluación anatómica posterior — 21-10-2026
+
+[Comparación Blender Studio/MakeHuman y diagnóstico del óvalo](base_model_comparison_20261021/README.md) · [Prueba autorizada de rig Blender Studio en Godot](studio_rig_trial/README.md). El ensayo tiene fuente, GLB y visor propios (`tools/STUDIO_TRIAL.bat`); no sustituye las apariencias jugables inferiores. Mejora el reposo y hombros; el agarre aún requiere refinar rig/pesos y la interpolación abierta/cerrada falla. La evidencia técnica no equivale a aceptación artística.
+
 ## Apariencias actuales
 
 | Sin uniforme | Uniforme completo |

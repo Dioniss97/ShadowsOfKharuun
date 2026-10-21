@@ -1,0 +1,206 @@
+{
+  "purpose": "Asset comparison only; no game assets changed",
+  "human_acceptance": "pending",
+  "blender": "5.2.2 LTS",
+  "height_m": 1.8,
+  "materials": "shared neutral clay; dark pelvis coverage",
+  "source_poses": "Native rest poses preserved; no candidate rig or animation inferred",
+  "studio_url": "https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip",
+  "studio_zip_sha256": "811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515",
+  "models": {
+    "current": {
+      "source": "art/source/characters/adventurer.blend",
+      "rigged_in_source": true,
+      "grip_contact_applied": true,
+      "render_vertices": 29220,
+      "render_faces": 28950,
+      "native_width_m": 0.644727349281311,
+      "normalization_scale": 0.9369509160770841,
+      "renders": [
+        "current_front.png",
+        "current_three_quarter.png",
+        "current_torso.png",
+        "current_hand_front.png",
+        "current_hand_back.png",
+        "current_hand_oblique.png",
+        "current_hand_aligned_A.png",
+        "current_hand_aligned_B.png",
+        "current_hand_aligned_oblique.png"
+      ]
+    },
+    "makehuman": {
+      "source": "Pinned MakeHuman hm08 base.obj; diagnostic baseline, not a second ready character",
+      "rigged_in_source": false,
+      "render_vertices": 53514,
+      "render_faces": 53512,
+      "native_width_m": 1.073940396308899,
+      "normalization_scale": 0.10823438038143589,
+      "renders": [
+        "makehuman_front.png",
+        "makehuman_three_quarter.png",
+        "makehuman_torso.png",
+        "makehuman_hand_front.png",
+        "makehuman_hand_back.png",
+        "makehuman_hand_oblique.png",
+        "makehuman_hand_aligned_A.png",
+        "makehuman_hand_aligned_B.png",
+        "makehuman_hand_aligned_oblique.png"
+      ]
+    },
+    "studio": {
+      "asset": {
+        "author": "Dan Ulrich",
+        "description": "Realistic scan data model with multiresolution details",
+        "license": "CC0",
+        "copyright": ""
+      },
+      "bundle_readme": "Important Info\n==============\n\nHuman Base Meshes: Asset Bundle - Version 1.4\n\nAll provided assets are public domain under the CC0 license.\nThe minimum supported Blender version is 4.2!\n\nWhat's included\n==============\n\nThese are various human base meshes that are provided by the Blender community and the Blender Studio.\nThey include:\n    - Quad topology for multi-resolution sculpting\n    - Closed volumes for voxel remeshing\n    - Face sets\n    - UV maps (including UDIMs)\n    - Multiresoluton levels for realistic assets\n    - Creased edges and Subdiv modifiers for planar/primitive assets\n\nHow to install the Asset Bundle\n===============================\n\nIt's recommended to create a new Asset Library in the preferences first:\n- Open the Preferences\n- Go to \"File Paths\"\n- Add a New Asset Library with the + button and call it \"Human Base Meshes\"\n- Set the \"Import Method\" to \"Append\"\n\nTo add the assets from this file to the Asset Library:\n- In the Asset Browser below, click on \"Copy Bundle to Asset Library\"\n- Choose a target Asset Library\n- Choose a target folder location\n\nThat's it. Enjoy!",
+      "source": "Blender Studio Human Base Meshes 1.4.1 / Body Male - Realistic",
+      "rigged_in_source": false,
+      "base_vertices": 10582,
+      "vertex_groups": 0,
+      "render_vertices": 43434,
+      "render_faces": 43428,
+      "native_width_m": 0.9400885105133057,
+      "normalization_scale": 1.065069129976903,
+      "renders": [
+        "studio_front.png",
+        "studio_three_quarter.png",
+        "studio_torso.png",
+        "studio_hand_front.png",
+        "studio_hand_back.png",
+        "studio_hand_oblique.png",
+        "studio_hand_aligned_A.png",
+        "studio_hand_aligned_B.png",
+        "studio_hand_aligned_oblique.png"
+      ]
+    },
+    "current_no_contact": {
+      "source": "In-memory create_character.py prefix, stopped before grip_contact; no save/export",
+      "rigged_in_source": true,
+      "grip_contact_applied": false,
+      "render_vertices": 29220,
+      "render_faces": 28950,
+      "native_width_m": 0.644727349281311,
+      "normalization_scale": 0.9369509160770841,
+      "renders": [
+        "current_no_contact_front.png",
+        "current_no_contact_three_quarter.png",
+        "current_no_contact_torso.png",
+        "current_no_contact_hand_front.png",
+        "current_no_contact_hand_back.png",
+        "current_no_contact_hand_oblique.png",
+        "current_no_contact_hand_aligned_A.png",
+        "current_no_contact_hand_aligned_B.png",
+        "current_no_contact_hand_aligned_oblique.png"
+      ]
+    },
+    "current_common_apose": {
+      "temporary_comparison_pose": "Shoulders rotated 22 degrees outward; no game file changed",
+      "source": "art/source/characters/adventurer.blend",
+      "rigged_in_source": true,
+      "grip_contact_applied": true,
+      "render_vertices": 29220,
+      "render_faces": 28950,
+      "native_width_m": 1.1487622261047363,
+      "normalization_scale": 0.9369509160770841,
+      "renders": [
+        "current_common_apose_front.png",
+        "current_common_apose_three_quarter.png",
+        "current_common_apose_torso.png",
+        "current_common_apose_hand_front.png",
+        "current_common_apose_hand_back.png",
+        "current_common_apose_hand_oblique.png",
+        "current_common_apose_hand_aligned_A.png",
+        "current_common_apose_hand_aligned_B.png",
+        "current_common_apose_hand_aligned_oblique.png"
+      ],
+      "hand_view_center": [
+        0.5278436541557312,
+        0.03020666539669037,
+        0.7922373414039612
+      ]
+    }
+  },
+  "camera_settings": {
+    "front": {
+      "position": [
+        0,
+        5,
+        0.92
+      ],
+      "target": [
+        0,
+        0,
+        0.92
+      ],
+      "ortho_scale": 2.02,
+      "size": [
+        800,
+        1000
+      ]
+    },
+    "three_quarter": {
+      "position": [
+        3,
+        5,
+        1.05
+      ],
+      "target": [
+        0,
+        0,
+        0.97
+      ],
+      "ortho_scale": 2.02,
+      "size": [
+        800,
+        1000
+      ]
+    },
+    "torso": {
+      "position": [
+        0,
+        5,
+        1.3
+      ],
+      "target": [
+        0,
+        0,
+        1.3
+      ],
+      "ortho_scale": 0.92,
+      "size": [
+        900,
+        800
+      ]
+    },
+    "hand_aligned": {
+      "ortho_scale": 0.28,
+      "target": [
+        0,
+        0,
+        -0.025
+      ],
+      "size": [
+        800,
+        800
+      ],
+      "A_position": [
+        0,
+        4,
+        -0.025
+      ],
+      "B_position": [
+        0,
+        -4,
+        -0.025
+      ]
+    }
+  },
+  "production_unchanged_sha256": {
+    "art\\source\\characters\\adventurer.blend": "e71910f69c3c4ddac2c46c177d0f91cb64aa151abe8dc403222c6d25f6346296",
+    "assets\\models\\characters\\adventurer.glb": "e12260519daa0fd36c124aa567aa5845def1ba7f394b81f1e45b7b50495a48d3"
+  },
+  "capture_count": 48,
+  "raw_capture_count": 45
+}

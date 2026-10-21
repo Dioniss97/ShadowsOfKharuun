@@ -32,3 +32,5 @@ La candidata conserva el atlas UV anatómico CC0 con mapas propios de piel de 10
 ## Decisiones
 
 19-10-2026: producción autorizada por el usuario tras revisar la hoja de ruta. Las capturas KOTOR son referencias de estados visuales; no se importan assets de esos juegos. La revisión inicial del modelo no representa un diseño final de protagonista o una aprobación de su apariencia concreta.
+
+21-10-2026: comparación de alternativas anatómicas autorizada tras el rechazo visual de manos y postura. La [evaluación en Blender](../../../../art/references/character/base_model_comparison_20261021/README.md) compara la base actual, su origen MakeHuman y el cuerpo masculino realista CC0 de Blender Studio. **Propuesta pendiente de elección:** usar ese cuerpo completo como nueva base y riggearlo conservando sus proporciones; mantener materiales, paleta y vestuario propios. La comparación también aísla un óvalo dorsal causado por el correctivo de contacto actual. No se ha sustituido la anatomía de producción ni se ha aprobado la apariencia candidata.
